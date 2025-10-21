@@ -2,10 +2,10 @@ import { useState, useRef, useEffect } from "react";
 import { MODE, MODE_CONFIG, TABS, LAYERS, TAB_CONFIG, LAYER_CONFIG } from "./data/layers";
 // Assets
 import HOME_LOGO from "./assets/images/logo.png";
-// Animations
-import Lottie from "lottie-react";
-import LoadingAnim from "./assets/animation/Loading.json";
+
+// Components
 import LandscapePrompt from "./components/LandscapePrompt";
+import Loading from "./components/Loading";
 
 export default function App() {
   //states
@@ -459,15 +459,7 @@ export default function App() {
                   alt="Transition frame"
                   src={imagesRef.current[currentIndexRef.current]?.src}
                 />
-              ) : (
-                <div className="text-center text-white p-6">
-                  <Lottie
-                    animationData={LoadingAnim}
-                    loop={true}
-                    style={{ width: 120, height: 120 }}
-                  />
-                </div>
-              )}
+              ) : <Loading />}
 
               {/* Example center marker */}
               {/* <div className="absolute left-1/2 top-28 -translate-x-1/2 flex flex-col items-center">
