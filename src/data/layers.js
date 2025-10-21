@@ -1,4 +1,8 @@
-export const MODE = 'sequences';
+export const MODE = {
+  VIDEO: 'videos',
+  SEQUENCE: 'sequences',
+};
+export const MODE_CONFIG = MODE.SEQUENCE;
 
 // Navigation Tabs (top-level categories)
 export const TABS = {

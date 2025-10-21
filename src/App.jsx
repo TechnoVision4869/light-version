@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import { MODE, TABS, LAYERS, TAB_CONFIG, LAYER_CONFIG } from "./data/layers";
+import { MODE, MODE_CONFIG, TABS, LAYERS, TAB_CONFIG, LAYER_CONFIG } from "./data/layers";
 // Assets
 import HOME_LOGO from "./assets/images/logo.png";
 // Animations
 import Lottie from "lottie-react";
-import LandscapeAnim from "./assets/animation/Rotate Phone.json";
 import LoadingAnim from "./assets/animation/Loading.json";
+import LandscapePrompt from "./components/LandscapePrompt";
 
 export default function App() {
   //states
@@ -99,20 +99,7 @@ export default function App() {
   const NO_OF_FRAMES = activeTab === TABS.HOME ? 1 : 45;
   const FPS = 45;
 
-  // state to show prompt for landscape orientation
-  const [showLandscapePrompt, setShowLandscapePrompt] = useState(false);
-  useEffect(() => {
-    const checkOrientation = () => {
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      const isPortrait = window.innerHeight > window.innerWidth;
-      setShowLandscapePrompt(isMobile && isPortrait);
-    };
 
-    // Check on load and resize
-    checkOrientation();
-    window.addEventListener("resize", checkOrientation);
-    return () => window.removeEventListener("resize", checkOrientation);
-  }, []);
 
   // load all images once
   // we use useEffect so loading images won't happen during the rendering and blocks the UI
@@ -154,7 +141,7 @@ export default function App() {
         paths = Array.from(
           { length: NO_OF_FRAMES },
           (_, i) =>
-            `${MODE}${currentPath}${currentPath}_${(i + 1)
+            `${MODE_CONFIG}${currentPath}${currentPath}_${(i + 1)
               .toString()
               .padStart(2, "0")}.jpg`
         );
@@ -258,17 +245,7 @@ export default function App() {
 
   return (
     <div className="w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4">
-      {showLandscapePrompt && (
-        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center">
-          <div className="text-center text-white p-6">
-            <Lottie
-              animationData={LandscapeAnim}
-              loop={true}
-              style={{ width: 250, height: 250 }}
-            />
-          </div>
-        </div>
-      )}
+      <LandscapePrompt />
       <div className="w-full h-full flex flex-col">
         {/* Top Tabs */}
         <div className="flex items-center justify-between mb-4 px-4">
@@ -301,31 +278,28 @@ export default function App() {
           <div className="flex items-center gap-6">
             <button
               onClick={() => handleActiveTab(TABS.SURROUNDINGS)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                activeTab === TABS.SURROUNDINGS
-                  ? "bg-white text-black"
-                  : "text-white/80"
-              }`}
+              className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.SURROUNDINGS
+                ? "bg-white text-black"
+                : "text-white/80"
+                }`}
             >
               SURROUNDINGS
             </button>
             <button
               onClick={() => handleActiveTab(TABS.ZONES)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                activeTab === TABS.ZONES
-                  ? "bg-white text-black"
-                  : "text-white/80"
-              }`}
+              className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.ZONES
+                ? "bg-white text-black"
+                : "text-white/80"
+                }`}
             >
               ZONES
             </button>
             <button
               onClick={() => handleActiveTab(TABS.AMENITIES)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                activeTab === TABS.AMENITIES
-                  ? "bg-white text-black"
-                  : "text-white/80"
-              }`}
+              className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.AMENITIES
+                ? "bg-white text-black"
+                : "text-white/80"
+                }`}
             >
               AMENITIES
             </button>
@@ -350,13 +324,12 @@ export default function App() {
           {/* Sidebar */}
           <aside
             className={`bg-white/9 rounded-2xl p-2 py-3 md:p-3 md:py-4 flex-shrink-0 transition-all duration-300 overflow-hidden
-             ${
-               activeTab === TABS.HOME
-                 ? "w-0 opacity-0 pointer-events-none"
-                 : sidebarOpen
-                 ? "w-44 md:w-60 opacity-100"
-                 : "w-0 opacity-0 pointer-events-none"
-             }`}
+             ${activeTab === TABS.HOME
+                ? "w-0 opacity-0 pointer-events-none"
+                : sidebarOpen
+                  ? "w-44 md:w-60 opacity-100"
+                  : "w-0 opacity-0 pointer-events-none"
+              }`}
           >
             <div className="h-full pr-2">
               {/* Dynamic sidebar title based on active tab */}
@@ -364,10 +337,10 @@ export default function App() {
                 {activeTab === TABS.ZONES
                   ? TAB_CONFIG[TABS.ZONES]?.title
                   : activeTab === TABS.SURROUNDINGS
-                  ? TAB_CONFIG[TABS.SURROUNDINGS]?.title
-                  : activeTab === TABS.AMENITIES
-                  ? TAB_CONFIG[TABS.AMENITIES]?.title
-                  : ""}
+                    ? TAB_CONFIG[TABS.SURROUNDINGS]?.title
+                    : activeTab === TABS.AMENITIES
+                      ? TAB_CONFIG[TABS.AMENITIES]?.title
+                      : ""}
               </div>
               <div className="h-0.5 bg-white/50 mx-3 mb-4"></div>
 
@@ -383,10 +356,9 @@ export default function App() {
                       }}
                       disabled={isDisabled}
                       className={`w-64 max-w-full mx-auto p-4 rounded-2xl transition
-                        ${
-                          isDisabled
-                            ? "opacity-50 cursor-not-allowed"
-                            : currentItemId === zone.id
+                        ${isDisabled
+                          ? "opacity-50 cursor-not-allowed"
+                          : currentItemId === zone.id
                             ? "bg-white/10"
                             : "bg-black/10 hover:bg-white/7"
                         }`}
@@ -418,13 +390,12 @@ export default function App() {
                       }}
                       disabled={isDisabled}
                       className={`w-64 max-w-full mx-auto p-4 rounded-2xl transition
-            ${
-              isDisabled
-                ? "opacity-50 cursor-not-allowed"
-                : currentItemId === item.id
-                ? "bg-white/10"
-                : "bg-black/10 hover:bg-white/7"
-            }`}
+            ${isDisabled
+                          ? "opacity-50 cursor-not-allowed"
+                          : currentItemId === item.id
+                            ? "bg-white/10"
+                            : "bg-black/10 hover:bg-white/7"
+                        }`}
                     >
                       <div className="text-left">
                         <div className="text-md font-bold text-white leading-tight">
@@ -447,13 +418,12 @@ export default function App() {
                       }}
                       disabled={isDisabled}
                       className={`w-64 max-w-full mx-auto p-4 rounded-2xl transition
-            ${
-              isDisabled
-                ? "opacity-50 cursor-not-allowed"
-                : currentItemId === item.id
-                ? "bg-white/10"
-                : "bg-black/10 hover:bg-white/7"
-            }`}
+            ${isDisabled
+                          ? "opacity-50 cursor-not-allowed"
+                          : currentItemId === item.id
+                            ? "bg-white/10"
+                            : "bg-black/10 hover:bg-white/7"
+                        }`}
                     >
                       <div className="text-left">
                         <div className="text-md font-bold text-white leading-tight">
