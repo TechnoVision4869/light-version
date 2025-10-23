@@ -7,6 +7,9 @@ import HOME_LOGO from "./assets/images/logo.png";
 import LandscapePrompt from "./components/LandscapePrompt";
 import Loading from "./components/Loading";
 import InfoPopup from "./components/InfoPopup";
+import ZoneButton from "./components/buttons/ZoneButton";
+import AmenityButton from "./components/buttons/AmenityButton"
+import SurroundingButton from "./components/buttons/SurroundingButton";
 
 export default function App() {
   //states
@@ -163,11 +166,11 @@ export default function App() {
         setIsImagesLoaded(true);
 
         if (shouldSkipAutoPlay) {
-          // ✅ Start at the LAST frame (which matches the previous sequence's first frame)
+          // Start at the LAST frame (which matches the previous sequence's first frame)
           currentIndexRef.current = NO_OF_FRAMES - 1;
           updateImage();
         } else {
-          // ✅ Start at the FIRST frame (normal forward navigation)
+          // Start at the FIRST frame (normal forward navigation)
           currentIndexRef.current = 0;
           updateImage();
         }
@@ -356,98 +359,24 @@ export default function App() {
                 {activeTab === TABS.ZONES &&
                   activeLayer === null &&
                   TAB_CONFIG[TABS.ZONES].getItems().map((zone) => (
-                    <button
-                      key={zone.id}
-                      onClick={() => {
-                        goToItem(zone, LAYERS.ZONE_DETAIL);
-                      }}
-                      disabled={isDisabled}
-                      className={`w-64 max-w-full mx-auto p-4 rounded-2xl transition
-                        ${isDisabled
-                          ? "opacity-50 cursor-not-allowed"
-                          : currentItemId === zone.id
-                            ? "bg-white/10"
-                            : "bg-black/10 hover:bg-white/7"
-                        }`}
-                    >
-                      <div className="text-left">
-                        <div className="text-md font-bold text-white leading-tight">
-                          {zone.name}
-                        </div>
-                        <div className="text-xs text-white/60 leading-tight py-1">
-                          {zone.subtitle}
-                        </div>
-                      </div>
-                      <div className="w-full rounded-lg overflow-hidden bg-black/10">
-                        <img
-                          src={zone.thumbnail}
-                          alt={zone.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    </button>
+                    <ZoneButton zone={zone} key={zone.id}
+                      isDisabled={isDisabled} isSeected={currentItemId === zone.id}
+                      goToZone={goToItem} />
                   ))}
                 {activeTab === TABS.SURROUNDINGS &&
                   activeLayer === null &&
                   TAB_CONFIG[TABS.SURROUNDINGS].getItems().map((item) => (
-                    <button
-                      key={item.id}
-                      onClick={() => {
-                        goToItem(item, LAYERS.SURROUNDING_DETAIL);
-                      }}
-                      disabled={isDisabled}
-                      className={`w-64 max-w-full mx-auto p-4 rounded-2xl transition
-            ${isDisabled
-                          ? "opacity-50 cursor-not-allowed"
-                          : currentItemId === item.id
-                            ? "bg-white/10"
-                            : "bg-black/10 hover:bg-white/7"
-                        }`}
-                    >
-                      <div className="text-left">
-                        <div className="text-md font-bold text-white leading-tight">
-                          {item.name}
-                        </div>
-                        <div className="text-xs text-white/60 leading-tight py-1">
-                          {item.distance}
-                        </div>
-                      </div>
-                    </button>
+                    <SurroundingButton surrounding={item} key={item.id}
+                      isDisabled={isDisabled} isSelected={currentItemId === item.id}
+                      goToSurrounding={goToItem} />
                   ))}
 
                 {activeTab === TABS.AMENITIES &&
                   activeLayer === null &&
                   TAB_CONFIG[TABS.AMENITIES].getItems().map((item) => (
-                    <button
-                      key={item.id}
-                      onClick={() => {
-                        goToItem(item, LAYERS.AMENITY_DETAIL);
-                      }}
-                      disabled={isDisabled}
-                      className={`w-64 max-w-full mx-auto p-4 rounded-2xl transition
-            ${isDisabled
-                          ? "opacity-50 cursor-not-allowed"
-                          : currentItemId === item.id
-                            ? "bg-white/10"
-                            : "bg-black/10 hover:bg-white/7"
-                        }`}
-                    >
-                      <div className="text-left">
-                        <div className="text-md font-bold text-white leading-tight">
-                          {item.name}
-                        </div>
-                        <div className="text-xs text-white/60 leading-tight py-1">
-                          {item.subtitle}
-                        </div>
-                      </div>
-                      <div className="w-full rounded-lg overflow-hidden bg-black/10">
-                        <img
-                          src={item.thumbnail}
-                          alt={item.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    </button>
+                    <AmenityButton amenity={item} key={item.id}
+                      isDisabled={isDisabled} isSelected={currentItemId === item.id}
+                      goToAmenity={goToItem} />
                   ))}
               </div>
 
