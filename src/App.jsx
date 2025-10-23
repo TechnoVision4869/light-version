@@ -6,6 +6,7 @@ import HOME_LOGO from "./assets/images/logo.png";
 // Components
 import LandscapePrompt from "./components/LandscapePrompt";
 import Loading from "./components/Loading";
+import InfoPopup from "./components/InfoPopup";
 
 export default function App() {
   //states
@@ -72,6 +73,7 @@ export default function App() {
       },
     ]);
 
+    // Show info popup if item has description
     const itemData = config.getData(item.id);
     if (itemData?.description) {
       setShowInfoPopup(true);
@@ -82,6 +84,11 @@ export default function App() {
       setShowInfoPopup(true); // Auto-show on first click
     }
   };
+
+  // Close popup
+  const closeInfoPopup = () => {
+    setShowInfoPopup(false);
+  }
 
   // Go back one step
   const goBack = () => {
@@ -498,51 +505,13 @@ export default function App() {
               )}
 
               {/* bottom info popup */}
-              {showInfoPopup && currentItemId && (
-                <div className="absolute left-1/2 bottom-6 -translate-x-1/2 w-[85%] max-w-[760px]">
-                  <div className="bg-black/70 backdrop-blur-sm text-white p-4 rounded-2xl shadow-2xl">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <div className="font-bold text-sm">
-                          {
-                            LAYER_CONFIG[activeLayer].getData(currentItemId)
-                              .name
-                          }
-                        </div>
-                        <p className="text-xs text-white/80 mt-2">
-                          {
-                            LAYER_CONFIG[activeLayer].getData(currentItemId)
-                              .description
-                          }
-                        </p>
-                      </div>
-                      <div>
-                        <button
-                          onClick={() => {
-                            setShowInfoPopup(false);
-                          }}
-                          className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center"
-                        >
-                          <svg
-                            width="12"
-                            height="12"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                          >
-                            <path
-                              d="M18 6L6 18M6 6L18 18"
-                              stroke="white"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+              {showInfoPopup && currentItemId &&
+                <InfoPopup
+                  showInfoPopup={showInfoPopup}
+                  layer={activeLayer}
+                  itemId={currentItemId}
+                  onClose={closeInfoPopup}
+                />}
             </div>
           </main>
         </div>
