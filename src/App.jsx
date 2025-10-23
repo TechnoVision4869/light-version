@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { MODE, MODE_CONFIG, TABS, LAYERS, TAB_CONFIG, LAYER_CONFIG } from "./data/layers";
-// Assets
-import HOME_LOGO from "./assets/images/logo.png";
-
+import { MODE, MODE_CONFIG, TABS, TAB_CONFIG } from "./data/layers";
+// Hooks
+import { useNavigation } from "./components/hooks/useNavigation";
+import { useSequenceViewer } from "./components/hooks/useSequenceViewer";
 // Components
 import LandscapePrompt from "./components/LandscapePrompt";
 import Loading from "./components/Loading";
@@ -10,81 +10,56 @@ import InfoPopup from "./components/InfoPopup";
 import ZoneButton from "./components/buttons/ZoneButton";
 import AmenityButton from "./components/buttons/AmenityButton"
 import SurroundingButton from "./components/buttons/SurroundingButton";
+import HomeButton from "./components/buttons/HomeButton";
 
 export default function App() {
+  console.log("App renders");
+
   //states
   const [sidebarOpen, setSidebarOpen] = useState(true); // set true when sidebar is open
-  const [isImagesLoaded, setIsImagesLoaded] = useState(false); //set true when async loading is done
-  const [isPlaying, setIsPlaying] = useState(false); //set true when transition is playing
   const [showInfoPopup, setShowInfoPopup] = useState(false);
 
-  //refs
-  const imagesRef = useRef([]); //ref to array of images
-  const intervalRef = useRef(null); //ref to interval id to remove in useEffect
-  const currentIndexRef = useRef(0); //current index of image being displayed
-  const imageRef = useRef(null); //ref to image element to set src
-  const justNavigatedBackRef = useRef(false);
-
-  const initHistory = [
-    {
-      tab: TABS.HOME,
-      layer: null,
-      itemId: null,
-      path: TAB_CONFIG[TABS.HOME].path,
-    },
-  ];
-  // state to manage history stack
-  const [history, setHistory] = useState(initHistory);
-
-  // Get current state from history
-  const currentEntry = history[history.length - 1];
+  // Navigation hook
   const {
-    tab: activeTab,
-    layer: activeLayer,
-    itemId: currentItemId,
-    path: currentPath,
-  } = currentEntry;
+    history,
+    activeTab,
+    activeLayer,
+    currentItemId,
+    currentPath,
+    goToTab,
+    goToItem,
+    goBack,
+    goToHome
+  } = useNavigation();
 
-  // Navigate to a main tab (ZONES, SURROUNDINGS, AMENITIES)
-  const goToTab = (tabKey) => {
-    const config = TAB_CONFIG[tabKey];
-    setHistory((prev) => [
-      ...prev,
-      {
-        tab: tabKey,
-        layer: null,
-        itemId: null,
-        path: config.path,
-      },
-    ]);
-    // console.log(history);
-  };
+  // Image sequence hook
+  const {
+    isImagesLoaded,
+    isPlaying,
+    imageRef,
+    imagesRef,
+    currentIndexRef,
+    StartTransition,
+    StartReverse,
+    updateImage,
+    goBackWithFlag
+  } = useSequenceViewer({
+    currentPath,
+    history,
+    activeTab,
+    onGoBack: goBack
+  });
 
-  // Navigate to a specific item within current tab
-  const goToItem = (item, layerKey) => {
-    const config = LAYER_CONFIG[layerKey];
-    // Since this is only called for detail layers, path is always a function
-    const path = config.path(item.id);
-
-    setHistory((prev) => [
-      ...prev,
-      {
-        tab: activeTab,
-        layer: layerKey,
-        itemId: item.id,
-        path: path,
-      },
-    ]);
+  // Show info popup when item has description
+  const handleGoToItem = (item, layerKey) => {
+    goToItem(item, layerKey);
 
     // Show info popup if item has description
-    const itemData = config.getData(item.id);
+    const itemData = layerKey ?
+      require("./data/layers").LAYER_CONFIG[layerKey].getData(item.id) : null;
+
     if (itemData?.description) {
       setShowInfoPopup(true);
-    }
-
-    const hasDescription = LAYER_CONFIG[layerKey].getData(item.id)?.description;
-    if (hasDescription) {
-      setShowInfoPopup(true); // Auto-show on first click
     }
   };
 
@@ -93,155 +68,6 @@ export default function App() {
     setShowInfoPopup(false);
   }
 
-  // Go back one step
-  const goBack = () => {
-    if (history.length <= 1) return; // Can't go back from home
-    setHistory((prev) => prev.slice(0, -1));
-    justNavigatedBackRef.current = true;
-  };
-
-  // Go to home (reset everything)
-  const goToHome = () => {
-    setHistory(initHistory);
-  };
-
-  //Constants
-  const NO_OF_FRAMES = activeTab === TABS.HOME ? 1 : 45;
-  const FPS = 45;
-
-
-
-  // load all images once
-  // we use useEffect so loading images won't happen during the rendering and blocks the UI
-  // or potentially run mutiple times
-  useEffect(() => {
-    // Clean up previous interval
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-
-    // Reset states for new path
-    setIsImagesLoaded(false);
-
-    // 1. define a function that returns a Promise.
-    // Promise is an object that represents a value that will be available in the future. It's either loading, resolved or rejected
-    const loadImage = (src) => {
-      // we use Promise because loading images takes time and JS doesn't wait for it to finish
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => resolve(img); // When loaded, resolved with the img
-        img.onerror = () => reject(new Error(`Failed to load: ${src}`)); // When failed, rejected with an error
-        img.src = src; // Set src to start loading
-      });
-    };
-
-    const loadAllImages = async () => {
-      const shouldSkipAutoPlay = justNavigatedBackRef.current;
-      // Immediately reset the ref (safe because we stored the value)
-      justNavigatedBackRef.current = false;
-
-      let paths;
-      // Special handling for HOME layer
-      if (activeTab === TABS.HOME) {
-        // For HOME, just load a single image at "/home.jpg"
-        paths = [currentPath];
-      } else {
-        // For all other layers, use the sequence pattern
-        paths = Array.from(
-          { length: NO_OF_FRAMES },
-          (_, i) =>
-            `${MODE_CONFIG}${currentPath}${currentPath}_${(i + 1)
-              .toString()
-              .padStart(2, "0")}.jpg`
-        );
-      }
-
-      // 2. use Promise.all to load all images in parallel
-      // Promise.all takes an array of Promises and returns a single Promise
-      // that resolves when all of the Promises in the array have resolved
-      try {
-        const loadedImages = await Promise.all(paths.map(loadImage));
-        imagesRef.current = loadedImages;
-        setIsImagesLoaded(true);
-
-        if (shouldSkipAutoPlay) {
-          // Start at the LAST frame (which matches the previous sequence's first frame)
-          currentIndexRef.current = NO_OF_FRAMES - 1;
-          updateImage();
-        } else {
-          // Start at the FIRST frame (normal forward navigation)
-          currentIndexRef.current = 0;
-          updateImage();
-        }
-
-        // Only auto-play for non-HOME layers
-        if (activeTab !== TABS.HOME && !shouldSkipAutoPlay) {
-          setTimeout(() => StartTransition(), 100); // slight delay to ensure DOM is ready
-        } else {
-          setIsPlaying(false);
-        }
-      } catch (error) {
-        console.error("Image loading failed:", error);
-      }
-    };
-    if (currentPath) {
-      loadAllImages();
-    }
-  }, [history]); // Run when component mounts and when history changes
-
-  // Play forward sequence
-  const StartTransition = () => {
-    if (intervalRef.current) return; // Prevent multiple intervals
-    setIsPlaying(true);
-
-    // intervalRef.current stores the interval ID from setInterval
-    intervalRef.current = setInterval(() => {
-      // Then, we update the currentIndexRef.current
-      if (currentIndexRef.current >= NO_OF_FRAMES - 1) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-        setIsPlaying(false);
-        return;
-      }
-      currentIndexRef.current += 1;
-      updateImage();
-    }, 1000 / FPS);
-  };
-
-  const StartReverse = () => {
-    if (intervalRef.current || history.length <= 1) return; // Prevent multiple intervals
-    setIsPlaying(true);
-
-    intervalRef.current = setInterval(() => {
-      if (currentIndexRef.current <= 0) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-        setIsPlaying(false);
-
-        goBack();
-        return;
-      }
-      currentIndexRef.current -= 1;
-      updateImage();
-    }, 1000 / FPS);
-  };
-
-  // Update image src when currentIndexRef changes and imagesLoaded is true
-  const updateImage = () => {
-    const currentImage = imagesRef.current[currentIndexRef.current];
-    if (imageRef.current && currentImage) {
-      imageRef.current.src = currentImage.src;
-    }
-  };
-
-  // Cleanup intervals on unmount
-  // we separated the cleanup from the async loading process
-  useEffect(() => {
-    return () => {
-      clearInterval(intervalRef.current);
-    };
-  }, []);
 
   const isDisabled = !isImagesLoaded || isPlaying;
 
@@ -314,20 +140,7 @@ export default function App() {
               AMENITIES
             </button>
           </div>
-          <div>
-            <button
-              onClick={goToHome}
-              className="w-20 h-10 rounded-xl flex items-center justify-center 
-              hover:bg-white/10 transition-all duration-200"
-              aria-label="Home"
-            >
-              <img
-                src={HOME_LOGO}
-                alt="home logo"
-                className="w-auto h-6 object-contain"
-              />
-            </button>
-          </div>
+          <HomeButton onHomeClick={goToHome} />
         </div>
 
         <div className="flex gap-3 flex-1 min-h-0 overflow-hidden">
@@ -344,13 +157,10 @@ export default function App() {
             <div className="h-full pr-2">
               {/* Dynamic sidebar title based on active tab */}
               <div className="text-white font-semibold mb-4 px-3">
-                {activeTab === TABS.ZONES
-                  ? TAB_CONFIG[TABS.ZONES]?.title
-                  : activeTab === TABS.SURROUNDINGS
-                    ? TAB_CONFIG[TABS.SURROUNDINGS]?.title
-                    : activeTab === TABS.AMENITIES
-                      ? TAB_CONFIG[TABS.AMENITIES]?.title
-                      : ""}
+                {activeTab === TABS.ZONES ?
+                  TAB_CONFIG[TABS.ZONES]?.title : activeTab === TABS.SURROUNDINGS ?
+                    TAB_CONFIG[TABS.SURROUNDINGS]?.title : activeTab === TABS.AMENITIES ?
+                      TAB_CONFIG[TABS.AMENITIES]?.title : ""}
               </div>
               <div className="h-0.5 bg-white/50 mx-3 mb-4"></div>
 
@@ -361,14 +171,14 @@ export default function App() {
                   TAB_CONFIG[TABS.ZONES].getItems().map((zone) => (
                     <ZoneButton zone={zone} key={zone.id}
                       isDisabled={isDisabled} isSeected={currentItemId === zone.id}
-                      goToZone={goToItem} />
+                      goToZone={handleGoToItem} />
                   ))}
                 {activeTab === TABS.SURROUNDINGS &&
                   activeLayer === null &&
                   TAB_CONFIG[TABS.SURROUNDINGS].getItems().map((item) => (
                     <SurroundingButton surrounding={item} key={item.id}
                       isDisabled={isDisabled} isSelected={currentItemId === item.id}
-                      goToSurrounding={goToItem} />
+                      goToSurrounding={handleGoToItem} />
                   ))}
 
                 {activeTab === TABS.AMENITIES &&
@@ -376,7 +186,7 @@ export default function App() {
                   TAB_CONFIG[TABS.AMENITIES].getItems().map((item) => (
                     <AmenityButton amenity={item} key={item.id}
                       isDisabled={isDisabled} isSelected={currentItemId === item.id}
-                      goToAmenity={goToItem} />
+                      goToAmenity={handleGoToItem} />
                   ))}
               </div>
 
