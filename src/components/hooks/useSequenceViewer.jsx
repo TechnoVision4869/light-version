@@ -141,7 +141,7 @@ export function useSequenceViewer({
         if (currentPath) {
             loadAllImages();
         }
-    }, [history, currentPath, activeTab, StartTransition, updateImage]); // Run when component mounts and when dependencies changes
+    }, [history]); // Run when component mounts and when dependencies changes
 
     // Cleanup intervals on unmount
     // we separated the cleanup from the async loading process

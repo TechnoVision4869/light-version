@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { MODE, MODE_CONFIG, TABS, TAB_CONFIG } from "./data/layers";
+import { MODE, MODE_CONFIG, TABS, TAB_CONFIG, LAYER_CONFIG } from "./data/layers";
 // Hooks
 import { useNavigation } from "./components/hooks/useNavigation";
 import { useSequenceViewer } from "./components/hooks/useSequenceViewer";
@@ -55,8 +55,7 @@ export default function App() {
     goToItem(item, layerKey);
 
     // Show info popup if item has description
-    const itemData = layerKey ?
-      require("./data/layers").LAYER_CONFIG[layerKey].getData(item.id) : null;
+    const itemData = LAYER_CONFIG[layerKey].getData(item.id);
 
     if (itemData?.description) {
       setShowInfoPopup(true);
@@ -254,6 +253,52 @@ export default function App() {
             </div>
           </main>
         </div>
+
+        {/* Breadcrumbs */}
+
+        {history.length > 1 && (
+          <div className="px-6 pt-3">
+            <div className="inline-flex items-center gap-3 bg-white/9 rounded-full px-4 py-2 text-sm">
+              {["Zones", "Zone1", "Small Villa", "Twin Casa A"].map(
+                (name, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-2 font-semibold"
+                  >
+                    <button
+                      className="w-auto cursor-pointer text-white"
+                      onClick={() => console.log(`${name} clicked`)}
+                    >
+                      {name}
+                    </button>
+                    {index < 3 && <span className="text-white">›</span>}
+                  </div>
+                )
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* {history.length > 1 && (
+          <div className="px-6 pt-3">
+            <div className="inline-flex items-center gap-3 bg-white/9 rounded-full px-4 py-2 text-sm">
+              {history.slice(1).map((entry, index) => (
+                <div key={entry.itemId}>
+                  <button
+                    className="w-auto cursor-pointer text-white"
+                    onClick={() => console.log(`${entry.itemId} clicked`)}
+                  >
+                    {entry.itemId}
+                  </button>
+                  {index === history.length - 1 && (
+                    <span className="text-white">›</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )} */}
+
       </div>
     </div>
   );
