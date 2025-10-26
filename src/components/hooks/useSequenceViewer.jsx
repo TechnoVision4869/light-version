@@ -58,6 +58,7 @@ export function useSequenceViewer({
                 intervalRef.current = null;
                 setIsPlaying(false);
                 onGoBack(); // Call the goBack function from navigation hook
+                justNavigatedBackRef.current = true;
                 return;
             }
             currentIndexRef.current -= 1;
@@ -153,12 +154,6 @@ export function useSequenceViewer({
         };
     }, []);
 
-    // Function to trigger back navigation with flag
-    const goBackWithFlag = useCallback(() => {
-        justNavigatedBackRef.current = true;
-        onGoBack();
-    }, [onGoBack]);
-
     return {
         isImagesLoaded,
         isPlaying,
@@ -168,6 +163,5 @@ export function useSequenceViewer({
         StartTransition,
         StartReverse,
         updateImage,
-        goBackWithFlag
     };
 }

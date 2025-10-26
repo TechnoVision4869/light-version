@@ -26,12 +26,12 @@ export function useNavigation() {
     // Navigate to a main tab (ZONES, SURROUNDINGS, AMENITIES)
     const goToTab = useCallback((tabKey) => {
         const config = TAB_CONFIG[tabKey];
-        setHistory((prev) => [
-            ...prev,
+        setHistory(() => [
+            initHistory,
             {
                 tab: tabKey,
                 layer: null,
-                itemId: null,
+                itemId: tabKey,
                 path: config.path,
             },
         ]);

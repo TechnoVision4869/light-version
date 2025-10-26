@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { MODE, MODE_CONFIG, TABS, TAB_CONFIG, LAYER_CONFIG } from "./data/layers";
 // Hooks
 import { useNavigation } from "./components/hooks/useNavigation";
@@ -13,10 +13,10 @@ import SurroundingButton from "./components/buttons/SurroundingButton";
 import HomeButton from "./components/buttons/HomeButton";
 
 export default function App() {
-  console.log("App renders");
+  // console.log("App renders");
 
   //states
-  const [sidebarOpen, setSidebarOpen] = useState(true); // set true when sidebar is open
+  const [sidebarOpen, setSidebarOpen] = useState(false); // set true when sidebar is open
   const [showInfoPopup, setShowInfoPopup] = useState(false);
 
   // Navigation hook
@@ -39,10 +39,7 @@ export default function App() {
     imageRef,
     imagesRef,
     currentIndexRef,
-    StartTransition,
     StartReverse,
-    updateImage,
-    goBackWithFlag
   } = useSequenceViewer({
     currentPath,
     history,
@@ -71,6 +68,7 @@ export default function App() {
   const isDisabled = !isImagesLoaded || isPlaying;
 
   const handleActiveTab = (tab) => {
+    setSidebarOpen(true);
     if (tab === TABS.HOME) {
       goToHome();
     } else {
@@ -142,7 +140,7 @@ export default function App() {
           <HomeButton onHomeClick={goToHome} />
         </div>
 
-        <div className="flex gap-3 flex-1 min-h-0 overflow-hidden">
+        <div className={`flex ${sidebarOpen ? "gap-3" : "gap-0"} flex-1 min-h-0 overflow-hidden`}>
           {/* Sidebar */}
           <aside
             className={`bg-white/9 rounded-2xl p-2 py-3 md:p-3 md:py-4 flex-shrink-0 transition-all duration-300 overflow-hidden
@@ -255,49 +253,27 @@ export default function App() {
         </div>
 
         {/* Breadcrumbs */}
-
         {history.length > 1 && (
           <div className="px-6 pt-3">
             <div className="inline-flex items-center gap-3 bg-white/9 rounded-full px-4 py-2 text-sm">
-              {["Zones", "Zone1", "Small Villa", "Twin Casa A"].map(
-                (name, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-2 font-semibold"
-                  >
+              {history.slice(1).map((entry, index) => (
+                entry.itemId && (
+                  <div key={entry.itemId} className=" flex gap-2">
                     <button
                       className="w-auto cursor-pointer text-white"
-                      onClick={() => console.log(`${name} clicked`)}
+                      onClick={() => console.log(`${entry.itemId} clicked`)}
                     >
-                      {name}
+                      {String(entry.itemId).charAt(0).toUpperCase() + String(entry.itemId).slice(1)}
                     </button>
-                    {index < 3 && <span className="text-white">›</span>}
+                    {entry.itemId !== currentItemId && (
+                      <span className="text-white">›</span>
+                    )}
                   </div>
                 )
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* {history.length > 1 && (
-          <div className="px-6 pt-3">
-            <div className="inline-flex items-center gap-3 bg-white/9 rounded-full px-4 py-2 text-sm">
-              {history.slice(1).map((entry, index) => (
-                <div key={entry.itemId}>
-                  <button
-                    className="w-auto cursor-pointer text-white"
-                    onClick={() => console.log(`${entry.itemId} clicked`)}
-                  >
-                    {entry.itemId}
-                  </button>
-                  {index === history.length - 1 && (
-                    <span className="text-white">›</span>
-                  )}
-                </div>
               ))}
             </div>
           </div>
-        )} */}
+        )}
 
       </div>
     </div>
