@@ -1,4 +1,3 @@
-// hooks/useImageSequence.js
 import { useState, useRef, useEffect, useCallback } from "react";
 import { MODE_CONFIG, TABS } from "../../data/layers";
 
@@ -13,10 +12,10 @@ export function useSequenceViewer({
     const [isPlaying, setIsPlaying] = useState(false);
 
     // Refs
+    const imageRef = useRef(null);
     const imagesRef = useRef([]);
     const intervalRef = useRef(null);
     const currentIndexRef = useRef(0);
-    const imageRef = useRef(null);
     const justNavigatedBackRef = useRef(false);
 
     // Constants

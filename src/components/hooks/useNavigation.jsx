@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { TABS, TAB_CONFIG, LAYER_CONFIG } from "../../data/layers";
+import { MODE, MODE_CONFIG, TABS, TAB_CONFIG, LAYER_CONFIG } from "../../data/layers";
 
 export function useNavigation() {
     const initHistory = [
@@ -8,6 +8,7 @@ export function useNavigation() {
             layer: null,
             itemId: null,
             path: TAB_CONFIG[TABS.HOME].path,
+            videosPath: TAB_CONFIG[TABS.HOME].videosPath,
         },
     ];
 
@@ -21,6 +22,7 @@ export function useNavigation() {
         layer: activeLayer,
         itemId: currentItemId,
         path: currentPath,
+        videosPath: currentVideosPaths,
     } = currentEntry;
 
     // Navigate to a main tab (ZONES, SURROUNDINGS, AMENITIES)
@@ -32,7 +34,8 @@ export function useNavigation() {
                 tab: tabKey,
                 layer: null,
                 itemId: tabKey,
-                path: config.path,
+                path: MODE_CONFIG === MODE.VIDEO ? null : config.path,
+                videosPath: MODE_CONFIG === MODE.VIDEO ? config.videosPath : null,
             },
         ]);
     }, []);
@@ -41,6 +44,7 @@ export function useNavigation() {
     const goToItem = useCallback((item, layerKey) => {
         const config = LAYER_CONFIG[layerKey];
         const path = config.path(item.id);
+        const videosPath = config.videosPath(item.id);
 
         setHistory((prev) => [
             ...prev,
@@ -49,6 +53,7 @@ export function useNavigation() {
                 layer: layerKey,
                 itemId: item.id,
                 path: path,
+                videosPath: videosPath,
             },
         ]);
     }, [activeTab]);
@@ -70,6 +75,7 @@ export function useNavigation() {
         activeLayer,
         currentItemId,
         currentPath,
+        currentVideosPaths,
         goToTab,
         goToItem,
         goBack,

@@ -3,6 +3,7 @@ import { MODE, MODE_CONFIG, TABS, TAB_CONFIG, LAYER_CONFIG } from "./data/layers
 // Hooks
 import { useNavigation } from "./components/hooks/useNavigation";
 import { useSequenceViewer } from "./components/hooks/useSequenceViewer";
+import { useVideoViewer } from "./components/hooks/useVideoViewer";
 // Components
 import LandscapePrompt from "./components/LandscapePrompt";
 import Loading from "./components/Loading";
@@ -26,26 +27,46 @@ export default function App() {
     activeLayer,
     currentItemId,
     currentPath,
+    currentVideosPaths,
     goToTab,
     goToItem,
     goBack,
     goToHome
   } = useNavigation();
 
-  // Image sequence hook
-  const {
-    isImagesLoaded,
-    isPlaying,
-    imageRef,
-    imagesRef,
-    currentIndexRef,
-    StartReverse,
-  } = useSequenceViewer({
-    currentPath,
-    history,
-    activeTab,
-    onGoBack: goBack
-  });
+  // Conditionally use video or sequence viewer
+  let viewerProps;
+  if (MODE_CONFIG === MODE.VIDEO) {
+    const videoViewer = useVideoViewer({
+      currentVideosPaths,
+      history,
+      activeTab,
+      onGoBack: goBack
+    });
+    viewerProps = {
+      isMediaLoaded: videoViewer.isVideosLoaded,
+      isPlaying: videoViewer.isPlaying,
+      mediaRef: videoViewer.videoRef,
+      StartReverse: videoViewer.StartReverse,
+      mediaElement: 'video'
+    };
+  } else {
+    const sequenceViewer = useSequenceViewer({
+      currentPath,
+      history,
+      activeTab,
+      onGoBack: goBack
+    });
+    viewerProps = {
+      isMediaLoaded: sequenceViewer.isImagesLoaded,
+      isPlaying: sequenceViewer.isPlaying,
+      mediaRef: sequenceViewer.imageRef,
+      imagesRef: sequenceViewer.imagesRef,
+      currentIndexRef: sequenceViewer.currentIndexRef,
+      StartReverse: sequenceViewer.StartReverse,
+      mediaElement: 'img'
+    };
+  }
 
   // Show info popup when item has description
   const handleGoToItem = (item, layerKey) => {
@@ -64,8 +85,7 @@ export default function App() {
     setShowInfoPopup(false);
   }
 
-
-  const isDisabled = !isImagesLoaded || isPlaying;
+  const isDisabled = !viewerProps.isMediaLoaded || viewerProps.isPlaying;
 
   const handleActiveTab = (tab) => {
     setSidebarOpen(true);
@@ -84,7 +104,7 @@ export default function App() {
         <div className="flex items-center justify-between mb-4 px-4">
           <div className="flex items-center gap-3">
             <button
-              onClick={StartReverse}
+              onClick={viewerProps.StartReverse}
               disabled={isDisabled || history.length <= 1}
               className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
               hover:bg-white/7 transition
@@ -194,15 +214,32 @@ export default function App() {
           {/* Main content area */}
           <main className="flex-1 relative">
             <div className="w-full h-full flex items-center justify-center bg-white/9 rounded-2xl overflow-hidden shadow-inner">
-              {/* img element */}
-              {isImagesLoaded ? (
-                <img
-                  ref={imageRef}
-                  className="w-full h-full object-contain rounded-2xl" // object-contain preserves aspect ratio
-                  alt="Transition frame"
-                  src={imagesRef.current[currentIndexRef.current]?.src}
-                />
-              ) : <Loading />}
+              {/* img or video element */}
+              {viewerProps.isMediaLoaded ? (
+                viewerProps.mediaElement === 'video' ? (
+                  <video
+                    ref={viewerProps.mediaRef}
+                    className="w-full h-full object-contain rounded-2xl"
+                    alt="Video"
+                    // src={viewerProps.mediaRef?.current?.src}
+                    muted
+                    playsInline
+                    onLoad={() => {
+                      // This ensures the video element is ready
+                      console.warn("Video element loaded");
+                    }}
+                  />
+                ) : (
+                  <img
+                    ref={viewerProps.mediaRef}
+                    className="w-full h-full object-contain rounded-2xl"
+                    alt="Transition frame"
+                    src={viewerProps.imagesRef?.current?.[viewerProps.currentIndexRef?.current]?.src}
+                  />
+                )
+              ) : (
+                <Loading />
+              )}
 
               {/* Example center marker */}
               {/* <div className="absolute left-1/2 top-28 -translate-x-1/2 flex flex-col items-center">
