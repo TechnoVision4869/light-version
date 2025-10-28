@@ -1,5 +1,5 @@
 import { LAYERS } from "../../data/layers";
-export default function SurroundingButton({ surrounding, isDisabled, isSelected, goToSurrounding }) {
+export default function SurroundingButton({ surrounding, isDisabled = true, isSelected, goToSurrounding }) {
     return (
         <button
             key={surrounding.id}

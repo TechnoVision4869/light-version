@@ -2,7 +2,7 @@ import { LAYERS } from "../../data/layers";
 export default function ZoneButton({ zone, isDisabled, isSelected, goToZone }) {
     return (
         <button
-            onClick={() => { goToZone(zone, LAYERS.BUILDING); }}
+            onClick={() => { goToZone(zone, LAYERS.ZONE_DETAIL); }}
             disabled={isDisabled}
             className={`w-64 max-w-full mx-auto p-4 rounded-2xl transition
                         ${isDisabled

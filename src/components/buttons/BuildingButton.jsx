@@ -4,7 +4,7 @@ export default function BuildingButton({ building, isDisabled, isSelected, goToB
         <button
             key={building.id}
             onClick={() => {
-                goToBuilding(building, LAYERS.SURROUNDING_DETAIL);
+                goToBuilding(building, LAYERS.BUILDING);
             }}
             disabled={isDisabled}
             className={`w-64 max-w-full mx-auto p-4 rounded-2xl transition

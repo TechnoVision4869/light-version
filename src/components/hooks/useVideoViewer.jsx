@@ -26,7 +26,6 @@ export function useVideoViewer({
     video.loop = false;
 
     video.onloadeddata = () => {
-      console.log("video is loaded");
       video.play().catch(e => console.error("Forward video play failed:", e));
     };
 
@@ -60,8 +59,6 @@ export function useVideoViewer({
 
   // Play idle (looping) video
   const playIdleVideo = useCallback(() => {
-    console.log("video ref", videoRef);
-
     if (!currentVideosPaths?.idleVideo || !videoRef.current) return;
 
     setIsPlaying(false); // Idle is not considered "playing" for UI purposes
@@ -112,11 +109,11 @@ export function useVideoViewer({
       }
     };
 
-    console.log("loadVideoAssets from useEffect", currentVideosPaths);
-
     if (currentVideosPaths) {
       loadVideoAssets();
     }
+    console.log(history);
+
   }, [history, currentVideosPaths]);
 
   // Cleanup on unmount
