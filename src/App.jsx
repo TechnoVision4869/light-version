@@ -245,7 +245,7 @@ export default function App() {
                 {activeTab === TABS.ZONES &&
                   activeLayer === LAYERS.ZONE_DETAIL &&
                   LAYER_CONFIG[LAYERS.ZONE_DETAIL]
-                    .getData("zone1")
+                    .getItems(currentItemId)
                     .map((building) => (
                       <BuildingButton
                         building={building}

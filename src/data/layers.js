@@ -88,9 +88,13 @@ export const LAYER_CONFIG = {
       reverseVideo: `/${MODE_CONFIG}/zones/${zoneId}/general/${zoneId}_gen_rev_trans.mp4`,
       idleVideo: `/${MODE_CONFIG}/zones/${zoneId}/general/${zoneId}_gen_idle.mp4`,
     }),
-    getData: (zoneId) => DATA.buildings.map((b) => b.zoneId === zoneId),
+    getData: (zoneId) => DATA.zones.find((z) => z.id === zoneId),
     // Here, getData returns the zone object with the given id
     // used to display the zone details
+    getItems: (zoneId) => {      
+      const zone = DATA.zones.find((z) => z.id === zoneId);
+      return zone.buildings;
+    }
   },
   [LAYERS.BUILDING]: {
     videosPath: (zoneId, buildingId) => ({
