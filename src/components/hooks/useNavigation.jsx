@@ -42,6 +42,8 @@ export function useNavigation() {
 
     // Navigate to a specific item within current tab
     const goToItem = useCallback((item, layerKey) => {
+        console.log("item: ", item);
+        console.log("layer: ", layerKey);
         const config = LAYER_CONFIG[layerKey];
         const path = config.path(item.id);
         const videosPath = config.videosPath(item.id);
