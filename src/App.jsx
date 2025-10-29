@@ -20,6 +20,7 @@ import AmenityButton from "./components/buttons/AmenityButton";
 import SurroundingButton from "./components/buttons/SurroundingButton";
 import HomeButton from "./components/buttons/HomeButton";
 import BuildingButton from "./components/buttons/BuildingButton";
+import FloorButton from "./components/buttons/FloorButton";
 
 export default function App() {
   // console.log("App renders");
@@ -231,17 +232,15 @@ export default function App() {
 
                 {activeTab === TABS.AMENITIES &&
                   activeLayer === null &&
-                  TAB_CONFIG[TABS.AMENITIES]
-                    .getItems()
-                    .map((item) => (
-                      <AmenityButton
-                        amenity={item}
-                        key={item.id}
-                        isDisabled={isDisabled}
-                        isSelected={currentItemId === item.id}
-                        goToAmenity={handleGoToItem}
-                      />
-                    ))}
+                  TAB_CONFIG[TABS.AMENITIES].getItems().map((item) => (
+                    <AmenityButton
+                      amenity={item}
+                      key={item.id}
+                      isDisabled={isDisabled}
+                      isSelected={currentItemId === item.id}
+                      goToAmenity={handleGoToItem}
+                    />
+                  ))}
                 {activeTab === TABS.ZONES &&
                   activeLayer === LAYERS.ZONE_DETAIL &&
                   LAYER_CONFIG[LAYERS.ZONE_DETAIL]
@@ -253,6 +252,19 @@ export default function App() {
                         isDisabled={isDisabled}
                         isSelected={currentItemId === building.id}
                         goToBuilding={handleGoToItem}
+                      />
+                    ))}
+                {activeTab === TABS.ZONES &&
+                  activeLayer === LAYERS.BUILDING &&
+                  LAYER_CONFIG[LAYERS.BUILDING]
+                    .getItems(currentItemId)
+                    .map((floor) => (
+                      <FloorButton
+                        floor={floor}
+                        key={floor.id}
+                        isDisabled={isDisabled}
+                        isSelected={currentItemId === floor.id}
+                        goToFloor={handleGoToItem}
                       />
                     ))}
               </div>
@@ -349,15 +361,15 @@ export default function App() {
           <div className="px-6 pt-3">
             <div className="inline-flex items-center gap-3 bg-white/9 rounded-full px-4 py-2 text-sm">
               {history.slice(1).map(
-                (entry, index) =>
+                (entry) =>
                   entry.itemId && (
                     <div key={entry.itemId} className=" flex gap-2">
                       <button
                         className="w-auto cursor-pointer text-white"
                         onClick={() => console.log(`${entry.itemId} clicked`)}
                       >
-                        {String(entry.itemId).charAt(0).toUpperCase() +
-                          String(entry.itemId).slice(1)}
+                        {String(entry.itemName).charAt(0).toUpperCase() +
+                          String(entry.itemName).slice(1)}
                       </button>
                       {entry.itemId !== currentItemId && (
                         <span className="text-white">›</span>

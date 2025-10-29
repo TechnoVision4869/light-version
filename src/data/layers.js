@@ -17,6 +17,7 @@ export const LAYERS = {
   // ZONES tab layers
   ZONE_DETAIL: "zone_detail",
   BUILDING: "building", // Could be a tower or villa
+  FLOOR: "floor",
   APARTMENT: "apartment",
   INTERIOR: "interior",
 
@@ -42,9 +43,9 @@ export const TAB_CONFIG = {
     path: "/zones_zoom",
 
     videosPath: {
-      forwardVideo: `/${MODE_CONFIG}/zones/general/zones_general_trans_from_home.mp4`,
-      reverseVideo: `/${MODE_CONFIG}/zones/general/zones_general_rev_trans_to_home.mp4`,
-      idleVideo: `/${MODE_CONFIG}/zones/general/zones_idle.mp4`,
+      forwardVideo: `/${MODE_CONFIG}/zones/zones_gen_trans.mp4`,
+      reverseVideo: `/${MODE_CONFIG}/zones/zones_gen_rev.mp4`,
+      idleVideo: `/${MODE_CONFIG}/zones/zones_gen_idle.mp4`,
     },
 
     getItems: () => DATA.zones,
@@ -83,28 +84,61 @@ export const TAB_CONFIG = {
 export const LAYER_CONFIG = {
   [LAYERS.ZONE_DETAIL]: {
     path: (zoneId) => `/${zoneId}_zoom`,
-    videosPath: (zoneId) => ({
-      forwardVideo: `/${MODE_CONFIG}/zones/${zoneId}/general/${zoneId}_gen_trans.mp4`,
-      reverseVideo: `/${MODE_CONFIG}/zones/${zoneId}/general/${zoneId}_gen_rev_trans.mp4`,
-      idleVideo: `/${MODE_CONFIG}/zones/${zoneId}/general/${zoneId}_gen_idle.mp4`,
-    }),
+    videosPath: (zone) => {
+      const zoneId = zone.id;
+      return {
+        forwardVideo: `/${MODE_CONFIG}/zones/${zoneId}/${zoneId}_gen_trans.mp4`,
+        reverseVideo: `/${MODE_CONFIG}/zones/${zoneId}/${zoneId}_gen_rev.mp4`,
+        idleVideo: `/${MODE_CONFIG}/zones/${zoneId}/${zoneId}_gen_idle.mp4`,
+      };
+    },
     getData: (zoneId) => DATA.zones.find((z) => z.id === zoneId),
     // Here, getData returns the zone object with the given id
     // used to display the zone details
-    getItems: (zoneId) => {      
-      const zone = DATA.zones.find((z) => z.id === zoneId);
-      return zone.buildings;
-    }
+    getItems: (zoneId) => DATA.buildings.filter((b) => b.zoneId === zoneId),
   },
   [LAYERS.BUILDING]: {
-    videosPath: (zoneId, buildingId) => ({
-      forwardVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_gen_trans.mp4`,
-      reverseVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_gen_rev_trans.mp4`,
-      idleVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/views/view1/${zoneId}_${buildingId}_view1_idle.mp4`,
-    }),
+    videosPath: (building) => {
+      const buildingId = building.id;
+      const zoneId = building.zoneId;
+      return {
+        forwardVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_gen_trans.mp4`,
+        reverseVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_gen_rev.mp4`,
+        idleVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/views/view1/${zoneId}_${buildingId}_view1_idle.mp4`,
+      };
+    },
     getData: (buildingId) => DATA.buildings.find((b) => b.id === buildingId),
     // Here, getData returns the building object with the given id
     // used to display the building details
+    getItems: (buildingId) => {
+      return DATA.floors.filter((f) => f.buildingId === buildingId);
+    },
+    // here there's a potential bug if building id isn't unique
+  },
+  [LAYERS.FLOOR]: {
+    videosPath: (floor) => {
+      const floorId = floor.id;
+      const buildingId = floor.buildingId;
+      const zoneId = floor.zoneId;
+      return {
+        forwardVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/floors/${zoneId}_${buildingId}_floor1_trans.mp4`,
+        reverseVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/floors/${zoneId}_${buildingId}_floor1_rev.mp4`,
+        idleVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/floors/${floorId}/${zoneId}_${buildingId}_${floorId}_idle.mp4`,
+      };
+    },
+    getData: (floorId) => DATA.floors.find((f) => f.id === floorId),
+    // Here, getData returns the floor object with the given id
+    // used to display the floor details
+    getItems: (floorId) => {
+      // const buildingId = floor.buildingId;
+      // const zoneId = floor.zoneId;
+      // return DATA.apartments.filter(
+      //   (a) =>
+      //     a.floorId === floorId &&
+      //     a.buildingId === buildingId &&
+      //     a.zoneId === zoneId
+      // );
+    },
   },
   [LAYERS.SURROUNDING_DETAIL]: {
     path: (surroundingId) => `/${surroundingId}_zoom`,
@@ -113,11 +147,14 @@ export const LAYER_CONFIG = {
   },
   [LAYERS.AMENITY_DETAIL]: {
     path: (amenityId) => `/${amenityId}_zoom`,
-    videosPath: (amenityId) => ({
-      forwardVideo: `/${MODE_CONFIG}/amenities/${amenityId}/${amenityId}_trans.mp4`,
-      reverseVideo: `/${MODE_CONFIG}/amenities/${amenityId}/${amenityId}_rev_trans.mp4`,
-      idleVideo: `/${MODE_CONFIG}/amenities/${amenityId}/${amenityId}_idle.mp4`,
-    }),
+    videosPath: (amenity) => {
+      const amenityId = amenity.id;
+      return {
+        forwardVideo: `/${MODE_CONFIG}/amenities/${amenityId}/${amenityId}_trans.mp4`,
+        reverseVideo: `/${MODE_CONFIG}/amenities/${amenityId}/${amenityId}_rev.mp4`,
+        idleVideo: `/${MODE_CONFIG}/amenities/${amenityId}/${amenityId}_idle.mp4`,
+      };
+    },
     getData: (amenityId) => DATA.amenities.find((a) => a.id === amenityId),
   },
 };
@@ -132,245 +169,6 @@ export const DATA = {
       thumbnail: "thumbnails/zones/zone1.png",
       description:
         "Our towers hold different apartments options. They are at the center of the city.",
-      buildings: [
-        {
-          id: "tower1",
-          name: "Tower 1",
-          description: 'Tower 1 description...',
-          floors: [
-            {
-              id: 'building1_floor1', // Unique ID combining parent IDs
-              name: 'Floor 1',
-              type: "Residential",
-              description: 'First floor description...',
-              apartments: [
-                {
-                  id: 'building1_floor1_apartment101', // Unique ID combining parent IDs
-                  name: 'Apartment 101',
-                  description: 'Beautiful 2-bedroom apartment...',
-                  bedrooms: 2,
-                  bathrooms: 1,
-                  area: '85 m²',
-                  price: '$$$,$$$'
-                },
-                {
-                  id: 'building1_floor1_apartment102', // Unique ID combining parent IDs
-                  name: 'Apartment 102',
-                  description: 'Beautiful 4-bedroom apartment...',
-                  bedrooms: 4,
-                  bathrooms: 2,
-                  area: '200 m²',
-                  price: '$$$,$$$'
-                },
-                {
-                  id: 'building1_floor1_apartment103', // Unique ID combining parent IDs
-                  name: 'Apartment 103',
-                  description: 'Beautiful 2-bedroom apartment...',
-                  bedrooms: 2,
-                  bathrooms: 2,
-                  area: '120 m²',
-                  price: '$$$,$$$'
-                },
-                {
-                  id: 'building1_floor1_apartment104', // Unique ID combining parent IDs
-                  name: 'Apartment 104',
-                  description: 'Beautiful 3-bedroom apartment...',
-                  bedrooms: 3,
-                  bathrooms: 2,
-                  area: '185 m²',
-                  price: '$$$,$$$'
-                },
-                {
-                  id: 'building1_floor1_apartment105', // Unique ID combining parent IDs
-                  name: 'Apartment 105',
-                  description: 'Beautiful 4-bedroom apartment...',
-                  bedrooms: 4,
-                  bathrooms: 2,
-                  area: '250 m²',
-                  price: '$$$,$$$'
-                },
-              ]
-            },
-            {
-              id: 'building1_floor2', // Unique ID combining parent IDs
-              name: 'Floor 2',
-              type: "Residential",
-              description: 'Second floor description...',
-              apartments: [
-                {
-                  id: 'building1_floor2_apartment201', // Unique ID combining parent IDs
-                  name: 'Apartment 201',
-                  description: 'Beautiful 2-bedroom apartment...',
-                  bedrooms: 2,
-                  bathrooms: 1,
-                  area: '115 m²',
-                  price: '$$$,$$$'
-                },
-                {
-                  id: 'building1_floor2_apartment202', // Unique ID combining parent IDs
-                  name: 'Apartment 202',
-                  description: 'Beautiful 2-bedroom apartment...',
-                  bedrooms: 2,
-                  bathrooms: 2,
-                  area: '125 m²',
-                  price: '$$$,$$$'
-                },
-                {
-                  id: 'building1_floor2_apartment203', // Unique ID combining parent IDs
-                  name: 'Apartment 203',
-                  description: 'Beautiful 2-bedroom apartment...',
-                  bedrooms: 2,
-                  bathrooms: 2,
-                  area: '125 m²',
-                  price: '$$$,$$$'
-                },
-                {
-                  id: 'building1_floor2_apartment204', // Unique ID combining parent IDs
-                  name: 'Apartment 204',
-                  description: 'Beautiful 2-bedroom apartment...',
-                  bedrooms: 2,
-                  bathrooms: 2,
-                  area: '115 m²',
-                  price: '$$$,$$$'
-                },
-                {
-                  id: 'building1_floor2_apartment205', // Unique ID combining parent IDs
-                  name: 'Apartment 205',
-                  description: 'Beautiful 3-bedroom apartment...',
-                  bedrooms: 3,
-                  bathrooms: 2,
-                  area: '145 m²',
-                  price: '$$$,$$$'
-                },
-                {
-                  id: 'building1_floor2_apartment206', // Unique ID combining parent IDs
-                  name: 'Apartment 206',
-                  description: 'Beautiful 4-bedroom apartment...',
-                  bedrooms: 4,
-                  bathrooms: 2,
-                  area: '200 m²',
-                  price: '$$$,$$$'
-                },
-              ]
-            },
-
-          ]
-        },
-        {
-          id: "tower2",
-          name: "Tower 2",
-          description: 'Tower 2 description...',
-          floors: [
-            {
-              id: 'building2_floor1', // Unique ID combining parent IDs
-              name: 'Floor 1',
-              type: "Residential",
-              description: 'First floor description...',
-              apartments: [
-                {
-                  id: 'building2_floor1_apartment111', // Unique ID combining parent IDs
-                  name: 'Apartment 111',
-                  description: 'Beautiful 2-bedroom apartment...',
-                  bedrooms: 2,
-                  bathrooms: 1,
-                  area: '100 m²',
-                  price: '$$$,$$$'
-                },
-                {
-                  id: 'building2_floor1_apartment112', // Unique ID combining parent IDs
-                  name: 'Apartment 112',
-                  description: 'Beautiful 2-bedroom apartment...',
-                  bedrooms: 2,
-                  bathrooms: 2,
-                  area: '150 m²',
-                  price: '$$$,$$$'
-                },
-                {
-                  id: 'building2_floor1_apartment113', // Unique ID combining parent IDs
-                  name: 'Apartment 113',
-                  description: 'Beautiful 2-bedroom apartment...',
-                  bedrooms: 2,
-                  bathrooms: 2,
-                  area: '85 m²',
-                  price: '$$$,$$$'
-                },
-                {
-                  id: 'building2_floor1_apartment114', // Unique ID combining parent IDs
-                  name: 'Apartment 114',
-                  description: 'Beautiful 3-bedroom apartment...',
-                  bedrooms: 3,
-                  bathrooms: 2,
-                  area: '185 m²',
-                  price: '$$$,$$$'
-                },
-                {
-                  id: 'building2_floor1_apartment115', // Unique ID combining parent IDs
-                  name: 'Apartment 115',
-                  description: 'Beautiful 4-bedroom apartment...',
-                  bedrooms: 4,
-                  bathrooms: 2,
-                  area: '220 m²',
-                  price: '$$$,$$$'
-                },
-              ]
-            },
-            {
-              id: 'building2_floor2', // Unique ID combining parent IDs
-              name: 'Floor 2',
-              type: "Residential",
-              description: 'Second floor description...',
-              apartments: [
-                {
-                  id: 'building2_floor2_apartment221', // Unique ID combining parent IDs
-                  name: 'Apartment 221',
-                  description: 'Beautiful 2-bedroom apartment...',
-                  bedrooms: 2,
-                  bathrooms: 1,
-                  area: '115 m²',
-                  price: '$$$,$$$'
-                },
-                {
-                  id: 'building2_floor2_apartment222', // Unique ID combining parent IDs
-                  name: 'Apartment 222',
-                  description: 'Beautiful 2-bedroom apartment...',
-                  bedrooms: 2,
-                  bathrooms: 2,
-                  area: '85 m²',
-                  price: '$$$,$$$'
-                },
-                {
-                  id: 'building2_floor2_apartment223', // Unique ID combining parent IDs
-                  name: 'Apartment 223',
-                  description: 'Beautiful 2-bedroom apartment...',
-                  bedrooms: 2,
-                  bathrooms: 2,
-                  area: '125 m²',
-                  price: '$$$,$$$'
-                },
-                {
-                  id: 'building2_floor2_apartment224', // Unique ID combining parent IDs
-                  name: 'Apartment 224',
-                  description: 'Beautiful 2-bedroom apartment...',
-                  bedrooms: 2,
-                  bathrooms: 2,
-                  area: '115 m²',
-                  price: '$$$,$$$'
-                },
-                {
-                  id: 'building2_floor2_apartment225', // Unique ID combining parent IDs
-                  name: 'Apartment 225',
-                  description: 'Beautiful 3-bedroom apartment...',
-                  bedrooms: 3,
-                  bathrooms: 2,
-                  area: '145 m²',
-                  price: '$$$,$$$'
-                },
-              ]
-            },
-
-          ]
-        }
-      ]
     },
     {
       id: "zone2",
@@ -379,39 +177,344 @@ export const DATA = {
       thumbnail: "thumbnails/zones/zone2.png",
       description:
         "Our towers hold different apartments options. They are at the center of the city.",
-      buildings: [{
-        id: "tower5",
-        name: "Tower 5",
-        description: 'Tower 5 description...',
-        floors: [],
-
-      }]
     },
     // ... other zones
   ],
+  buildings: [
+    {
+      id: "tower1",
+      zoneId: "zone1",
+      name: "Tower 1",
+      description: "Tower 1 description...",
+    },
+    {
+      id: "tower2",
+      zoneId: "zone1",
+      name: "Tower 2",
+      description: "Tower 2 description...",
+    },
+    {
+      id: "tower5",
+      zoneId: "zone2",
+      name: "Tower 5",
+      description: "Tower 5 description...",
+    },
+  ],
+  floors: [
+    {
+      id: "floor1",
+      buildingId: "tower1",
+      zoneId: "zone1",
+      name: "Floor 1",
+      type: "Residential",
+      description: "First floor description...",
+    },
+    {
+      id: "floor2",
+      buildingId: "tower1",
+      zoneId: "zone1",
+      name: "Floor 2",
+      type: "Residential",
+      description: "Second floor description...",
+    },
+    {
+      id: "floor1",
+      buildingId: "tower2",
+      zoneId: "zone1",
+      name: "Floor 1",
+      type: "Residential",
+      description: "First floor description...",
+    },
+    {
+      id: "floor2",
+      buildingId: "tower2",
+      zoneId: "zone1",
+      name: "Floor 2",
+      type: "Residential",
+      description: "Second floor description...",
+    },
+  ],
+  apartments: [
+    // Zone 1 - Tower 1 - Floor 1
+    {
+      apartmentId: "apartment101",
+      floorId: "floor1",
+      buildingId: "tower1",
+      zoneId: "zone1",
+      name: "Apartment 101",
+      description: "Beautiful 2-bedroom apartment...",
+      bedrooms: 2,
+      bathrooms: 1,
+      area: 85, // Store as number for range queries
+      price: 250000, // Store as number for range queries
+    },
+    {
+      apartmentId: "apartment102",
+      floorId: "floor1",
+      buildingId: "tower1",
+      zoneId: "zone1",
+      name: "Apartment 102",
+      description: "Beautiful 4-bedroom apartment...",
+      bedrooms: 4,
+      bathrooms: 2,
+      area: 200,
+      price: 400000,
+    },
+    {
+      apartmentId: "apartment103",
+      floorId: "floor1",
+      buildingId: "tower1",
+      zoneId: "zone1",
+      name: "Apartment 103",
+      description: "Beautiful 2-bedroom apartment...",
+      bedrooms: 2,
+      bathrooms: 2,
+      area: 120,
+      price: 300000,
+    },
+    {
+      apartmentId: "apartment104",
+      floorId: "floor1",
+      buildingId: "tower1",
+      zoneId: "zone1",
+      name: "Apartment 104",
+      description: "Beautiful 3-bedroom apartment...",
+      bedrooms: 3,
+      bathrooms: 2,
+      area: 185,
+      price: 350000,
+    },
+    {
+      apartmentId: "apartment105",
+      floorId: "floor1",
+      buildingId: "tower1",
+      zoneId: "zone1",
+      name: "Apartment 105",
+      description: "Beautiful 4-bedroom apartment...",
+      bedrooms: 4,
+      bathrooms: 2,
+      area: 250,
+      price: 500000,
+    },
+    // Zone 1 - Tower 1 - Floor 2
+    {
+      apartmentId: "apartment201",
+      floorId: "floor2",
+      buildingId: "tower1",
+      zoneId: "zone1",
+      name: "Apartment 201",
+      description: "Beautiful 2-bedroom apartment...",
+      bedrooms: 2,
+      bathrooms: 1,
+      area: 115,
+      price: 275000,
+    },
+    {
+      apartmentId: "apartment202",
+      floorId: "floor2",
+      buildingId: "tower1",
+      zoneId: "zone1",
+      name: "Apartment 202",
+      description: "Beautiful 2-bedroom apartment...",
+      bedrooms: 2,
+      bathrooms: 2,
+      area: 125,
+      price: 300000,
+    },
+    {
+      apartmentId: "apartment203",
+      floorId: "floor2",
+      buildingId: "tower1",
+      zoneId: "zone1",
+      name: "Apartment 203",
+      description: "Beautiful 2-bedroom apartment...",
+      bedrooms: 2,
+      bathrooms: 2,
+      area: 125,
+      price: 300000,
+    },
+    {
+      apartmentId: "apartment204",
+      floorId: "floor2",
+      buildingId: "tower1",
+      zoneId: "zone1",
+      name: "Apartment 204",
+      description: "Beautiful 2-bedroom apartment...",
+      bedrooms: 2,
+      bathrooms: 2,
+      area: 115,
+      price: 275000,
+    },
+    {
+      apartmentId: "apartment205",
+      floorId: "floor2",
+      buildingId: "tower1",
+      zoneId: "zone1",
+      name: "Apartment 205",
+      description: "Beautiful 3-bedroom apartment...",
+      bedrooms: 3,
+      bathrooms: 2,
+      area: 145,
+      price: 325000,
+    },
+    {
+      apartmentId: "apartment206",
+      floorId: "floor2",
+      buildingId: "tower1",
+      zoneId: "zone1",
+      name: "Apartment 206",
+      description: "Beautiful 4-bedroom apartment...",
+      bedrooms: 4,
+      bathrooms: 2,
+      area: 200,
+      price: 400000,
+    },
+    // Zone 1 - Tower 2 - Floor 1
+    {
+      apartmentId: "apartment111",
+      floorId: "floor1",
+      buildingId: "tower2",
+      zoneId: "zone1",
+      name: "Apartment 111",
+      description: "Beautiful 2-bedroom apartment...",
+      bedrooms: 2,
+      bathrooms: 1,
+      area: 100,
+      price: 260000,
+    },
+    {
+      apartmentId: "apartment112",
+      floorId: "floor1",
+      buildingId: "tower2",
+      zoneId: "zone1",
+      name: "Apartment 112",
+      description: "Beautiful 2-bedroom apartment...",
+      bedrooms: 2,
+      bathrooms: 2,
+      area: 150,
+      price: 325000,
+    },
+    {
+      apartmentId: "apartment113",
+      floorId: "floor1",
+      buildingId: "tower2",
+      zoneId: "zone1",
+      name: "Apartment 113",
+      description: "Beautiful 2-bedroom apartment...",
+      bedrooms: 2,
+      bathrooms: 2,
+      area: 85,
+      price: 240000,
+    },
+    {
+      apartmentId: "apartment114",
+      floorId: "floor1",
+      buildingId: "tower2",
+      zoneId: "zone1",
+      name: "Apartment 114",
+      description: "Beautiful 3-bedroom apartment...",
+      bedrooms: 3,
+      bathrooms: 2,
+      area: 185,
+      price: 375000,
+    },
+    {
+      apartmentId: "apartment115",
+      floorId: "floor1",
+      buildingId: "tower2",
+      zoneId: "zone1",
+      name: "Apartment 115",
+      description: "Beautiful 4-bedroom apartment...",
+      bedrooms: 4,
+      bathrooms: 2,
+      area: 220,
+      price: 450000,
+    },
+    // Zone 1 - Tower 2 - Floor 2
+    {
+      apartmentId: "apartment221",
+      floorId: "floor2",
+      buildingId: "tower2",
+      zoneId: "zone1",
+      name: "Apartment 221",
+      description: "Beautiful 2-bedroom apartment...",
+      bedrooms: 2,
+      bathrooms: 1,
+      area: 115,
+      price: 275000,
+    },
+    {
+      apartmentId: "apartment222",
+      floorId: "floor2",
+      buildingId: "tower2",
+      zoneId: "zone1",
+      name: "Apartment 222",
+      description: "Beautiful 2-bedroom apartment...",
+      bedrooms: 2,
+      bathrooms: 2,
+      area: 85,
+      price: 240000,
+    },
+    {
+      apartmentId: "apartment223",
+      floorId: "floor2",
+      buildingId: "tower2",
+      zoneId: "zone1",
+      name: "Apartment 223",
+      description: "Beautiful 2-bedroom apartment...",
+      bedrooms: 2,
+      bathrooms: 2,
+      area: 125,
+      price: 300000,
+    },
+    {
+      apartmentId: "apartment224",
+      floorId: "floor2",
+      buildingId: "tower2",
+      zoneId: "zone1",
+      name: "Apartment 224",
+      description: "Beautiful 2-bedroom apartment...",
+      bedrooms: 2,
+      bathrooms: 2,
+      area: 115,
+      price: 275000,
+    },
+    {
+      apartmentId: "apartment225",
+      floorId: "floor2",
+      buildingId: "tower2",
+      zoneId: "zone1",
+      name: "Apartment 225",
+      description: "Beautiful 3-bedroom apartment...",
+      bedrooms: 3,
+      bathrooms: 2,
+      area: 145,
+      price: 325000,
+    },
+  ],
+
   surroundings: [
     {
-      id: 'surrounding1',
-      name: 'Cairo Airport',
-      distance: '15 KM',
-      thumbnail: 'thumbnails/cairo_airboart.jpg',
-      description: 'Cairo International Airport...',
+      id: "surrounding1",
+      name: "Cairo Airport",
+      distance: "15 KM",
+      thumbnail: "thumbnails/cairo_airboart.jpg",
+      description: "Cairo International Airport...",
     },
     {
-      id: 'surrounding2',
-      name: 'GYM',
-      distance: '1 KM',
-      thumbnail: 'thumbnails/gym.jpg',
-      description: 'Gym...',
+      id: "surrounding2",
+      name: "GYM",
+      distance: "1 KM",
+      thumbnail: "thumbnails/gym.jpg",
+      description: "Gym...",
     },
     {
-      id: 'surrounding3',
-      name: 'Iconic Tower',
-      distance: '3 KM',
-      thumbnail: 'thumbnails/iconic_tower.jpg',
-      description: 'Iconic tower...',
+      id: "surrounding3",
+      name: "Iconic Tower",
+      distance: "3 KM",
+      thumbnail: "thumbnails/iconic_tower.jpg",
+      description: "Iconic tower...",
     },
-
   ],
   amenities: [
     {
@@ -431,4 +534,3 @@ export const DATA = {
     },
   ],
 };
-

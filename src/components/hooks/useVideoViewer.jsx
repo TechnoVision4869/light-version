@@ -38,6 +38,7 @@ export function useVideoViewer({
   // Play reverse transition video
   const playReverseVideo = useCallback(() => {
     if (!currentVideosPaths?.reverseVideo || !videoRef.current) return;
+console.log(currentVideosPaths.reverseVideo);
 
     setIsPlaying(true);
     const video = videoRef.current;
@@ -96,11 +97,11 @@ export function useVideoViewer({
         } else {
           if (activeTab === TABS.HOME) {
             // For HOME, just play idle
-            console.log("Tab is Home, should play idle");
+            // console.log("Tab is Home, should play idle");
             playIdleVideo();
           } else {
             // Start forward video
-            console.log("start transition");
+            // console.log("start transition");
             playForwardVideo();
           }
         }
@@ -112,7 +113,7 @@ export function useVideoViewer({
     if (currentVideosPaths) {
       loadVideoAssets();
     }
-    console.log(history);
+    // console.log(history);
 
   }, [history, currentVideosPaths]);
 
