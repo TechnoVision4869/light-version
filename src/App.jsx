@@ -22,6 +22,7 @@ import HomeButton from "./components/buttons/HomeButton";
 import BuildingButton from "./components/buttons/BuildingButton";
 import FloorButton from "./components/buttons/FloorButton";
 import ApartmentButton from "./components/buttons/ApartmentButton";
+import HistoryBreadcrumbs from "./components/HistoryBreadcrumbs";
 
 export default function App() {
   // console.log("App renders");
@@ -29,6 +30,7 @@ export default function App() {
   //states
   const [sidebarOpen, setSidebarOpen] = useState(false); // set true when sidebar is open
   const [showInfoPopup, setShowInfoPopup] = useState(false);
+  const [currentViewIndex, setCurrentViewIndex] = useState(0);
 
   // Navigation hook
   const {
@@ -369,32 +371,16 @@ export default function App() {
         {/* Breadcrumbs */}
         {history.length > 1 && (
           <div className="inline-flex px-6 pt-3">
-            <div className=" inline-flex items-center gap-3 bg-white/9 rounded-full px-4 py-2 text-sm">
-              {history.slice(1).map(
-                (entry) =>
-                  entry.item?.id && (
-                    <div key={entry.item.id} className=" flex gap-2">
-                      <button
-                        className="w-auto cursor-pointer text-white"
-                        onClick={() => console.log(`${entry.item.id} clicked`)}
-                      >
-                        {String(entry.item.name).charAt(0).toUpperCase() +
-                          String(entry.item.name).slice(1)}
-                      </button>
-                      {entry.item.id !== currentItem.id && (
-                        <span className="text-white">›</span>
-                      )}
-                    </div>
-                  )
-              )}
-            </div>
+            <HistoryBreadcrumbs history={history} currentItem={currentItem} />
             {activeLayer === LAYERS.BUILDING && (
               <div className="items-center text-white gap-3 px-4 py-2 text-sm">
                 <div className=" flex gap-2">
                   <div className=""> Views </div>
-                  // prev button
+                  {/* prev button */}
                   <button className="w-auto cursor-pointer text-white mx-2"
-                    onClick={() => { }}>
+                    onClick={() => {
+                      console.log("prev");
+                    }}>
                     <svg
                       width="18"
                       height="18"
@@ -412,29 +398,19 @@ export default function App() {
                     </svg>
                   </button>
 
-                  <span>
-                    <svg width="21" height="21" viewBox="0 0 21 21" fill="white" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="10" cy="10" r="8" stroke="white" strokeWidth="1" />
-                    </svg>
-                  </span>
-                  <span>
-                    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="10" cy="10" r="8" stroke="white" strokeWidth="1" />
-                    </svg>
-                  </span>
-                  <span>
-                    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="10" cy="10" r="8" stroke="white" strokeWidth="1" />
-                    </svg>
-                  </span>
-                  <span>
-                    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="10" cy="10" r="8" stroke="white" strokeWidth="1" />
-                    </svg>
-                  </span>
+                  {Array.from({ length: 4 }).map((_, index) => (
+                    <span key={index}>
+                      <svg width="21" height="21" viewBox="0 0 21 21" fill={index === currentViewIndex ? "white" : "none"} xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="10" cy="10" r="8" stroke="white" strokeWidth="1" />
+                      </svg>
+                    </span>
+                  ))}
 
-                  // next button
-                  <button className="w-auto cursor-pointer text-white mx-2">
+                  {/* next button */}
+                  <button className="w-auto cursor-pointer text-white mx-2"
+                    onClick={() => {
+                      console.log("next");
+                    }}>
                     <svg
                       width="18"
                       height="18"
@@ -459,6 +435,6 @@ export default function App() {
           </div>
         )}
       </div>
-    </div>
+    </div >
   );
 }
