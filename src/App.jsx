@@ -102,7 +102,8 @@ export default function App() {
     if (tab === TABS.HOME) {
       goToHome();
     } else {
-      goToTab(tab);
+      const isFromHome = activeTab === TABS.HOME;
+      goToTab(tab, isFromHome);
     }
   };
 
@@ -141,31 +142,28 @@ export default function App() {
           <div className="flex items-center gap-6">
             <button
               onClick={() => handleActiveTab(TABS.SURROUNDINGS)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                activeTab === TABS.SURROUNDINGS
+              className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.SURROUNDINGS
                   ? "bg-white text-black"
                   : "text-white/80"
-              }`}
+                }`}
             >
               SURROUNDINGS
             </button>
             <button
               onClick={() => handleActiveTab(TABS.ZONES)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                activeTab === TABS.ZONES
+              className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.ZONES
                   ? "bg-white text-black"
                   : "text-white/80"
-              }`}
+                }`}
             >
               ZONES
             </button>
             <button
               onClick={() => handleActiveTab(TABS.AMENITIES)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                activeTab === TABS.AMENITIES
+              className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.AMENITIES
                   ? "bg-white text-black"
                   : "text-white/80"
-              }`}
+                }`}
             >
               AMENITIES
             </button>
@@ -174,20 +172,18 @@ export default function App() {
         </div>
 
         <div
-          className={`flex ${
-            sidebarOpen ? "gap-3" : "gap-0"
-          } flex-1 min-h-0 overflow-hidden`}
+          className={`flex ${sidebarOpen ? "gap-3" : "gap-0"
+            } flex-1 min-h-0 overflow-hidden`}
         >
           {/* Sidebar */}
           <aside
             className={`bg-white/9 rounded-2xl p-2 py-3 md:p-3 md:py-4 flex-shrink-0 transition-all duration-300 overflow-hidden
-             ${
-               activeTab === TABS.HOME
-                 ? "w-0 opacity-0 pointer-events-none"
-                 : sidebarOpen
-                 ? "w-44 md:w-60 opacity-100"
-                 : "w-0 opacity-0 pointer-events-none"
-             }`}
+             ${activeTab === TABS.HOME
+                ? "w-0 opacity-0 pointer-events-none"
+                : sidebarOpen
+                  ? "w-44 md:w-60 opacity-100"
+                  : "w-0 opacity-0 pointer-events-none"
+              }`}
           >
             <div className="h-full pr-2">
               {/* Dynamic sidebar title based on active tab */}
@@ -195,10 +191,10 @@ export default function App() {
                 {activeTab === TABS.ZONES
                   ? TAB_CONFIG[TABS.ZONES]?.title
                   : activeTab === TABS.SURROUNDINGS
-                  ? TAB_CONFIG[TABS.SURROUNDINGS]?.title
-                  : activeTab === TABS.AMENITIES
-                  ? TAB_CONFIG[TABS.AMENITIES]?.title
-                  : ""}
+                    ? TAB_CONFIG[TABS.SURROUNDINGS]?.title
+                    : activeTab === TABS.AMENITIES
+                      ? TAB_CONFIG[TABS.AMENITIES]?.title
+                      : ""}
               </div>
               <div className="h-0.5 bg-white/50 mx-3 mb-4"></div>
 
@@ -225,7 +221,7 @@ export default function App() {
                       <SurroundingButton
                         surrounding={item}
                         key={item.id}
-                        isDisabled={isDisabled}
+
                         isSelected={currentItem === item}
                         goToSurrounding={handleGoToItem}
                       />
@@ -276,7 +272,7 @@ export default function App() {
                       <ApartmentButton
                         apartment={apartment}
                         key={apartment.id}
-                        isDisabled={isDisabled}
+
                         isSelected={currentItem === apartment}
                         goToApartment={handleGoToItem}
                       />

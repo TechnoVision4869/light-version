@@ -26,7 +26,7 @@ export function useNavigation() {
     } = currentEntry;
 
     // Navigate to a main tab (ZONES, SURROUNDINGS, AMENITIES)
-    const goToTab = useCallback((tabKey) => {
+    const goToTab = useCallback((tabKey, isFromHome = true) => {
         const config = TAB_CONFIG[tabKey];
         setHistory(() => [
             ...initHistory,
@@ -38,15 +38,15 @@ export function useNavigation() {
                     name: tabKey,
                 },
                 path: MODE_CONFIG === MODE.VIDEO ? null : config.path,
-                videosPath: MODE_CONFIG === MODE.VIDEO ? config.videosPath : null,
+                videosPath: MODE_CONFIG === MODE.VIDEO ? config.videosPath(isFromHome) : null,
             },
         ]);
     }, []);
 
     // Navigate to a specific item within current tab
     const goToItem = useCallback((item, layerKey) => {
-        console.log("item: ", item);
-        console.log("layer: ", layerKey);
+        // console.log("item: ", item);
+        // console.log("layer: ", layerKey);
         const config = LAYER_CONFIG[layerKey];
         const path = config.path?.(item.id);
         const videosPath = config.videosPath?.(item);

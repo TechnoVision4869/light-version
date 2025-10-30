@@ -33,7 +33,7 @@ export const TAB_CONFIG = {
   [TABS.HOME]: {
     path: "/home.jpg", // Static image
     videosPath: {
-      forwardVideo: null,
+      forwardVideo: `${MODE_CONFIG}/home/home_out.mp4`,
       reverseVideo: null,
       idleVideo: `/${MODE_CONFIG}/home/home_idle.mp4`,
     },
@@ -42,11 +42,11 @@ export const TAB_CONFIG = {
     title: "Zoya Zones",
     path: "/zones_zoom",
 
-    videosPath: {
-      forwardVideo: `/${MODE_CONFIG}/zones/zones_gen_trans.mp4`,
+    videosPath: (isFromHome) => ({
+      forwardVideo: isFromHome ? `/${MODE_CONFIG}/zones/zones_gen_trans.mp4` : `/${MODE_CONFIG}/home/home_out.mp4`,
       reverseVideo: `/${MODE_CONFIG}/zones/zones_gen_rev.mp4`,
       idleVideo: `/${MODE_CONFIG}/zones/zones_gen_idle.mp4`,
-    },
+    }),
 
     getItems: () => DATA.zones,
     // Here, getItems returns array of all the zones,
@@ -58,11 +58,11 @@ export const TAB_CONFIG = {
     description:
       "Zoya Ghazala Bays location was a decision meticulously made to achieve prime. An exclusive spot on the 142 kmAlex to Matrouh Road. It lies on Ghazala Bay's crystal clearshoreline.",
 
-    videosPath: {
-      forwardVideo: `/${MODE_CONFIG}/surroundings/surr_gen_trans_from_home.mp4`,
+    videosPath: (isFromHome) => ({
+      forwardVideo: isFromHome ? `/${MODE_CONFIG}/surroundings/surr_gen_trans_from_home.mp4` : `/${MODE_CONFIG}/surroundings/surr_out.mp4`,
       reverseVideo: `/${MODE_CONFIG}/surroundings/surr_gen_rev_trans_to_home.mp4`,
       idleVideo: `/${MODE_CONFIG}/surroundings/surr_idle.mp4`,
-    },
+    }),
 
     getItems: () => DATA.surroundings,
   },
@@ -70,11 +70,11 @@ export const TAB_CONFIG = {
     title: "Amenities",
     path: "/amenities_zoom",
 
-    videosPath: {
-      forwardVideo: `/${MODE_CONFIG}/amenities/amenities_gen_trans_from_home.mp4`,
+    videosPath: (isFromHome) => ({
+      forwardVideo: isFromHome ? `/${MODE_CONFIG}/amenities/amenities_gen_trans_from_home.mp4` : `/${MODE_CONFIG}/amenities/amenities_out.mp4`,
       reverseVideo: `/${MODE_CONFIG}/amenities/amenities_gen_rev_trans_to_home.mp4`,
       idleVideo: `/${MODE_CONFIG}/amenities/amenities_gen_idle.mp4`,
-    },
+    }),
 
     getItems: () => DATA.amenities,
   },

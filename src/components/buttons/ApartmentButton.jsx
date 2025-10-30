@@ -1,5 +1,5 @@
 import { LAYERS } from "../../data/layers";
-export default function ApartmentButton({ apartment, isDisabled, isSelected, goToApartment }) {
+export default function ApartmentButton({ apartment, isDisabled = true, isSelected, goToApartment }) {
     return (
         <button
             key={apartment.id}
@@ -8,7 +8,7 @@ export default function ApartmentButton({ apartment, isDisabled, isSelected, goT
             }}
             disabled={isDisabled}
             className={`w-64 max-w-full mx-auto p-4 rounded-2xl transition
-        ${isDisabled
+            ${isDisabled
                     ? "opacity-50 cursor-not-allowed"
                     : isSelected
                         ? "bg-white/10"
