@@ -143,8 +143,8 @@ export default function App() {
             <button
               onClick={() => handleActiveTab(TABS.SURROUNDINGS)}
               className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.SURROUNDINGS
-                  ? "bg-white text-black"
-                  : "text-white/80"
+                ? "bg-white text-black"
+                : "text-white/80"
                 }`}
             >
               SURROUNDINGS
@@ -152,8 +152,8 @@ export default function App() {
             <button
               onClick={() => handleActiveTab(TABS.ZONES)}
               className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.ZONES
-                  ? "bg-white text-black"
-                  : "text-white/80"
+                ? "bg-white text-black"
+                : "text-white/80"
                 }`}
             >
               ZONES
@@ -161,8 +161,8 @@ export default function App() {
             <button
               onClick={() => handleActiveTab(TABS.AMENITIES)}
               className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.AMENITIES
-                  ? "bg-white text-black"
-                  : "text-white/80"
+                ? "bg-white text-black"
+                : "text-white/80"
                 }`}
             >
               AMENITIES
@@ -178,7 +178,7 @@ export default function App() {
           {/* Sidebar */}
           <aside
             className={`bg-white/9 rounded-2xl p-2 py-3 md:p-3 md:py-4 flex-shrink-0 transition-all duration-300 overflow-hidden
-             ${activeTab === TABS.HOME
+             ${(activeTab === TABS.HOME || activeLayer === LAYERS.AMENITY_DETAIL)
                 ? "w-0 opacity-0 pointer-events-none"
                 : sidebarOpen
                   ? "w-44 md:w-60 opacity-100"
@@ -221,7 +221,7 @@ export default function App() {
                       <SurroundingButton
                         surrounding={item}
                         key={item.id}
-
+                        isDisabled={isDisabled}
                         isSelected={currentItem === item}
                         goToSurrounding={handleGoToItem}
                       />
@@ -323,7 +323,7 @@ export default function App() {
               </div> */}
 
               {/* left floating chevron to collapse sidebar */}
-              {activeTab !== TABS.HOME && (
+              {activeTab !== TABS.HOME && activeLayer !== LAYERS.AMENITY_DETAIL && (
                 <button
                   onClick={() => setSidebarOpen((s) => !s)}
                   className="absolute left-[-18px] top-80 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow"
@@ -368,8 +368,8 @@ export default function App() {
 
         {/* Breadcrumbs */}
         {history.length > 1 && (
-          <div className="px-6 pt-3">
-            <div className="inline-flex items-center gap-3 bg-white/9 rounded-full px-4 py-2 text-sm">
+          <div className="inline-flex px-6 pt-3">
+            <div className=" inline-flex items-center gap-3 bg-white/9 rounded-full px-4 py-2 text-sm">
               {history.slice(1).map(
                 (entry) =>
                   entry.item?.id && (
@@ -388,6 +388,74 @@ export default function App() {
                   )
               )}
             </div>
+            {activeLayer === LAYERS.BUILDING && (
+              <div className="items-center text-white gap-3 px-4 py-2 text-sm">
+                <div className=" flex gap-2">
+                  <div className=""> Views </div>
+                  // prev button
+                  <button className="w-auto cursor-pointer text-white mx-2"
+                    onClick={() => { }}>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M31 12H2M2 12L9 6M2 12L9 18"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+
+                  <span>
+                    <svg width="21" height="21" viewBox="0 0 21 21" fill="white" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="10" cy="10" r="8" stroke="white" strokeWidth="1" />
+                    </svg>
+                  </span>
+                  <span>
+                    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="10" cy="10" r="8" stroke="white" strokeWidth="1" />
+                    </svg>
+                  </span>
+                  <span>
+                    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="10" cy="10" r="8" stroke="white" strokeWidth="1" />
+                    </svg>
+                  </span>
+                  <span>
+                    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="10" cy="10" r="8" stroke="white" strokeWidth="1" />
+                    </svg>
+                  </span>
+
+                  // next button
+                  <button className="w-auto cursor-pointer text-white mx-2">
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M3 12H22M22 12L15 6M22 12L15 18"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
+
+
+              </div>
+            )}
           </div>
         )}
       </div>

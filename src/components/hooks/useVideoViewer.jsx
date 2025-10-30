@@ -38,7 +38,7 @@ export function useVideoViewer({
   // Play reverse transition video
   const playReverseVideo = useCallback(() => {
     if (!currentVideosPaths?.reverseVideo || !videoRef.current) return;
-console.log(currentVideosPaths.reverseVideo);
+    // console.log(currentVideosPaths.reverseVideo);
 
     setIsPlaying(true);
     const video = videoRef.current;
