@@ -95,7 +95,7 @@ export const LAYER_CONFIG = {
     getData: (zoneId) => DATA.zones.find((z) => z.id === zoneId),
     // Here, getData returns the zone object with the given id
     // used to display the zone details
-    getItems: (zoneId) => DATA.buildings.filter((b) => b.zoneId === zoneId),
+    getItems: (zone) => DATA.buildings.filter((b) => b.zoneId === zone.id),
   },
   [LAYERS.BUILDING]: {
     videosPath: (building) => {
@@ -110,10 +110,14 @@ export const LAYER_CONFIG = {
     getData: (buildingId) => DATA.buildings.find((b) => b.id === buildingId),
     // Here, getData returns the building object with the given id
     // used to display the building details
-    getItems: (buildingId) => {
-      return DATA.floors.filter((f) => f.buildingId === buildingId);
-    },
+
     // here there's a potential bug if building id isn't unique
+    // which is predictable, same for floors and apartments
+    getItems: (building) => {
+      const buildingId = building.id;
+      const zoneId = building.zoneId;
+      return DATA.floors.filter((f) => (f.buildingId === buildingId && f.zoneId === zoneId));
+    },
   },
   [LAYERS.FLOOR]: {
     videosPath: (floor) => {
@@ -129,16 +133,20 @@ export const LAYER_CONFIG = {
     getData: (floorId) => DATA.floors.find((f) => f.id === floorId),
     // Here, getData returns the floor object with the given id
     // used to display the floor details
-    getItems: (floorId) => {
-      // const buildingId = floor.buildingId;
-      // const zoneId = floor.zoneId;
-      // return DATA.apartments.filter(
-      //   (a) =>
-      //     a.floorId === floorId &&
-      //     a.buildingId === buildingId &&
-      //     a.zoneId === zoneId
-      // );
+    getItems: (floor) => {
+      const floorId = floor.id
+      const buildingId = floor.buildingId;
+      const zoneId = floor.zoneId;
+      return DATA.apartments.filter(
+        (a) =>
+          a.floorId === floorId &&
+          a.buildingId === buildingId &&
+          a.zoneId === zoneId
+      );
     },
+  },
+  [LAYERS.APARTMENT]: {
+
   },
   [LAYERS.SURROUNDING_DETAIL]: {
     path: (surroundingId) => `/${surroundingId}_zoom`,
@@ -237,7 +245,7 @@ export const DATA = {
   apartments: [
     // Zone 1 - Tower 1 - Floor 1
     {
-      apartmentId: "apartment101",
+      id: "apartment101",
       floorId: "floor1",
       buildingId: "tower1",
       zoneId: "zone1",
@@ -249,7 +257,7 @@ export const DATA = {
       price: 250000, // Store as number for range queries
     },
     {
-      apartmentId: "apartment102",
+      id: "apartment102",
       floorId: "floor1",
       buildingId: "tower1",
       zoneId: "zone1",
@@ -261,7 +269,7 @@ export const DATA = {
       price: 400000,
     },
     {
-      apartmentId: "apartment103",
+      id: "apartment103",
       floorId: "floor1",
       buildingId: "tower1",
       zoneId: "zone1",
@@ -273,7 +281,7 @@ export const DATA = {
       price: 300000,
     },
     {
-      apartmentId: "apartment104",
+      id: "apartment104",
       floorId: "floor1",
       buildingId: "tower1",
       zoneId: "zone1",
@@ -285,7 +293,7 @@ export const DATA = {
       price: 350000,
     },
     {
-      apartmentId: "apartment105",
+      id: "apartment105",
       floorId: "floor1",
       buildingId: "tower1",
       zoneId: "zone1",
@@ -298,7 +306,7 @@ export const DATA = {
     },
     // Zone 1 - Tower 1 - Floor 2
     {
-      apartmentId: "apartment201",
+      id: "apartment201",
       floorId: "floor2",
       buildingId: "tower1",
       zoneId: "zone1",
@@ -310,7 +318,7 @@ export const DATA = {
       price: 275000,
     },
     {
-      apartmentId: "apartment202",
+      id: "apartment202",
       floorId: "floor2",
       buildingId: "tower1",
       zoneId: "zone1",
@@ -322,7 +330,7 @@ export const DATA = {
       price: 300000,
     },
     {
-      apartmentId: "apartment203",
+      id: "apartment203",
       floorId: "floor2",
       buildingId: "tower1",
       zoneId: "zone1",
@@ -334,7 +342,7 @@ export const DATA = {
       price: 300000,
     },
     {
-      apartmentId: "apartment204",
+      id: "apartment204",
       floorId: "floor2",
       buildingId: "tower1",
       zoneId: "zone1",
@@ -346,7 +354,7 @@ export const DATA = {
       price: 275000,
     },
     {
-      apartmentId: "apartment205",
+      id: "apartment205",
       floorId: "floor2",
       buildingId: "tower1",
       zoneId: "zone1",
@@ -358,7 +366,7 @@ export const DATA = {
       price: 325000,
     },
     {
-      apartmentId: "apartment206",
+      id: "apartment206",
       floorId: "floor2",
       buildingId: "tower1",
       zoneId: "zone1",
@@ -371,7 +379,7 @@ export const DATA = {
     },
     // Zone 1 - Tower 2 - Floor 1
     {
-      apartmentId: "apartment111",
+      id: "apartment111",
       floorId: "floor1",
       buildingId: "tower2",
       zoneId: "zone1",
@@ -383,7 +391,7 @@ export const DATA = {
       price: 260000,
     },
     {
-      apartmentId: "apartment112",
+      id: "apartment112",
       floorId: "floor1",
       buildingId: "tower2",
       zoneId: "zone1",
@@ -395,7 +403,7 @@ export const DATA = {
       price: 325000,
     },
     {
-      apartmentId: "apartment113",
+      id: "apartment113",
       floorId: "floor1",
       buildingId: "tower2",
       zoneId: "zone1",
@@ -407,7 +415,7 @@ export const DATA = {
       price: 240000,
     },
     {
-      apartmentId: "apartment114",
+      id: "apartment114",
       floorId: "floor1",
       buildingId: "tower2",
       zoneId: "zone1",
@@ -419,7 +427,7 @@ export const DATA = {
       price: 375000,
     },
     {
-      apartmentId: "apartment115",
+      id: "apartment115",
       floorId: "floor1",
       buildingId: "tower2",
       zoneId: "zone1",
@@ -432,7 +440,7 @@ export const DATA = {
     },
     // Zone 1 - Tower 2 - Floor 2
     {
-      apartmentId: "apartment221",
+      id: "apartment221",
       floorId: "floor2",
       buildingId: "tower2",
       zoneId: "zone1",
@@ -444,7 +452,7 @@ export const DATA = {
       price: 275000,
     },
     {
-      apartmentId: "apartment222",
+      id: "apartment222",
       floorId: "floor2",
       buildingId: "tower2",
       zoneId: "zone1",
@@ -456,7 +464,7 @@ export const DATA = {
       price: 240000,
     },
     {
-      apartmentId: "apartment223",
+      id: "apartment223",
       floorId: "floor2",
       buildingId: "tower2",
       zoneId: "zone1",
@@ -468,7 +476,7 @@ export const DATA = {
       price: 300000,
     },
     {
-      apartmentId: "apartment224",
+      id: "apartment224",
       floorId: "floor2",
       buildingId: "tower2",
       zoneId: "zone1",
@@ -480,7 +488,7 @@ export const DATA = {
       price: 275000,
     },
     {
-      apartmentId: "apartment225",
+      id: "apartment225",
       floorId: "floor2",
       buildingId: "tower2",
       zoneId: "zone1",

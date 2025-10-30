@@ -21,6 +21,7 @@ import SurroundingButton from "./components/buttons/SurroundingButton";
 import HomeButton from "./components/buttons/HomeButton";
 import BuildingButton from "./components/buttons/BuildingButton";
 import FloorButton from "./components/buttons/FloorButton";
+import ApartmentButton from "./components/buttons/ApartmentButton";
 
 export default function App() {
   // console.log("App renders");
@@ -34,7 +35,7 @@ export default function App() {
     history,
     activeTab,
     activeLayer,
-    currentItemId,
+    currentItem,
     currentPath,
     currentVideosPaths,
     goToTab,
@@ -212,7 +213,7 @@ export default function App() {
                         zone={zone}
                         key={zone.id}
                         isDisabled={isDisabled}
-                        isSeected={currentItemId === zone.id}
+                        isSeected={currentItem === zone}
                         goToZone={handleGoToItem}
                       />
                     ))}
@@ -225,7 +226,7 @@ export default function App() {
                         surrounding={item}
                         key={item.id}
                         isDisabled={isDisabled}
-                        isSelected={currentItemId === item.id}
+                        isSelected={currentItem === item}
                         goToSurrounding={handleGoToItem}
                       />
                     ))}
@@ -237,34 +238,47 @@ export default function App() {
                       amenity={item}
                       key={item.id}
                       isDisabled={isDisabled}
-                      isSelected={currentItemId === item.id}
+                      isSelected={currentItem === item}
                       goToAmenity={handleGoToItem}
                     />
                   ))}
                 {activeTab === TABS.ZONES &&
                   activeLayer === LAYERS.ZONE_DETAIL &&
                   LAYER_CONFIG[LAYERS.ZONE_DETAIL]
-                    .getItems(currentItemId)
+                    .getItems(currentItem)
                     .map((building) => (
                       <BuildingButton
                         building={building}
                         key={building.id}
                         isDisabled={isDisabled}
-                        isSelected={currentItemId === building.id}
+                        isSelected={currentItem === building}
                         goToBuilding={handleGoToItem}
                       />
                     ))}
                 {activeTab === TABS.ZONES &&
                   activeLayer === LAYERS.BUILDING &&
                   LAYER_CONFIG[LAYERS.BUILDING]
-                    .getItems(currentItemId)
+                    .getItems(currentItem)
                     .map((floor) => (
                       <FloorButton
                         floor={floor}
                         key={floor.id}
                         isDisabled={isDisabled}
-                        isSelected={currentItemId === floor.id}
+                        isSelected={currentItem === floor}
                         goToFloor={handleGoToItem}
+                      />
+                    ))}
+                {activeTab === TABS.ZONES &&
+                  activeLayer === LAYERS.FLOOR &&
+                  LAYER_CONFIG[LAYERS.FLOOR]
+                    .getItems(currentItem)
+                    .map((apartment) => (
+                      <ApartmentButton
+                        apartment={apartment}
+                        key={apartment.id}
+                        isDisabled={isDisabled}
+                        isSelected={currentItem === apartment}
+                        goToApartment={handleGoToItem}
                       />
                     ))}
               </div>
@@ -316,7 +330,7 @@ export default function App() {
               {activeTab !== TABS.HOME && (
                 <button
                   onClick={() => setSidebarOpen((s) => !s)}
-                  className="absolute left-[-18px] top-75 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow"
+                  className="absolute left-[-18px] top-80 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow"
                   aria-label={sidebarOpen ? "close sidebar" : "open sidebar"}
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -344,11 +358,11 @@ export default function App() {
               )}
 
               {/* bottom info popup */}
-              {showInfoPopup && currentItemId && (
+              {showInfoPopup && currentItem?.id && (
                 <InfoPopup
                   showInfoPopup={showInfoPopup}
                   layer={activeLayer}
-                  itemId={currentItemId}
+                  itemId={currentItem.id}
                   onClose={closeInfoPopup}
                 />
               )}
@@ -362,16 +376,16 @@ export default function App() {
             <div className="inline-flex items-center gap-3 bg-white/9 rounded-full px-4 py-2 text-sm">
               {history.slice(1).map(
                 (entry) =>
-                  entry.itemId && (
-                    <div key={entry.itemId} className=" flex gap-2">
+                  entry.item?.id && (
+                    <div key={entry.item.id} className=" flex gap-2">
                       <button
                         className="w-auto cursor-pointer text-white"
-                        onClick={() => console.log(`${entry.itemId} clicked`)}
+                        onClick={() => console.log(`${entry.item.id} clicked`)}
                       >
-                        {String(entry.itemName).charAt(0).toUpperCase() +
-                          String(entry.itemName).slice(1)}
+                        {String(entry.item.name).charAt(0).toUpperCase() +
+                          String(entry.item.name).slice(1)}
                       </button>
-                      {entry.itemId !== currentItemId && (
+                      {entry.item.id !== currentItem.id && (
                         <span className="text-white">›</span>
                       )}
                     </div>

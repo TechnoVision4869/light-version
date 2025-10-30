@@ -6,8 +6,7 @@ export function useNavigation() {
         {
             tab: TABS.HOME,
             layer: null,
-            itemId: null,
-            itemName: null,
+            item: null,
             path: TAB_CONFIG[TABS.HOME].path,
             videosPath: TAB_CONFIG[TABS.HOME].videosPath,
         },
@@ -21,7 +20,7 @@ export function useNavigation() {
     const {
         tab: activeTab,
         layer: activeLayer,
-        itemId: currentItemId,
+        item: currentItem,
         path: currentPath,
         videosPath: currentVideosPaths,
     } = currentEntry;
@@ -30,12 +29,14 @@ export function useNavigation() {
     const goToTab = useCallback((tabKey) => {
         const config = TAB_CONFIG[tabKey];
         setHistory(() => [
-            initHistory,
+            ...initHistory,
             {
                 tab: tabKey,
                 layer: null,
-                itemId: tabKey,
-                itemName: tabKey,
+                item: {
+                    id: tabKey,
+                    name: tabKey,
+                },
                 path: MODE_CONFIG === MODE.VIDEO ? null : config.path,
                 videosPath: MODE_CONFIG === MODE.VIDEO ? config.videosPath : null,
             },
@@ -44,8 +45,8 @@ export function useNavigation() {
 
     // Navigate to a specific item within current tab
     const goToItem = useCallback((item, layerKey) => {
-        // console.log("item: ", item);
-        // console.log("layer: ", layerKey);
+        console.log("item: ", item);
+        console.log("layer: ", layerKey);
         const config = LAYER_CONFIG[layerKey];
         const path = config.path?.(item.id);
         const videosPath = config.videosPath?.(item);
@@ -55,8 +56,7 @@ export function useNavigation() {
             {
                 tab: activeTab,
                 layer: layerKey,
-                itemId: item.id,
-                itemName: item.name,
+                item: item,
                 path: path,
                 videosPath: videosPath,
             },
@@ -78,7 +78,7 @@ export function useNavigation() {
         history,
         activeTab,
         activeLayer,
-        currentItemId,
+        currentItem,
         currentPath,
         currentVideosPaths,
         goToTab,
