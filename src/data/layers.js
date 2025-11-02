@@ -43,7 +43,9 @@ export const TAB_CONFIG = {
     path: "/zones_zoom",
 
     videosPath: (isFromHome) => ({
-      forwardVideo: isFromHome ? `/${MODE_CONFIG}/zones/zones_gen_trans.mp4` : `/${MODE_CONFIG}/home/home_out.mp4`,
+      forwardVideo: isFromHome
+        ? `/${MODE_CONFIG}/zones/zones_gen_trans.mp4`
+        : `/${MODE_CONFIG}/home/home_out.mp4`,
       reverseVideo: `/${MODE_CONFIG}/zones/zones_gen_rev.mp4`,
       idleVideo: `/${MODE_CONFIG}/zones/zones_gen_idle.mp4`,
     }),
@@ -59,7 +61,9 @@ export const TAB_CONFIG = {
       "Zoya Ghazala Bays location was a decision meticulously made to achieve prime. An exclusive spot on the 142 kmAlex to Matrouh Road. It lies on Ghazala Bay's crystal clearshoreline.",
 
     videosPath: (isFromHome) => ({
-      forwardVideo: isFromHome ? `/${MODE_CONFIG}/surroundings/surr_gen_trans_from_home.mp4` : `/${MODE_CONFIG}/surroundings/surr_out.mp4`,
+      forwardVideo: isFromHome
+        ? `/${MODE_CONFIG}/surroundings/surr_gen_trans_from_home.mp4`
+        : `/${MODE_CONFIG}/surroundings/surr_out.mp4`,
       reverseVideo: `/${MODE_CONFIG}/surroundings/surr_gen_rev_trans_to_home.mp4`,
       idleVideo: `/${MODE_CONFIG}/surroundings/surr_idle.mp4`,
     }),
@@ -71,7 +75,9 @@ export const TAB_CONFIG = {
     path: "/amenities_zoom",
 
     videosPath: (isFromHome) => ({
-      forwardVideo: isFromHome ? `/${MODE_CONFIG}/amenities/amenities_gen_trans_from_home.mp4` : `/${MODE_CONFIG}/amenities/amenities_out.mp4`,
+      forwardVideo: isFromHome
+        ? `/${MODE_CONFIG}/amenities/amenities_gen_trans_from_home.mp4`
+        : `/${MODE_CONFIG}/amenities/amenities_out.mp4`,
       reverseVideo: `/${MODE_CONFIG}/amenities/amenities_gen_rev_trans_to_home.mp4`,
       idleVideo: `/${MODE_CONFIG}/amenities/amenities_gen_idle.mp4`,
     }),
@@ -116,7 +122,20 @@ export const LAYER_CONFIG = {
     getItems: (building) => {
       const buildingId = building.id;
       const zoneId = building.zoneId;
-      return DATA.floors.filter((f) => (f.buildingId === buildingId && f.zoneId === zoneId));
+      return DATA.floors.filter(
+        (f) => f.buildingId === buildingId && f.zoneId === zoneId
+      );
+    },
+    // Function to get video paths for a specific view of this building
+    getVideosPathForView: (building, viewIndex) => {
+      const buildingId = building.id;
+      const zoneId = building.zoneId;
+      const viewNum = viewIndex + 1; // Convert 0-based index to 1-based view number
+      return {
+        forwardVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_trans.mp4`,
+        reverseVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_rev.mp4`,
+        idleVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_idle.mp4`,
+      };
     },
   },
   [LAYERS.FLOOR]: {
@@ -134,7 +153,7 @@ export const LAYER_CONFIG = {
     // Here, getData returns the floor object with the given id
     // used to display the floor details
     getItems: (floor) => {
-      const floorId = floor.id
+      const floorId = floor.id;
       const buildingId = floor.buildingId;
       const zoneId = floor.zoneId;
       return DATA.apartments.filter(
@@ -145,9 +164,7 @@ export const LAYER_CONFIG = {
       );
     },
   },
-  [LAYERS.APARTMENT]: {
-
-  },
+  [LAYERS.APARTMENT]: {},
   [LAYERS.SURROUNDING_DETAIL]: {
     path: (surroundingId) => `/${surroundingId}_zoom`,
     getData: (surroundingId) =>
@@ -507,7 +524,8 @@ export const DATA = {
       name: "Cairo Airport",
       thumbnail: "thumbnails/cairo_airboart.jpg",
       distance: "38 Min | 55 Km",
-      description: "Cairo International Airport is the principal international airport of Cairo and the largest and busiest airport in Egypt. It serves as the primary hub for Egyptair and Nile Air as well as several other airlines.",
+      description:
+        "Cairo International Airport is the principal international airport of Cairo and the largest and busiest airport in Egypt. It serves as the primary hub for Egyptair and Nile Air as well as several other airlines.",
     },
     {
       id: "surrounding2",

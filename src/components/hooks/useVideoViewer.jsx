@@ -5,83 +5,121 @@ export function useVideoViewer({
   currentVideosPaths,
   history,
   activeTab,
-  onGoBack
+  onGoBack,
 }) {
-  // States
   const [isVideosLoaded, setIsVideosLoaded] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // Refs
   const videoRef = useRef(null);
   const justNavigatedBackRef = useRef(false);
+  // NEW: Flag to indicate if we are in a view transition process
+  const isViewTransitioningRef = useRef(false);
 
-  // Play forward transition video
+  const playVideo = useCallback((src, loop = false, onEnded = null) => {
+    if (!src || !videoRef.current) return;
+
+    setIsPlaying(!loop);
+    const video = videoRef.current;
+    video.src = src;
+    video.load();
+    video.loop = loop;
+
+    video.onloadeddata = () => {
+      video.play().catch((e) => console.error("Video play failed:", e));
+    };
+
+    // Clear previous onended and set the new one if provided
+    if (onEnded) {
+      video.onended = onEnded;
+    } else {
+      video.onended = null;
+    }
+  }, []);
+
   const playForwardVideo = useCallback(() => {
-    if (!currentVideosPaths?.forwardVideo || !videoRef.current) return;
+    if (!currentVideosPaths?.forwardVideo) return;
+    playVideo(currentVideosPaths.forwardVideo, false, playIdleVideo);
+  }, [currentVideosPaths, playVideo]);
 
-    setIsPlaying(true);
-    const video = videoRef.current;
-    video.src = currentVideosPaths.forwardVideo;
-    video.load();
-    video.loop = false;
-
-    video.onloadeddata = () => {
-      video.play().catch(e => console.error("Forward video play failed:", e));
-    };
-
-    video.onended = () => {
-      // Play idle video after forward transition
-      playIdleVideo();
-    };
-  }, [currentVideosPaths]);
-
-  // Play reverse transition video
   const playReverseVideo = useCallback(() => {
-    if (!currentVideosPaths?.reverseVideo || !videoRef.current) return;
-    // console.log(currentVideosPaths.reverseVideo);
+    if (!currentVideosPaths?.reverseVideo) return;
 
-    setIsPlaying(true);
-    const video = videoRef.current;
-    video.src = currentVideosPaths.reverseVideo;
-    video.load();
-    video.loop = false;
-
-    video.onloadeddata = () => {
-      video.play().catch(e => console.error("Reverse video play failed:", e));
-    };
-
-    video.onended = () => {
-      // Mark that we just navigated back
+    playVideo(currentVideosPaths.reverseVideo, false, () => {
       justNavigatedBackRef.current = true;
-      // Go back in history
       onGoBack();
-    };
-  }, [currentVideosPaths, onGoBack]);
+    });
+  }, [currentVideosPaths, playVideo, onGoBack]);
 
-  // Play idle (looping) video
   const playIdleVideo = useCallback(() => {
-    if (!currentVideosPaths?.idleVideo || !videoRef.current) return;
+    if (!currentVideosPaths?.idleVideo) return;
+    // Ensure we are not in a view transition when this runs due to main navigation
+    isViewTransitioningRef.current = false;
+    playVideo(currentVideosPaths.idleVideo, true);
+  }, [currentVideosPaths, playVideo]);
 
-    setIsPlaying(false); // Idle is not considered "playing" for UI purposes
-    const video = videoRef.current;
-    video.src = currentVideosPaths.idleVideo;
-    video.load();
-    video.loop = true;
+  // NEW: Dedicated function for view transitions
+  const playViewTransitionAndIdle = useCallback(
+    (transitionVideoPath, idleVideoPath) => {
+      if (!transitionVideoPath || !idleVideoPath || !videoRef.current) return;
 
-    video.onloadeddata = () => {
-      video.play().catch(e => console.error("Idle video play failed:", e));
-    };
-  }, [currentVideosPaths]);
+      console.log("Starting view transition from:", transitionVideoPath, "to idle:", idleVideoPath);
 
-  // Start reverse video (called from App.jsx)
+      // Set flag to indicate we are now transitioning views
+      isViewTransitioningRef.current = true;
+      setIsPlaying(true);
+
+      const video = videoRef.current;
+
+      // Define the handler for the *transition* video ending
+      const onTransitionEnded = () => {
+        console.log("View transition video ended, switching to idle:", idleVideoPath);
+        // Remove the handler from the transition video
+        video.onended = null;
+
+        // Check the flag again before proceeding (in case another transition started)
+        if (isViewTransitioningRef.current) {
+          // Switch to the new idle video
+          video.src = idleVideoPath;
+          video.load();
+          video.loop = true;
+
+          video.onloadeddata = () => {
+            console.log("View idle video loaded, playing...");
+            video
+              .play()
+              .catch((e) => console.error("View idle video play failed:", e));
+            // Set playing state to false for idle video
+            setIsPlaying(false);
+            // Transition process is complete, unset the flag
+            isViewTransitioningRef.current = false;
+          };
+        } else {
+          console.log("View transition was interrupted, not switching to idle.");
+        }
+      };
+
+      // Set the transition video source and handler
+      video.src = transitionVideoPath;
+      video.load();
+      video.loop = false;
+      video.onended = onTransitionEnded; // Attach handler for *this* transition
+
+      video.onloadeddata = () => {
+        console.log("View transition video loaded, playing...");
+        video
+          .play()
+          .catch((e) => console.error("View transition play failed:", e));
+      };
+    },
+    []
+  );
+
   const StartReverse = useCallback(() => {
     if (history.length <= 1) return;
     playReverseVideo();
   }, [history.length, playReverseVideo]);
 
-  // Load video assets when history changes
   useEffect(() => {
-    // Reset states for new path
     setIsVideosLoaded(false);
 
     const loadVideoAssets = async () => {
@@ -91,17 +129,21 @@ export function useVideoViewer({
       try {
         setIsVideosLoaded(true);
 
+        // Check if we are in the middle of a view transition, if so, don't interfere
+        if (isViewTransitioningRef.current) {
+             console.log("Main history changed, but a view transition is ongoing, skipping main load logic.");
+            // Maybe just ensure isVideosLoaded is true if needed by UI?
+            // Or potentially cancel the ongoing view transition if history changed unexpectedly.
+            // For now, just skip loading main videos.
+            return;
+        }
+
         if (shouldSkipAutoPlay) {
-          // After back navigation, play idle video
           playIdleVideo();
         } else {
           if (activeTab === TABS.HOME) {
-            // For HOME, just play idle
-            // console.log("Tab is Home, should play idle");
             playIdleVideo();
           } else {
-            // Start forward video
-            // console.log("start transition");
             playForwardVideo();
           }
         }
@@ -113,11 +155,8 @@ export function useVideoViewer({
     if (currentVideosPaths) {
       loadVideoAssets();
     }
-    // console.log(history);
+  }, [history, currentVideosPaths]); // Watch history and currentVideosPaths
 
-  }, [history, currentVideosPaths]);
-
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (videoRef.current) {
@@ -132,8 +171,9 @@ export function useVideoViewer({
     isPlaying,
     videoRef,
     StartReverse,
+    playViewTransitionAndIdle,
     playForwardVideo,
     playReverseVideo,
-    playIdleVideo
+    playIdleVideo,
   };
 }
