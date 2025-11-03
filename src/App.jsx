@@ -11,7 +11,11 @@ import {
 import { useNavigation } from "./components/hooks/useNavigation";
 import { useSequenceViewer } from "./components/hooks/useSequenceViewer";
 import { useVideoViewer } from "./components/hooks/useVideoViewer";
+import { useVideoPreloader } from "./components/hooks/useVideoPreloader";
+
 // Components
+import VideoPreloader from "./components/VideoPreloader";
+
 import LandscapePrompt from "./components/LandscapePrompt";
 import Loading from "./components/Loading";
 import InfoPopup from "./components/InfoPopup";
@@ -26,6 +30,20 @@ import HistoryBreadcrumbs from "./components/HistoryBreadcrumbs";
 
 export default function App() {
   // console.log("App renders");
+
+  // Preload state, function and content
+  const [videosPreloaded, setVideosPreloaded] = useState(false);
+  const { isLoading, loadingProgress } = useVideoPreloader();
+
+  useEffect(() => {
+    console.log(isLoading);
+    if (!isLoading) {
+      const timer = setTimeout(() => {
+        setVideosPreloaded(true);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading])
 
   //states
   const [sidebarOpen, setSidebarOpen] = useState(false); // set true when sidebar is open
@@ -82,6 +100,7 @@ export default function App() {
       mediaElement: "img",
     };
   }
+  const isDisabled = !viewerProps.isMediaLoaded || viewerProps.isPlaying;
 
   // Show info popup when item has description
   const handleGoToItem = (item, layerKey) => {
@@ -101,8 +120,6 @@ export default function App() {
   const closeInfoPopup = () => {
     setShowInfoPopup(false);
   };
-
-  const isDisabled = !viewerProps.isMediaLoaded || viewerProps.isPlaying;
 
   const handleActiveTab = (tab) => {
     setSidebarOpen(true);
@@ -155,6 +172,10 @@ export default function App() {
   },
     [activeLayer, currentViewIndex, buildingViewVideos]
   );
+
+  if (!videosPreloaded) {
+    return <VideoPreloader loadingProgress={loadingProgress} />;
+  }
 
   return (
     <div className="w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4">
