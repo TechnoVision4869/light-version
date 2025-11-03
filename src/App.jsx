@@ -85,6 +85,8 @@ export default function App() {
 
   // Show info popup when item has description
   const handleGoToItem = (item, layerKey) => {
+    setCurrentViewIndex(0);
+    setBuildingViewVideos(null);
     goToItem(item, layerKey);
 
     // Show info popup if item has description
@@ -104,6 +106,9 @@ export default function App() {
 
   const handleActiveTab = (tab) => {
     setSidebarOpen(true);
+    setCurrentViewIndex(0);
+    setBuildingViewVideos(null);
+
     if (tab === TABS.HOME) {
       goToHome();
     } else {
@@ -158,14 +163,14 @@ export default function App() {
         {/* Top Tabs */}
         <div className="flex items-center justify-between mb-4 px-4">
           <div className="flex items-center gap-3">
-            <button
+            {currentViewIndex === 0 && <button
               onClick={viewerProps.StartReverse}
               disabled={isDisabled || history.length <= 1}
               className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
               hover:bg-white/7 transition
               disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {/* back/chev icon */}
+              {/* back chev icon */}
               <svg
                 width="18"
                 height="18"
@@ -181,7 +186,7 @@ export default function App() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </button>
+            </button>}
           </div>
           <div className="flex items-center gap-6">
             <button
@@ -221,8 +226,8 @@ export default function App() {
         >
           {/* Sidebar */}
           <aside
-            className={`bg-white/9 rounded-2xl p-2 py-3 md:p-3 md:py-4 flex-shrink-0 transition-all duration-300 overflow-hidden
-             ${activeTab === TABS.HOME || activeLayer === LAYERS.AMENITY_DETAIL
+            className={`bg-white/9 rounded-2xl p-2 py-3 md:p-3 md:py-4 flex-shrink-0 transition-all duration-700 overflow-hidden
+             ${activeTab === TABS.HOME || activeLayer === LAYERS.AMENITY_DETAIL || currentViewIndex !== 0
                 ? "w-0 opacity-0 pointer-events-none"
                 : sidebarOpen
                   ? "w-44 md:w-60 opacity-100"
@@ -369,7 +374,8 @@ export default function App() {
 
               {/* left floating chevron to collapse sidebar */}
               {activeTab !== TABS.HOME &&
-                activeLayer !== LAYERS.AMENITY_DETAIL && (
+                activeLayer !== LAYERS.AMENITY_DETAIL &&
+                currentViewIndex === 0 && (
                   <button
                     onClick={() => setSidebarOpen((s) => !s)}
                     className="absolute left-[-18px] top-80 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow"
@@ -414,10 +420,13 @@ export default function App() {
 
         {/* Breadcrumbs */}
         {history.length > 1 && (
-          <div className="inline-flex px-6 pt-3">
-            <HistoryBreadcrumbs history={history} currentItem={currentItem} />
+          <div className="flex px-6 pt-3">
+            <div className="flex-shrink-0">
+              <HistoryBreadcrumbs history={history} currentItem={currentItem} />
+            </div>
+            {/* Views visuals */}
             {activeLayer === LAYERS.BUILDING && (
-              <div className="items-center text-white gap-3 px-4 py-2 text-sm">
+              <div className="flex-1 flex justify-center items-center justify-center text-white gap-3 px-4 py-2 text-sm">
                 <div className=" flex gap-2">
                   <div className=""> Views </div>
                   {/* prev button */}
