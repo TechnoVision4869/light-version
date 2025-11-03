@@ -47,27 +47,12 @@ export default function App() {
     goToHome,
   } = useNavigation();
 
-  // Effect to load the first view's videos when entering the BUILDING layer
-  useEffect(() => {
-    if (activeLayer === LAYERS.BUILDING && currentItem) {
-      const buildingConfig = LAYER_CONFIG[LAYERS.BUILDING];
-      const initialViewVideos = buildingConfig.getVideosPathForView(
-        currentItem,
-        0
-      ); // Load view 1
-      setBuildingViewVideos(initialViewVideos);
-      setCurrentViewIndex(0); // Reset to first view
-    }
-  }, [activeLayer, currentItem]);
-
   // Conditionally use video or sequence viewer
   let viewerProps;
   if (MODE_CONFIG === MODE.VIDEO) {
     const videoViewer = useVideoViewer({
       currentVideosPaths:
-        activeLayer === LAYERS.BUILDING
-          ? buildingViewVideos || currentVideosPaths
-          : currentVideosPaths, // Use view videos if available, else main ones
+        buildingViewVideos || currentVideosPaths, // Use view videos if available, else main ones
       history,
       activeTab,
       onGoBack: goBack,
@@ -127,41 +112,43 @@ export default function App() {
     }
   };
 
-  const changeView = useCallback(
-    (direction) => {
-      if (activeLayer !== LAYERS.BUILDING || !currentItem) return;
+  const changeView = useCallback((direction) => {
+    console.log(direction);
+    if (activeLayer !== LAYERS.BUILDING || !currentItem) return;
 
-      const buildingConfig = LAYER_CONFIG[LAYERS.BUILDING];
-      const numViews = 4; // Get number of views from item data
+    const buildingConfig = LAYER_CONFIG[LAYERS.BUILDING];
+    const numViews = 4; // Get number of views from item data
 
-      let newIndex = currentViewIndex + (direction === "next" ? 1 : -1);
+    let newIndex = currentViewIndex + (direction === "next" ? 1 : -1);
 
-      // Handle wrap-around
-      if (newIndex >= numViews) newIndex = 0;
-      if (newIndex < 0) newIndex = numViews - 1;
+    // Handle wrap-around
+    if (newIndex >= numViews) newIndex = 0;
+    if (newIndex < 0) newIndex = numViews - 1;
 
-      // Get the video paths for the new view
-      const newViewVideos = buildingConfig.getVideosPathForView(
-        currentItem,
-        newIndex
-      );
-
+    // Get the video paths for the new view
+    const newViewVideos = buildingConfig.getVideosPathForView(
+      currentItem,
+      newIndex
+    );
+    if (direction === "next") {
       // Call the video viewer function to play the transition and then the new idle video
       viewerProps.playViewTransitionAndIdle(
         newViewVideos.forwardVideo,
         newViewVideos.idleVideo
       );
+    } else {
+      // Call the video viewer function to play the transition and then the new idle video
+      viewerProps.playViewTransitionAndIdle(
+        buildingViewVideos.reverseVideo,
+        newViewVideos.idleVideo
+      );
+    }
 
-      // Update the state which will trigger the video viewer to load new videos
-      setBuildingViewVideos(newViewVideos);
-      setCurrentViewIndex(newIndex);
-    },
-    [
-      activeLayer,
-      currentViewIndex,
-      currentItem,
-      viewerProps.playViewTransitionAndIdle,
-    ]
+    // Update the state which will trigger the video viewer to load new videos
+    setBuildingViewVideos(newViewVideos);
+    setCurrentViewIndex(newIndex);
+  },
+    [activeLayer, currentViewIndex, buildingViewVideos]
   );
 
   return (
@@ -199,31 +186,28 @@ export default function App() {
           <div className="flex items-center gap-6">
             <button
               onClick={() => handleActiveTab(TABS.SURROUNDINGS)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                activeTab === TABS.SURROUNDINGS
-                  ? "bg-white text-black"
-                  : "text-white/80"
-              }`}
+              className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.SURROUNDINGS
+                ? "bg-white text-black"
+                : "text-white/80"
+                }`}
             >
               SURROUNDINGS
             </button>
             <button
               onClick={() => handleActiveTab(TABS.ZONES)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                activeTab === TABS.ZONES
-                  ? "bg-white text-black"
-                  : "text-white/80"
-              }`}
+              className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.ZONES
+                ? "bg-white text-black"
+                : "text-white/80"
+                }`}
             >
               ZONES
             </button>
             <button
               onClick={() => handleActiveTab(TABS.AMENITIES)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                activeTab === TABS.AMENITIES
-                  ? "bg-white text-black"
-                  : "text-white/80"
-              }`}
+              className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.AMENITIES
+                ? "bg-white text-black"
+                : "text-white/80"
+                }`}
             >
               AMENITIES
             </button>
@@ -232,20 +216,18 @@ export default function App() {
         </div>
 
         <div
-          className={`flex ${
-            sidebarOpen ? "gap-3" : "gap-0"
-          } flex-1 min-h-0 overflow-hidden`}
+          className={`flex ${sidebarOpen ? "gap-3" : "gap-0"
+            } flex-1 min-h-0 overflow-hidden`}
         >
           {/* Sidebar */}
           <aside
             className={`bg-white/9 rounded-2xl p-2 py-3 md:p-3 md:py-4 flex-shrink-0 transition-all duration-300 overflow-hidden
-             ${
-               activeTab === TABS.HOME || activeLayer === LAYERS.AMENITY_DETAIL
-                 ? "w-0 opacity-0 pointer-events-none"
-                 : sidebarOpen
-                 ? "w-44 md:w-60 opacity-100"
-                 : "w-0 opacity-0 pointer-events-none"
-             }`}
+             ${activeTab === TABS.HOME || activeLayer === LAYERS.AMENITY_DETAIL
+                ? "w-0 opacity-0 pointer-events-none"
+                : sidebarOpen
+                  ? "w-44 md:w-60 opacity-100"
+                  : "w-0 opacity-0 pointer-events-none"
+              }`}
           >
             <div className="h-full pr-2">
               {/* Dynamic sidebar title based on active tab */}
@@ -253,10 +235,10 @@ export default function App() {
                 {activeTab === TABS.ZONES
                   ? TAB_CONFIG[TABS.ZONES]?.title
                   : activeTab === TABS.SURROUNDINGS
-                  ? TAB_CONFIG[TABS.SURROUNDINGS]?.title
-                  : activeTab === TABS.AMENITIES
-                  ? TAB_CONFIG[TABS.AMENITIES]?.title
-                  : ""}
+                    ? TAB_CONFIG[TABS.SURROUNDINGS]?.title
+                    : activeTab === TABS.AMENITIES
+                      ? TAB_CONFIG[TABS.AMENITIES]?.title
+                      : ""}
               </div>
               <div className="h-0.5 bg-white/50 mx-3 mb-4"></div>
 
@@ -440,11 +422,9 @@ export default function App() {
                   <div className=""> Views </div>
                   {/* prev button */}
                   <button
-                    className="w-auto cursor-pointer text-white mx-2"
-                    onClick={() => {
-                      console.log("prev");
-                      changeView("prev");
-                    }}
+                    className={`w-auto text-white mx-2 ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                    disabled={isDisabled}
+                    onClick={() => { changeView("prev"); }}
                   >
                     <svg
                       width="18"
@@ -485,11 +465,9 @@ export default function App() {
 
                   {/* next button */}
                   <button
-                    className="w-auto cursor-pointer text-white mx-2"
-                    onClick={() => {
-                      console.log("next");
-                      changeView("next");
-                    }}
+                    className={`w-auto text-white mx-2 ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                    disabled={isDisabled}
+                    onClick={() => { changeView("next"); }}
                   >
                     <svg
                       width="18"
@@ -513,6 +491,6 @@ export default function App() {
           </div>
         )}
       </div>
-    </div>
+    </div >
   );
 }

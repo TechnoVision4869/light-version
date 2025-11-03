@@ -60,6 +60,9 @@ export function useVideoViewer({
   // NEW: Dedicated function for view transitions
   const playViewTransitionAndIdle = useCallback(
     (transitionVideoPath, idleVideoPath) => {
+      console.log(`transition vieo path: ${transitionVideoPath},
+        idle video path: ${idleVideoPath},
+        videoRef current: ${videoRef.current}`);
       if (!transitionVideoPath || !idleVideoPath || !videoRef.current) return;
 
       console.log("Starting view transition from:", transitionVideoPath, "to idle:", idleVideoPath);
@@ -77,25 +80,23 @@ export function useVideoViewer({
         video.onended = null;
 
         // Check the flag again before proceeding (in case another transition started)
-        if (isViewTransitioningRef.current) {
-          // Switch to the new idle video
-          video.src = idleVideoPath;
-          video.load();
-          video.loop = true;
 
-          video.onloadeddata = () => {
-            console.log("View idle video loaded, playing...");
-            video
-              .play()
-              .catch((e) => console.error("View idle video play failed:", e));
-            // Set playing state to false for idle video
-            setIsPlaying(false);
-            // Transition process is complete, unset the flag
-            isViewTransitioningRef.current = false;
-          };
-        } else {
-          console.log("View transition was interrupted, not switching to idle.");
-        }
+        // Switch to the new idle video
+        video.src = idleVideoPath;
+        video.load();
+        video.loop = true;
+
+        video.onloadeddata = () => {
+          console.log("View idle video loaded, playing...");
+          video
+            .play()
+            .catch((e) => console.error("View idle video play failed:", e));
+          // Set playing state to false for idle video
+          setIsPlaying(false);
+          // Transition process is complete, unset the flag
+          isViewTransitioningRef.current = false;
+        };
+
       };
 
       // Set the transition video source and handler
@@ -123,7 +124,7 @@ export function useVideoViewer({
     setIsVideosLoaded(false);
 
     const loadVideoAssets = async () => {
-      const shouldSkipAutoPlay = justNavigatedBackRef.current;
+      const shouldStayIdle = justNavigatedBackRef.current;
       justNavigatedBackRef.current = false;
 
       try {
@@ -131,14 +132,11 @@ export function useVideoViewer({
 
         // Check if we are in the middle of a view transition, if so, don't interfere
         if (isViewTransitioningRef.current) {
-             console.log("Main history changed, but a view transition is ongoing, skipping main load logic.");
-            // Maybe just ensure isVideosLoaded is true if needed by UI?
-            // Or potentially cancel the ongoing view transition if history changed unexpectedly.
-            // For now, just skip loading main videos.
-            return;
+          console.log("Main videos paths changed, but a view transition is ongoing, skipping main load logic.");
+          return;
         }
 
-        if (shouldSkipAutoPlay) {
+        if (shouldStayIdle) {
           playIdleVideo();
         } else {
           if (activeTab === TABS.HOME) {
