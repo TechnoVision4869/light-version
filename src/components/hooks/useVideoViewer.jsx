@@ -12,11 +12,16 @@ export function useVideoViewer({
 
   const videoRef = useRef(null);
   const justNavigatedBackRef = useRef(false);
-  // NEW: Flag to indicate if we are in a view transition process
+  // Flag to indicate if we are in a view transition process
   const isViewTransitioningRef = useRef(false);
+  // Flag to indicate if we have played the initial video (Home idle)
+  const isInitPlayedRef = useRef(true);
 
   const playVideo = useCallback((src, loop = false, onEnded = null) => {
-    if (!src || !videoRef.current) return;
+    if (!src || !videoRef.current) {
+      console.warn("playVideo called but src or videoRef.current is not available", { src, videoRefCurrent: videoRef.current });
+      return; // Exit if not ready
+    }
 
     setIsPlaying(!loop);
     const video = videoRef.current;
@@ -52,6 +57,7 @@ export function useVideoViewer({
 
   const playIdleVideo = useCallback(() => {
     if (!currentVideosPaths?.idleVideo) return;
+    // console.log("playIdleVideo called with idleVideo:", currentVideosPaths.idleVideo);
     // Ensure we are not in a view transition when this runs due to main navigation
     isViewTransitioningRef.current = false;
     playVideo(currentVideosPaths.idleVideo, true);
@@ -140,7 +146,14 @@ export function useVideoViewer({
           playIdleVideo();
         } else {
           if (activeTab === TABS.HOME) {
-            playIdleVideo();
+            // console.log("Active tab is HOME, playing idle video.");
+            if (isInitPlayedRef.current) {
+              setTimeout(() => {
+                playIdleVideo();
+              }, 200);
+            } else {
+              playIdleVideo();
+            }
           } else {
             playForwardVideo();
           }
@@ -153,7 +166,7 @@ export function useVideoViewer({
     if (currentVideosPaths) {
       loadVideoAssets();
     }
-  }, [history, currentVideosPaths]); // Watch history and currentVideosPaths
+  }, [history, currentVideosPaths, videoRef]); // Watch history and currentVideosPaths and videoRef
 
   useEffect(() => {
     return () => {

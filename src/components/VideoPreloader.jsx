@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 export default function VideoPreloader({ loadingProgress }) {
     return (
-        <div className="fixed inset-0 bg-gray-900/80 backdrop-blur-remove flex flex-col items-center justify-center z-50">
+        <div className="fixed inset-0 bg-gray-900/10 backdrop-blur-remove flex flex-col items-center justify-center z-50">
             <div className="text-white text-xl mb-4">Loading Videos...</div>
             <div className="w-64 h-4 bg-[#4b514a] rounded-full overflow-hidden">
                 <div

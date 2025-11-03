@@ -36,7 +36,6 @@ export default function App() {
   const { isLoading, loadingProgress } = useVideoPreloader();
 
   useEffect(() => {
-    console.log(isLoading);
     if (!isLoading) {
       const timer = setTimeout(() => {
         setVideosPreloaded(true);
