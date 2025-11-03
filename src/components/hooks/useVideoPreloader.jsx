@@ -82,7 +82,7 @@ export function useVideoPreloader() {
         addVideoPaths(amenPaths);
     });
 
-    console.log('Preloading videos:', Array.from(allVideoUrls)); // Debug log
+    // console.log('Preloading videos:', Array.from(allVideoUrls)); // Debug log
 
     const videoArray = Array.from(allVideoUrls);
     let loadedCount = 0;
