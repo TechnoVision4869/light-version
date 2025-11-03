@@ -60,12 +60,12 @@ export function useVideoViewer({
   // NEW: Dedicated function for view transitions
   const playViewTransitionAndIdle = useCallback(
     (transitionVideoPath, idleVideoPath) => {
-      console.log(`transition vieo path: ${transitionVideoPath},
-        idle video path: ${idleVideoPath},
-        videoRef current: ${videoRef.current}`);
+      // console.log(`transition vieo path: ${transitionVideoPath},
+      //   idle video path: ${idleVideoPath},
+      //   videoRef current: ${videoRef.current}`);
       if (!transitionVideoPath || !idleVideoPath || !videoRef.current) return;
 
-      console.log("Starting view transition from:", transitionVideoPath, "to idle:", idleVideoPath);
+      // console.log("Starting view transition from:", transitionVideoPath, "to idle:", idleVideoPath);
 
       // Set flag to indicate we are now transitioning views
       isViewTransitioningRef.current = true;
@@ -75,7 +75,7 @@ export function useVideoViewer({
 
       // Define the handler for the *transition* video ending
       const onTransitionEnded = () => {
-        console.log("View transition video ended, switching to idle:", idleVideoPath);
+        // console.log("View transition video ended, switching to idle:", idleVideoPath);
         // Remove the handler from the transition video
         video.onended = null;
 
@@ -87,7 +87,7 @@ export function useVideoViewer({
         video.loop = true;
 
         video.onloadeddata = () => {
-          console.log("View idle video loaded, playing...");
+          // console.log("View idle video loaded, playing...");
           video
             .play()
             .catch((e) => console.error("View idle video play failed:", e));
@@ -106,7 +106,7 @@ export function useVideoViewer({
       video.onended = onTransitionEnded; // Attach handler for *this* transition
 
       video.onloadeddata = () => {
-        console.log("View transition video loaded, playing...");
+        // console.log("View transition video loaded, playing...");
         video
           .play()
           .catch((e) => console.error("View transition play failed:", e));
@@ -132,7 +132,7 @@ export function useVideoViewer({
 
         // Check if we are in the middle of a view transition, if so, don't interfere
         if (isViewTransitioningRef.current) {
-          console.log("Main videos paths changed, but a view transition is ongoing, skipping main load logic.");
+          // console.log("Main videos paths changed, but a view transition is ongoing, skipping main load logic.");
           return;
         }
 

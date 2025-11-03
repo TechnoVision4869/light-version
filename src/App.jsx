@@ -346,10 +346,7 @@ export default function App() {
                     // src={viewerProps.mediaRef?.current?.src}
                     muted
                     playsInline
-                    onLoad={() => {
-                      // This ensures the video element is ready
-                      console.warn("Video element loaded");
-                    }}
+                    preload="auto"
                   />
                 ) : (
                   <img
