@@ -123,7 +123,12 @@ export default function App() {
       goToHome();
     } else {
       const isFromHome = activeTab === TABS.HOME;
-      goToTab(tab, isFromHome);
+      const isFromAnotherTab = (activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS)
+      if (isFromAnotherTab) {
+        viewerProps.StartReverse(isFromAnotherTab, () => goToTab(tab, true));
+        return;
+      }
+      goToTab(tab, isFromHome, isFromAnotherTab);
     }
 
     setTimeout(() => {

@@ -91,20 +91,27 @@ export function useVideoViewer({
 
   const playForwardVideo = useCallback(() => {
     if (!currentVideosPaths?.forwardVideo) return;
-    // console.log("playForwardVideo called with forwardVideo:", currentVideosPaths.forwardVideo);
+    console.log("playForwardVideo called with forwardVideo:", currentVideosPaths.forwardVideo);
 
     playVideo(currentVideosPaths.forwardVideo, false, playIdleVideo);
   }, [currentVideosPaths, playVideo]);
 
-  const playReverseVideo = useCallback(() => {
+  const playReverseVideo = useCallback((navigatedBetweenTabs, onReverseEnded) => {
     if (!currentVideosPaths?.reverseVideo) return;
     // console.log("Reverse video", currentVideosPaths.reverseVideo);
 
     playVideo(currentVideosPaths.reverseVideo, false, () => {
+      if (navigatedBetweenTabs) {
+        onGoBack();
+        console.log(currentVideosPaths);
+        
+        onReverseEnded();
+        return;
+      }
       justNavigatedBackRef.current = true;
       onGoBack();
     });
-  }, [currentVideosPaths, playVideo, onGoBack]);
+  }, [currentVideosPaths, playVideo, onGoBack, playForwardVideo]);
 
   const playIdleVideo = useCallback(() => {
     if (!currentVideosPaths?.idleVideo) return;
@@ -168,10 +175,10 @@ export function useVideoViewer({
     []
   );
 
-  const StartReverse = useCallback(() => {
+  const StartReverse = useCallback((isFromAnotherTab) => {
     if (history.length <= 1) return;
     // console.log("StartReverse called with current reverse video:", currentVideosPaths.reverseVideo);
-    playReverseVideo();
+    playReverseVideo(isFromAnotherTab);
   }, [history.length, playReverseVideo]);
 
   useEffect(() => {
@@ -186,7 +193,7 @@ export function useVideoViewer({
         // console.log("Main videos paths changed, but a view transition is ongoing, skipping main load logic.");
         return;
       }
-      
+
       try {
         setIsVideosLoaded(true);
 
@@ -203,6 +210,8 @@ export function useVideoViewer({
               isInitPlayedRef.current = false;
             }, 200);
           } else {
+            console.log("HEEEREEE");
+
             playForwardVideo();
           }
         }
