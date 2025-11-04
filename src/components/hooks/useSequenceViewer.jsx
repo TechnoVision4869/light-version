@@ -4,7 +4,6 @@ import { MODE_CONFIG, TABS } from "../../data/layers";
 export function useSequenceViewer({
     currentPath,
     history,
-    activeTab,
     onGoBack
 }) {
     // States
@@ -17,6 +16,9 @@ export function useSequenceViewer({
     const intervalRef = useRef(null);
     const currentIndexRef = useRef(0);
     const justNavigatedBackRef = useRef(false);
+
+    const currentHistoryEntry = history[history.length - 1]; // Get the current (top) entry
+    const activeTab = currentHistoryEntry?.tab || null;
 
     // Constants
     const NO_OF_FRAMES = activeTab === TABS.HOME ? 1 : 45;

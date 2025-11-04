@@ -1,10 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { TABS } from "../../data/layers";
+import { TABS, LAYERS, LAYER_CONFIG } from "../../data/layers";
 
 export function useVideoViewer({
   currentVideosPaths,
   history,
-  activeTab,
   onGoBack,
 }) {
   const [isVideosLoaded, setIsVideosLoaded] = useState(false);
@@ -12,10 +11,59 @@ export function useVideoViewer({
 
   const videoRef = useRef(null);
   const justNavigatedBackRef = useRef(false);
-  // Flag to indicate if we are in a view transition process
-  const isViewTransitioningRef = useRef(false);
-  // Flag to indicate if we have played the initial video (Home idle)
-  const isInitPlayedRef = useRef(true);
+  const isViewTransitioningRef = useRef(false);  // Flag to indicate if we are in a view transition process
+  const isInitPlayedRef = useRef(true);  // Flag to indicate if we have played the initial video (Home idle)
+
+  const [currentViewIndex, setCurrentViewIndex] = useState(0);
+  const [buildingViewVideos, setBuildingViewVideos] = useState(null);
+
+  const currentHistoryEntry = history[history.length - 1]; // Get the current (top) entry
+  const activeTab = currentHistoryEntry?.tab || null;
+  const currentItem = currentHistoryEntry?.item || null;
+  const numViews = 4;
+
+  // Function to handle view changes (uses activeTab and currentItem derived above)
+  const changeView = useCallback((direction) => {
+    console.log("useVideoViewer: changeView called with direction:", direction);
+    // Use the locally derived activeTab and currentItem
+
+    const buildingConfig = LAYER_CONFIG[LAYERS.BUILDING];
+    if (!buildingConfig) {
+      console.error("LAYER_CONFIG for BUILDING not found.");
+      return;
+    }
+    console.log("current item", currentItem);
+
+    let newIndex = currentViewIndex + (direction === "next" ? 1 : -1);
+    // Handle wrap-around
+    if (newIndex >= numViews) newIndex = 0;
+    if (newIndex < 0) newIndex = numViews - 1;
+
+    const newViewVideos = buildingConfig.getVideosPathForView(
+      currentItem, newIndex);
+    if (!newViewVideos) {
+      console.error("Could not get video paths for view index:", newIndex);
+      return;
+    }
+
+    if (direction === "next") {
+      playViewTransitionAndIdle(
+        newViewVideos.forwardVideo,
+        newViewVideos.idleVideo);
+    } else {
+      const currentViewPaths = buildingConfig.getVideosPathForView(currentItem, currentViewIndex);
+      if (!currentViewPaths?.reverseVideo) {
+        console.error("Could not get reverse video path for current view index:", currentViewIndex);
+        return;
+      }
+      playViewTransitionAndIdle(
+        buildingViewVideos.reverseVideo,
+        newViewVideos.idleVideo);
+    }
+
+    setBuildingViewVideos(newViewVideos);
+    setCurrentViewIndex(newIndex);
+  }, [history, currentViewIndex, buildingViewVideos]);
 
   const playVideo = useCallback((src, loop = false, onEnded = null) => {
     if (!src || !videoRef.current) {
@@ -97,18 +145,14 @@ export function useVideoViewer({
 
         video.onloadeddata = () => {
           // console.log("View idle video loaded, playing...");
-          video
-            .play()
-            .catch((e) => console.error("View idle video play failed:", e));
+          video.play().catch((e) => console.error("View idle video play failed:", e));
           // Set playing state to false for idle video
           setIsPlaying(false);
           // Transition process is complete, unset the flag
           isViewTransitioningRef.current = false;
         };
-
       };
 
-      // Set the transition video source and handler
       video.src = transitionVideoPath;
       video.load();
       video.loop = false;
@@ -127,7 +171,6 @@ export function useVideoViewer({
   const StartReverse = useCallback(() => {
     if (history.length <= 1) return;
     console.log("StartReverse called with current reverse video:", currentVideosPaths.reverseVideo);
-    
     playReverseVideo();
   }, [history.length, playReverseVideo]);
 
@@ -143,14 +186,17 @@ export function useVideoViewer({
       const shouldStayIdle = justNavigatedBackRef.current;
       justNavigatedBackRef.current = false;
 
+      // Check if we are in the middle of a view transition, if so, don't interfere
+      if (isViewTransitioningRef.current) {
+        // console.log("Main videos paths changed, but a view transition is ongoing, skipping main load logic.");
+        return;
+      }
+
       try {
         setIsVideosLoaded(true);
 
-        // Check if we are in the middle of a view transition, if so, don't interfere
-        if (isViewTransitioningRef.current) {
-          // console.log("Main videos paths changed, but a view transition is ongoing, skipping main load logic.");
-          return;
-        }
+        setCurrentViewIndex(0);
+        setBuildingViewVideos(null);
 
         if (shouldStayIdle) {
           playIdleVideo();
@@ -193,8 +239,7 @@ export function useVideoViewer({
     videoRef,
     StartReverse,
     playViewTransitionAndIdle,
-    playForwardVideo,
-    playReverseVideo,
-    playIdleVideo,
+    currentViewIndex,
+    changeView,
   };
 }

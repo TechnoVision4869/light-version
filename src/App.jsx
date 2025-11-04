@@ -47,8 +47,6 @@ export default function App() {
   //states
   const [sidebarOpen, setSidebarOpen] = useState(false); // set true when sidebar is open
   const [showInfoPopup, setShowInfoPopup] = useState(false);
-  const [currentViewIndex, setCurrentViewIndex] = useState(0);
-  const [buildingViewVideos, setBuildingViewVideos] = useState(null); // State to hold view-specific video paths
 
   // Navigation hook
   const {
@@ -68,10 +66,9 @@ export default function App() {
   let viewerProps;
   if (MODE_CONFIG === MODE.VIDEO) {
     const videoViewer = useVideoViewer({
-      currentVideosPaths:
-        buildingViewVideos || currentVideosPaths, // Use view videos if available, else main ones
+      currentVideosPaths,
+      buildingViewPaths: null,
       history,
-      activeTab,
       onGoBack: goBack,
     });
     viewerProps = {
@@ -80,13 +77,14 @@ export default function App() {
       mediaRef: videoViewer.videoRef,
       StartReverse: videoViewer.StartReverse,
       playViewTransitionAndIdle: videoViewer.playViewTransitionAndIdle,
+      currentViewIndex: videoViewer.currentViewIndex, // Now managed by the hook
+      changeView: videoViewer.changeView, // Now managed by the hook
       mediaElement: "video",
     };
   } else {
     const sequenceViewer = useSequenceViewer({
       currentPath,
       history,
-      activeTab,
       onGoBack: goBack,
     });
     viewerProps = {
@@ -103,8 +101,6 @@ export default function App() {
 
   // Show info popup when item has description
   const handleGoToItem = (item, layerKey) => {
-    setCurrentViewIndex(0);
-    setBuildingViewVideos(null);
     goToItem(item, layerKey);
 
     // Show info popup if item has description
@@ -122,8 +118,6 @@ export default function App() {
 
   const handleActiveTab = (tab) => {
     setSidebarOpen(true);
-    setCurrentViewIndex(0);
-    setBuildingViewVideos(null);
 
     if (tab === TABS.HOME) {
       goToHome();
@@ -133,44 +127,6 @@ export default function App() {
     }
   };
 
-  const changeView = useCallback((direction) => {
-    console.log(direction);
-    if (activeLayer !== LAYERS.BUILDING || !currentItem) return;
-
-    const buildingConfig = LAYER_CONFIG[LAYERS.BUILDING];
-    const numViews = 4; // Get number of views from item data
-
-    let newIndex = currentViewIndex + (direction === "next" ? 1 : -1);
-
-    // Handle wrap-around
-    if (newIndex >= numViews) newIndex = 0;
-    if (newIndex < 0) newIndex = numViews - 1;
-
-    // Get the video paths for the new view
-    const newViewVideos = buildingConfig.getVideosPathForView(
-      currentItem,
-      newIndex
-    );
-    if (direction === "next") {
-      // Call the video viewer function to play the transition and then the new idle video
-      viewerProps.playViewTransitionAndIdle(
-        newViewVideos.forwardVideo,
-        newViewVideos.idleVideo
-      );
-    } else {
-      // Call the video viewer function to play the transition and then the new idle video
-      viewerProps.playViewTransitionAndIdle(
-        buildingViewVideos.reverseVideo,
-        newViewVideos.idleVideo
-      );
-    }
-
-    // Update the state which will trigger the video viewer to load new videos
-    setBuildingViewVideos(newViewVideos);
-    setCurrentViewIndex(newIndex);
-  },
-    [activeLayer, currentViewIndex, buildingViewVideos]
-  );
 
   return (
     <>
@@ -181,7 +137,7 @@ export default function App() {
           {/* Top Tabs */}
           <div className="flex items-center justify-between mb-4 px-4">
             <div className="flex items-center gap-3">
-              {currentViewIndex === 0 && <button
+              {viewerProps.currentViewIndex === 0 && <button
                 onClick={viewerProps.StartReverse}
                 disabled={isDisabled || history.length <= 1}
                 className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
@@ -245,7 +201,7 @@ export default function App() {
             {/* Sidebar */}
             <aside
               className={`bg-white/9 rounded-2xl p-2 py-3 md:p-3 md:py-4 flex-shrink-0 transition-all duration-700 overflow-hidden
-             ${activeTab === TABS.HOME || activeLayer === LAYERS.AMENITY_DETAIL || currentViewIndex !== 0
+             ${activeTab === TABS.HOME || activeLayer === LAYERS.AMENITY_DETAIL || viewerProps.currentViewIndex !== 0
                   ? "w-0 opacity-0 pointer-events-none"
                   : sidebarOpen
                     ? "w-44 md:w-60 opacity-100"
@@ -354,9 +310,9 @@ export default function App() {
             {/* Main content area */}
             <main className="flex-1 relative">
               <div className="w-full h-full flex items-center justify-center bg-white/9 rounded-2xl overflow-hidden shadow-inner">
-                {/* img or video element */}
-                {viewerProps.isMediaLoaded ? (
-                  viewerProps.mediaElement === "video" ? (
+                <div className="w-full h-full relative">
+                  {/* img or video element */}
+                  {viewerProps.mediaElement === "video" ? (
                     <video
                       ref={viewerProps.mediaRef}
                       className="w-full h-full object-contain rounded-2xl"
@@ -377,10 +333,10 @@ export default function App() {
                         ]?.src
                       }
                     />
-                  )
-                ) : (
-                  <Loading />
-                )}
+                  )}
+                  {!viewerProps.isMediaLoaded && <Loading />}
+                </div>
+
 
                 {/* Example center marker */}
                 {/* <div className="absolute left-1/2 top-28 -translate-x-1/2 flex flex-col items-center">
@@ -390,10 +346,10 @@ export default function App() {
                 {/* left floating chevron to collapse sidebar */}
                 {activeTab !== TABS.HOME &&
                   activeLayer !== LAYERS.AMENITY_DETAIL &&
-                  currentViewIndex === 0 && (
+                  viewerProps.currentViewIndex === 0 && (
                     <button
                       onClick={() => setSidebarOpen((s) => !s)}
-                      className="absolute left-[-18px] top-80 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow"
+                      className="absolute left-[-18px] top-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow"
                       aria-label={sidebarOpen ? "close sidebar" : "open sidebar"}
                     >
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -448,7 +404,7 @@ export default function App() {
                     <button
                       className={`w-auto text-white mx-2 ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                       disabled={isDisabled}
-                      onClick={() => { changeView("prev"); }}
+                      onClick={() => { viewerProps.changeView("prev"); }}
                     >
                       <svg
                         width="18"
@@ -473,7 +429,7 @@ export default function App() {
                           width="21"
                           height="21"
                           viewBox="0 0 21 21"
-                          fill={index === currentViewIndex ? "white" : "none"}
+                          fill={index === viewerProps.currentViewIndex ? "white" : "none"}
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <circle
@@ -491,7 +447,7 @@ export default function App() {
                     <button
                       className={`w-auto text-white mx-2 ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                       disabled={isDisabled}
-                      onClick={() => { changeView("next"); }}
+                      onClick={() => { viewerProps.changeView("next"); }}
                     >
                       <svg
                         width="18"
