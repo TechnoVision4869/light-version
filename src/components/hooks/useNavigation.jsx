@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { MODE, MODE_CONFIG, TABS, TAB_CONFIG, LAYER_CONFIG } from "../../data/layers";
+import { MODE, MODE_CONFIG, TABS, TAB_CONFIG, LAYER_CONFIG, LAYERS } from "../../data/layers";
 
 export function useNavigation() {
     const initHistory = [

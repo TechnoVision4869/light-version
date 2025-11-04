@@ -117,7 +117,7 @@ export default function App() {
   };
 
   const handleActiveTab = (tab) => {
-    setSidebarOpen(true);
+    if (tab === activeTab) return;
 
     if (tab === TABS.HOME) {
       goToHome();
@@ -125,8 +125,11 @@ export default function App() {
       const isFromHome = activeTab === TABS.HOME;
       goToTab(tab, isFromHome);
     }
-  };
 
+    setTimeout(() => {
+      setSidebarOpen(true);
+    }, 800)
+  };
 
   return (
     <>
@@ -138,7 +141,10 @@ export default function App() {
           <div className="flex items-center justify-between mb-4 px-4">
             <div className="flex items-center gap-3">
               {viewerProps.currentViewIndex === 0 && <button
-                onClick={viewerProps.StartReverse}
+                onClick={() => {
+                  if (activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS) setSidebarOpen(false);
+                  viewerProps.StartReverse();
+                }}
                 disabled={isDisabled || history.length <= 1}
                 className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
               hover:bg-white/7 transition
@@ -349,7 +355,7 @@ export default function App() {
                   viewerProps.currentViewIndex === 0 && (
                     <button
                       onClick={() => setSidebarOpen((s) => !s)}
-                      className="absolute left-[-18px] top-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow"
+                      className="absolute left-[-18px] top-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow z-50"
                       aria-label={sidebarOpen ? "close sidebar" : "open sidebar"}
                     >
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">

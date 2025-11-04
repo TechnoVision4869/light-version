@@ -24,7 +24,7 @@ export function useVideoViewer({
 
   // Function to handle view changes (uses activeTab and currentItem derived above)
   const changeView = useCallback((direction) => {
-    console.log("useVideoViewer: changeView called with direction:", direction);
+    // console.log("useVideoViewer: changeView called with direction:", direction);
     // Use the locally derived activeTab and currentItem
 
     const buildingConfig = LAYER_CONFIG[LAYERS.BUILDING];
@@ -32,7 +32,7 @@ export function useVideoViewer({
       console.error("LAYER_CONFIG for BUILDING not found.");
       return;
     }
-    console.log("current item", currentItem);
+    // console.log("current item", currentItem);
 
     let newIndex = currentViewIndex + (direction === "next" ? 1 : -1);
     // Handle wrap-around
@@ -91,14 +91,14 @@ export function useVideoViewer({
 
   const playForwardVideo = useCallback(() => {
     if (!currentVideosPaths?.forwardVideo) return;
-    console.log("playForwardVideo called with forwardVideo:", currentVideosPaths.forwardVideo);
+    // console.log("playForwardVideo called with forwardVideo:", currentVideosPaths.forwardVideo);
 
     playVideo(currentVideosPaths.forwardVideo, false, playIdleVideo);
   }, [currentVideosPaths, playVideo]);
 
   const playReverseVideo = useCallback(() => {
     if (!currentVideosPaths?.reverseVideo) return;
-    console.log("Reverse video", currentVideosPaths.reverseVideo);
+    // console.log("Reverse video", currentVideosPaths.reverseVideo);
 
     playVideo(currentVideosPaths.reverseVideo, false, () => {
       justNavigatedBackRef.current = true;
@@ -117,9 +117,9 @@ export function useVideoViewer({
   // NEW: Dedicated function for view transitions
   const playViewTransitionAndIdle = useCallback(
     (transitionVideoPath, idleVideoPath) => {
-      console.log(`transition vieo path: ${transitionVideoPath},
-         idle video path: ${idleVideoPath},
-         videoRef current: ${videoRef.current}`);
+      // console.log(`transition vieo path: ${transitionVideoPath},
+      //  idle video path: ${idleVideoPath},
+      //  videoRef current: ${videoRef.current}`);
       if (!transitionVideoPath || !idleVideoPath || !videoRef.current) return;
 
       // console.log("Starting view transition from:", transitionVideoPath, "to idle:", idleVideoPath);
@@ -170,14 +170,9 @@ export function useVideoViewer({
 
   const StartReverse = useCallback(() => {
     if (history.length <= 1) return;
-    console.log("StartReverse called with current reverse video:", currentVideosPaths.reverseVideo);
+    // console.log("StartReverse called with current reverse video:", currentVideosPaths.reverseVideo);
     playReverseVideo();
   }, [history.length, playReverseVideo]);
-
-  useEffect(() => {
-    console.log(currentVideosPaths);
-    console.log(history);
-  }, [currentVideosPaths, history])
 
   useEffect(() => {
     setIsVideosLoaded(false);
@@ -191,7 +186,7 @@ export function useVideoViewer({
         // console.log("Main videos paths changed, but a view transition is ongoing, skipping main load logic.");
         return;
       }
-
+      
       try {
         setIsVideosLoaded(true);
 
@@ -201,15 +196,12 @@ export function useVideoViewer({
         if (shouldStayIdle) {
           playIdleVideo();
         } else {
-          if (activeTab === TABS.HOME) {
-            // console.log("Active tab is HOME, playing idle video.");
-            if (isInitPlayedRef.current) {
-              setTimeout(() => {
-                playIdleVideo();
-              }, 200);
-            } else {
+          if (activeTab === TABS.HOME && isInitPlayedRef.current) {
+            console.log("initial HOME tab, playing idle video.");
+            setTimeout(() => {
               playIdleVideo();
-            }
+              isInitPlayedRef.current = false;
+            }, 200);
           } else {
             playForwardVideo();
           }
@@ -223,6 +215,7 @@ export function useVideoViewer({
       loadVideoAssets();
     }
   }, [history, videoRef]); // Watch history and videoRef
+
 
   useEffect(() => {
     return () => {
