@@ -1,4 +1,3 @@
-// hooks/useVideoPreloader.js
 import { useState, useEffect } from 'react';
 import { TABS, LAYERS, TAB_CONFIG, LAYER_CONFIG, DATA } from "../../data/layers"; // Adjust path
 

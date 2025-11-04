@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 export default function VideoPreloader({ loadingProgress }) {
     return (
         <div className="fixed inset-0 bg-gray-900/10 backdrop-blur-remove flex flex-col items-center justify-center z-50">

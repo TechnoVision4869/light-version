@@ -43,11 +43,14 @@ export function useVideoViewer({
 
   const playForwardVideo = useCallback(() => {
     if (!currentVideosPaths?.forwardVideo) return;
+    console.log("playForwardVideo called with forwardVideo:", currentVideosPaths.forwardVideo);
+
     playVideo(currentVideosPaths.forwardVideo, false, playIdleVideo);
   }, [currentVideosPaths, playVideo]);
 
   const playReverseVideo = useCallback(() => {
     if (!currentVideosPaths?.reverseVideo) return;
+    console.log("Reverse video", currentVideosPaths.reverseVideo);
 
     playVideo(currentVideosPaths.reverseVideo, false, () => {
       justNavigatedBackRef.current = true;
@@ -66,9 +69,9 @@ export function useVideoViewer({
   // NEW: Dedicated function for view transitions
   const playViewTransitionAndIdle = useCallback(
     (transitionVideoPath, idleVideoPath) => {
-      // console.log(`transition vieo path: ${transitionVideoPath},
-      //   idle video path: ${idleVideoPath},
-      //   videoRef current: ${videoRef.current}`);
+      console.log(`transition vieo path: ${transitionVideoPath},
+         idle video path: ${idleVideoPath},
+         videoRef current: ${videoRef.current}`);
       if (!transitionVideoPath || !idleVideoPath || !videoRef.current) return;
 
       // console.log("Starting view transition from:", transitionVideoPath, "to idle:", idleVideoPath);
@@ -123,8 +126,15 @@ export function useVideoViewer({
 
   const StartReverse = useCallback(() => {
     if (history.length <= 1) return;
+    console.log("StartReverse called with current reverse video:", currentVideosPaths.reverseVideo);
+    
     playReverseVideo();
   }, [history.length, playReverseVideo]);
+
+  useEffect(() => {
+    console.log(currentVideosPaths);
+    console.log(history);
+  }, [currentVideosPaths, history])
 
   useEffect(() => {
     setIsVideosLoaded(false);
@@ -166,7 +176,7 @@ export function useVideoViewer({
     if (currentVideosPaths) {
       loadVideoAssets();
     }
-  }, [history, currentVideosPaths, videoRef]); // Watch history and currentVideosPaths and videoRef
+  }, [history, videoRef]); // Watch history and videoRef
 
   useEffect(() => {
     return () => {
