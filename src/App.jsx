@@ -62,15 +62,22 @@ export default function App() {
     goToHome,
   } = useNavigation();
 
-  // Conditionally use video or sequence viewer
+  const videoViewer = useVideoViewer({
+    currentVideosPaths,
+    buildingViewPaths: null,
+    history,
+    onGoBack: goBack,
+  });
+
+  const sequenceViewer = useSequenceViewer({
+    currentPath,
+    history,
+    onGoBack: goBack,
+  });
+
   let viewerProps;
+  // Conditionally, set viewerProps to use video or sequence viewer
   if (MODE_CONFIG === MODE.VIDEO) {
-    const videoViewer = useVideoViewer({
-      currentVideosPaths,
-      buildingViewPaths: null,
-      history,
-      onGoBack: goBack,
-    });
     viewerProps = {
       isMediaLoaded: videoViewer.isVideosLoaded,
       isPlaying: videoViewer.isPlaying,
@@ -82,11 +89,6 @@ export default function App() {
       mediaElement: "video",
     };
   } else {
-    const sequenceViewer = useSequenceViewer({
-      currentPath,
-      history,
-      onGoBack: goBack,
-    });
     viewerProps = {
       isMediaLoaded: sequenceViewer.isImagesLoaded,
       isPlaying: sequenceViewer.isPlaying,

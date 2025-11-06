@@ -15,7 +15,6 @@ export function useVideoViewer({
   const isInitPlayedRef = useRef(true);  // Flag to indicate if we have played the initial video (Home idle)
 
   const [currentViewIndex, setCurrentViewIndex] = useState(0);
-  const [buildingViewVideos, setBuildingViewVideos] = useState(null);
 
   const currentHistoryEntry = history[history.length - 1]; // Get the current (top) entry
   const activeTab = currentHistoryEntry?.tab || null;
@@ -48,17 +47,16 @@ export function useVideoViewer({
     if (direction === "next") {
       playViewTransitionAndIdle(newViewVideos.forwardVideo, newViewVideos.idleVideo);
     } else {
-      const currentViewPaths = buildingConfig.getVideosPathForView(currentItem, currentViewIndex);
-      if (!currentViewPaths?.reverseVideo) {
+      const buildingViewVideos = buildingConfig.getVideosPathForView(currentItem, currentViewIndex);
+      if (!buildingViewVideos?.reverseVideo) {
         console.error("Could not get reverse video path for current view index:", currentViewIndex);
         return;
       }
       playViewTransitionAndIdle(buildingViewVideos.reverseVideo, newViewVideos.idleVideo);
     }
 
-    setBuildingViewVideos(newViewVideos);
     setCurrentViewIndex(newIndex);
-  }, [history, currentViewIndex, buildingViewVideos]);
+  }, [history, currentViewIndex]);
 
   const playVideo = useCallback((src, loop = false, onEnded = null) => {
     if (!src || !videoRef.current) {
@@ -193,7 +191,6 @@ export function useVideoViewer({
         setIsVideosLoaded(true);
 
         setCurrentViewIndex(0);
-        setBuildingViewVideos(null);
 
         if (shouldStayIdle) {
           playIdleVideo();
