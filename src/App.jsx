@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   MODE,
   MODE_CONFIG,
@@ -138,6 +138,46 @@ export default function App() {
       setSidebarOpen(true);
     }, 800)
   };
+
+  // Test buttons
+  const SURROUNDING_BUTTONS = [
+    { id: 'airport', name: 'Cairo Airport', icon: 'airport', x: 0.30, y: 0.80 },
+    { id: 'tower', name: 'Iconic Tower', icon: 'tower', x: 0.70, y: 0.40 },
+    { id: 'gym', name: 'Gym', icon: 'muscle', x: 0.75, y: 0.25 },
+  ];
+
+  const mediaContainerRef = useRef(null);
+  const [buttonPositions, setButtonPositions] = useState(
+    SURROUNDING_BUTTONS.map(() => ({ left: 0, top: 0 }))
+  );
+
+  useEffect(() => {
+    const container = mediaContainerRef.current;
+    if (!container) return;
+
+    const updatePositions = () => {
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      const videoW = h * (16 / 9);
+      const videoLeft = (w - videoW) / 2;
+
+      const newPositions = SURROUNDING_BUTTONS.map(btn => ({
+        left: videoLeft + videoW * btn.x,
+        top: h * btn.y,
+      }));
+
+      setButtonPositions(newPositions);
+    };
+
+    updatePositions();
+
+    const resizeObserver = new ResizeObserver(updatePositions);
+    resizeObserver.observe(container);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [mediaContainerRef]);
 
   return (
     <>
@@ -329,56 +369,50 @@ export default function App() {
 
             {/* Main content area */}
             <main className="flex-1 relative">
-              <div className="w-full h-full flex items-center justify-center bg-white/9 rounded-2xl overflow-hidden shadow-inner">
-                <div className="w-full h-full relative">
-                  {/* img or video element */}
-                  {viewerProps.mediaElement === "video" ? (
-                    <video
-                      ref={viewerProps.mediaRef}
-                      className="w-full h-full object-contain rounded-2xl"
-                      alt="Video"
-                      // src={viewerProps.mediaRef?.current?.src}
-                      muted
-                      playsInline
-                      preload="auto"
-                    />
-                  ) : (
-                    <img
-                      ref={viewerProps.mediaRef}
-                      className="w-full h-full object-contain rounded-2xl"
-                      alt="Transition frame"
-                      src={
-                        viewerProps.imagesRef?.current?.[
-                          viewerProps.currentIndexRef?.current
-                        ]?.src
-                      }
-                    />
-                  )}
-                  {!viewerProps.isMediaLoaded && <Loading />}
-                </div>
+              <div
+                className="w-full h-full bg-white/9 rounded-2xl overflow-hidden shadow-inner"
+                ref={mediaContainerRef}
+              >
+                {/* img or video element */}
+                {viewerProps.mediaElement === "video" ? (
+                  <video
+                    ref={viewerProps.mediaRef}
+                    className="w-auto min-w-full h-full object-cover object-center rounded-2xl"
+                    alt="Video"
+                    // src={viewerProps.mediaRef?.current?.src}
+                    muted
+                    playsInline
+                    preload="auto"
+                  />
+                ) : (
+                  <img
+                    ref={viewerProps.mediaRef}
+                    className="w-auto min-w-full h-full object-cover object-center rounded-2xl"
+                    alt="Transition frame"
+                    src={
+                      viewerProps.imagesRef?.current?.[
+                        viewerProps.currentIndexRef?.current
+                      ]?.src
+                    }
+                  />
+                )}
+                {!viewerProps.isMediaLoaded && <Loading />}
 
+                {activeTab === TABS.SURROUNDINGS &&
+                  activeLayer === null &&
+                  SURROUNDING_BUTTONS.map((btn, i) => (
+                    <FloatingButton
+                      key={btn.id}
+                      name={btn.name}
+                      iconType={btn.icon}
+                      buttonType="surrounding"
+                      style={{
+                        left: `${buttonPositions[i].left}px`,
+                        top: `${buttonPositions[i].top}px`,
+                      }}
+                    />
+                  ))}
 
-                {/* Example center marker */}
-                <FloatingButton
-                  x="30%"  // 30% from left edge of parent
-                  y="20%"  // 20% from top edge of parent
-                  name="Cairo Airport"
-                  iconType="airport"
-                  buttonType="surrounding"
-                />
-                <FloatingButton
-                  x="70vw"  // 70% of viewport width
-                  y="40vh"  // 40% of viewport height
-                  name="Iconic Tower"
-                  iconType="tower"
-                  buttonType="surrounding"
-                />
-                <FloatingButton
-                  x="40%"   // center horizontally
-                  y="60%"   // 60% down from top
-                  name="Gym"
-                  iconType="muscle"
-                  buttonType="surrounding" />
 
                 {/* left floating chevron to collapse sidebar */}
                 {activeTab !== TABS.HOME &&
@@ -507,7 +541,7 @@ export default function App() {
               )}
             </div>
           )}
-        </div>
+        </div >
       </div >
     </>
   );

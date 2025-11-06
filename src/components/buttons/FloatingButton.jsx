@@ -17,17 +17,17 @@ const getIcon = (type) => {
 };
 
 export default function FloatingButton({ name, iconType = null, buttonType, isSelected = false,
-    x = "50%", y = "50%" }) {
+    style = {}, }) {
     const icon = getIcon(iconType);
     return (
-        <button className={`absolute text-white px-4 py-2 rounded-lg flex items-center gap-2
+        <button className={`relative text-white px-4 py-2 rounded-lg flex items-center gap-2 z-20
         ${buttonType === 'surrounding' ? 'bg-[#94846D]/70' : 'bg-[#418AFF]'}`}
             style={{
                 position: 'absolute',
-                left: x,
-                top: y,
-                transform: 'translate(-50%, -50%)', // centers the button on (x, y)
-            }}>
+                transform: 'translate(-50%, -50%)',
+                ...style, // apply computed left/top
+            }}
+        >
             {/* Icon Circle */}
             {(buttonType === 'surrounding' && icon) && (
                 <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
@@ -40,10 +40,10 @@ export default function FloatingButton({ name, iconType = null, buttonType, isSe
 
             {/* Pointed Bottom Triangle */}
             <div
-                className="absolute top-10 left-1/2 -translate-x-1/2 w-6 h-4 pointer-events-none"
+                className="absolute top-full left-1/2 -translate-x-1/2 w-6 h-4 pointer-events-none"
                 style={{
                     backgroundColor: 'rgba(148, 132, 109, 0.7)',
-                    clipPath: 'polygon(100% 0%, 0% 0%, 50% 100%)',
+                    clipPath: 'polygon(50% 100%, 0% 0%, 100% 0%)'
                 }}
             ></div>
         </button>
