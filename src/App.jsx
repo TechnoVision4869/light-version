@@ -27,6 +27,7 @@ import BuildingButton from "./components/buttons/BuildingButton";
 import FloorButton from "./components/buttons/FloorButton";
 import ApartmentButton from "./components/buttons/ApartmentButton";
 import HistoryBreadcrumbs from "./components/HistoryBreadcrumbs";
+import FloatingButton from "./components/buttons/FloatingButton";
 
 export default function App() {
   // console.log("App renders");
@@ -358,9 +359,26 @@ export default function App() {
 
 
                 {/* Example center marker */}
-                {/* <div className="absolute left-1/2 top-28 -translate-x-1/2 flex flex-col items-center">
-                <div className="bg-[#3b82f6] px-4 py-2 rounded-full text-white font-semibold shadow-lg">SAND VIL</div>
-              </div> */}
+                <FloatingButton
+                  x="30%"  // 30% from left edge of parent
+                  y="20%"  // 20% from top edge of parent
+                  name="Cairo Airport"
+                  iconType="airport"
+                  buttonType="surrounding"
+                />
+                <FloatingButton
+                  x="70vw"  // 70% of viewport width
+                  y="40vh"  // 40% of viewport height
+                  name="Iconic Tower"
+                  iconType="tower"
+                  buttonType="surrounding"
+                />
+                <FloatingButton
+                  x="40%"   // center horizontally
+                  y="60%"   // 60% down from top
+                  name="Gym"
+                  iconType="muscle"
+                  buttonType="surrounding" />
 
                 {/* left floating chevron to collapse sidebar */}
                 {activeTab !== TABS.HOME &&
