@@ -147,7 +147,7 @@ export default function App() {
             <div className="flex items-center gap-3">
               {viewerProps.currentViewIndex === 0 && <button
                 onClick={() => {
-                  if (activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS) setSidebarOpen(false);
+                  if ((activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS) && activeLayer === null) setSidebarOpen(false);
                   viewerProps.StartReverse(false, () => { });
                 }}
                 disabled={isDisabled || history.length <= 1}
@@ -202,7 +202,13 @@ export default function App() {
                 AMENITIES
               </button>
             </div>
-            <HomeButton onHomeClick={goToHome} />
+            <HomeButton onHomeClick={() => {
+              if ((activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS) && activeLayer === null) {
+                viewerProps.StartReverse(false, () => { });
+                return;
+              }
+              goToHome();
+            }} />
           </div>
 
           <div

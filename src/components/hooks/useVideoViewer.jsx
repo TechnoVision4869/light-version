@@ -39,26 +39,21 @@ export function useVideoViewer({
     if (newIndex >= numViews) newIndex = 0;
     if (newIndex < 0) newIndex = numViews - 1;
 
-    const newViewVideos = buildingConfig.getVideosPathForView(
-      currentItem, newIndex);
+    const newViewVideos = buildingConfig.getVideosPathForView(currentItem, newIndex);
     if (!newViewVideos) {
       console.error("Could not get video paths for view index:", newIndex);
       return;
     }
 
     if (direction === "next") {
-      playViewTransitionAndIdle(
-        newViewVideos.forwardVideo,
-        newViewVideos.idleVideo);
+      playViewTransitionAndIdle(newViewVideos.forwardVideo, newViewVideos.idleVideo);
     } else {
       const currentViewPaths = buildingConfig.getVideosPathForView(currentItem, currentViewIndex);
       if (!currentViewPaths?.reverseVideo) {
         console.error("Could not get reverse video path for current view index:", currentViewIndex);
         return;
       }
-      playViewTransitionAndIdle(
-        buildingViewVideos.reverseVideo,
-        newViewVideos.idleVideo);
+      playViewTransitionAndIdle(buildingViewVideos.reverseVideo, newViewVideos.idleVideo);
     }
 
     setBuildingViewVideos(newViewVideos);
@@ -91,7 +86,7 @@ export function useVideoViewer({
 
   const playForwardVideo = useCallback(() => {
     if (!currentVideosPaths?.forwardVideo) return;
-    console.log("playForwardVideo called with forwardVideo:", currentVideosPaths.forwardVideo);
+    // console.log("playForwardVideo called with forwardVideo:", currentVideosPaths.forwardVideo);
 
     playVideo(currentVideosPaths.forwardVideo, false, playIdleVideo);
   }, [currentVideosPaths, playVideo]);
@@ -103,8 +98,8 @@ export function useVideoViewer({
     playVideo(currentVideosPaths.reverseVideo, false, () => {
       if (navigatedBetweenTabs) {
         onGoBack();
-        console.log(currentVideosPaths);
-        
+        // console.log(currentVideosPaths);
+
         onReverseEnded();
         return;
       }
@@ -204,14 +199,12 @@ export function useVideoViewer({
           playIdleVideo();
         } else {
           if (activeTab === TABS.HOME && isInitPlayedRef.current) {
-            console.log("initial HOME tab, playing idle video.");
+            // console.log("initial HOME tab, playing idle video.");
             setTimeout(() => {
               playIdleVideo();
               isInitPlayedRef.current = false;
             }, 200);
           } else {
-            console.log("HEEEREEE");
-
             playForwardVideo();
           }
         }

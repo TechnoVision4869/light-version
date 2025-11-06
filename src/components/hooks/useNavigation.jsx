@@ -28,7 +28,7 @@ export function useNavigation() {
     // Navigate to a main tab (ZONES, SURROUNDINGS, AMENITIES)
     const goToTab = useCallback((tabKey, isFromHome = true) => {
         const config = TAB_CONFIG[tabKey];
-        console.log(tabKey);
+        // console.log(tabKey);
         
         setHistory(() => [
             ...initHistory,
@@ -67,8 +67,7 @@ export function useNavigation() {
 
     // Go back one step
     const goBack = useCallback(() => {
-        console.log("here 2");
-        console.log(history);
+        // console.log(history);
 
         if (history.length <= 1) return; // Can't go back from home
         setHistory((prev) => prev.slice(0, -1));
