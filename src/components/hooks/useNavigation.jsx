@@ -14,7 +14,6 @@ export function useNavigation() {
 
     // state to manage history stack
     const [history, setHistory] = useState(initHistory);
-    const navigateBetweenTabsRef = useRef(null);
 
     // Get current state from history
     const currentEntry = history[history.length - 1];

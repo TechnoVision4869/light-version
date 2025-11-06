@@ -175,10 +175,10 @@ export function useVideoViewer({
     []
   );
 
-  const StartReverse = useCallback((isFromAnotherTab) => {
+  const StartReverse = useCallback((isFromAnotherTab, onReverseEnded) => {
     if (history.length <= 1) return;
     // console.log("StartReverse called with current reverse video:", currentVideosPaths.reverseVideo);
-    playReverseVideo(isFromAnotherTab);
+    playReverseVideo(isFromAnotherTab, onReverseEnded);
   }, [history.length, playReverseVideo]);
 
   useEffect(() => {

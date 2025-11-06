@@ -124,7 +124,7 @@ export default function App() {
     } else {
       const isFromHome = activeTab === TABS.HOME;
       const isFromAnotherTab = (activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS)
-      if (isFromAnotherTab) {
+      if (isFromAnotherTab && activeLayer === null) {
         viewerProps.StartReverse(isFromAnotherTab, () => goToTab(tab, true));
         return;
       }
@@ -148,7 +148,7 @@ export default function App() {
               {viewerProps.currentViewIndex === 0 && <button
                 onClick={() => {
                   if (activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS) setSidebarOpen(false);
-                  viewerProps.StartReverse();
+                  viewerProps.StartReverse(false, () => { });
                 }}
                 disabled={isDisabled || history.length <= 1}
                 className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
