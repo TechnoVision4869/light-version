@@ -32,7 +32,24 @@ body {
   border-radius: 20%;
   position: absolute;
   left: calc(50% - 10px);
-  bottom:-24%;
+  bottom: -24%;
   clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
   transform: rotate(-45deg);
+}
+
+/* Custom Range Slider */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #7F7F7F;
+  border-radius: 9999px;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 30%;
+  background: white;
 }
