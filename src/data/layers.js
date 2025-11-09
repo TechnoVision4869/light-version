@@ -211,18 +211,23 @@ export const DATA = {
       zoneId: "zone1",
       name: "Tower 1",
       description: "Tower 1 description...",
+      x: 0.45, y: 0.53,
+
     },
     {
       id: "tower2",
       zoneId: "zone1",
       name: "Tower 2",
       description: "Tower 2 description...",
+      x: 0.65, y: 0.35,
+
     },
     {
       id: "tower5",
       zoneId: "zone2",
       name: "Tower 5",
       description: "Tower 5 description...",
+      x: 0.35, y: 0.12,
     },
   ],
   floors: [
@@ -272,6 +277,7 @@ export const DATA = {
       bathrooms: 1,
       area: 85, // Store as number for range queries
       price: 250000, // Store as number for range queries
+      x: 0.40, y: 0.60,
     },
     {
       id: "apartment102",
@@ -284,6 +290,7 @@ export const DATA = {
       bathrooms: 2,
       area: 200,
       price: 400000,
+      x: 0.25, y: 0.4,
     },
     {
       id: "apartment103",
@@ -296,6 +303,7 @@ export const DATA = {
       bathrooms: 2,
       area: 120,
       price: 300000,
+      x: 0.438, y: 0.3,
     },
     {
       id: "apartment104",
@@ -308,6 +316,7 @@ export const DATA = {
       bathrooms: 2,
       area: 185,
       price: 350000,
+      x: 0.65, y: 0.33,
     },
     {
       id: "apartment105",
@@ -320,6 +329,7 @@ export const DATA = {
       bathrooms: 2,
       area: 250,
       price: 500000,
+      x: 0.7, y: 0.65,
     },
     // Zone 1 - Tower 1 - Floor 2
     {
@@ -333,6 +343,7 @@ export const DATA = {
       bathrooms: 1,
       area: 115,
       price: 275000,
+      x: 0.4, y: 0.64,
     },
     {
       id: "apartment202",
@@ -345,6 +356,7 @@ export const DATA = {
       bathrooms: 2,
       area: 125,
       price: 300000,
+      x: 0.22, y: 0.55,
     },
     {
       id: "apartment203",
@@ -357,6 +369,7 @@ export const DATA = {
       bathrooms: 2,
       area: 125,
       price: 300000,
+      x: 0.225, y: 0.23,
     },
     {
       id: "apartment204",
@@ -369,6 +382,7 @@ export const DATA = {
       bathrooms: 2,
       area: 115,
       price: 275000,
+      x: 0.42, y: 0.25,
     },
     {
       id: "apartment205",
@@ -381,6 +395,7 @@ export const DATA = {
       bathrooms: 2,
       area: 145,
       price: 325000,
+      x: 0.65, y: 0.25,
     },
     {
       id: "apartment206",
@@ -393,6 +408,7 @@ export const DATA = {
       bathrooms: 2,
       area: 200,
       price: 400000,
+      x: 0.67, y: 0.65,
     },
     // Zone 1 - Tower 2 - Floor 1
     {
@@ -404,8 +420,9 @@ export const DATA = {
       description: "Beautiful 2-bedroom apartment...",
       bedrooms: 2,
       bathrooms: 1,
-      area: 100,
+      area: 140,
       price: 260000,
+      x: 0.4, y: 0.58,
     },
     {
       id: "apartment112",
@@ -418,6 +435,9 @@ export const DATA = {
       bathrooms: 2,
       area: 150,
       price: 325000,
+
+      x: 0.21, y: 0.43,
+
     },
     {
       id: "apartment113",
@@ -430,6 +450,7 @@ export const DATA = {
       bathrooms: 2,
       area: 85,
       price: 240000,
+      x: 0.23, y: 0.2,
     },
     {
       id: "apartment114",
@@ -442,6 +463,7 @@ export const DATA = {
       bathrooms: 2,
       area: 185,
       price: 375000,
+      x: 0.6, y: 0.25,
     },
     {
       id: "apartment115",
@@ -454,6 +476,7 @@ export const DATA = {
       bathrooms: 2,
       area: 220,
       price: 450000,
+      x: 0.7, y: 0.65,
     },
     // Zone 1 - Tower 2 - Floor 2
     {
@@ -465,8 +488,9 @@ export const DATA = {
       description: "Beautiful 2-bedroom apartment...",
       bedrooms: 2,
       bathrooms: 1,
-      area: 115,
+      area: 185,
       price: 275000,
+      x: 0.2, y: 0.4,
     },
     {
       id: "apartment222",
@@ -479,6 +503,7 @@ export const DATA = {
       bathrooms: 2,
       area: 85,
       price: 240000,
+      x: 0.24, y: 0.2,
     },
     {
       id: "apartment223",
@@ -491,6 +516,7 @@ export const DATA = {
       bathrooms: 2,
       area: 125,
       price: 300000,
+      x: 0.475, y: 0.24,
     },
     {
       id: "apartment224",
@@ -503,6 +529,7 @@ export const DATA = {
       bathrooms: 2,
       area: 115,
       price: 275000,
+      x: 0.715, y: 0.21,
     },
     {
       id: "apartment225",
@@ -515,6 +542,7 @@ export const DATA = {
       bathrooms: 2,
       area: 145,
       price: 325000,
+      x: 0.55, y: 0.5,
     },
   ],
 
@@ -522,24 +550,30 @@ export const DATA = {
     {
       id: "surrounding1",
       name: "Cairo Airport",
+      icon: "airport",
       thumbnail: "thumbnails/cairo_airboart.jpg",
       distance: "38 Min | 55 Km",
       description:
         "Cairo International Airport is the principal international airport of Cairo and the largest and busiest airport in Egypt. It serves as the primary hub for Egyptair and Nile Air as well as several other airlines.",
+      x: 0.75, y: 0.85,
     },
     {
       id: "surrounding2",
       name: "GYM",
+      icon: "muscle",
       thumbnail: "thumbnails/gym.jpg",
       distance: "3 Min | 1 Km",
       description: "Gym...",
+      x: 0.5, y: 0.6,
     },
     {
       id: "surrounding3",
       name: "Iconic Tower",
+      icon: "tower",
       thumbnail: "thumbnails/iconic_tower.jpg",
       distance: "8 Min | 5 Km",
       description: "Iconic tower...",
+      x: 0.27, y: 0.43,
     },
   ],
   amenities: [

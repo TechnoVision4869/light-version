@@ -6,6 +6,7 @@ import {
   LAYERS,
   TAB_CONFIG,
   LAYER_CONFIG,
+  DATA,
 } from "./data/layers";
 // Hooks
 import { useNavigation } from "./components/hooks/useNavigation";
@@ -27,7 +28,7 @@ import BuildingButton from "./components/buttons/BuildingButton";
 import FloorButton from "./components/buttons/FloorButton";
 import ApartmentButton from "./components/buttons/ApartmentButton";
 import HistoryBreadcrumbs from "./components/HistoryBreadcrumbs";
-import FloatingButton from "./components/buttons/FloatingButton";
+import Flaoting from "./components/Floating";
 
 export default function App() {
   // console.log("App renders");
@@ -48,6 +49,10 @@ export default function App() {
   //states
   const [sidebarOpen, setSidebarOpen] = useState(false); // set true when sidebar is open
   const [showInfoPopup, setShowInfoPopup] = useState(false);
+
+
+  // Ref
+  const mediaContainerRef = useRef(null);
 
   // Navigation hook
   const {
@@ -138,46 +143,6 @@ export default function App() {
       setSidebarOpen(true);
     }, 800)
   };
-
-  // Test buttons
-  const SURROUNDING_BUTTONS = [
-    { id: 'airport', name: 'Cairo Airport', icon: 'airport', x: 0.30, y: 0.80 },
-    { id: 'tower', name: 'Iconic Tower', icon: 'tower', x: 0.70, y: 0.40 },
-    { id: 'gym', name: 'Gym', icon: 'muscle', x: 0.75, y: 0.25 },
-  ];
-
-  const mediaContainerRef = useRef(null);
-  const [buttonPositions, setButtonPositions] = useState(
-    SURROUNDING_BUTTONS.map(() => ({ left: 0, top: 0 }))
-  );
-
-  useEffect(() => {
-    const container = mediaContainerRef.current;
-    if (!container) return;
-
-    const updatePositions = () => {
-      const w = container.clientWidth;
-      const h = container.clientHeight;
-      const videoW = h * (16 / 9);
-      const videoLeft = (w - videoW) / 2;
-
-      const newPositions = SURROUNDING_BUTTONS.map(btn => ({
-        left: videoLeft + videoW * btn.x,
-        top: h * btn.y,
-      }));
-
-      setButtonPositions(newPositions);
-    };
-
-    updatePositions();
-
-    const resizeObserver = new ResizeObserver(updatePositions);
-    resizeObserver.observe(container);
-
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, [mediaContainerRef]);
 
   return (
     <>
@@ -400,19 +365,22 @@ export default function App() {
 
                 {activeTab === TABS.SURROUNDINGS &&
                   activeLayer === null &&
-                  SURROUNDING_BUTTONS.map((btn, i) => (
-                    <FloatingButton
-                      key={btn.id}
-                      name={btn.name}
-                      iconType={btn.icon}
-                      buttonType="surrounding"
-                      style={{
-                        left: `${buttonPositions[i].left}px`,
-                        top: `${buttonPositions[i].top}px`,
-                      }}
-                    />
-                  ))}
+                  <Flaoting buttons={DATA.surroundings}
+                    mediaRef={mediaContainerRef}
+                    tab={activeTab}
+                  />}
 
+                {activeLayer === LAYERS.ZONE_DETAIL &&
+                  <Flaoting buttons={LAYER_CONFIG[LAYERS.ZONE_DETAIL].getItems(currentItem)}
+                    mediaRef={mediaContainerRef}
+                    tab={activeTab}
+                  />}
+
+                {activeLayer === LAYERS.FLOOR &&
+                  <Flaoting buttons={LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem)}
+                    mediaRef={mediaContainerRef}
+                    tab={activeTab}
+                  />}
 
                 {/* left floating chevron to collapse sidebar */}
                 {activeTab !== TABS.HOME &&

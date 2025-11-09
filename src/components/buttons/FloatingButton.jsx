@@ -1,3 +1,4 @@
+import { TABS } from '../../data/layers';
 
 import AirportIcon from '../../assets/icons/airport.svg';
 import TowerIcon from '../../assets/icons/tower.svg';
@@ -16,12 +17,14 @@ const getIcon = (type) => {
     }
 };
 
-export default function FloatingButton({ name, iconType = null, buttonType, isSelected = false,
+export default function FloatingButton({ name, iconType = null, tabType, isSelected = false,
     style = {}, }) {
     const icon = getIcon(iconType);
+    const isSurrounding = tabType === TABS.SURROUNDINGS;
+    const color = isSurrounding ? 'bg-[#94846D]/75 hover:bg-[#94846D]/85' : 'bg-[#418AFF] hover:bg-[#357AEE]';
+
     return (
-        <button className={`relative text-white px-4 py-2 rounded-lg flex items-center gap-2 z-20
-        ${buttonType === 'surrounding' ? 'bg-[#94846D]/70' : 'bg-[#418AFF]'}`}
+        <button className={`${color} relative text-white px-4 py-2 rounded-lg flex items-center gap-2 z-20`}
             style={{
                 position: 'absolute',
                 transform: 'translate(-50%, -50%)',
@@ -29,7 +32,7 @@ export default function FloatingButton({ name, iconType = null, buttonType, isSe
             }}
         >
             {/* Icon Circle */}
-            {(buttonType === 'surrounding' && icon) && (
+            {(isSurrounding && icon) && (
                 <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
                     <img src={icon} alt={iconType} className="w-4 h-4 p-[1px]" />
                 </div>
@@ -39,14 +42,7 @@ export default function FloatingButton({ name, iconType = null, buttonType, isSe
             <span className='whitespace-nowrap text-sm'>{name}</span>
 
             {/* Pointed Bottom Triangle */}
-            <div
-                className="absolute top-full left-1/2 -translate-x-1/2 w-6 h-4 pointer-events-none"
-                style={{
-                    backgroundColor: 'rgba(148, 132, 109, 0.7)',
-                    clipPath: 'polygon(50% 100%, 0% 0%, 100% 0%)'
-                }}
-            ></div>
+            <span className='triangle'></span>
         </button>
-
     )
 }
