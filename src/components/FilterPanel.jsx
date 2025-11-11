@@ -1,4 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+// import { LAYER_CONFIG, LAYERS } from "../data/layers"
+// import { useNavigation } from "./hooks/useNavigation";
+
+// const { currentItem } = useNavigation;
 
 const UNIT_TYPES = {
     RESIDENTIAL: "residential",
@@ -22,6 +27,12 @@ export const BUDGET_RANGE = {
 // Bedroom/Bathroom options
 export const BEDROOM_OPTIONS = [1, 2, 3, 4, 5, 6];
 export const BATHROOM_OPTIONS = [1, 2, 3, 4, 5, 6];
+
+// const updateFilter = () => {
+//     console.log("Filterred apartments: ");
+//     const filtered = LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem.id);
+//     console.log(filtered);
+// }
 
 function Slider({ name, unit, min, max }) {
     const [value, setVlue] = useState((min + max) / 2);
@@ -57,6 +68,10 @@ function Slider({ name, unit, min, max }) {
 export default function FilterPanel() {
     const [unitType, setUnitType] = useState(null);
     const [bedrooms, setBedrooms] = useState(null);
+
+    // useEffect(() => {
+    //     updateFilter();
+    // }, [unitType, bedrooms])
 
     return (
         <div className="flex flex-col gap-2 text-white font-light text-sm">
