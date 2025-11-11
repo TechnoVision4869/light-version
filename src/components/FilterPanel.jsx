@@ -16,77 +16,77 @@ export const AREA_RANGE = {
 export const BUDGET_RANGE = {
     MIN: 100_000,
     MAX: 20_000_000,
-    CURRENCY: "L.E",
+    UNIT: "L.E",
 };
 
 // Bedroom/Bathroom options
 export const BEDROOM_OPTIONS = [1, 2, 3, 4, 5, 6];
 export const BATHROOM_OPTIONS = [1, 2, 3, 4, 5, 6];
 
-export default function FilterPanel() {
-    const [unitType, setUnitType] = useState(null);
-    const [area, setArea] = useState(100);
-    const [budget, setBudget] = useState(5_000_000);
-    const [bedrooms, setBedrooms] = useState(null);
+function Slider({ name, unit, min, max }) {
+    const [value, setVlue] = useState((min + max) / 2);
 
     const fillColor = 'white';
     const trackColor = '#7f7f7f';
-    const areaPercent =
-        ((area - AREA_RANGE.MIN) / (AREA_RANGE.MAX - AREA_RANGE.MIN)) * 100;
-    const budgetPercent =
-        ((budget - BUDGET_RANGE.MIN) / (BUDGET_RANGE.MAX - BUDGET_RANGE.MIN)) * 100;
+    const sliderPercent = ((value - min) / (max - min)) * 100;
 
     return (
-        <div className="text-white font-light text-sm">
-            <div>
-                <div className="flex justify-between">
-                    <span>Surface Area</span>
-                    <span>{area} {AREA_RANGE.UNIT}</span>
-                </div>
-                <div className="px-1 py-2 rounded-lg bg-[#2e2e2e]">
-                    <input
-                        type="range"
-                        min={AREA_RANGE.MIN}
-                        max={AREA_RANGE.MAX}
-                        value={area}
-                        onChange={(e) => setArea(Number(e.target.value))}
-                        className="w-full h-1 cursor-pointer slider"
-                        style={{
-                            background: `linear-gradient(to right, ${fillColor} 0%, ${fillColor} ${areaPercent}%, ${trackColor} ${areaPercent}%, ${trackColor} 100%)`
-                        }}
-                    />
-                </div>
-
+        <div className="flex flex-col gap-2 pb-2">
+            <div className="flex justify-between">
+                <span>{name}</span>
+                <span>{Math.round(value).toLocaleString()} {unit}</span>
             </div>
+            <div className="px-1 py-2 rounded-lg bg-[#2e2e2e]">
+                <input
+                    type="range"
+                    min={min}
+                    max={max}
+                    value={value}
+                    onChange={(e) => setVlue(Number(e.target.value))}
+                    className="w-full h-1 cursor-pointer slider"
+                    style={{
+                        background:
+                            `linear-gradient(to right, ${fillColor} 0%, ${fillColor} ${sliderPercent}%, ${trackColor} ${sliderPercent}%, ${trackColor} 100%)`
+                    }}
+                />
+            </div>
+        </div>
+    )
+}
 
-            <div className="h-[1px] bg-white/50 mb-4"></div>
+export default function FilterPanel() {
+    const [unitType, setUnitType] = useState(null);
+    const [bedrooms, setBedrooms] = useState(null);
 
-            <div>
-                <div className="flex justify-between">
-                    <span>Budget</span>
-                    <span>{budget} {BUDGET_RANGE.CURRENCY}</span>
-                </div>
-                <div className="px-1 py-2 rounded-lg bg-[#2e2e2e]">
-
-                    <input
-                        type="range"
-                        min={BUDGET_RANGE.MIN}
-                        max={BUDGET_RANGE.MAX}
-                        value={budget}
-                        onChange={(e) => setBudget(Number(e.target.value))}
-                        className="w-full h-1  cursor-pointer slider"
-                        style={{
-                            background: `linear-gradient(to right, ${fillColor} 0%, ${fillColor} ${budgetPercent}%, ${trackColor} ${areaPercent}%, ${trackColor} 100%)`
-                        }}
-                    />
+    return (
+        <div className="flex flex-col gap-2 text-white font-light text-sm">
+            <div className="flex flex-col gap-2">
+                <span>Type</span>
+                <div className="flex flex-row gap-2">
+                    {Object.values(UNIT_TYPES).map((type) => (
+                        <button
+                            key={type}
+                            onClick={() => setUnitType(type)}
+                            className={`py-2 px-3 rounded-lg
+                                ${unitType === type ?
+                                    "bg-white/10" : "bg-[#2e2e2e] hover:bg-white/7"}`}
+                        >
+                            {String(type).charAt(0).toUpperCase() + String(type).slice(1)}
+                        </button>
+                    ))}
                 </div>
             </div>
+            <Slider name="Surface Area" unit={AREA_RANGE.UNIT} min={AREA_RANGE.MIN} max={AREA_RANGE.MAX} />
 
-            <div className="h-[1px] bg-white/50 mb-4"></div>
+            <div className="h-0.5 bg-white/50"></div>
+
+            <Slider name="Budget" unit={BUDGET_RANGE.UNIT} min={BUDGET_RANGE.MIN} max={BUDGET_RANGE.MAX} />
+
+            <div className="h-0.5 bg-white/50"></div>
 
             <div>
                 <span>Bed Rooms</span>
-                <div className="flex gap-2">
+                <div className="pt-2 flex gap-2">
                     {BEDROOM_OPTIONS.map((num) => (
                         <button
                             key={num}
