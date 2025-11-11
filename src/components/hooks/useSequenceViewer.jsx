@@ -85,7 +85,7 @@ export function useSequenceViewer({
             return new Promise((resolve, reject) => {
                 const img = new Image();
                 img.onload = () => resolve(img); // When loaded, resolved with the img
-                img.onerror = () => reject(new Error(`Failed to load: ${src}`)); // When failed, rejected with an error
+                // img.onerror = () => reject(new Error(`Failed to load: ${src}`)); // When failed, rejected with an error
                 img.src = src; // Set src to start loading
             });
         };
