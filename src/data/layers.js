@@ -164,7 +164,9 @@ export const LAYER_CONFIG = {
       );
     },
   },
-  [LAYERS.APARTMENT]: {},
+  [LAYERS.APARTMENT]: {
+    getData: (apartmentId) => DATA.apartments.find((a) => a.id === apartmentId)
+  },
   [LAYERS.SURROUNDING_DETAIL]: {
     path: (surroundingId) => `/${surroundingId}_zoom`,
     getData: (surroundingId) =>
