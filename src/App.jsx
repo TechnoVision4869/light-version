@@ -152,6 +152,27 @@ export default function App() {
 
   }, [activeLayer])
 
+  // Swipe States
+  const [startX, setStartX] = useState(0);
+  const [translateX, setTranslateX] = useState(0);
+
+  const handleMouseDown = (e) => {
+    setStartX(e.clientX);
+  }
+  const handleMouseUp = (e) => {
+    setTranslateX(startX - e.clientX)
+  }
+
+  useEffect(() => {
+    if (activeLayer !== LAYERS.BUILDING) return;
+    if (isDisabled) return;
+    // console.log(translateX);
+
+    if (translateX > 0) viewerProps.changeView("next");
+    else if (translateX < 0) viewerProps.changeView("prev");
+
+  }, [translateX])
+
   return (
     <>
       {!videosPreloaded && <VideoPreloader loadingProgress={loadingProgress} />}
@@ -384,6 +405,8 @@ export default function App() {
               <div
                 className="w-full h-full bg-white/9 rounded-2xl overflow-hidden shadow-inner"
                 ref={mediaContainerRef}
+                onMouseDown={handleMouseDown}
+                onMouseUp={handleMouseUp}
               >
                 {/* img or video element */}
                 {viewerProps.mediaElement === "video" ? (
