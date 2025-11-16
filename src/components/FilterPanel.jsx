@@ -43,7 +43,7 @@ function Slider({ name, unit, min, max }) {
 
     return (
         <div className="flex flex-col gap-2 pb-2">
-            <div className="flex justify-between">
+            <div className="flex flex-col md:flex-row justify-between">
                 <span>{name}</span>
                 <span>{Math.round(value).toLocaleString()} {unit}</span>
             </div>
@@ -74,10 +74,10 @@ export default function FilterPanel() {
     // }, [unitType, bedrooms])
 
     return (
-        <div className="flex flex-col gap-2 text-white font-light text-sm">
+        <div className="flex flex-col gap-2 max-h-[calc(100vh-200px)] scrollbar-custom overflow-auto pe-2 text-white font-light text-sm">
             <div className="flex flex-col gap-2">
                 <span>Type</span>
-                <div className="flex flex-row gap-2">
+                <div className="flex flex-col md:flex-row gap-2">
                     {Object.values(UNIT_TYPES).map((type) => (
                         <button
                             key={type}
@@ -101,7 +101,7 @@ export default function FilterPanel() {
 
             <div>
                 <span>Bed Rooms</span>
-                <div className="pt-2 flex gap-2">
+                <div className="pt-2 flex flex-wrap gap-2">
                     {BEDROOM_OPTIONS.map((num) => (
                         <button
                             key={num}

@@ -30,6 +30,7 @@ import ApartmentButton from "./components/buttons/ApartmentButton";
 import HistoryBreadcrumbs from "./components/HistoryBreadcrumbs";
 import Flaoting from "./components/Floating";
 import FilterPanel from "./components/FilterPanel";
+import UnitPanel from "./components/UnitPanel";
 
 export default function App() {
   // console.log("App renders");
@@ -147,7 +148,30 @@ export default function App() {
 
   useEffect(() => {
     if (activeLayer !== LAYERS.FLOOR) setIsFilter(false);
+    console.log(activeLayer);
+
   }, [activeLayer])
+
+  // Swipe States
+  const [startX, setStartX] = useState(0);
+  const [translateX, setTranslateX] = useState(0);
+
+  const handleMouseDown = (e) => {
+    setStartX(e.clientX);
+  }
+  const handleMouseUp = (e) => {
+    setTranslateX(startX - e.clientX)
+  }
+
+  useEffect(() => {
+    if (activeLayer !== LAYERS.BUILDING) return;
+    if (isDisabled) return;
+    // console.log(translateX);
+
+    if (translateX > 0) viewerProps.changeView("next");
+    else if (translateX < 0) viewerProps.changeView("prev");
+
+  }, [translateX])
 
   return (
     <>
@@ -230,146 +254,150 @@ export default function App() {
           >
             {/* Sidebar */}
             <aside
-              className={`bg-white/9 rounded-2xl p-2 py-3 md:p-3 md:py-4 flex-shrink-0 transition-all duration-700 overflow-hidden
+              className={`bg-white/9 rounded-2xl p-2 py-3 md:py-4 flex-shrink-0 transition-all duration-700 overflow-hidden
              ${activeTab === TABS.HOME || activeLayer === LAYERS.AMENITY_DETAIL || viewerProps.currentViewIndex !== 0
                   ? "w-0 opacity-0 pointer-events-none"
                   : sidebarOpen
-                    ? "w-44 md:w-60 opacity-100"
+                    ? "w-44 md:w-68 opacity-100"
                     : "w-0 opacity-0 pointer-events-none"
                 }`}
             >
-              <div className="h-full pr-1">
-                {activeLayer === LAYERS.FLOOR &&
-                  <div className="flex rounded-md overflow-hidden mb-4">
-                    {/* Navigate Button */}
-                    <button
-                      onClick={() => setIsFilter(false)}
-                      className={`px-4 py-2 font-semibold transition rounded-l-md 
+              {(activeTab === TABS.ZONES &&
+                activeLayer === LAYERS.APARTMENT) ?
+                <UnitPanel unit={currentItem} key={currentItem.id} />
+                :
+                <div className="h-full pr-1">
+                  {activeLayer === LAYERS.FLOOR &&
+                    <div className="flex rounded-md overflow-hidden mb-4">
+                      {/* Navigate Button */}
+                      <button
+                        onClick={() => setIsFilter(false)}
+                        className={`px-4 py-2 font-semibold transition rounded-l-md 
                     ${!isFilter
-                          ? 'bg-white text-black'
-                          : 'bg-[#2e2e2e] text-white hover:bg-white/7'
-                        }`}
-                    >
-                      Navigate
-                    </button>
+                            ? 'bg-white text-black'
+                            : 'bg-[#2e2e2e] text-white hover:bg-white/7'
+                          }`}
+                      >
+                        Navigate
+                      </button>
 
-                    {/* Filter Button */}
-                    <button
-                      onClick={() => setIsFilter(true)}
-                      className={`px-4 py-2 font-semibold transition rounded-r-md 
+                      {/* Filter Button */}
+                      <button
+                        onClick={() => setIsFilter(true)}
+                        className={`px-4 py-2 font-semibold transition rounded-r-md 
                     ${isFilter
-                          ? 'bg-white text-black'
-                          : 'bg-[#2e2e2e] text-white hover:bg-white/7'
-                        }`}
-                    >
-                      Filter
-                    </button>
-                  </div>}
+                            ? 'bg-white text-black'
+                            : 'bg-[#2e2e2e] text-white hover:bg-white/7'
+                          }`}
+                      >
+                        Filter
+                      </button>
+                    </div>}
 
-                {isFilter ? (
-                  <FilterPanel />
-                ) : (
-                  <>
-                    {/* Dynamic sidebar title based on active tab */}
-                    <div className="text-white font-semibold my-1 px-3">
-                      {String(currentItem?.name).charAt(0).toUpperCase() +
-                        String(currentItem?.name).slice(1)}
-                      {/* {activeTab === TABS.ZONES
+                  {isFilter ? (
+                    <FilterPanel />
+                  ) : (
+                    <>
+                      {/* Dynamic sidebar title based on active tab */}
+                      <div className="text-white font-semibold my-1 px-3">
+                        {String(currentItem?.name).charAt(0).toUpperCase() +
+                          String(currentItem?.name).slice(1)}
+                        {/* {activeTab === TABS.ZONES
                     ? TAB_CONFIG[TABS.ZONES]?.title
                     : activeTab === TABS.SURROUNDINGS
                       ? TAB_CONFIG[TABS.SURROUNDINGS]?.title
                       : activeTab === TABS.AMENITIES
                         ? TAB_CONFIG[TABS.AMENITIES]?.title
                         : ""} */}
-                    </div>
-                    <div className="h-0.5 bg-white/50 mx-3 mb-4"></div>
+                      </div>
+                      <div className="h-0.5 bg-white/50 mx-3 mb-4"></div>
 
-                    <div className="max-h-[calc(100vh-200px)] scrollbar-custom overflow-auto space-y-3 px-2 py-2">
-                      {/* Render different content based on active tab */}
-                      {activeTab === TABS.ZONES &&
-                        activeLayer === null &&
-                        TAB_CONFIG[TABS.ZONES]
-                          .getItems()
-                          .map((zone) => (
-                            <ZoneButton
-                              zone={zone}
-                              key={zone.id}
-                              isDisabled={isDisabled}
-                              isSeected={currentItem === zone}
-                              goToZone={handleGoToItem}
-                            />
-                          ))}
-                      {activeTab === TABS.SURROUNDINGS &&
-                        activeLayer === null &&
-                        TAB_CONFIG[TABS.SURROUNDINGS]
-                          .getItems()
-                          .map((item) => (
-                            <SurroundingButton
-                              surrounding={item}
-                              key={item.id}
-                              isDisabled={isDisabled}
-                              isSelected={currentItem === item}
-                              goToSurrounding={handleGoToItem}
-                            />
-                          ))}
+                      <div className="max-h-[calc(100vh-200px)] scrollbar-custom overflow-auto space-y-3 px-2 py-2">
+                        {/* Render different content based on active tab */}
+                        {activeTab === TABS.ZONES &&
+                          activeLayer === null &&
+                          TAB_CONFIG[TABS.ZONES]
+                            .getItems()
+                            .map((zone) => (
+                              <ZoneButton
+                                zone={zone}
+                                key={zone.id}
+                                isDisabled={isDisabled}
+                                isSeected={currentItem === zone}
+                                goToZone={handleGoToItem}
+                              />
+                            ))}
+                        {activeTab === TABS.SURROUNDINGS &&
+                          activeLayer === null &&
+                          TAB_CONFIG[TABS.SURROUNDINGS]
+                            .getItems()
+                            .map((item) => (
+                              <SurroundingButton
+                                surrounding={item}
+                                key={item.id}
+                                isDisabled={isDisabled}
+                                isSelected={currentItem === item}
+                                goToSurrounding={handleGoToItem}
+                              />
+                            ))}
 
-                      {activeTab === TABS.AMENITIES &&
-                        activeLayer === null &&
-                        TAB_CONFIG[TABS.AMENITIES]
-                          .getItems()
-                          .map((item) => (
-                            <AmenityButton
-                              amenity={item}
-                              key={item.id}
-                              isDisabled={isDisabled}
-                              isSelected={currentItem === item}
-                              goToAmenity={handleGoToItem}
-                            />
-                          ))}
-                      {activeTab === TABS.ZONES &&
-                        activeLayer === LAYERS.ZONE_DETAIL &&
-                        LAYER_CONFIG[LAYERS.ZONE_DETAIL]
-                          .getItems(currentItem)
-                          .map((building) => (
-                            <BuildingButton
-                              building={building}
-                              key={building.id}
-                              isDisabled={isDisabled}
-                              isSelected={currentItem === building}
-                              goToBuilding={handleGoToItem}
-                            />
-                          ))}
-                      {activeTab === TABS.ZONES &&
-                        activeLayer === LAYERS.BUILDING &&
-                        LAYER_CONFIG[LAYERS.BUILDING]
-                          .getItems(currentItem)
-                          .map((floor) => (
-                            <FloorButton
-                              floor={floor}
-                              key={floor.id}
-                              isDisabled={isDisabled}
-                              isSelected={currentItem === floor}
-                              goToFloor={handleGoToItem}
-                            />
-                          ))}
-                      {activeTab === TABS.ZONES &&
-                        activeLayer === LAYERS.FLOOR &&
-                        LAYER_CONFIG[LAYERS.FLOOR]
-                          .getItems(currentItem)
-                          .map((apartment) => (
-                            <ApartmentButton
-                              apartment={apartment}
-                              key={apartment.id}
-                              isSelected={currentItem === apartment}
-                              goToApartment={handleGoToItem}
-                            />
-                          ))}
-                    </div>
+                        {activeTab === TABS.AMENITIES &&
+                          activeLayer === null &&
+                          TAB_CONFIG[TABS.AMENITIES]
+                            .getItems()
+                            .map((item) => (
+                              <AmenityButton
+                                amenity={item}
+                                key={item.id}
+                                isDisabled={isDisabled}
+                                isSelected={currentItem === item}
+                                goToAmenity={handleGoToItem}
+                              />
+                            ))}
+                        {activeTab === TABS.ZONES &&
+                          activeLayer === LAYERS.ZONE_DETAIL &&
+                          LAYER_CONFIG[LAYERS.ZONE_DETAIL]
+                            .getItems(currentItem)
+                            .map((building) => (
+                              <BuildingButton
+                                building={building}
+                                key={building.id}
+                                isDisabled={isDisabled}
+                                isSelected={currentItem === building}
+                                goToBuilding={handleGoToItem}
+                              />
+                            ))}
+                        {activeTab === TABS.ZONES &&
+                          activeLayer === LAYERS.BUILDING &&
+                          LAYER_CONFIG[LAYERS.BUILDING]
+                            .getItems(currentItem)
+                            .map((floor) => (
+                              <FloorButton
+                                floor={floor}
+                                key={floor.id}
+                                isDisabled={isDisabled}
+                                isSelected={currentItem === floor}
+                                goToFloor={handleGoToItem}
+                              />
+                            ))}
+                        {activeTab === TABS.ZONES &&
+                          activeLayer === LAYERS.FLOOR &&
+                          LAYER_CONFIG[LAYERS.FLOOR]
+                            .getItems(currentItem)
+                            .map((apartment) => (
+                              <ApartmentButton
+                                apartment={apartment}
+                                key={apartment.id}
+                                isDisabled={isDisabled}
+                                isSelected={currentItem === apartment}
+                                goToApartment={handleGoToItem}
+                              />
+                            ))}
+                      </div>
+                    </>)}
 
-                  </>)}
-
-                {/* history */}
-              </div>
+                  {/* history */}
+                </div>}
             </aside>
 
             {/* Main content area */}
@@ -377,6 +405,8 @@ export default function App() {
               <div
                 className="w-full h-full bg-white/9 rounded-2xl overflow-hidden shadow-inner"
                 ref={mediaContainerRef}
+                onMouseDown={handleMouseDown}
+                onMouseUp={handleMouseUp}
               >
                 {/* img or video element */}
                 {viewerProps.mediaElement === "video" ? (
