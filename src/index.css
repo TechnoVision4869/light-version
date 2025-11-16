@@ -53,3 +53,17 @@ body {
   border-radius: 30%;
   background: white;
 }
+
+.h-divider {
+  border: none;
+  border-bottom: 1.27px solid white;
+  opacity: 0.5;
+  width: 100%;
+}
+
+.v-divider {
+  border: none;
+  border-right: 1.27px solid white;
+  opacity: 0.5;
+  width: 100%;
+}

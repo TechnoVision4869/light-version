@@ -233,11 +233,11 @@ export default function App() {
           >
             {/* Sidebar */}
             <aside
-              className={`bg-white/9 rounded-2xl p-2 py-3 md:p-3 md:py-4 flex-shrink-0 transition-all duration-700 overflow-hidden
+              className={`bg-white/9 rounded-2xl p-2 py-3 md:py-4 flex-shrink-0 transition-all duration-700 overflow-hidden
              ${activeTab === TABS.HOME || activeLayer === LAYERS.AMENITY_DETAIL || viewerProps.currentViewIndex !== 0
                   ? "w-0 opacity-0 pointer-events-none"
                   : sidebarOpen
-                    ? "w-44 md:w-60 opacity-100"
+                    ? "w-44 md:w-68 opacity-100"
                     : "w-0 opacity-0 pointer-events-none"
                 }`}
             >
