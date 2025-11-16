@@ -8,29 +8,38 @@ import V2 from "../assets/images/v2.svg"
 import V3 from "../assets/images/v3.svg"
 import V4 from "../assets/images/v4.svg"
 
+import C1 from "../assets/images/c1.png"
+import C2 from "../assets/images/c2.png"
+import C3 from "../assets/images/c3.png"
+import C4 from "../assets/images/c4.png"
+
+
+
 export default function UnitPanel({ unit }) {
     const [isVisualsOpen, setIsVisualsOpen] = useState(true);
     const [isCutSectionsOpen, setIsCutSectionsOpen] = useState(false);
     const [isPaymentPlanOpen, setIsPaymentPlanOpen] = useState(false);
 
     // Mock data
-    const property = {
-        name: "Town Casa A",
-        area: "203 M²",
-        rooms: 4,
-        serviceRooms: ["Nanny's Room", "Drivers Room", "Hard Kitchen", "Play Room", "Guards Room"],
-        visuals: [
-            { id: 1, src: V1 },
-            { id: 2, src: V2 },
-            { id: 3, src: V3 },
-            { id: 4, src: V4 },
-        ],
-        paymentPlan: {
-            downPayment: 4999999,
-            monthly: 499999,
-            years: 8,
-        },
-    };
+    const property = unit;
+    //temporary visuals and payment plan
+    const visuals = [
+        { id: 1, src: V1 },
+        { id: 2, src: V2 },
+        { id: 3, src: V3 },
+        { id: 4, src: V4 },
+    ]
+    const cutSections = [
+        { id: 1, src: C1 },
+        { id: 2, src: C2 },
+        { id: 3, src: C3 },
+        { id: 4, src: C4 },
+    ]
+    const paymentPlan = {
+        downPayment: 4999999,
+        monthly: 499999,
+        years: 8,
+    }
 
     return (
         <div className="h-full pr-1">
@@ -42,7 +51,7 @@ export default function UnitPanel({ unit }) {
                         <div className="w-6 h-6 items-center justify-center">
                             <img src={AREA_ICON} alt="Area icon" className="w-6 h-6 p-[1px]" />
                         </div>
-                        <span>Area : {property.area}</span>
+                        <span>Area : {property.area} m²</span>
                     </div>
                 </div>
 
@@ -54,7 +63,7 @@ export default function UnitPanel({ unit }) {
                         <div className="w-6 h-6 flex items-center justify-center">
                             <img src={DOOR_ICON} alt="Area icon" className="w-6 h-6 p-[1px]" />
                         </div>
-                        <span>Rooms : {property.rooms}</span>
+                        <span>Rooms : {property.bedrooms}</span>
                     </div>
 
                     <div className="flex items-center gap-2 mb-4">
@@ -112,7 +121,7 @@ export default function UnitPanel({ unit }) {
                     </button>
                     {isVisualsOpen && (
                         <div className="grid grid-cols-2 gap-2 mt-2">
-                            {property.visuals.map((img) => (
+                            {visuals.map((img) => (
                                 <button className='hover:opacity-70'>
                                     <img
                                         key={img.id}
@@ -148,11 +157,18 @@ export default function UnitPanel({ unit }) {
                         </svg>
                     </button>
                     {isCutSectionsOpen && (
-                        <div className="mt-2">
-                            {/* Placeholder for cut sections content */}
-                            <div className="bg-black/10 p-4 rounded-lg text-center text-sm text-white/70">
-                                Cut sections content will appear here.
-                            </div>
+                        <div className="grid grid-cols-2 gap-2 mt-2">
+                            {cutSections.map((img) => (
+                                <button className='hover:opacity-70'>
+                                    <img
+                                        key={img.id}
+                                        src={img.src}
+                                        alt="Visual"
+                                        className="w-full h-20 object-cover rounded-lg"
+                                    />
+                                </button>
+
+                            ))}
                         </div>
                     )}
                 </div>
@@ -180,17 +196,17 @@ export default function UnitPanel({ unit }) {
                     {isPaymentPlanOpen && (
                         <div className="mt-2 flex justify-between gap-2 whitespace-nowrap">
                             <div className="flex-1 text-center">
-                                <div className="font-bold text-sm">{property.paymentPlan.downPayment.toLocaleString()} L.E</div>
+                                <div className="font-bold text-sm">{paymentPlan.downPayment.toLocaleString()} L.E</div>
                                 <div className="text-xs text-white/70">Down Payment</div>
                             </div>
                             <div className="v-divider"></div>
                             <div className="flex-1 text-center">
-                                <div className="font-bold text-sm">{property.paymentPlan.monthly.toLocaleString()} L.E</div>
+                                <div className="font-bold text-sm">{paymentPlan.monthly.toLocaleString()} L.E</div>
                                 <div className="text-xs text-white/70">Monthly</div>
                             </div>
                             <div className="v-divider"></div>
                             <div className="flex-1 text-center">
-                                <div className="font-bold text-sm">{property.paymentPlan.years}</div>
+                                <div className="font-bold text-sm">{paymentPlan.years}</div>
                                 <div className="text-xs text-white/70">Years</div>
                             </div>
                         </div>
