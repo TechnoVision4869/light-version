@@ -406,7 +406,9 @@ export default function App() {
                 className="w-full h-full bg-white/9 rounded-2xl overflow-hidden shadow-inner"
                 ref={mediaContainerRef}
                 onMouseDown={handleMouseDown}
+                onTouchStart={handleMouseDown}
                 onMouseUp={handleMouseUp}
+                onTouchEnd={handleMouseUp}
               >
                 {/* img or video element */}
                 {viewerProps.mediaElement === "video" ? (
