@@ -7,7 +7,6 @@ export default function HistoryBreadcrumbs({ history, currentItem }) {
                         <div key={entry.item.id} className=" flex gap-2">
                             <button
                                 className="w-auto cursor-pointer text-white"
-                                onClick={() => console.log(`${entry.item.id} clicked`)}
                             >
                                 {String(entry.item.name).charAt(0).toUpperCase() +
                                     String(entry.item.name).slice(1)}

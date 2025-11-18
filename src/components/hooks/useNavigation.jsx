@@ -1,5 +1,5 @@
-import { useState, useCallback, useRef } from "react";
-import { MODE, MODE_CONFIG, TABS, TAB_CONFIG, LAYER_CONFIG, LAYERS } from "../../data/layers";
+import { useState, useCallback } from "react";
+import {TABS, TAB_CONFIG, LAYER_CONFIG } from "../../data/layers";
 
 export function useNavigation() {
     const initHistory = [
@@ -7,7 +7,6 @@ export function useNavigation() {
             tab: TABS.HOME,
             layer: null,
             item: null,
-            path: TAB_CONFIG[TABS.HOME].path,
             videosPath: TAB_CONFIG[TABS.HOME].videosPath,
         },
     ];
@@ -21,7 +20,6 @@ export function useNavigation() {
         tab: activeTab,
         layer: activeLayer,
         item: currentItem,
-        path: currentPath,
         videosPath: currentVideosPaths,
     } = currentEntry;
 
@@ -29,7 +27,7 @@ export function useNavigation() {
     const goToTab = useCallback((tabKey, isFromHome = true) => {
         const config = TAB_CONFIG[tabKey];
         // console.log(tabKey);
-        
+
         setHistory(() => [
             ...initHistory,
             {
@@ -39,8 +37,7 @@ export function useNavigation() {
                     id: tabKey,
                     name: tabKey,
                 },
-                path: MODE_CONFIG === MODE.VIDEO ? null : config.path,
-                videosPath: MODE_CONFIG === MODE.VIDEO ? config.videosPath(isFromHome) : null,
+                videosPath: config.videosPath(isFromHome),
             },
         ]);
     }, []);
@@ -83,7 +80,6 @@ export function useNavigation() {
         activeTab,
         activeLayer,
         currentItem,
-        currentPath,
         currentVideosPaths,
         goToTab,
         goToItem,

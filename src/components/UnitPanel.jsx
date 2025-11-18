@@ -122,9 +122,8 @@ export default function UnitPanel({ unit }) {
                     {isVisualsOpen && (
                         <div className="grid grid-cols-2 gap-2 mt-2">
                             {visuals.map((img) => (
-                                <button className='hover:opacity-70'>
+                                <button className='hover:opacity-70'  key={img.id}>
                                     <img
-                                        key={img.id}
                                         src={img.src}
                                         alt="Visual"
                                         className="w-full h-20 object-cover rounded-lg"

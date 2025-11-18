@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import {
-  MODE,
-  MODE_CONFIG,
   TABS,
   LAYERS,
   TAB_CONFIG,
@@ -10,7 +8,6 @@ import {
 } from "./data/layers";
 // Hooks
 import { useNavigation } from "./components/hooks/useNavigation";
-import { useSequenceViewer } from "./components/hooks/useSequenceViewer";
 import { useVideoViewer } from "./components/hooks/useVideoViewer";
 
 // Components
@@ -46,7 +43,6 @@ export default function App() {
     activeTab,
     activeLayer,
     currentItem,
-    currentPath,
     currentVideosPaths, // This is the main navigation video path
     goToTab,
     goToItem,
@@ -61,36 +57,16 @@ export default function App() {
     onGoBack: goBack,
   });
 
-  const sequenceViewer = useSequenceViewer({
-    currentPath,
-    history,
-    onGoBack: goBack,
-  });
+  let viewerProps = {
+    isMediaLoaded: videoViewer.isVideosLoaded,
+    isPlaying: videoViewer.isPlaying,
+    mediaRef: videoViewer.videoRef,
+    StartReverse: videoViewer.StartReverse,
+    playViewTransitionAndIdle: videoViewer.playViewTransitionAndIdle,
+    currentViewIndex: videoViewer.currentViewIndex, // Now managed by the hook
+    changeView: videoViewer.changeView, // Now managed by the hook
+  };
 
-  let viewerProps;
-  // Conditionally, set viewerProps to use video or sequence viewer
-  if (MODE_CONFIG === MODE.VIDEO) {
-    viewerProps = {
-      isMediaLoaded: videoViewer.isVideosLoaded,
-      isPlaying: videoViewer.isPlaying,
-      mediaRef: videoViewer.videoRef,
-      StartReverse: videoViewer.StartReverse,
-      playViewTransitionAndIdle: videoViewer.playViewTransitionAndIdle,
-      currentViewIndex: videoViewer.currentViewIndex, // Now managed by the hook
-      changeView: videoViewer.changeView, // Now managed by the hook
-      mediaElement: "video",
-    };
-  } else {
-    viewerProps = {
-      isMediaLoaded: sequenceViewer.isImagesLoaded,
-      isPlaying: sequenceViewer.isPlaying,
-      mediaRef: sequenceViewer.imageRef,
-      imagesRef: sequenceViewer.imagesRef,
-      currentIndexRef: sequenceViewer.currentIndexRef,
-      StartReverse: sequenceViewer.StartReverse,
-      mediaElement: "img",
-    };
-  }
   const isDisabled = !viewerProps.isMediaLoaded || viewerProps.isPlaying;
 
   // Show info popup when item has description
@@ -129,12 +105,6 @@ export default function App() {
       setSidebarOpen(true);
     }, 800)
   };
-
-  useEffect(() => {
-    if (activeLayer !== LAYERS.FLOOR) setIsFilter(false);
-    console.log(activeLayer);
-
-  }, [activeLayer])
 
   // Swipe States
   const [startX, setStartX] = useState(0);
@@ -402,28 +372,16 @@ export default function App() {
                 onTouchMove={handleTouchMove}
               >
                 {/* img or video element */}
-                {viewerProps.mediaElement === "video" ? (
-                  <video
-                    ref={viewerProps.mediaRef}
-                    className="w-auto min-w-full h-full object-cover object-center rounded-2xl"
-                    alt="Video"
-                    // src={viewerProps.mediaRef?.current?.src}
-                    muted
-                    playsInline
-                    preload="auto"
-                  />
-                ) : (
-                  <img
-                    ref={viewerProps.mediaRef}
-                    className="w-auto min-w-full h-full object-cover object-center rounded-2xl"
-                    alt="Transition frame"
-                    src={
-                      viewerProps.imagesRef?.current?.[
-                        viewerProps.currentIndexRef?.current
-                      ]?.src
-                    }
-                  />
-                )}
+                <video
+                  ref={viewerProps.mediaRef}
+                  className="w-auto min-w-full h-full object-cover object-center rounded-2xl"
+                  alt="Video"
+                  // src={viewerProps.mediaRef?.current?.src}
+                  muted
+                  playsInline
+                  preload="auto"
+                />
+
                 {!viewerProps.isMediaLoaded && <Loading />}
 
                 {activeTab === TABS.SURROUNDINGS &&
