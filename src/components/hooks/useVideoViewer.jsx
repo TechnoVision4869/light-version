@@ -9,12 +9,15 @@ export function useVideoViewer({
   const [isVideosLoaded, setIsVideosLoaded] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const videoRef = useRef(null);
+  const firstVideoRef = useRef(null);
+  const secondVideoRef = useRef(null);
   const justNavigatedBackRef = useRef(false);
   const isViewTransitioningRef = useRef(false);  // Flag to indicate if we are in a view transition process
   const isInitPlayedRef = useRef(true);  // Flag to indicate if we have played the initial video (Home idle)
 
   const [currentViewIndex, setCurrentViewIndex] = useState(0);
+  const [firstVideoOpacity, setFirstVideoOpacity] = useState(0);
+  const [secondVideoOpacity, setSecondVideoOpacity] = useState(1);
 
   const currentHistoryEntry = history[history.length - 1]; // Get the current (top) entry
   const activeTab = currentHistoryEntry?.tab || null;
@@ -59,27 +62,51 @@ export function useVideoViewer({
   }, [history, currentViewIndex]);
 
   const playVideo = useCallback((src, loop = false, onEnded = null) => {
-    if (!src || !videoRef.current) {
-      console.warn("playVideo called but src or videoRef.current is not available", { src, videoRefCurrent: videoRef.current });
+    if (!src || !firstVideoRef.current) {
+      console.warn("playVideo called but src or videoRef.current is not available", { src, videoRefCurrent: firstVideoRef.current });
       return; // Exit if not ready
     }
 
     setIsPlaying(!loop);
-    const video = videoRef.current;
-    video.src = src;
-    video.load();
-    video.loop = loop;
+    const video1 = firstVideoRef.current;
+    const video2 = secondVideoRef.current;
+    if (loop) {
 
-    video.onloadeddata = () => {
-      video.play().catch((e) => console.error("Video play failed:", e));
-    };
+      video2.src = src;
+      video2.load();
+      // video.loop = loop;
 
-    // Clear previous onended and set the new one if provided
-    if (onEnded) {
-      video.onended = onEnded;
+      video2.onloadeddata = () => {
+        setFirstVideoOpacity(0);
+        setSecondVideoOpacity(1);
+        video2.play().catch((e) => console.error("Video play failed:", e));
+      };
+
+      // Clear previous onended and set the new one if provided
+      if (onEnded) {
+        video2.onended = onEnded;
+      } else {
+        video2.onended = null;
+      }
     } else {
-      video.onended = null;
+      video1.src = src;
+      video1.load();
+      // video.loop = loop;
+
+      video1.onloadeddata = () => {
+        setFirstVideoOpacity(1);
+        setSecondVideoOpacity(0);
+        video1.play().catch((e) => console.error("Video play failed:", e));
+      };
+
+      // Clear previous onended and set the new one if provided
+      if (onEnded) {
+        video1.onended = onEnded;
+      } else {
+        video1.onended = null;
+      }
     }
+
   }, []);
 
   const playForwardVideo = useCallback(() => {
@@ -120,7 +147,7 @@ export function useVideoViewer({
       // console.log(`transition vieo path: ${transitionVideoPath},
       //  idle video path: ${idleVideoPath},
       //  videoRef current: ${videoRef.current}`);
-      if (!transitionVideoPath || !idleVideoPath || !videoRef.current) return;
+      if (!transitionVideoPath || !idleVideoPath || !firstVideoRef.current) return;
 
       // console.log("Starting view transition from:", transitionVideoPath, "to idle:", idleVideoPath);
 
@@ -128,24 +155,27 @@ export function useVideoViewer({
       isViewTransitioningRef.current = true;
       setIsPlaying(true);
 
-      const video = videoRef.current;
+      const video1 = firstVideoRef.current;
+      const video2 = secondVideoRef.current;
 
       // Define the handler for the *transition* video ending
       const onTransitionEnded = () => {
         // console.log("View transition video ended, switching to idle:", idleVideoPath);
         // Remove the handler from the transition video
-        video.onended = null;
+        video1.onended = null;
 
         // Check the flag again before proceeding (in case another transition started)
 
         // Switch to the new idle video
-        video.src = idleVideoPath;
-        video.load();
-        video.loop = true;
+        video2.src = idleVideoPath;
+        video2.load();
+        // video2.loop = true;
 
-        video.onloadeddata = () => {
+        video2.onloadeddata = () => {
+          setFirstVideoOpacity(0);
+          setSecondVideoOpacity(1);
           // console.log("View idle video loaded, playing...");
-          video.play().catch((e) => console.error("View idle video play failed:", e));
+          video2.play().catch((e) => console.error("View idle video play failed:", e));
           // Set playing state to false for idle video
           setIsPlaying(false);
           // Transition process is complete, unset the flag
@@ -153,14 +183,16 @@ export function useVideoViewer({
         };
       };
 
-      video.src = transitionVideoPath;
-      video.load();
-      video.loop = false;
-      video.onended = onTransitionEnded; // Attach handler for *this* transition
+      video1.src = transitionVideoPath;
+      video1.load();
+      // video1.loop = false;
+      video1.onended = onTransitionEnded; // Attach handler for *this* transition
 
-      video.onloadeddata = () => {
+      video1.onloadeddata = () => {
         // console.log("View transition video loaded, playing...");
-        video
+        setFirstVideoOpacity(1)
+        setSecondVideoOpacity(0);
+        video1
           .play()
           .catch((e) => console.error("View transition play failed:", e));
       };
@@ -213,14 +245,14 @@ export function useVideoViewer({
     if (currentVideosPaths) {
       loadVideoAssets();
     }
-  }, [history, videoRef]); // Watch history and videoRef
+  }, [history, firstVideoRef]); // Watch history and videoRef
 
 
   useEffect(() => {
     return () => {
-      if (videoRef.current) {
-        videoRef.current.pause();
-        videoRef.current.src = null;
+      if (firstVideoRef.current) {
+        firstVideoRef.current.pause();
+        firstVideoRef.current.src = null;
       }
     };
   }, []);
@@ -228,7 +260,10 @@ export function useVideoViewer({
   return {
     isVideosLoaded,
     isPlaying,
-    videoRef,
+    firstVideoRef,
+    secondVideoRef,
+    firstVideoOpacity,
+    secondVideoOpacity,
     StartReverse,
     playViewTransitionAndIdle,
     currentViewIndex,

@@ -52,7 +52,6 @@ export default function App() {
 
   const videoViewer = useVideoViewer({
     currentVideosPaths,
-    buildingViewPaths: null,
     history,
     onGoBack: goBack,
   });
@@ -60,7 +59,10 @@ export default function App() {
   let viewerProps = {
     isMediaLoaded: videoViewer.isVideosLoaded,
     isPlaying: videoViewer.isPlaying,
-    mediaRef: videoViewer.videoRef,
+    firstMediaRef: videoViewer.firstVideoRef,
+    secondMediaRef: videoViewer.secondVideoRef,
+    firstVideoOpacity: videoViewer.firstVideoOpacity,
+    secondVideoOpacity: videoViewer.secondVideoOpacity,
     StartReverse: videoViewer.StartReverse,
     playViewTransitionAndIdle: videoViewer.playViewTransitionAndIdle,
     currentViewIndex: videoViewer.currentViewIndex, // Now managed by the hook
@@ -372,15 +374,29 @@ export default function App() {
                 onTouchMove={handleTouchMove}
               >
                 {/* img or video element */}
-                <video
-                  ref={viewerProps.mediaRef}
-                  className="w-auto min-w-full h-full object-cover object-center rounded-2xl"
-                  alt="Video"
-                  // src={viewerProps.mediaRef?.current?.src}
-                  muted
-                  playsInline
-                  preload="auto"
-                />
+                <div className="absolute inset-0">
+                  {/* First Video (e.g., transition, or initial idle) */}
+                  <video
+                    ref={viewerProps.firstMediaRef}
+                    className="w-full h-full object-cover object-center rounded-2xl absolute inset-0"
+                    style={{ opacity: viewerProps.firstVideoOpacity }} // Apply opacity
+                    alt="Video 1"
+                    muted
+                    playsInline
+                    preload="auto"
+                  />
+                  {/* Second Video (e.g., target idle after transition) */}
+                  <video
+                    ref={viewerProps.secondMediaRef}
+                    className="w-full h-full object-cover object-center rounded-2xl absolute inset-0"
+                    style={{ opacity: viewerProps.secondVideoOpacity }} // Apply opacity
+                    alt="Video 2"
+                    muted
+                    playsInline
+                    preload="auto"
+                    loop
+                  />
+                </div>
 
                 {!viewerProps.isMediaLoaded && <Loading />}
 
