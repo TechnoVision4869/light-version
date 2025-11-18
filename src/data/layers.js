@@ -24,6 +24,18 @@ export const LAYERS = {
   AMENITY_DETAIL: "amenity_detail",
 };
 
+export const FILTER_ENUM = {
+  // TYPE: "type",
+  AREA: "area",
+  PRICE: "price",
+  BEDROOMS: "bedrooms",
+}
+
+export const FILTER_TYPE = {
+  RANGE: "range",
+  DISCRETE: "discrete",
+}
+
 // Tab configurations (main views)
 export const TAB_CONFIG = {
   [TABS.HOME]: {
@@ -168,7 +180,36 @@ export const LAYER_CONFIG = {
         idleVideo: "/loading.mp4",
       };
     },
-    getData: (apartmentId) => DATA.apartments.find((a) => a.id === apartmentId)
+    getData: (apartmentId) => DATA.apartments.find((a) => a.id === apartmentId),
+
+    getMinMaxRange: (filterEnum) => {
+      const apartments = DATA.apartments;
+      if (apartments.length === 0) {
+        return { min: 0, max: 0 };
+      }
+      const key = FILTER_ENUM[filterEnum];
+      if (!key) { // Check if the filterEnum key exists in FILTER_ENUM
+        console.error(`Invalid filterEnum key: ${filterEnum}`);
+        return { min: 0, max: 0 };
+      }
+
+      let min = apartments[0][key];
+      let max = apartments[0][key];
+
+      for (let i = 1; i < apartments.length; i++) {
+        const value = apartments[i][key];
+        if (value < min) min = value;
+        if (value > max) max = value;
+      }
+      return {
+        min: min,
+        max: max,
+      }
+    },
+    getDiscreteValues: (filterEnum) => {
+      const key = FILTER_ENUM[filterEnum];
+      return [...new Set(DATA.apartments.map(a => a[key]))].sort((a, b) => a - b);
+    },
   },
   [LAYERS.SURROUNDING_DETAIL]: {
     path: (surroundingId) => `/${surroundingId}_zoom`,
@@ -276,7 +317,7 @@ export const DATA = {
       floorId: "floor1",
       buildingId: "tower1",
       zoneId: "zone1",
-      name: "Apartment 101",
+      name: "A101",
       description: "Beautiful 2-bedroom apartment...",
       bedrooms: 2,
       bathrooms: 1,
@@ -290,7 +331,7 @@ export const DATA = {
       floorId: "floor1",
       buildingId: "tower1",
       zoneId: "zone1",
-      name: "Apartment 102",
+      name: "A102",
       description: "Beautiful 4-bedroom apartment...",
       bedrooms: 4,
       bathrooms: 2,
@@ -304,7 +345,7 @@ export const DATA = {
       floorId: "floor1",
       buildingId: "tower1",
       zoneId: "zone1",
-      name: "Apartment 103",
+      name: "A103",
       description: "Beautiful 2-bedroom apartment...",
       bedrooms: 2,
       bathrooms: 2,
@@ -318,7 +359,7 @@ export const DATA = {
       floorId: "floor1",
       buildingId: "tower1",
       zoneId: "zone1",
-      name: "Apartment 104",
+      name: "A104",
       description: "Beautiful 3-bedroom apartment...",
       bedrooms: 3,
       bathrooms: 2,
@@ -332,7 +373,7 @@ export const DATA = {
       floorId: "floor1",
       buildingId: "tower1",
       zoneId: "zone1",
-      name: "Apartment 105",
+      name: "A105",
       description: "Beautiful 4-bedroom apartment...",
       bedrooms: 4,
       bathrooms: 2,
@@ -347,7 +388,7 @@ export const DATA = {
       floorId: "floor2",
       buildingId: "tower1",
       zoneId: "zone1",
-      name: "Apartment 201",
+      name: "A201",
       description: "Beautiful 2-bedroom apartment...",
       bedrooms: 2,
       bathrooms: 1,
@@ -361,7 +402,7 @@ export const DATA = {
       floorId: "floor2",
       buildingId: "tower1",
       zoneId: "zone1",
-      name: "Apartment 202",
+      name: "A202",
       description: "Beautiful 2-bedroom apartment...",
       bedrooms: 2,
       bathrooms: 2,
@@ -375,7 +416,7 @@ export const DATA = {
       floorId: "floor2",
       buildingId: "tower1",
       zoneId: "zone1",
-      name: "Apartment 203",
+      name: "A203",
       description: "Beautiful 2-bedroom apartment...",
       bedrooms: 2,
       bathrooms: 2,
@@ -389,7 +430,7 @@ export const DATA = {
       floorId: "floor2",
       buildingId: "tower1",
       zoneId: "zone1",
-      name: "Apartment 204",
+      name: "A204",
       description: "Beautiful 2-bedroom apartment...",
       bedrooms: 2,
       bathrooms: 2,
@@ -403,7 +444,7 @@ export const DATA = {
       floorId: "floor2",
       buildingId: "tower1",
       zoneId: "zone1",
-      name: "Apartment 205",
+      name: "A205",
       description: "Beautiful 3-bedroom apartment...",
       bedrooms: 3,
       bathrooms: 2,
@@ -417,7 +458,7 @@ export const DATA = {
       floorId: "floor2",
       buildingId: "tower1",
       zoneId: "zone1",
-      name: "Apartment 206",
+      name: "A206",
       description: "Beautiful 4-bedroom apartment...",
       bedrooms: 4,
       bathrooms: 2,
@@ -432,7 +473,7 @@ export const DATA = {
       floorId: "floor1",
       buildingId: "tower2",
       zoneId: "zone1",
-      name: "Apartment 111",
+      name: "A111",
       description: "Beautiful 2-bedroom apartment...",
       bedrooms: 2,
       bathrooms: 1,
@@ -446,7 +487,7 @@ export const DATA = {
       floorId: "floor1",
       buildingId: "tower2",
       zoneId: "zone1",
-      name: "Apartment 112",
+      name: "A-112",
       description: "Beautiful 2-bedroom apartment...",
       bedrooms: 2,
       bathrooms: 2,
@@ -460,7 +501,7 @@ export const DATA = {
       floorId: "floor1",
       buildingId: "tower2",
       zoneId: "zone1",
-      name: "Apartment 113",
+      name: "A113",
       description: "Beautiful 2-bedroom apartment...",
       bedrooms: 2,
       bathrooms: 2,
@@ -474,7 +515,7 @@ export const DATA = {
       floorId: "floor1",
       buildingId: "tower2",
       zoneId: "zone1",
-      name: "Apartment 114",
+      name: "A114",
       description: "Beautiful 3-bedroom apartment...",
       bedrooms: 3,
       bathrooms: 2,
@@ -488,7 +529,7 @@ export const DATA = {
       floorId: "floor1",
       buildingId: "tower2",
       zoneId: "zone1",
-      name: "Apartment 115",
+      name: "A115",
       description: "Beautiful 4-bedroom apartment...",
       bedrooms: 4,
       bathrooms: 2,
@@ -503,7 +544,7 @@ export const DATA = {
       floorId: "floor2",
       buildingId: "tower2",
       zoneId: "zone1",
-      name: "Apartment 221",
+      name: "A221",
       description: "Beautiful 2-bedroom apartment...",
       bedrooms: 2,
       bathrooms: 1,
@@ -517,7 +558,7 @@ export const DATA = {
       floorId: "floor2",
       buildingId: "tower2",
       zoneId: "zone1",
-      name: "Apartment 222",
+      name: "A222",
       description: "Beautiful 2-bedroom apartment...",
       bedrooms: 2,
       bathrooms: 2,
@@ -531,7 +572,7 @@ export const DATA = {
       floorId: "floor2",
       buildingId: "tower2",
       zoneId: "zone1",
-      name: "Apartment 223",
+      name: "A223",
       description: "Beautiful 2-bedroom apartment...",
       bedrooms: 2,
       bathrooms: 2,
@@ -545,7 +586,7 @@ export const DATA = {
       floorId: "floor2",
       buildingId: "tower2",
       zoneId: "zone1",
-      name: "Apartment 224",
+      name: "A-224",
       description: "Beautiful 2-bedroom apartment...",
       bedrooms: 2,
       bathrooms: 2,
@@ -559,7 +600,7 @@ export const DATA = {
       floorId: "floor2",
       buildingId: "tower2",
       zoneId: "zone1",
-      name: "Apartment 225",
+      name: "A225",
       description: "Beautiful 3-bedroom apartment...",
       bedrooms: 3,
       bathrooms: 2,

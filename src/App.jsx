@@ -151,6 +151,7 @@ export default function App() {
                   onClick={() => {
                     if ((activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS) && activeLayer === null) setSidebarOpen(false);
                     viewerProps.StartReverse(false, () => { });
+                    setIsFilter(false);
                   }}
                   disabled={isDisabled || history.length <= 1}
                   className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 

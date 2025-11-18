@@ -1,9 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-// import { LAYER_CONFIG, LAYERS } from "../data/layers"
-// import { useNavigation } from "./hooks/useNavigation";
-
-// const { currentItem } = useNavigation;
+import { LAYER_CONFIG, LAYERS, FILTER_ENUM } from "../data/layers"
 
 const UNIT_TYPES = {
     RESIDENTIAL: "residential",
@@ -12,30 +9,24 @@ const UNIT_TYPES = {
 
 // Surface area range (in square meters)
 export const AREA_RANGE = {
-    MIN: 65,
-    MAX: 400,
+    MIN: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(FILTER_ENUM.AREA).min,
+    MAX: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(FILTER_ENUM.AREA).max,
     UNIT: "m²",
 };
 
 // Budget range (in local currency)
 export const BUDGET_RANGE = {
-    MIN: 100_000,
-    MAX: 20_000_000,
+    MIN: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(FILTER_ENUM.PRICE).min,
+    MAX: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(FILTER_ENUM.PRICE).max,
     UNIT: "L.E",
 };
 
 // Bedroom/Bathroom options
-export const BEDROOM_OPTIONS = [1, 2, 3, 4, 5, 6];
+export const BEDROOM_OPTIONS = LAYER_CONFIG[LAYERS.APARTMENT].getDiscreteValues(FILTER_ENUM.BEDROOMS);
 export const BATHROOM_OPTIONS = [1, 2, 3, 4, 5, 6];
 
-// const updateFilter = () => {
-//     console.log("Filterred apartments: ");
-//     const filtered = LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem.id);
-//     console.log(filtered);
-// }
-
 function Slider({ name, unit, min, max }) {
-    const [value, setVlue] = useState((min + max) / 2);
+    const [value, setValue] = useState(max);
 
     const fillColor = 'white';
     const trackColor = '#7f7f7f';
@@ -53,7 +44,7 @@ function Slider({ name, unit, min, max }) {
                     min={min}
                     max={max}
                     value={value}
-                    onChange={(e) => setVlue(Number(e.target.value))}
+                    onChange={(e) => setValue(Number(e.target.value))}
                     className="w-full h-1 cursor-pointer slider"
                     style={{
                         background:
@@ -68,10 +59,6 @@ function Slider({ name, unit, min, max }) {
 export default function FilterPanel() {
     const [unitType, setUnitType] = useState(null);
     const [bedrooms, setBedrooms] = useState(null);
-
-    // useEffect(() => {
-    //     updateFilter();
-    // }, [unitType, bedrooms])
 
     return (
         <div className="flex flex-col gap-2 max-h-[calc(100vh-200px)] scrollbar-custom overflow-auto pe-2 text-white font-light text-sm">
