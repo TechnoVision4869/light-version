@@ -67,3 +67,13 @@ body {
   opacity: 0.5;
   width: 100%;
 }
+
+.fade-in-element {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  /* 1 second duration, ease-in-out timing */
+}
+
+.fade-in-element.fade-in-started {
+  opacity: 1;
+}

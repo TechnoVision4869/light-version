@@ -9,6 +9,8 @@ export function useVideoViewer({
   const [isVideosLoaded, setIsVideosLoaded] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
 
+  const [floatingOpacity, setFloatingOpacity] = useState(0);
+
   const firstVideoRef = useRef(null);
   const secondVideoRef = useRef(null);
   const justNavigatedBackRef = useRef(false);
@@ -112,6 +114,7 @@ export function useVideoViewer({
   const playForwardVideo = useCallback(() => {
     if (!currentVideosPaths?.forwardVideo) return;
     // console.log("playForwardVideo called with forwardVideo:", currentVideosPaths.forwardVideo);
+    setFloatingOpacity(0);
 
     playVideo(currentVideosPaths.forwardVideo, false, playIdleVideo);
   }, [currentVideosPaths, playVideo]);
@@ -119,6 +122,7 @@ export function useVideoViewer({
   const playReverseVideo = useCallback((navigatedBetweenTabs, onReverseEnded) => {
     if (!currentVideosPaths?.reverseVideo) return;
     // console.log("Reverse video", currentVideosPaths.reverseVideo);
+    setFloatingOpacity(0);
 
     playVideo(currentVideosPaths.reverseVideo, false, () => {
       if (navigatedBetweenTabs) {
@@ -138,6 +142,9 @@ export function useVideoViewer({
     // console.log("playIdleVideo called with idleVideo:", currentVideosPaths.idleVideo);
     // Ensure we are not in a view transition when this runs due to main navigation
     isViewTransitioningRef.current = false;
+    setTimeout(() => {
+      setFloatingOpacity(1);
+    }, 500);
     playVideo(currentVideosPaths.idleVideo, true);
   }, [currentVideosPaths, playVideo]);
 
@@ -187,6 +194,7 @@ export function useVideoViewer({
       video1.load();
       // video1.loop = false;
       video1.onended = onTransitionEnded; // Attach handler for *this* transition
+
 
       video1.onloadeddata = () => {
         // console.log("View transition video loaded, playing...");
@@ -264,6 +272,7 @@ export function useVideoViewer({
     secondVideoRef,
     firstVideoOpacity,
     secondVideoOpacity,
+    floatingOpacity,
     StartReverse,
     playViewTransitionAndIdle,
     currentViewIndex,

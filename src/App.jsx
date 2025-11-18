@@ -22,7 +22,7 @@ import BuildingButton from "./components/buttons/BuildingButton";
 import FloorButton from "./components/buttons/FloorButton";
 import ApartmentButton from "./components/buttons/ApartmentButton";
 import HistoryBreadcrumbs from "./components/HistoryBreadcrumbs";
-import Flaoting from "./components/Floating";
+import Floating from "./components/Floating";
 import FilterPanel from "./components/FilterPanel";
 import UnitPanel from "./components/UnitPanel";
 
@@ -63,6 +63,7 @@ export default function App() {
     secondMediaRef: videoViewer.secondVideoRef,
     firstVideoOpacity: videoViewer.firstVideoOpacity,
     secondVideoOpacity: videoViewer.secondVideoOpacity,
+    floatingOpacity: videoViewer.floatingOpacity,
     StartReverse: videoViewer.StartReverse,
     playViewTransitionAndIdle: videoViewer.playViewTransitionAndIdle,
     currentViewIndex: videoViewer.currentViewIndex, // Now managed by the hook
@@ -379,7 +380,7 @@ export default function App() {
                   <video
                     ref={viewerProps.firstMediaRef}
                     className="w-full h-full object-cover object-center rounded-2xl absolute inset-0"
-                    style={{ opacity: viewerProps.firstVideoOpacity }} // Apply opacity
+                    style={{ opacity: viewerProps.firstVideoOpacity }}
                     alt="Video 1"
                     muted
                     playsInline
@@ -389,7 +390,7 @@ export default function App() {
                   <video
                     ref={viewerProps.secondMediaRef}
                     className="w-full h-full object-cover object-center rounded-2xl absolute inset-0"
-                    style={{ opacity: viewerProps.secondVideoOpacity }} // Apply opacity
+                    style={{ opacity: viewerProps.secondVideoOpacity }}
                     alt="Video 2"
                     muted
                     playsInline
@@ -401,20 +402,20 @@ export default function App() {
                 {!viewerProps.isMediaLoaded && <Loading />}
 
                 {activeTab === TABS.SURROUNDINGS &&
-                  activeLayer === null &&
-                  <Flaoting buttons={DATA.surroundings}
+                  activeLayer === null && viewerProps.floatingOpacity &&
+                  <Floating buttons={DATA.surroundings}
                     mediaRef={mediaContainerRef}
                     tab={activeTab}
                   />}
 
-                {activeLayer === LAYERS.ZONE_DETAIL &&
-                  <Flaoting buttons={LAYER_CONFIG[LAYERS.ZONE_DETAIL].getItems(currentItem)}
+                {activeLayer === LAYERS.ZONE_DETAIL && viewerProps.floatingOpacity &&
+                  <Floating buttons={LAYER_CONFIG[LAYERS.ZONE_DETAIL].getItems(currentItem)}
                     mediaRef={mediaContainerRef}
                     tab={activeTab}
                   />}
 
-                {activeLayer === LAYERS.FLOOR &&
-                  <Flaoting buttons={LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem)}
+                {activeLayer === LAYERS.FLOOR && viewerProps.floatingOpacity &&
+                  <Floating buttons={LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem)}
                     mediaRef={mediaContainerRef}
                     tab={activeTab}
                   />}
