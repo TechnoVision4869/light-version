@@ -161,6 +161,13 @@ export const LAYER_CONFIG = {
     },
   },
   [LAYERS.APARTMENT]: {
+    videosPath: (apartment) => {
+      return {
+        forwardVideo: "/loading.mp4",
+        reverseVideo: "/loading.mp4",
+        idleVideo: "/loading.mp4",
+      };
+    },
     getData: (apartmentId) => DATA.apartments.find((a) => a.id === apartmentId)
   },
   [LAYERS.SURROUNDING_DETAIL]: {

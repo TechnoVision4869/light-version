@@ -146,33 +146,34 @@ export default function App() {
           {/* Top Tabs */}
           <div className="flex items-center justify-between mb-4 px-4">
             <div className="flex items-center gap-3">
-              {viewerProps.currentViewIndex === 0 && <button
-                onClick={() => {
-                  if ((activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS) && activeLayer === null) setSidebarOpen(false);
-                  viewerProps.StartReverse(false, () => { });
-                }}
-                disabled={isDisabled || history.length <= 1}
-                className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
+              {viewerProps.currentViewIndex === 0 &&
+                <button
+                  onClick={() => {
+                    if ((activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS) && activeLayer === null) setSidebarOpen(false);
+                    viewerProps.StartReverse(false, () => { });
+                  }}
+                  disabled={isDisabled || history.length <= 1}
+                  className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
               hover:bg-white/7 transition
               disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {/* back chev icon */}
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path
-                    d="M31 12H2M2 12L9 6M2 12L9 18"
-                    stroke="black"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>}
+                  {/* back chev icon */}
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M31 12H2M2 12L9 6M2 12L9 18"
+                      stroke="black"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>}
             </div>
             <div className="flex items-center gap-6">
               <button
@@ -399,7 +400,7 @@ export default function App() {
                   />
                 </div>
 
-                {!viewerProps.isMediaLoaded && <Loading />}
+                {(!viewerProps.isMediaLoaded || activeLayer === LAYERS.APARTMENT) && <Loading />}
 
                 {activeTab === TABS.SURROUNDINGS &&
                   activeLayer === null && viewerProps.floatingOpacity &&

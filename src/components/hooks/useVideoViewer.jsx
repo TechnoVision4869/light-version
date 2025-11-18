@@ -81,6 +81,8 @@ export function useVideoViewer({
       video2.onloadeddata = () => {
         setFirstVideoOpacity(0);
         setSecondVideoOpacity(1);
+        setFloatingOpacity(1);
+
         video2.play().catch((e) => console.error("Video play failed:", e));
       };
 
@@ -120,7 +122,10 @@ export function useVideoViewer({
   }, [currentVideosPaths, playVideo]);
 
   const playReverseVideo = useCallback((navigatedBetweenTabs, onReverseEnded) => {
-    if (!currentVideosPaths?.reverseVideo) return;
+    if (!currentVideosPaths?.reverseVideo) {
+      return;
+    }
+
     // console.log("Reverse video", currentVideosPaths.reverseVideo);
     setFloatingOpacity(0);
 
@@ -142,9 +147,6 @@ export function useVideoViewer({
     // console.log("playIdleVideo called with idleVideo:", currentVideosPaths.idleVideo);
     // Ensure we are not in a view transition when this runs due to main navigation
     isViewTransitioningRef.current = false;
-    setTimeout(() => {
-      setFloatingOpacity(1);
-    }, 500);
     playVideo(currentVideosPaths.idleVideo, true);
   }, [currentVideosPaths, playVideo]);
 
@@ -181,6 +183,8 @@ export function useVideoViewer({
         video2.onloadeddata = () => {
           setFirstVideoOpacity(0);
           setSecondVideoOpacity(1);
+          setFloatingOpacity(1);
+
           // console.log("View idle video loaded, playing...");
           video2.play().catch((e) => console.error("View idle video play failed:", e));
           // Set playing state to false for idle video
