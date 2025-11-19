@@ -29,6 +29,7 @@ export const FILTER_ENUM = {
   AREA: "area",
   PRICE: "price",
   BEDROOMS: "bedrooms",
+  BATHROOMS: "bathrooms",
 }
 
 export const FILTER_TYPE = {
@@ -182,22 +183,18 @@ export const LAYER_CONFIG = {
     },
     getData: (apartmentId) => DATA.apartments.find((a) => a.id === apartmentId),
 
-    getMinMaxRange: (filterEnum) => {
+    getMinMaxRange: (filterName) => {
       const apartments = DATA.apartments;
+
       if (apartments.length === 0) {
         return { min: 0, max: 0 };
       }
-      const key = FILTER_ENUM[filterEnum];
-      if (!key) { // Check if the filterEnum key exists in FILTER_ENUM
-        console.error(`Invalid filterEnum key: ${filterEnum}`);
-        return { min: 0, max: 0 };
-      }
 
-      let min = apartments[0][key];
-      let max = apartments[0][key];
+      let min = apartments[0][filterName];
+      let max = apartments[0][filterName];
 
       for (let i = 1; i < apartments.length; i++) {
-        const value = apartments[i][key];
+        const value = apartments[i][filterName];
         if (value < min) min = value;
         if (value > max) max = value;
       }
@@ -206,9 +203,8 @@ export const LAYER_CONFIG = {
         max: max,
       }
     },
-    getDiscreteValues: (filterEnum) => {
-      const key = FILTER_ENUM[filterEnum];
-      return [...new Set(DATA.apartments.map(a => a[key]))].sort((a, b) => a - b);
+    getDiscreteValues: (filterName) => {
+      return [...new Set(DATA.apartments.map(a => a[filterName]))].sort((a, b) => a - b);
     },
   },
   [LAYERS.SURROUNDING_DETAIL]: {
