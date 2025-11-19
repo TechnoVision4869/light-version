@@ -26,6 +26,9 @@ import Floating from "./components/Floating";
 import FilterPanel from "./components/FilterPanel";
 import UnitPanel from "./components/UnitPanel";
 
+// logo
+import TECHNO_LOGO from "./assets/techno.png"
+
 export default function App() {
   // console.log("App renders");
 
@@ -469,14 +472,19 @@ export default function App() {
           </div>
 
           {/* Breadcrumbs */}
-          {history.length > 1 && (
-            <div className="flex px-6 pt-3">
+          
+          <div className="flex px-6 pt-3">
+          {history.length > 1 && 
               <div className="flex-shrink-0">
                 <HistoryBreadcrumbs history={history} currentItem={currentItem} />
               </div>
+          }
+              <div className="w-18 h-auto ml-auto">
+                <img src={TECHNO_LOGO} alt="Techno Vision Logo" />
+              </div>
               {/* Views visuals */}
               {activeLayer === LAYERS.BUILDING && (
-                <div className="flex-1 flex justify-center items-center justify-center text-white gap-3 px-4 py-2 text-sm">
+                <div className="flex-1 flex items-center justify-center text-white gap-3 px-4 py-2 text-sm">
                   <div className=" flex gap-2">
                     <div className=""> Views </div>
                     {/* prev button */}
@@ -548,7 +556,7 @@ export default function App() {
                 </div>
               )}
             </div>
-          )}
+          
         </div >
       </div >
     </>
