@@ -1,17 +1,17 @@
-import HOME_LOGO from "../../assets/images/logo.png";
+import HOME_ICON from "../../assets/icons/home.svg?react";
 
-export default function HomeButton({onHomeClick}) {
+export default function HomeButton({ onHomeClick }) {
     return (
         <div>
             <button
                 onClick={onHomeClick}
-                className="w-20 h-10 rounded-xl flex items-center justify-center 
-              hover:bg-white/10 transition-all duration-200"
+                className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
+              hover:bg-white/7 transition"
                 aria-label="Home"
             >
                 <img
-                    src={HOME_LOGO}
-                    alt="home logo"
+                    src={HOME_ICON}
+                    alt="Home icon"
                     className="w-auto h-6 object-contain"
                 />
             </button>

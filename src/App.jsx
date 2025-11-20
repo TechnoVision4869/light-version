@@ -183,8 +183,8 @@ export default function App() {
               <button
                 onClick={() => handleActiveTab(TABS.SURROUNDINGS)}
                 className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.SURROUNDINGS
-                  ? "bg-white text-black"
-                  : "text-white/80"
+                  ? "bg-white/85 text-black"
+                  : "text-white"
                   }`}
               >
                 SURROUNDINGS
@@ -192,8 +192,8 @@ export default function App() {
               <button
                 onClick={() => handleActiveTab(TABS.ZONES)}
                 className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.ZONES
-                  ? "bg-white text-black"
-                  : "text-white/80"
+                  ? "bg-white/85 text-black"
+                  : "text-white"
                   }`}
               >
                 ZONES
@@ -201,8 +201,8 @@ export default function App() {
               <button
                 onClick={() => handleActiveTab(TABS.AMENITIES)}
                 className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.AMENITIES
-                  ? "bg-white text-black"
-                  : "text-white/80"
+                  ? "bg-white/85 text-black"
+                  : "text-white"
                   }`}
               >
                 AMENITIES
