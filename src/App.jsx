@@ -141,6 +141,15 @@ export default function App() {
 
   }, [translateX])
 
+  //filters variables
+  const [filters, setFilters] = useState({
+    unitType: null,
+    bedrooms: null,
+    bathrooms: null,
+    area: null,
+    price: null,
+  });
+
   return (
     <>
       <div className={`w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4`}>
@@ -264,7 +273,8 @@ export default function App() {
                     </div>}
 
                   {isFilter ? (
-                    <FilterPanel />
+                    <></>
+                    // <FilterPanel onFilterChange={setFilters} />
                   ) : (
                     <>
                       {/* Dynamic sidebar title based on active tab */}
@@ -406,24 +416,26 @@ export default function App() {
 
                 {(!viewerProps.isMediaLoaded || activeLayer === LAYERS.APARTMENT) && <Loading />}
 
-                {activeTab === TABS.SURROUNDINGS &&
+                {/* {activeTab === TABS.SURROUNDINGS &&
                   activeLayer === null && viewerProps.floatingOpacity &&
-                  <Floating buttons={DATA.surroundings}
+                  <Floating items={DATA.surroundings}
                     mediaRef={mediaContainerRef}
                     tab={activeTab}
                   />}
 
                 {activeLayer === LAYERS.ZONE_DETAIL && viewerProps.floatingOpacity &&
-                  <Floating buttons={LAYER_CONFIG[LAYERS.ZONE_DETAIL].getItems(currentItem)}
+                  <Floating items={LAYER_CONFIG[LAYERS.ZONE_DETAIL].getItems(currentItem)}
                     mediaRef={mediaContainerRef}
                     tab={activeTab}
-                  />}
+                    filters={filters}
+                  />} */}
 
-                {activeLayer === LAYERS.FLOOR && viewerProps.floatingOpacity &&
-                  <Floating buttons={LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem)}
+                {/* {activeLayer === LAYERS.FLOOR && viewerProps.floatingOpacity &&
+                  <Floating items={LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem)}
                     mediaRef={mediaContainerRef}
                     tab={activeTab}
-                  />}
+                    filters={filters}
+                  />} */}
 
                 {/* left floating chevron to collapse sidebar */}
                 {activeTab !== TABS.HOME &&

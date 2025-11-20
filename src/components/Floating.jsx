@@ -1,15 +1,51 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { DATA } from "../data/layers";
-import FloatingButton from "./buttons/FloatingButton"
+import FloatingButton from "./buttons/FloatingButton";
 
-export default function Flaoting({ buttons, mediaRef, tab }) {
-    const [buttonPositions, setButtonPositions] = useState(
-        buttons.map(() => ({ left: 0, top: 0 }))
-    );
+export default function Floating({ items, mediaRef, tab, filters = null }) {
+    // Filter items based on current filter state
+    const filteredItems = useMemo(() => {
+        if (!filters) return items;
+
+        return items.filter(item => {
+            // Apply unit type filter - check if item's unitType is in the selected array
+            if (filters.unitType.length > 0 && !filters.unitType.includes(item.unitType)) {
+                return false;
+            }
+
+            // Apply bedroom filter - check if item's bedroom count is in the selected array
+            if (filters.bedrooms.length > 0 && !filters.bedrooms.includes(item.bedrooms)) {
+                return false;
+            }
+
+            // Apply bathroom filter - check if item's bathroom count is in the selected array
+            if (filters.bathrooms.length > 0 && !filters.bathrooms.includes(item.bathrooms)) {
+                return false;
+            }
+
+            // Apply surface area filter (assuming item has area property)
+            if (filters.area !== null && item.area > filters.area) {
+                return false;
+            }
+
+            // Apply budget filter (assuming item has price property)
+            if (filters.price !== null && item.price > filters.price) {
+                return false;
+            }
+
+            return true;
+        });
+    }, [items, filters]);
+
+    const [buttonPositions, setButtonPositions] = useState([]);
 
     useEffect(() => {
+        // Update button positions whenever filteredItems changes
         const container = mediaRef.current;
-        if (!container) return;
+        if (!container || filteredItems.length === 0) {
+            setButtonPositions([]);
+            return;
+        }
 
         const updatePositions = () => {
             const w = container.clientWidth;
@@ -17,11 +53,10 @@ export default function Flaoting({ buttons, mediaRef, tab }) {
             const videoW = h * (16 / 9);
             const videoLeft = (w - videoW) / 2;
 
-            const newPositions = buttons.map(surr => ({
+            const newPositions = filteredItems.map(surr => ({
                 left: videoLeft + videoW * surr.x,
                 top: h * surr.y,
             }));
-
             setButtonPositions(newPositions);
         };
 
@@ -33,10 +68,15 @@ export default function Flaoting({ buttons, mediaRef, tab }) {
         return () => {
             resizeObserver.disconnect();
         };
-    }, [mediaRef, DATA]);
+    }, [mediaRef, DATA, filteredItems]); // Remove DATA dependency if it's not needed here
+
+    // Don't render anything if there are no filtered items or no positions calculated yet
+    if (filteredItems.length === 0 || buttonPositions.length !== filteredItems.length) {
+        return null;
+    }
 
     return (
-        buttons.map((btn, i) => (
+        filteredItems.map((btn, i) => (
             <FloatingButton
                 key={btn.id}
                 name={btn.name}
@@ -48,6 +88,5 @@ export default function Flaoting({ buttons, mediaRef, tab }) {
                 }}
             />
         ))
-    )
-
+    );
 }

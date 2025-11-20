@@ -1,11 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { LAYER_CONFIG, LAYERS, FILTER_ENUM } from "../data/layers";
 
-const UNIT_TYPES = {
-  RESIDENTIAL: "residential",
-  COMMERCIAL: "commercial",
-};
+const UNIT_TYPES = LAYER_CONFIG[LAYERS.APARTMENT].getDiscreteValues(FILTER_ENUM.TYPE);
 
 // Surface area range (in square meters)
 const AREA_RANGE = {
@@ -29,9 +26,7 @@ const BATHROOM_OPTIONS = LAYER_CONFIG[LAYERS.APARTMENT].getDiscreteValues(
   FILTER_ENUM.BATHROOMS
 );
 
-function Slider({ name, unit, min, max, step = 1 }) {
-  const [value, setValue] = useState(max);
-
+function Slider({ name, unit, min, max, step = 1, value, onValueChange }) {
   const fillColor = "white";
   const trackColor = "#7f7f7f";
   const sliderPercent = ((value - min) / (max - min)) * 100;
@@ -51,7 +46,7 @@ function Slider({ name, unit, min, max, step = 1 }) {
           max={max}
           value={value}
           step={step}
-          onChange={(e) => setValue(Number(e.target.value))}
+          onChange={(e) => onValueChange(Number(e.target.value))}
           className="w-full h-1 cursor-pointer slider"
           style={{
             background: `linear-gradient(to right, ${fillColor} 0%, ${fillColor} ${sliderPercent}%, ${trackColor} ${sliderPercent}%, ${trackColor} 100%)`,
@@ -62,41 +57,82 @@ function Slider({ name, unit, min, max, step = 1 }) {
   );
 }
 
-export default function FilterPanel() {
+function Discrete({ name, options, array, onValueChange }) {
+  const toggleOption = (option) => {
+    if (array.includes(option)) {
+      // Remove if already selected
+      onValueChange(array.filter(item => item !== option));
+    } else {
+      // Add if not selected
+      onValueChange([...array, option]);
+    }
+  };
+
+  const isSelected = (option) => {
+    return array.includes(option);
+  };
+
+  return (
+    <div>
+      <span>{name}</span>
+      <div className="pt-2 flex flex-wrap gap-2">
+        {options.map((option) => (
+          <button
+            key={option}
+            onClick={() => toggleOption(option)}
+            className={`py-2 px-3 rounded-lg
+                                ${isSelected(option)
+                ? "bg-white/10"
+                : "bg-[#2e2e2e] hover:bg-white/7"
+              }`}
+          >
+            {option}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default function FilterPanel({ onFilterChange }) {
   const [unitType, setUnitType] = useState(null);
-  const [bedrooms, setBedrooms] = useState(null);
-  const [bathrooms, setBathrooms] = useState(null);
+  const [bedrooms, setBedrooms] = useState([]);
+  const [bathrooms, setBathrooms] = useState([]);
+  const [area, setArea] = useState(AREA_RANGE.MAX);
+  const [price, setPrice] = useState(BUDGET_RANGE.MAX);
+
+  useEffect(() => {
+    onFilterChange({
+      unitType,
+      bedrooms,
+      bathrooms,
+      area,
+      price,
+    });
+  }, [unitType, bedrooms, bathrooms, area, price, onFilterChange]);
 
   return (
     <div className="flex flex-col gap-2 max-h-[calc(100vh-200px)] scrollbar-custom overflow-auto pe-2 text-white font-light text-sm">
-      <div className="flex flex-col gap-2">
-        <span>Type</span>
-        <div className="flex flex-col md:flex-row gap-2">
-          {Object.values(UNIT_TYPES).map((type) => (
-            <button
-              key={type}
-              onClick={() => setUnitType(type)}
-              className={`py-2 px-3 rounded-lg
-                                ${
-                                  unitType === type
-                                    ? "bg-white/10"
-                                    : "bg-[#2e2e2e] hover:bg-white/7"
-                                }`}
-            >
-              {String(type).charAt(0).toUpperCase() + String(type).slice(1)}
-            </button>
-          ))}
-        </div>
-      </div>
+      <Discrete
+        name="Type"
+        options={UNIT_TYPES}
+        array={unitType}
+        onValueChange={setUnitType}
+      />
+
+      <div className="h-divider"></div>
+
       <Slider
         name="Surface Area"
         unit={AREA_RANGE.UNIT}
         min={AREA_RANGE.MIN}
         max={AREA_RANGE.MAX}
         step={5}
+        value={area}
+        onValueChange={setArea}
       />
 
-      <div className="h-0.5 bg-white/50"></div>
+      <div className="h-divider"></div>
 
       <Slider
         name="Budget"
@@ -104,48 +140,26 @@ export default function FilterPanel() {
         min={BUDGET_RANGE.MIN}
         max={BUDGET_RANGE.MAX}
         step={1000}
+        value={price}
+        onValueChange={setPrice}
       />
 
-      <div className="h-0.5 bg-white/50"></div>
+      <div className="h-divider"></div>
 
-      <div>
-        <span>Bedrooms</span>
-        <div className="pt-2 flex flex-wrap gap-2">
-          {BEDROOM_OPTIONS.map((num) => (
-            <button
-              key={num}
-              onClick={() => setBedrooms(num)}
-              className={`p-2 rounded-lg
-                                ${
-                                  bedrooms === num
-                                    ? "bg-white/10"
-                                    : "bg-[#2e2e2e] hover:bg-white/7"
-                                }`}
-            >
-              {num}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div>
-        <span>Bathrooms</span>
-        <div className="pt-2 flex flex-wrap gap-2">
-          {BATHROOM_OPTIONS.map((num) => (
-            <button
-              key={num}
-              onClick={() => setBathrooms(num)}
-              className={`p-2 rounded-lg
-                                ${
-                                  bathrooms === num
-                                    ? "bg-white/10"
-                                    : "bg-[#2e2e2e] hover:bg-white/7"
-                                }`}
-            >
-              {num}
-            </button>
-          ))}
-        </div>
-      </div>
+      <Discrete
+        name="Bedrooms"
+        options={BEDROOM_OPTIONS}
+        array={bedrooms}
+        onValueChange={setBedrooms}
+      />
+
+      <Discrete
+        name="Bathrooms"
+        options={BATHROOM_OPTIONS}
+        array={bathrooms}
+        onValueChange={setBathrooms}
+      />
+
     </div>
   );
 }
