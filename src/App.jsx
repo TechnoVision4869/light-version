@@ -472,91 +472,91 @@ export default function App() {
           </div>
 
           {/* Breadcrumbs */}
-          
+
           <div className="flex px-6 pt-3">
-          {history.length > 1 && 
+            {history.length > 1 &&
               <div className="flex-shrink-0">
                 <HistoryBreadcrumbs history={history} currentItem={currentItem} />
               </div>
-          }
-              <div className="w-18 h-auto ml-auto">
-                <img src={TECHNO_LOGO} alt="Techno Vision Logo" />
-              </div>
-              {/* Views visuals */}
-              {activeLayer === LAYERS.BUILDING && (
-                <div className="flex-1 flex items-center justify-center text-white gap-3 px-4 py-2 text-sm">
-                  <div className=" flex gap-2">
-                    <div className=""> Views </div>
-                    {/* prev button */}
-                    <button
-                      className={`w-auto text-white mx-2 ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-                      disabled={isDisabled}
-                      onClick={() => { viewerProps.changeView("prev"); }}
+            }
+            {/* Views visuals */}
+            {activeLayer === LAYERS.BUILDING && (
+              <div className="flex-1 flex items-center justify-center text-white gap-3 px-4 py-2 text-sm">
+                <div className=" flex gap-2">
+                  <div className=""> Views </div>
+                  {/* prev button */}
+                  <button
+                    className={`w-auto text-white mx-2 ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                    disabled={isDisabled}
+                    onClick={() => { viewerProps.changeView("prev"); }}
+                  >
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
                     >
+                      <path
+                        d="M31 12H2M2 12L9 6M2 12L9 18"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+
+                  {Array.from({ length: 4 }).map((_, index) => (
+                    <span key={index}>
                       <svg
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        fill="none"
+                        width="21"
+                        height="21"
+                        viewBox="0 0 21 21"
+                        fill={index === viewerProps.currentViewIndex ? "white" : "none"}
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <path
-                          d="M31 12H2M2 12L9 6M2 12L9 18"
+                        <circle
+                          cx="10"
+                          cy="10"
+                          r="8"
                           stroke="white"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                          strokeWidth="1"
                         />
                       </svg>
-                    </button>
+                    </span>
+                  ))}
 
-                    {Array.from({ length: 4 }).map((_, index) => (
-                      <span key={index}>
-                        <svg
-                          width="21"
-                          height="21"
-                          viewBox="0 0 21 21"
-                          fill={index === viewerProps.currentViewIndex ? "white" : "none"}
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle
-                            cx="10"
-                            cy="10"
-                            r="8"
-                            stroke="white"
-                            strokeWidth="1"
-                          />
-                        </svg>
-                      </span>
-                    ))}
-
-                    {/* next button */}
-                    <button
-                      className={`w-auto text-white mx-2 ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
-                      disabled={isDisabled}
-                      onClick={() => { viewerProps.changeView("next"); }}
+                  {/* next button */}
+                  <button
+                    className={`w-auto text-white mx-2 ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                    disabled={isDisabled}
+                    onClick={() => { viewerProps.changeView("next"); }}
+                  >
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
                     >
-                      <svg
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M3 12H22M22 12L15 6M22 12L15 18"
-                          stroke="white"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </button>
-                  </div>
+                      <path
+                        d="M3 12H22M22 12L15 6M22 12L15 18"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
                 </div>
-              )}
+              </div>
+            )}
+            <div className="w-18 h-auto ml-auto">
+              <img src={TECHNO_LOGO} alt="Techno Vision Logo" />
             </div>
-          
+          </div>
+
         </div >
       </div >
     </>
