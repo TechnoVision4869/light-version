@@ -22,7 +22,8 @@ import BuildingButton from "./components/buttons/BuildingButton";
 import FloorButton from "./components/buttons/FloorButton";
 import ApartmentButton from "./components/buttons/ApartmentButton";
 import HistoryBreadcrumbs from "./components/HistoryBreadcrumbs";
-import Floating from "./components/Floating";
+import Floating from "./components/FloatingFilter";
+import FloatingFilter from "./components/FloatingFilter";
 import FilterPanel from "./components/FilterPanel";
 import UnitPanel from "./components/UnitPanel";
 
@@ -143,9 +144,9 @@ export default function App() {
 
   //filters variables
   const [filters, setFilters] = useState({
-    unitType: null,
-    bedrooms: null,
-    bathrooms: null,
+    unitType: [],
+    bedrooms: [],
+    bathrooms: [],
     area: null,
     price: null,
   });
@@ -250,7 +251,7 @@ export default function App() {
                       {/* Navigate Button */}
                       <button
                         onClick={() => setIsFilter(false)}
-                        className={`px-4 py-2 font-semibold transition rounded-l-md 
+                        className={`flex-1 px-4 py-2 font-semibold transition rounded-l-md 
                     ${!isFilter
                             ? 'bg-white text-black'
                             : 'bg-[#2e2e2e] text-white hover:bg-white/7'
@@ -262,7 +263,7 @@ export default function App() {
                       {/* Filter Button */}
                       <button
                         onClick={() => setIsFilter(true)}
-                        className={`px-4 py-2 font-semibold transition rounded-r-md 
+                        className={`flex-1 px-4 py-2 font-semibold transition rounded-r-md 
                     ${isFilter
                             ? 'bg-white text-black'
                             : 'bg-[#2e2e2e] text-white hover:bg-white/7'
@@ -273,8 +274,7 @@ export default function App() {
                     </div>}
 
                   {isFilter ? (
-                    <></>
-                    // <FilterPanel onFilterChange={setFilters} />
+                    <FilterPanel onFilterChange={setFilters} />
                   ) : (
                     <>
                       {/* Dynamic sidebar title based on active tab */}
@@ -291,7 +291,7 @@ export default function App() {
                       </div>
                       <div className="h-0.5 bg-white/50 mx-3 mb-4"></div>
 
-                      <div className="max-h-[calc(100vh-200px)] scrollbar-custom overflow-auto space-y-3 px-2 py-2">
+                      <div className="max-h-[calc(100vh-285px)] scrollbar-custom overflow-auto space-y-3 px-2 py-2">
                         {/* Render different content based on active tab */}
                         {activeTab === TABS.ZONES &&
                           activeLayer === null &&
@@ -416,7 +416,7 @@ export default function App() {
 
                 {(!viewerProps.isMediaLoaded || activeLayer === LAYERS.APARTMENT) && <Loading />}
 
-                {/* {activeTab === TABS.SURROUNDINGS &&
+                {activeTab === TABS.SURROUNDINGS &&
                   activeLayer === null && viewerProps.floatingOpacity &&
                   <Floating items={DATA.surroundings}
                     mediaRef={mediaContainerRef}
@@ -427,15 +427,14 @@ export default function App() {
                   <Floating items={LAYER_CONFIG[LAYERS.ZONE_DETAIL].getItems(currentItem)}
                     mediaRef={mediaContainerRef}
                     tab={activeTab}
-                    filters={filters}
-                  />} */}
+                  />}
 
-                {/* {activeLayer === LAYERS.FLOOR && viewerProps.floatingOpacity &&
-                  <Floating items={LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem)}
+                {activeLayer === LAYERS.FLOOR && viewerProps.floatingOpacity &&
+                  <FloatingFilter items={LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem)}
                     mediaRef={mediaContainerRef}
                     tab={activeTab}
                     filters={filters}
-                  />} */}
+                  />}
 
                 {/* left floating chevron to collapse sidebar */}
                 {activeTab !== TABS.HOME &&
