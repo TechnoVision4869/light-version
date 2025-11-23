@@ -666,6 +666,7 @@ export const DATA = {
       thumbnail: "thumbnails/amenities/f1.png",
       description:
         "Modern landscapes provide a beautiful view of the mall area.",
+      x: 0.17, y: 0.69,
     },
     {
       id: "amenity2",
@@ -673,6 +674,7 @@ export const DATA = {
       subtitle: "Amenity",
       thumbnail: "thumbnails/amenities/f2.png",
       description: "A selection of fine shops.",
+      x: 0.32, y: 0.65,
     },
   ],
 };

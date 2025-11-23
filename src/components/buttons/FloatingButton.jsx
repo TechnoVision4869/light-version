@@ -24,7 +24,7 @@ export default function FloatingButton({ name, iconType = null, tabType, isSelec
     const color = isSurrounding ? 'bg-[#94846D]/75 hover:bg-[#94846D]/85' : 'bg-[#418AFF] hover:bg-[#357AEE]';
 
     return (
-        <button className={`${color} relative text-white px-4 py-2 rounded-lg flex items-center gap-2 z-20`}
+        <button className={`${color} text-white px-4 py-2 rounded-lg flex items-center gap-2 z-20`}
             style={{
                 position: 'absolute',
                 transform: 'translate(-50%, -50%)',

@@ -22,8 +22,7 @@ import BuildingButton from "./components/buttons/BuildingButton";
 import FloorButton from "./components/buttons/FloorButton";
 import ApartmentButton from "./components/buttons/ApartmentButton";
 import HistoryBreadcrumbs from "./components/HistoryBreadcrumbs";
-import Floating from "./components/FloatingFilter";
-import FloatingFilter from "./components/FloatingFilter";
+import Floating from "./components/Floating";
 import FilterPanel from "./components/FilterPanel";
 import UnitPanel from "./components/UnitPanel";
 
@@ -133,6 +132,12 @@ export default function App() {
   }
 
   useEffect(() => {
+    if (activeLayer !== LAYERS.FLOOR) {
+      setIsFilter(false);
+    };
+  }, [activeLayer])
+
+  useEffect(() => {
     if (activeLayer !== LAYERS.BUILDING) return;
     if (isDisabled) return;
     // console.log(translateX);
@@ -164,7 +169,6 @@ export default function App() {
                   onClick={() => {
                     if ((activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS) && activeLayer === null) setSidebarOpen(false);
                     viewerProps.StartReverse(false, () => { });
-                    setIsFilter(false);
                   }}
                   disabled={isDisabled || history.length <= 1}
                   className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
@@ -389,7 +393,7 @@ export default function App() {
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
               >
-                {/* img or video element */}
+                {/* video element */}
                 <div className="absolute inset-0">
                   {/* First Video (e.g., transition, or initial idle) */}
                   <video
@@ -423,6 +427,13 @@ export default function App() {
                     tab={activeTab}
                   />}
 
+                {activeTab === TABS.AMENITIES &&
+                  activeLayer === null && viewerProps.floatingOpacity &&
+                  <Floating items={DATA.amenities}
+                    mediaRef={mediaContainerRef}
+                    tab={activeTab}
+                  />}
+
                 {activeLayer === LAYERS.ZONE_DETAIL && viewerProps.floatingOpacity &&
                   <Floating items={LAYER_CONFIG[LAYERS.ZONE_DETAIL].getItems(currentItem)}
                     mediaRef={mediaContainerRef}
@@ -430,7 +441,7 @@ export default function App() {
                   />}
 
                 {activeLayer === LAYERS.FLOOR && viewerProps.floatingOpacity &&
-                  <FloatingFilter items={LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem)}
+                  <Floating items={LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem)}
                     mediaRef={mediaContainerRef}
                     tab={activeTab}
                     filters={filters}
