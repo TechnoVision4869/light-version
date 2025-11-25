@@ -324,6 +324,56 @@ export const DATA = {
       area: 85, // Store as number for range queries
       price: 250000, // Store as number for range queries
       x: 0.40, y: 0.60,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "livingroom",
+                image: "./panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 52,
+                    pitch: -14,
+                    type: 'info',
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 52,
+                    pitch: -14,
+                    type: 'scene',
+                    label: "bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "dinning",
+                image: "./panorama/dinning.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 52,
+                    pitch: -14,
+                    type: 'info',
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 52,
+                    pitch: -14,
+                    type: 'scene',
+                    label: "livingroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     {
       id: "apartment102",
