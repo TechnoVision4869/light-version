@@ -1,4 +1,4 @@
-import { TABS } from '../../data/layers';
+import { TABS, LAYERS } from '../../data/layers';
 
 import AirportIcon from '../../assets/icons/airport.svg';
 import TowerIcon from '../../assets/icons/tower.svg';
@@ -17,10 +17,12 @@ const getIcon = (type) => {
     }
 };
 
-export default function FloatingButton({ name, iconType = null, tabType, isSelected = false,
+export default function FloatingButton({ name, iconType = null, tabType = null, layerType = null, isSelected = false,
     style = {}, }) {
     const icon = getIcon(iconType);
     const isSurrounding = tabType === TABS.SURROUNDINGS;
+    const isFloor = layerType === LAYERS.BUILDING;    
+
     const color = isSurrounding ? 'bg-[#94846D]/75 hover:bg-[#94846D]/85' : 'bg-[#418AFF] hover:bg-[#357AEE]';
 
     return (
@@ -42,7 +44,7 @@ export default function FloatingButton({ name, iconType = null, tabType, isSelec
             <span className='whitespace-nowrap text-sm'>{name}</span>
 
             {/* Pointed Bottom Triangle */}
-            <span className='triangle'></span>
+            {isFloor ? <span className='triangle-right'></span> : <span className='triangle'></span>}
         </button>
     )
 }

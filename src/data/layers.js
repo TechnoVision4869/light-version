@@ -254,7 +254,6 @@ export const DATA = {
       name: "Tower 1",
       description: "Tower 1 description...",
       x: 0.45, y: 0.53,
-
     },
     {
       id: "tower2",
@@ -262,7 +261,6 @@ export const DATA = {
       name: "Tower 2",
       description: "Tower 2 description...",
       x: 0.65, y: 0.35,
-
     },
     {
       id: "tower5",
@@ -280,6 +278,7 @@ export const DATA = {
       name: "Floor 1",
       type: "Residential",
       description: "First floor description...",
+      x: 0.2, y: 0.52,
     },
     {
       id: "floor2",
@@ -288,6 +287,7 @@ export const DATA = {
       name: "Floor 2",
       type: "Residential",
       description: "Second floor description...",
+      x: 0.2, y: 0.44,
     },
     {
       id: "floor1",
@@ -296,6 +296,7 @@ export const DATA = {
       name: "Floor 1",
       type: "Residential",
       description: "First floor description...",
+      x: 0.2, y: 0.58,
     },
     {
       id: "floor2",
@@ -304,6 +305,7 @@ export const DATA = {
       name: "Floor 2",
       type: "Residential",
       description: "Second floor description...",
+      x: 0.2, y: 0.5,
     },
   ],
   apartments: [

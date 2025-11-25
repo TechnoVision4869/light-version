@@ -464,19 +464,22 @@ export default function App() {
                   activeLayer === null && viewerProps.floatingOpacity &&
                   <Floating items={DATA.amenities}
                     mediaRef={mediaContainerRef}
-                    tab={activeTab}
                   />}
 
                 {activeLayer === LAYERS.ZONE_DETAIL && viewerProps.floatingOpacity &&
                   <Floating items={LAYER_CONFIG[LAYERS.ZONE_DETAIL].getItems(currentItem)}
                     mediaRef={mediaContainerRef}
-                    tab={activeTab}
+                  />}
+
+                {activeLayer === LAYERS.BUILDING && viewerProps.floatingOpacity &&
+                  <Floating items={LAYER_CONFIG[LAYERS.BUILDING].getItems(currentItem)}
+                    mediaRef={mediaContainerRef}
+                    layer={activeLayer}
                   />}
 
                 {activeLayer === LAYERS.FLOOR && viewerProps.floatingOpacity &&
                   <Floating items={LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem)}
                     mediaRef={mediaContainerRef}
-                    tab={activeTab}
                     filters={filters}
                   />}
 

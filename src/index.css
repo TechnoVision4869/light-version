@@ -38,15 +38,15 @@ body {
 }
 
 .triangle-right {
-  height: 20px;
-  width: 20px;
+  height: 15px;
+  width: 15px;
   background: inherit;
   border-radius: 20%;
   position: absolute;
   top: 50%;
-  right: -15px;
-  transform: translateY(-50%);
-  clip-path: polygon(0 0, 100% 50%, 0 100%);
+  right: calc(0% - 7px);
+  transform: translateY(-50%) rotate(225deg);
+  clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
 }
 
 /* Custom Range Slider */

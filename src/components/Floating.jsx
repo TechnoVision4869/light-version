@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { DATA } from "../data/layers";
 import FloatingButton from "./buttons/FloatingButton";
 
-export default function FloatingFilter({ items, mediaRef, tab, filters = null }) {
+export default function FloatingFilter({ items, mediaRef, tab, layer, filters = null }) {
     // Filter items based on current filter state
     const filteredItems = useMemo(() => {
         if (!filters) return items;
@@ -84,6 +84,7 @@ export default function FloatingFilter({ items, mediaRef, tab, filters = null })
                 name={btn.name}
                 iconType={btn.icon}
                 tabType={tab}
+                layerType={layer}
                 style={{
                     left: `${buttonPositions[i].left}px`,
                     top: `${buttonPositions[i].top}px`,
