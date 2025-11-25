@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { MODE, MODE_CONFIG, TABS, TAB_CONFIG, LAYER_CONFIG } from "../../data/layers";
+import { TABS, TAB_CONFIG, LAYER_CONFIG } from "../../data/layers";
 
 export function useNavigation() {
     const initHistory = [
@@ -7,7 +7,6 @@ export function useNavigation() {
             tab: TABS.HOME,
             layer: null,
             item: null,
-            path: TAB_CONFIG[TABS.HOME].path,
             videosPath: TAB_CONFIG[TABS.HOME].videosPath,
         },
     ];
@@ -21,13 +20,14 @@ export function useNavigation() {
         tab: activeTab,
         layer: activeLayer,
         item: currentItem,
-        path: currentPath,
         videosPath: currentVideosPaths,
     } = currentEntry;
 
     // Navigate to a main tab (ZONES, SURROUNDINGS, AMENITIES)
     const goToTab = useCallback((tabKey, isFromHome = true) => {
         const config = TAB_CONFIG[tabKey];
+        // console.log(tabKey);
+
         setHistory(() => [
             ...initHistory,
             {
@@ -37,8 +37,7 @@ export function useNavigation() {
                     id: tabKey,
                     name: tabKey,
                 },
-                path: MODE_CONFIG === MODE.VIDEO ? null : config.path,
-                videosPath: MODE_CONFIG === MODE.VIDEO ? config.videosPath(isFromHome) : null,
+                videosPath: config.videosPath(isFromHome),
             },
         ]);
     }, []);
@@ -47,6 +46,7 @@ export function useNavigation() {
     const goToItem = useCallback((item, layerKey) => {
         // console.log("item: ", item);
         // console.log("layer: ", layerKey);
+        // console.log(videosPath);
         const config = LAYER_CONFIG[layerKey];
         const path = config.path?.(item.id);
         const videosPath = config.videosPath?.(item);
@@ -65,6 +65,8 @@ export function useNavigation() {
 
     // Go back one step
     const goBack = useCallback(() => {
+        // console.log(history);
+
         if (history.length <= 1) return; // Can't go back from home
         setHistory((prev) => prev.slice(0, -1));
     }, [history.length]);
@@ -79,7 +81,6 @@ export function useNavigation() {
         activeTab,
         activeLayer,
         currentItem,
-        currentPath,
         currentVideosPaths,
         goToTab,
         goToItem,

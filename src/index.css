@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 /* Custom scrollbar */
 .scrollbar-custom::-webkit-scrollbar {
@@ -16,4 +17,63 @@
 
 .scrollbar-custom::-webkit-scrollbar-track {
   background: transparent;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+.triangle {
+  /* display: block; */
+  height: 20px;
+  width: 20px;
+  background: inherit;
+  /* border: 1px solid inherit; */
+  border-radius: 20%;
+  position: absolute;
+  left: calc(50% - 10px);
+  bottom: -24%;
+  clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
+  transform: rotate(-45deg);
+}
+
+/* Custom Range Slider */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #7F7F7F;
+  border-radius: 9999px;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 30%;
+  background: white;
+}
+
+.h-divider {
+  border: none;
+  border-bottom: 1.27px solid white;
+  opacity: 0.5;
+  width: 100%;
+}
+
+.v-divider {
+  border: none;
+  border-right: 1.27px solid white;
+  opacity: 0.5;
+  width: 100%;
+}
+
+.fade-in-element {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  /* 1 second duration, ease-in-out timing */
+}
+
+.fade-in-element.fade-in-started {
+  opacity: 1;
 }
