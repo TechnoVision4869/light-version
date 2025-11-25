@@ -13,9 +13,7 @@ import C2 from "../assets/images/c2.png"
 import C3 from "../assets/images/c3.png"
 import C4 from "../assets/images/c4.png"
 
-
-
-export default function UnitPanel({ unit }) {
+export default function UnitPanel({ unit, onInterior }) {
     const [isVisualsOpen, setIsVisualsOpen] = useState(true);
     const [isCutSectionsOpen, setIsCutSectionsOpen] = useState(false);
     const [isPaymentPlanOpen, setIsPaymentPlanOpen] = useState(false);
@@ -83,7 +81,9 @@ export default function UnitPanel({ unit }) {
 
                     <div className="flex flex-col gap-2 mt-4">
                         <div className="flex gap-2">
-                            <button className="flex-1 border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition">
+                            <button className="flex-1 border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition"
+                                onClick={onInterior}
+                            >
                                 Interior
                             </button>
                             <button className="flex-1 border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition">
@@ -122,7 +122,7 @@ export default function UnitPanel({ unit }) {
                     {isVisualsOpen && (
                         <div className="grid grid-cols-2 gap-2 mt-2">
                             {visuals.map((img) => (
-                                <button className='hover:opacity-70'  key={img.id}>
+                                <button className='hover:opacity-70' key={img.id}>
                                     <img
                                         src={img.src}
                                         alt="Visual"

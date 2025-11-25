@@ -25,6 +25,7 @@ import HistoryBreadcrumbs from "./components/HistoryBreadcrumbs";
 import Floating from "./components/Floating";
 import FilterPanel from "./components/FilterPanel";
 import UnitPanel from "./components/UnitPanel";
+import Panorama from './components/Panorama';
 
 // logo
 import TECHNO_LOGO from "./assets/techno.png"
@@ -36,6 +37,10 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false); // set true when sidebar is open
   const [showInfoPopup, setShowInfoPopup] = useState(false);
   const [isFilter, setIsFilter] = useState(false); // 'navigate' or 'filter'
+  const [isPanorama, setIsPanorama] = useState(false);
+
+  const handleBack = () => setIsPanorama(false)
+  const handleInterior = () => setIsPanorama(true);
 
   // Ref
   const mediaContainerRef = useRef(null);
@@ -158,6 +163,36 @@ export default function App() {
 
   return (
     <>
+      {isPanorama &&
+        <div className="absolute inset-0 z-60">
+          <div className="absolute top-4 left-6 z-10">
+            <button onClick={handleBack}
+              className="w-10 h-10 rounded-xl bg-blue-300 flex items-center justify-center
+                hover:bg-white/7 transition
+                disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M31 12H2M2 12L9 6M2 12L9 18"
+                  stroke="black"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div className="absolute inset-0">
+            <Panorama />
+          </div>
+        </div>
+      }
       <div className={`w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4`}>
         <LandscapePrompt />
         <div className="w-full h-full flex flex-col">
@@ -247,7 +282,7 @@ export default function App() {
             >
               {(activeTab === TABS.ZONES &&
                 activeLayer === LAYERS.APARTMENT) ?
-                <UnitPanel unit={currentItem} key={currentItem.id} />
+                <UnitPanel unit={currentItem} onInterior={handleInterior} />
                 :
                 <div className="h-full pr-1">
                   {activeLayer === LAYERS.FLOOR &&
@@ -378,8 +413,6 @@ export default function App() {
                             ))}
                       </div>
                     </>)}
-
-                  {/* history */}
                 </div>}
             </aside>
 
@@ -581,6 +614,7 @@ export default function App() {
 
         </div >
       </div >
+
     </>
   );
 }
