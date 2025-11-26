@@ -331,45 +331,99 @@ export const DATA = {
             rooms: [
               {
                 id: "room1",
-                name: "livingroom",
-                image: "./panorama/livingroom.png",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
                     id: 'spot1',
                     yaw: 52,
                     pitch: -14,
-                    type: 'info',
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
                   },
                   {
                     id: 'spot2',
-                    yaw: 52,
-                    pitch: -14,
+                    yaw: 150,
+                    pitch: -5,
                     type: 'scene',
-                    label: "bedroom",
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
                   }
                 ]
               },
               {
                 id: "room2",
-                name: "dinning",
-                image: "./panorama/dinning.png",
+                name: "Dinning and Kitchen",
+                image: "./panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
                     id: 'spot1',
                     yaw: 52,
                     pitch: -14,
-                    type: 'info',
-                  },
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "./panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
                   {
-                    id: 'spot2',
+                    id: 'spot1',
                     yaw: 52,
                     pitch: -14,
                     type: 'scene',
-                    label: "livingroom",
+                    label: "Livingroom",
                   }
                 ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "./panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 52,
+                    pitch: -14,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 150,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ] 
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "./panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 52,
+                    pitch: -14,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ] 
               }
             ]
           }]
@@ -389,6 +443,19 @@ export const DATA = {
       area: 200,
       price: 400000,
       x: 0.25, y: 0.4,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "livingroom",
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       id: "apartment103",

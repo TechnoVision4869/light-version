@@ -1,11 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import {
-  TABS,
-  LAYERS,
-  TAB_CONFIG,
-  LAYER_CONFIG,
-  DATA,
-} from "./data/layers";
+import { TABS, LAYERS, TAB_CONFIG, LAYER_CONFIG, DATA } from "./data/layers";
 // Hooks
 import { useNavigation } from "./components/hooks/useNavigation";
 import { useVideoViewer } from "./components/hooks/useVideoViewer";
@@ -25,10 +19,10 @@ import HistoryBreadcrumbs from "./components/HistoryBreadcrumbs";
 import Floating from "./components/Floating";
 import FilterPanel from "./components/FilterPanel";
 import UnitPanel from "./components/UnitPanel";
-import Panorama from './components/Panorama';
+import Panorama from "./components/Panorama";
 
 // logo
-import TECHNO_LOGO from "./assets/techno.png"
+import TECHNO_LOGO from "./assets/techno.png";
 
 export default function App() {
   // console.log("App renders");
@@ -39,7 +33,7 @@ export default function App() {
   const [isFilter, setIsFilter] = useState(false); // 'navigate' or 'filter'
   const [isPanorama, setIsPanorama] = useState(false);
 
-  const handleBack = () => setIsPanorama(false)
+  const handleBack = () => setIsPanorama(false);
   const handleInterior = () => setIsPanorama(true);
 
   // Ref
@@ -104,7 +98,10 @@ export default function App() {
       goToHome();
     } else {
       const isFromHome = activeTab === TABS.HOME;
-      const isFromAnotherTab = (activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS)
+      const isFromAnotherTab =
+        activeTab === TABS.ZONES ||
+        activeTab === TABS.AMENITIES ||
+        activeTab === TABS.SURROUNDINGS;
       if (isFromAnotherTab && activeLayer === null) {
         viewerProps.StartReverse(isFromAnotherTab, () => goToTab(tab, true));
         return;
@@ -114,7 +111,7 @@ export default function App() {
 
     setTimeout(() => {
       setSidebarOpen(true);
-    }, 800)
+    }, 800);
   };
 
   // Swipe States
@@ -123,24 +120,24 @@ export default function App() {
 
   const handleMouseDown = (e) => {
     setStartX(e.clientX);
-  }
+  };
   const handleMouseUp = (e) => {
-    setTranslateX(startX - e.clientX)
-  }
+    setTranslateX(startX - e.clientX);
+  };
 
   const handleTouchStart = (e) => {
     setStartX(e.touches[0].clientX);
-  }
+  };
 
   const handleTouchMove = (e) => {
     setTranslateX(startX - e.touches[0].clientX);
-  }
+  };
 
   useEffect(() => {
     if (activeLayer !== LAYERS.FLOOR) {
       setIsFilter(false);
-    };
-  }, [activeLayer])
+    }
+  }, [activeLayer]);
 
   useEffect(() => {
     if (activeLayer !== LAYERS.BUILDING) return;
@@ -149,8 +146,7 @@ export default function App() {
 
     if (translateX > 0) viewerProps.changeView("next");
     else if (translateX < 0) viewerProps.changeView("prev");
-
-  }, [translateX])
+  }, [translateX]);
 
   //filters variables
   const [filters, setFilters] = useState({
@@ -163,11 +159,12 @@ export default function App() {
 
   return (
     <>
-      {isPanorama &&
+      {isPanorama && (
         <div className="absolute inset-0 z-60">
           <div className="absolute top-4 left-6 z-10">
-            <button onClick={handleBack}
-              className="w-10 h-10 rounded-xl bg-blue-300 flex items-center justify-center
+            <button
+              onClick={handleBack}
+              className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center
                 hover:bg-white/7 transition
                 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -189,21 +186,27 @@ export default function App() {
             </button>
           </div>
           <div className="absolute inset-0">
-            <Panorama />
+            <Panorama apartment={currentItem} />
           </div>
         </div>
-      }
+      )}
       <div className={`w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4`}>
         <LandscapePrompt />
         <div className="w-full h-full flex flex-col">
           {/* Top Tabs */}
           <div className="flex items-center justify-between mb-4 px-4">
             <div className="flex items-center gap-3">
-              {viewerProps.currentViewIndex === 0 &&
+              {viewerProps.currentViewIndex === 0 && (
                 <button
                   onClick={() => {
-                    if ((activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS) && activeLayer === null) setSidebarOpen(false);
-                    viewerProps.StartReverse(false, () => { });
+                    if (
+                      (activeTab === TABS.ZONES ||
+                        activeTab === TABS.AMENITIES ||
+                        activeTab === TABS.SURROUNDINGS) &&
+                      activeLayer === null
+                    )
+                      setSidebarOpen(false);
+                    viewerProps.StartReverse(false, () => {});
                   }}
                   disabled={isDisabled || history.length <= 1}
                   className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
@@ -226,75 +229,90 @@ export default function App() {
                       strokeLinejoin="round"
                     />
                   </svg>
-                </button>}
+                </button>
+              )}
             </div>
             <div className="flex items-center gap-6">
               <button
                 onClick={() => handleActiveTab(TABS.SURROUNDINGS)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.SURROUNDINGS
-                  ? "bg-white/85 text-black"
-                  : "text-white"
-                  }`}
+                className={`px-4 py-2 rounded-full text-sm font-semibold ${
+                  activeTab === TABS.SURROUNDINGS
+                    ? "bg-white/85 text-black"
+                    : "text-white"
+                }`}
               >
                 SURROUNDINGS
               </button>
               <button
                 onClick={() => handleActiveTab(TABS.ZONES)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.ZONES
-                  ? "bg-white/85 text-black"
-                  : "text-white"
-                  }`}
+                className={`px-4 py-2 rounded-full text-sm font-semibold ${
+                  activeTab === TABS.ZONES
+                    ? "bg-white/85 text-black"
+                    : "text-white"
+                }`}
               >
                 ZONES
               </button>
               <button
                 onClick={() => handleActiveTab(TABS.AMENITIES)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.AMENITIES
-                  ? "bg-white/85 text-black"
-                  : "text-white"
-                  }`}
+                className={`px-4 py-2 rounded-full text-sm font-semibold ${
+                  activeTab === TABS.AMENITIES
+                    ? "bg-white/85 text-black"
+                    : "text-white"
+                }`}
               >
                 AMENITIES
               </button>
             </div>
-            <HomeButton onHomeClick={() => {
-              if ((activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS) && activeLayer === null) {
-                viewerProps.StartReverse(false, () => { });
-                return;
-              }
-              goToHome();
-            }} />
+            <HomeButton
+              onHomeClick={() => {
+                if (
+                  (activeTab === TABS.ZONES ||
+                    activeTab === TABS.AMENITIES ||
+                    activeTab === TABS.SURROUNDINGS) &&
+                  activeLayer === null
+                ) {
+                  viewerProps.StartReverse(false, () => {});
+                  return;
+                }
+                goToHome();
+              }}
+            />
           </div>
 
           <div
-            className={`flex ${sidebarOpen ? "gap-3" : "gap-0"
-              } flex-1 min-h-0 overflow-hidden`}
+            className={`flex ${
+              sidebarOpen ? "gap-3" : "gap-0"
+            } flex-1 min-h-0 overflow-hidden`}
           >
             {/* Sidebar */}
             <aside
               className={`bg-white/9 rounded-2xl p-2 py-3 md:py-4 flex-shrink-0 transition-all duration-700 overflow-hidden
-             ${activeTab === TABS.HOME || activeLayer === LAYERS.AMENITY_DETAIL || viewerProps.currentViewIndex !== 0
-                  ? "w-0 opacity-0 pointer-events-none"
-                  : sidebarOpen
-                    ? "w-44 md:w-68 opacity-100"
-                    : "w-0 opacity-0 pointer-events-none"
-                }`}
+             ${
+               activeTab === TABS.HOME ||
+               activeLayer === LAYERS.AMENITY_DETAIL ||
+               viewerProps.currentViewIndex !== 0
+                 ? "w-0 opacity-0 pointer-events-none"
+                 : sidebarOpen
+                 ? "w-44 md:w-68 opacity-100"
+                 : "w-0 opacity-0 pointer-events-none"
+             }`}
             >
-              {(activeTab === TABS.ZONES &&
-                activeLayer === LAYERS.APARTMENT) ?
+              {activeTab === TABS.ZONES && activeLayer === LAYERS.APARTMENT ? (
                 <UnitPanel unit={currentItem} onInterior={handleInterior} />
-                :
+              ) : (
                 <div className="h-full pr-1">
-                  {activeLayer === LAYERS.FLOOR &&
+                  {activeLayer === LAYERS.FLOOR && (
                     <div className="flex rounded-md overflow-hidden mb-4">
                       {/* Navigate Button */}
                       <button
                         onClick={() => setIsFilter(false)}
                         className={`flex-1 px-4 py-2 font-semibold transition rounded-l-md 
-                    ${!isFilter
-                            ? 'bg-white text-black'
-                            : 'bg-[#2e2e2e] text-white hover:bg-white/7'
-                          }`}
+                    ${
+                      !isFilter
+                        ? "bg-white text-black"
+                        : "bg-[#2e2e2e] text-white hover:bg-white/7"
+                    }`}
                       >
                         Navigate
                       </button>
@@ -303,14 +321,16 @@ export default function App() {
                       <button
                         onClick={() => setIsFilter(true)}
                         className={`flex-1 px-4 py-2 font-semibold transition rounded-r-md 
-                    ${isFilter
-                            ? 'bg-white text-black'
-                            : 'bg-[#2e2e2e] text-white hover:bg-white/7'
-                          }`}
+                    ${
+                      isFilter
+                        ? "bg-white text-black"
+                        : "bg-[#2e2e2e] text-white hover:bg-white/7"
+                    }`}
                       >
                         Filter
                       </button>
-                    </div>}
+                    </div>
+                  )}
 
                   {isFilter ? (
                     <FilterPanel onFilterChange={setFilters} />
@@ -412,8 +432,10 @@ export default function App() {
                               />
                             ))}
                       </div>
-                    </>)}
-                </div>}
+                    </>
+                  )}
+                </div>
+              )}
             </aside>
 
             {/* Main content area */}
@@ -451,37 +473,57 @@ export default function App() {
                   />
                 </div>
 
-                {(!viewerProps.isMediaLoaded || activeLayer === LAYERS.APARTMENT) && <Loading />}
+                {(!viewerProps.isMediaLoaded ||
+                  activeLayer === LAYERS.APARTMENT) && <Loading />}
 
                 {activeTab === TABS.SURROUNDINGS &&
-                  activeLayer === null && viewerProps.floatingOpacity &&
-                  <Floating items={DATA.surroundings}
-                    mediaRef={mediaContainerRef}
-                    tab={activeTab}
-                  />}
+                  activeLayer === null &&
+                  viewerProps.floatingOpacity && (
+                    <Floating
+                      items={DATA.surroundings}
+                      mediaRef={mediaContainerRef}
+                      tab={activeTab}
+                    />
+                  )}
 
                 {activeTab === TABS.AMENITIES &&
-                  activeLayer === null && viewerProps.floatingOpacity &&
-                  <Floating items={DATA.amenities}
-                    mediaRef={mediaContainerRef}
-                  />}
+                  activeLayer === null &&
+                  viewerProps.floatingOpacity && (
+                    <Floating
+                      items={DATA.amenities}
+                      mediaRef={mediaContainerRef}
+                    />
+                  )}
 
-                {activeLayer === LAYERS.ZONE_DETAIL && viewerProps.floatingOpacity &&
-                  <Floating items={LAYER_CONFIG[LAYERS.ZONE_DETAIL].getItems(currentItem)}
-                    mediaRef={mediaContainerRef}
-                  />}
+                {activeLayer === LAYERS.ZONE_DETAIL &&
+                  viewerProps.floatingOpacity && (
+                    <Floating
+                      items={LAYER_CONFIG[LAYERS.ZONE_DETAIL].getItems(
+                        currentItem
+                      )}
+                      mediaRef={mediaContainerRef}
+                    />
+                  )}
 
-                {activeLayer === LAYERS.BUILDING && viewerProps.floatingOpacity &&
-                  <Floating items={LAYER_CONFIG[LAYERS.BUILDING].getItems(currentItem)}
-                    mediaRef={mediaContainerRef}
-                    layer={activeLayer}
-                  />}
+                {activeLayer === LAYERS.BUILDING &&
+                  viewerProps.floatingOpacity && (
+                    <Floating
+                      items={LAYER_CONFIG[LAYERS.BUILDING].getItems(
+                        currentItem
+                      )}
+                      mediaRef={mediaContainerRef}
+                      layer={activeLayer}
+                    />
+                  )}
 
-                {activeLayer === LAYERS.FLOOR && viewerProps.floatingOpacity &&
-                  <Floating items={LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem)}
-                    mediaRef={mediaContainerRef}
-                    filters={filters}
-                  />}
+                {activeLayer === LAYERS.FLOOR &&
+                  viewerProps.floatingOpacity && (
+                    <Floating
+                      items={LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem)}
+                      mediaRef={mediaContainerRef}
+                      filters={filters}
+                    />
+                  )}
 
                 {/* left floating chevron to collapse sidebar */}
                 {activeTab !== TABS.HOME &&
@@ -490,9 +532,16 @@ export default function App() {
                     <button
                       onClick={() => setSidebarOpen((s) => !s)}
                       className="absolute left-[-18px] top-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow z-50"
-                      aria-label={sidebarOpen ? "close sidebar" : "open sidebar"}
+                      aria-label={
+                        sidebarOpen ? "close sidebar" : "open sidebar"
+                      }
                     >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
                         {sidebarOpen ? (
                           // Chevron pointing left (close sidebar)
                           <path
@@ -532,11 +581,14 @@ export default function App() {
           {/* Breadcrumbs */}
 
           <div className="flex px-6 pt-3">
-            {history.length > 1 &&
+            {history.length > 1 && (
               <div className="flex-shrink-0">
-                <HistoryBreadcrumbs history={history} currentItem={currentItem} />
+                <HistoryBreadcrumbs
+                  history={history}
+                  currentItem={currentItem}
+                />
               </div>
-            }
+            )}
             {/* Views visuals */}
             {activeLayer === LAYERS.BUILDING && (
               <div className="flex-1 flex items-center justify-center text-white gap-3 px-4 py-2 text-sm">
@@ -544,9 +596,15 @@ export default function App() {
                   <div className=""> Views </div>
                   {/* prev button */}
                   <button
-                    className={`w-auto text-white mx-2 ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                    className={`w-auto text-white mx-2 ${
+                      isDisabled
+                        ? "opacity-50 cursor-not-allowed"
+                        : "cursor-pointer"
+                    }`}
                     disabled={isDisabled}
-                    onClick={() => { viewerProps.changeView("prev"); }}
+                    onClick={() => {
+                      viewerProps.changeView("prev");
+                    }}
                   >
                     <svg
                       width="18"
@@ -571,7 +629,11 @@ export default function App() {
                         width="21"
                         height="21"
                         viewBox="0 0 21 21"
-                        fill={index === viewerProps.currentViewIndex ? "white" : "none"}
+                        fill={
+                          index === viewerProps.currentViewIndex
+                            ? "white"
+                            : "none"
+                        }
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <circle
@@ -587,9 +649,15 @@ export default function App() {
 
                   {/* next button */}
                   <button
-                    className={`w-auto text-white mx-2 ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                    className={`w-auto text-white mx-2 ${
+                      isDisabled
+                        ? "opacity-50 cursor-not-allowed"
+                        : "cursor-pointer"
+                    }`}
                     disabled={isDisabled}
-                    onClick={() => { viewerProps.changeView("next"); }}
+                    onClick={() => {
+                      viewerProps.changeView("next");
+                    }}
                   >
                     <svg
                       width="18"
@@ -614,10 +682,8 @@ export default function App() {
               <img src={TECHNO_LOGO} alt="Techno Vision Logo" />
             </div>
           </div>
-
-        </div >
-      </div >
-
+        </div>
+      </div>
     </>
   );
 }
