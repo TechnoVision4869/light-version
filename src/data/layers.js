@@ -337,15 +337,15 @@ export const DATA = {
                 hotspots: [
                   {
                     id: 'spot1',
-                    yaw: 52,
-                    pitch: -14,
+                    yaw: 25,
+                    pitch: -5,
                     type: 'scene',
                     label: "Bedroom", // must match the room name
                   },
                   {
                     id: 'spot2',
-                    yaw: 150,
-                    pitch: -5,
+                    yaw: 25,
+                    pitch: 5,
                     type: 'scene',
                     label: "Master Bedroom",
                   },
@@ -361,28 +361,42 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "./panorama/dinning_kitchen.png",
+                image: "/src/assets/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
                     id: 'spot1',
-                    yaw: 52,
-                    pitch: -14,
+                    yaw: -65,
+                    pitch: -25,
                     type: 'scene',
                     label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
                   }
                 ]
               },
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "./panorama/bedroom.png",
+                image: "/src/assets/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
                     id: 'spot1',
-                    yaw: 52,
-                    pitch: -14,
+                    yaw: -105,
+                    pitch: -10,
                     type: 'scene',
                     label: "Livingroom",
                   }
@@ -391,39 +405,39 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "./panorama/master_bedroom.png",
+                image: "/src/assets/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
                     id: 'spot1',
-                    yaw: 52,
-                    pitch: -14,
+                    yaw: -115,
+                    pitch: -5,
                     type: 'scene',
                     label: "Livingroom",
                   },
                   {
                     id: 'spot2',
-                    yaw: 150,
-                    pitch: -5,
+                    yaw: -115,
+                    pitch: -15,
                     type: 'scene',
                     label: "Bathroom", //must match the room name
                   }
-                ] 
+                ]
               },
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "./panorama/bathroom.png",
+                image: "/src/assets/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
                     id: 'spot1',
-                    yaw: 52,
-                    pitch: -14,
+                    yaw: -3,
+                    pitch: 0,
                     type: 'scene',
                     label: "Master Bedroom",
                   }
-                ] 
+                ]
               }
             ]
           }]
@@ -450,11 +464,116 @@ export const DATA = {
             rooms: [
               {
                 id: "room1",
-                name: "livingroom",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
               }
             ]
-          }
-        ]
+          }]
       }
     },
     {
@@ -471,6 +590,124 @@ export const DATA = {
       serviceRooms: ["Hard Kitchen"],
       price: 300000,
       x: 0.438, y: 0.3,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     {
       id: "apartment104",
@@ -486,6 +723,124 @@ export const DATA = {
       serviceRooms: ["Hard Kitchen"],
       price: 350000,
       x: 0.65, y: 0.33,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     {
       id: "apartment105",
@@ -501,6 +856,124 @@ export const DATA = {
       area: 250,
       price: 500000,
       x: 0.7, y: 0.65,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     // Zone 1 - Tower 1 - Floor 2
     {
@@ -517,6 +990,124 @@ export const DATA = {
       area: 115,
       price: 275000,
       x: 0.4, y: 0.64,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     {
       id: "apartment202",
@@ -532,6 +1123,124 @@ export const DATA = {
       area: 125,
       price: 300000,
       x: 0.22, y: 0.55,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     {
       id: "apartment203",
@@ -547,6 +1256,124 @@ export const DATA = {
       area: 125,
       price: 300000,
       x: 0.225, y: 0.23,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     {
       id: "apartment204",
@@ -562,6 +1389,124 @@ export const DATA = {
       area: 115,
       price: 275000,
       x: 0.42, y: 0.25,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     {
       id: "apartment205",
@@ -577,6 +1522,124 @@ export const DATA = {
       area: 145,
       price: 325000,
       x: 0.65, y: 0.25,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     {
       id: "apartment206",
@@ -592,6 +1655,124 @@ export const DATA = {
       area: 200,
       price: 400000,
       x: 0.67, y: 0.65,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     // Zone 1 - Tower 2 - Floor 1
     {
@@ -608,6 +1789,124 @@ export const DATA = {
       area: 140,
       price: 260000,
       x: 0.4, y: 0.58,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     {
       id: "apartment112",
@@ -623,6 +1922,124 @@ export const DATA = {
       area: 150,
       price: 325000,
       x: 0.21, y: 0.43,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     {
       id: "apartment113",
@@ -638,6 +2055,124 @@ export const DATA = {
       area: 85,
       price: 240000,
       x: 0.23, y: 0.2,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     {
       id: "apartment114",
@@ -653,6 +2188,124 @@ export const DATA = {
       area: 185,
       price: 375000,
       x: 0.6, y: 0.25,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     {
       id: "apartment115",
@@ -668,6 +2321,124 @@ export const DATA = {
       area: 220,
       price: 450000,
       x: 0.7, y: 0.65,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     // Zone 1 - Tower 2 - Floor 2
     {
@@ -684,6 +2455,124 @@ export const DATA = {
       area: 185,
       price: 275000,
       x: 0.2, y: 0.4,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     {
       id: "apartment222",
@@ -699,6 +2588,124 @@ export const DATA = {
       area: 85,
       price: 240000,
       x: 0.24, y: 0.2,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     {
       id: "apartment223",
@@ -714,6 +2721,124 @@ export const DATA = {
       area: 125,
       price: 300000,
       x: 0.475, y: 0.24,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     {
       id: "apartment224",
@@ -729,6 +2854,124 @@ export const DATA = {
       area: 115,
       price: 275000,
       x: 0.715, y: 0.21,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
     {
       id: "apartment225",
@@ -744,6 +2987,124 @@ export const DATA = {
       area: 145,
       price: 325000,
       x: 0.55, y: 0.5,
+      interior: {
+        floors: [
+          {
+            id: "floor1",
+            rooms: [
+              {
+                id: "room1",
+                name: "Livingroom", // must match the hotspot label
+                image: "/src/assets/panorama/livingroom.png",
+                description: "A spacious livingroom where all the family can spend their time together.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 25,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Bedroom", // must match the room name
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 25,
+                    pitch: 5,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 0,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Dinning and Kitchen",
+                  }
+                ]
+              },
+              {
+                id: "room2",
+                name: "Dinning and Kitchen",
+                image: "/src/assets/panorama/dinning_kitchen.png",
+                description: "A comfortable dinning room with a table and chairs.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -65,
+                    pitch: -25,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: 83,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Bedroom",
+                  },
+                  {
+                    id: 'spot3',
+                    yaw: 83,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              },
+              {
+                id: "room3",
+                name: "Bedroom",
+                image: "/src/assets/panorama/bedroom.png",
+                description: "A cozy bedroom with a comfortable bed and a wardrobe.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -105,
+                    pitch: -10,
+                    type: 'scene',
+                    label: "Livingroom",
+                  }
+                ]
+              },
+              {
+                id: "room4",
+                name: "Master Bedroom",
+                image: "/src/assets/panorama/master_bedroom.png",
+                description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -115,
+                    pitch: -5,
+                    type: 'scene',
+                    label: "Livingroom",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -115,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "Bathroom", //must match the room name
+                  }
+                ]
+              },
+              {
+                id: "room5",
+                name: "Bathroom",
+                image: "/src/assets/panorama/bathroom.png",
+                description: "A modern bathroom with all the necessary amenities.",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: -3,
+                    pitch: 0,
+                    type: 'scene',
+                    label: "Master Bedroom",
+                  }
+                ]
+              }
+            ]
+          }]
+      }
     },
   ],
 

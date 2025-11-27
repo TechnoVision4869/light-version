@@ -10,9 +10,13 @@ export default function Panorama({ apartment }) {
   const [hotspotPositions, setHotspotPositions] = useState({});
 
   const apartmentData = DATA.apartments.find((a) => a.id === apartment.id);
+  const interior = apartmentData.interior;
 
-  const image = apartmentData.interior.floors[0].rooms[0].image;
-  const hotspots = apartmentData.interior.floors[0].rooms[0].hotspots;
+  const floors = interior.floors;
+  const [room, setRoom] = useState(floors[0].rooms[0]);
+
+  const image = room.image;
+  const hotspots = room.hotspots;
 
   const getHotspotScreenPosition = (viewer, yaw, pitch) => {
     const oyaw = viewer.getYaw();
@@ -98,6 +102,10 @@ export default function Panorama({ apartment }) {
     };
   }, [image, DATA]);
 
+  const findRoomById = (roomLabel) => {
+    return floors.flatMap(floor => floor.rooms).find(room => room.name === roomLabel);
+  };
+
   return (
     <div className="relative w-full h-full">
       <div ref={containerRef} className="w-screen h-screen bg-[#2f2f2f]" />
@@ -110,7 +118,7 @@ export default function Panorama({ apartment }) {
             key={spot.id}
             type={spot.type}
             label={spot.label}
-            // onClick={spot.onClick}
+            onClick={() => setRoom(findRoomById(spot.label))}
             style={{
               left: `${pos.x}px`,
               top: `${pos.y}px`,
