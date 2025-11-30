@@ -176,9 +176,9 @@ export const LAYER_CONFIG = {
   [LAYERS.APARTMENT]: {
     videosPath: (apartment) => {
       return {
-        forwardVideo: "/loading.mp4",
-        reverseVideo: "/loading.mp4",
-        idleVideo: "/loading.mp4",
+        forwardVideo: "/cutsection.mp4",
+        reverseVideo: "/cutsection.mp4",
+        idleVideo: "/cutsection.mp4",
       };
     },
     getData: (apartmentId) => DATA.apartments.find((a) => a.id === apartmentId),
@@ -464,97 +464,76 @@ export const DATA = {
             rooms: [
               {
                 id: "room1",
-                name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                name: "0", // must match the hotspot label
+                image: "/src/assets/panorama/0.jpg",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
                     id: 'spot1',
-                    yaw: 25,
+                    yaw: 0,
                     pitch: -5,
                     type: 'scene',
-                    label: "Bedroom", // must match the room name
+                    label: "100", // must match the room name
                   },
-                  {
-                    id: 'spot2',
-                    yaw: 25,
-                    pitch: 5,
-                    type: 'scene',
-                    label: "Master Bedroom",
-                  },
-                  {
-                    id: 'spot3',
-                    yaw: 0,
-                    pitch: 0,
-                    type: 'scene',
-                    label: "Dinning and Kitchen",
-                  }
                 ]
               },
               {
                 id: "room2",
-                name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                name: "100",
+                image: "/src/assets/panorama/100.jpg",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
                     id: 'spot1',
-                    yaw: -65,
-                    pitch: -25,
+                    yaw: -160,
+                    pitch: -15,
                     type: 'scene',
-                    label: "Livingroom",
+                    label: "0",
                   },
                   {
                     id: 'spot2',
-                    yaw: 83,
-                    pitch: 0,
+                    yaw: 10,
+                    pitch: -5,
                     type: 'scene',
-                    label: "Bedroom",
+                    label: "250",
                   },
-                  {
-                    id: 'spot3',
-                    yaw: 83,
-                    pitch: -10,
-                    type: 'scene',
-                    label: "Master Bedroom",
-                  }
                 ]
               },
               {
                 id: "room3",
-                name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                name: "250",
+                image: "/src/assets/panorama/250.jpg",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
                     id: 'spot1',
-                    yaw: -105,
+                    yaw: -110,
                     pitch: -10,
                     type: 'scene',
-                    label: "Livingroom",
+                    label: "100",
+                  },
+                  {
+                    id: 'spot2',
+                    yaw: -7,
+                    pitch: -15,
+                    type: 'scene',
+                    label: "300",
                   }
                 ]
               },
               {
                 id: "room4",
-                name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                name: "300",
+                image: "/src/assets/panorama/300.jpg",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
                     id: 'spot1',
-                    yaw: -115,
-                    pitch: -5,
+                    yaw: -190,
+                    pitch: -12,
                     type: 'scene',
-                    label: "Livingroom",
+                    label: "250",
                   },
-                  {
-                    id: 'spot2',
-                    yaw: -115,
-                    pitch: -15,
-                    type: 'scene',
-                    label: "Bathroom", //must match the room name
-                  }
                 ]
               },
               {

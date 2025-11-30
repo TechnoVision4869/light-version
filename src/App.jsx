@@ -161,7 +161,8 @@ export default function App() {
     <>
       {isPanorama && (
         <div className="absolute inset-0 z-60">
-          <div className="absolute top-4 left-6 z-10">
+          <div className={`w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4`}/>
+          <div className="absolute top-4 left-6 z-40">
             <button
               onClick={handleBack}
               className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center
@@ -189,6 +190,7 @@ export default function App() {
             <Panorama apartment={currentItem} />
           </div>
         </div>
+        
       )}
       <div className={`w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4`}>
         <LandscapePrompt />
@@ -472,9 +474,6 @@ export default function App() {
                     loop
                   />
                 </div>
-
-                {(!viewerProps.isMediaLoaded ||
-                  activeLayer === LAYERS.APARTMENT) && <Loading />}
 
                 {activeTab === TABS.SURROUNDINGS &&
                   activeLayer === null &&

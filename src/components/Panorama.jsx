@@ -75,14 +75,16 @@ export default function Panorama({ apartment }) {
     viewerRef.current = new PanoViewer(containerRef.current, {
       image: image,
       useZoom: true,
-      fovRange: [45, 65], // allow zoom-in, restrict zoom-out
+      fovRange: [75, 100],
+      fov: 95,
+      showPolePoint: true,
+      // fovRange: [45, 65],
     });
 
     // Smaller FOV = more zoomed-in (e.g., 45°)
     // Larger FOV = more zoomed-out (e.g., 110°)
 
     viewerRef.current.on("ready", () => {
-      viewerRef.current.lookAt({ fov: 65 }); // start at max FOV (no zoom-out beyond this)
       updateHotspots();
     });
 
@@ -107,13 +109,15 @@ export default function Panorama({ apartment }) {
     hotspotsRef.current = hotspots;
 
     const handleImageLoaded = () => {
-      // Optional: animate to reset view or look toward entrance
-      viewerRef.current.lookAt({ fov: 65 }, 300);
       // update positions after image loads
-      setTimeout(updateHotspots, 250); // allow animation to start
+      updateHotspots();
     };
 
     viewerRef.current.once("imageLoaded", handleImageLoaded);
+    // var fov = viewerRef.current.getFove();
+    // console.log(fov);
+
+    viewerRef.current.lookAt({ yaw: 0, pitch: 0, fov: 75 }, 400);
     viewerRef.current.setImage(image);
 
     return () => {
