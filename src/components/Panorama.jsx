@@ -17,6 +17,7 @@ export default function Panorama({ apartment }) {
 
   const image = room.image;
   const hotspots = room.hotspots;
+  const hotspotsRef = useRef(hotspots);
 
   const getHotspotScreenPosition = (viewer, yaw, pitch) => {
     const oyaw = viewer.getYaw();
@@ -56,7 +57,7 @@ export default function Panorama({ apartment }) {
     if (!viewerRef.current) return;
 
     const positions = {};
-    hotspots.forEach((spot) => {
+    hotspotsRef.current.forEach((spot) => {
       const pos = getHotspotScreenPosition(
         viewerRef.current,
         spot.yaw,
@@ -67,27 +68,25 @@ export default function Panorama({ apartment }) {
     setHotspotPositions(positions);
   };
 
+  // Initialize viewer ONCE
   useEffect(() => {
     if (!containerRef.current) return;
 
     viewerRef.current = new PanoViewer(containerRef.current, {
       image: image,
-      //   projectionType: "equirectangular", // default is equirectangular
-      // Other types are "cubemap", "cubestrip", and "stereoscopicEqui".
       useZoom: true,
-      fovRange: [50, 60], //  Default  is [30, 110],
+      fovRange: [45, 65], // allow zoom-in, restrict zoom-out
     });
 
     // Smaller FOV = more zoomed-in (e.g., 45°)
     // Larger FOV = more zoomed-out (e.g., 110°)
 
     viewerRef.current.on("ready", () => {
+      viewerRef.current.lookAt({ fov: 65 }); // start at max FOV (no zoom-out beyond this)
       updateHotspots();
     });
 
-    viewerRef.current.on("viewChange", () => {
-      updateHotspots();
-    });
+    viewerRef.current.on("viewChange", updateHotspots);
 
     const handleResize = () => {
       viewerRef.current?.updateViewportDimensions();
@@ -100,7 +99,27 @@ export default function Panorama({ apartment }) {
       window.removeEventListener("resize", handleResize);
       viewerRef.current?.destroy();
     };
-  }, [image, DATA]);
+  }, []); // 👈 Run only once on mount
+
+  useEffect(() => {
+    if (!viewerRef.current) return;
+    // Sync hotspots ref
+    hotspotsRef.current = hotspots;
+
+    const handleImageLoaded = () => {
+      // Optional: animate to reset view or look toward entrance
+      viewerRef.current.lookAt({ fov: 65 }, 300);
+      // update positions after image loads
+      setTimeout(updateHotspots, 250); // allow animation to start
+    };
+
+    viewerRef.current.once("imageLoaded", handleImageLoaded);
+    viewerRef.current.setImage(image);
+
+    return () => {
+      viewerRef.current?.off("imageLoaded", handleImageLoaded);
+    };
+  }, [image, hotspots]);
 
   const findRoomById = (roomLabel) => {
     return floors.flatMap(floor => floor.rooms).find(room => room.name === roomLabel);

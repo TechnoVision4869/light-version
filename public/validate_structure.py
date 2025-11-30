@@ -4,8 +4,9 @@ import sys
 from pathlib import Path
 
 # ====== CONFIGURATION ======
-DELETE_DOT_UNDERSCORE_FILES = True  # Set to True to auto-delete ._ files
-IGNORED_FOLDERS = {"highlight"}     # Folders to skip during validation (must be lowercase)
+DELETE_DOT_UNDERSCORE_FILES = True  # Set True to auto-delete ._ files
+DELETE_PSD_AND_ZIP = True           # Set False to disable .psd/.zip deletion
+IGNORED_FOLDERS = {"highlight"}     # Folders to skip during validation
 # ==========================
 
 def log_error(path, msg):
@@ -24,22 +25,34 @@ def delete_file_safely(filepath: Path):
     except Exception as e:
         print(f"[FAILED TO DELETE] {filepath}: {e}")
 
-def collect_files_and_dirs(folder: Path):
-    files = []
-    dirs = []
-    if not folder.exists():
-        return files, dirs
-    for item in folder.iterdir():
-        if item.is_file():
-            if is_ignored_file(item.name):
-                if DELETE_DOT_UNDERSCORE_FILES:
-                    delete_file_safely(item)
-                continue
-            files.append(item)
-        else:
-            # Do NOT skip here — we still want to clean ._ files inside highlight
-            dirs.append(item)
-    return files, dirs
+def should_skip_path(path: Path, root: Path) -> bool:
+    try:
+        rel = path.relative_to(root)
+        return any(part.lower() in IGNORED_FOLDERS for part in rel.parts)
+    except ValueError:
+        return False
+
+def is_unwanted_binary_file(name: str) -> bool:
+    return name.lower().endswith(('.psd', '.zip'))
+
+def clean_unwanted_files_and_dot_underscore(ROOT: Path):
+    """Scan and delete ._*, .psd, .zip files."""
+    deleted_count = 0
+    for root_path, dirs, files in os.walk(ROOT):
+        for f in files:
+            file_path = Path(root_path) / f
+            deleted = False
+            if is_ignored_file(f) and DELETE_DOT_UNDERSCORE_FILES:
+                delete_file_safely(file_path)
+                deleted = True
+            elif is_unwanted_binary_file(f) and DELETE_PSD_AND_ZIP:
+                delete_file_safely(file_path)
+                deleted = True
+            if deleted:
+                deleted_count += 1
+    return deleted_count
+
+# === Rest of the validation logic (unchanged except passing ROOT) ===
 
 def is_lowercase_no_spaces(name):
     return name == name.lower() and ' ' not in name
@@ -47,39 +60,37 @@ def is_lowercase_no_spaces(name):
 def check_folder_case_and_spaces(folder: Path):
     for root, dirs, files_in_walk in os.walk(folder):
         root_path = Path(root)
-        # Skip case-checking inside ignored folders
         rel_root = root_path.relative_to(folder)
         if any(part.lower() in IGNORED_FOLDERS for part in rel_root.parts):
             continue
         if not is_lowercase_no_spaces(root_path.name):
             log_error(root_path, "Folder name must be lowercase with no spaces")
         for d in dirs:
+            full_dir = root_path / d
+            try:
+                rel_full = full_dir.relative_to(folder)
+                if any(part.lower() in IGNORED_FOLDERS for part in rel_full.parts):
+                    continue
+            except ValueError:
+                pass
             if not is_lowercase_no_spaces(d):
-                full_dir = root_path / d
-                # Check if this dir is inside an ignored path
-                try:
-                    rel_full = full_dir.relative_to(folder)
-                    if any(part.lower() in IGNORED_FOLDERS for part in rel_full.parts):
-                        continue
-                except ValueError:
-                    pass
                 log_error(full_dir, "Folder name must be lowercase with no spaces")
         for f in files_in_walk:
-            if not is_ignored_file(f):
-                full_file = root_path / f
-                try:
-                    rel_full = full_file.relative_to(folder)
-                    if any(part.lower() in IGNORED_FOLDERS for part in rel_full.parts):
-                        continue
-                except ValueError:
-                    pass
-                if not is_lowercase_no_spaces(f):
-                    log_error(full_file, "File name must be lowercase with no spaces")
+            if is_ignored_file(f) or is_unwanted_binary_file(f):
+                continue
+            full_file = root_path / f
+            try:
+                rel_full = full_file.relative_to(folder)
+                if any(part.lower() in IGNORED_FOLDERS for part in rel_full.parts):
+                    continue
+            except ValueError:
+                pass
+            if not is_lowercase_no_spaces(f):
+                log_error(full_file, "File name must be lowercase with no spaces")
 
 errors = []
 
-# --- Validation functions (same logic, but skip highlight recursively) ---
-
+# --- Expected structure ---
 TOP_LEVEL_FOLDERS = {"home", "amenities", "surroundings", "zones"}
 EXPECTED_HOME_FILES = {"home_idle.mp4", "home_out.mp4"}
 EXPECTED_AMENITIES_FILES = {
@@ -100,12 +111,21 @@ EXPECTED_ZONES_GEN_FILES = {
     "zones_gen_idle.mp4"
 }
 
-def should_skip_path(path: Path, root: Path) -> bool:
-    try:
-        rel = path.relative_to(root)
-        return any(part.lower() in IGNORED_FOLDERS for part in rel.parts)
-    except ValueError:
-        return False
+def collect_files_and_dirs(folder: Path):
+    files = []
+    dirs = []
+    if not folder.exists():
+        return files, dirs
+    for item in folder.iterdir():
+        if item.is_file():
+            if is_ignored_file(item.name) or is_unwanted_binary_file(item.name):
+                continue  # already handled in cleaning phase
+            files.append(item)
+        else:
+            dirs.append(item)
+    return files, dirs
+
+# --- Validation functions (same as before, with ROOT passed) ---
 
 def validate_home(home_dir: Path, ROOT: Path):
     if should_skip_path(home_dir, ROOT):
@@ -319,29 +339,17 @@ def main():
 
     print(f"📁 Validating structure in: {ROOT}")
 
-    # 1. Clean ._ files globally (including inside 'highlight')
-    print("🔍 Scanning for ._ files...")
-    dot_files_found = []
-    for root_path, dirs, files in os.walk(ROOT):
-        for f in files:
-            if f.startswith("._"):
-                dot_files_found.append(Path(root_path) / f)
-
-    if dot_files_found:
-        print(f"⚠️ Found {len(dot_files_found)} ._ file(s).")
-        if DELETE_DOT_UNDERSCORE_FILES:
-            print("🗑️  Deleting them...")
-            for fp in dot_files_found:
-                delete_file_safely(fp)
-        else:
-            print("ℹ️  To auto-delete, set DELETE_DOT_UNDERSCORE_FILES = True in the script.")
+    # 🔥 Clean unwanted files: ._*, .psd, .zip
+    print("🧹 Cleaning unwanted files (.psd, .zip, and ._ files if enabled)...")
+    deleted_count = clean_unwanted_files_and_dot_underscore(ROOT)
+    if deleted_count == 0:
+        print("✅ No unwanted files found.")
     else:
-        print("✅ No ._ files found.")
+        print(f"✅ Cleaned {deleted_count} unwanted file(s).")
 
-    # 2. Validate naming (skip highlight)
+    # Validate structure (excluding 'highlight')
     check_folder_case_and_spaces(ROOT)
 
-    # 3. Validate top-level folders (skip if highlight is at top — though it shouldn't be)
     actual_top = {d.name for d in ROOT.iterdir() if d.is_dir()}
     missing_top = TOP_LEVEL_FOLDERS - actual_top
     extra_top = actual_top - TOP_LEVEL_FOLDERS
@@ -351,18 +359,14 @@ def main():
             log_error(folder_path, "Missing top-level folder")
     for folder_name in extra_top:
         folder_path = ROOT / folder_name
-        if not should_skip_path(folder_path, ROOT):
-            # Only complain if it's not an ignored folder
-            if folder_name.lower() not in IGNORED_FOLDERS:
-                log_error(folder_path, "Unexpected top-level folder")
+        if folder_name.lower() not in IGNORED_FOLDERS:
+            log_error(folder_path, "Unexpected top-level folder")
 
-    # 4. Validate sections
     validate_home(ROOT / "home", ROOT)
     validate_amenities(ROOT / "amenities", ROOT)
     validate_surroundings(ROOT / "surroundings", ROOT)
     validate_zones(ROOT / "zones", ROOT)
 
-    # 5. Report
     if errors:
         print("\n❌ Validation failed. Issues found:")
         for err in errors:
