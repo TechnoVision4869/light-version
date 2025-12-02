@@ -1,10 +1,16 @@
-// components/PanoViewer.jsx
 import { useState, useEffect, useRef } from "react";
 import { PanoViewer } from "@egjs/view360";
 import { DATA } from "../data/layers";
 import Pin from "./pin";
 
 export default function Panorama({ apartment }) {
+  const MIN_FOV = 60;
+  const MAX_FOV = 105;
+  const NORMAL_FOV = 90;
+
+  const ZOOM_IN_TIME = 1000;
+  const ZOOM_OUT_TIME = 1000;
+
   const containerRef = useRef(null);
   const viewerRef = useRef(null);
   const [hotspotPositions, setHotspotPositions] = useState({});
@@ -18,6 +24,8 @@ export default function Panorama({ apartment }) {
   const image = room.image;
   const hotspots = room.hotspots;
   const hotspotsRef = useRef(hotspots);
+
+  // const readyRef = useRef(false);
 
   const getHotspotScreenPosition = (viewer, yaw, pitch) => {
     const oyaw = viewer.getYaw();
@@ -75,17 +83,27 @@ export default function Panorama({ apartment }) {
     viewerRef.current = new PanoViewer(containerRef.current, {
       image: image,
       useZoom: true,
-      fovRange: [75, 100],
-      fov: 95,
+      fovRange: [MIN_FOV, MAX_FOV],
       showPolePoint: true,
+      fov: 95,
       // fovRange: [45, 65],
     });
 
     // Smaller FOV = more zoomed-in (e.g., 45°)
     // Larger FOV = more zoomed-out (e.g., 110°)
 
+    // The "ready" event fires once: only when the viewer is fully initialized and ready for interaction.
     viewerRef.current.on("ready", () => {
+      // if (readyRef.current) return
+      // readyRef.current = true;
+      console.log("Viewer is ready!");
+      viewerRef.current.lookAt({ yaw: 0, pitch: 0, fov: NORMAL_FOV }, 1000);
       updateHotspots();
+    });
+
+    // The "animationEnd" event fires when lookAt finished its animation
+    viewerRef.current.on("animationEnd", () => {
+      console.log("animation end");
     });
 
     viewerRef.current.on("viewChange", updateHotspots);
@@ -100,30 +118,35 @@ export default function Panorama({ apartment }) {
     return () => {
       window.removeEventListener("resize", handleResize);
       viewerRef.current?.destroy();
+      console.log("viewer ref is destroyed");
+      viewerRef.current = null; //
     };
   }, []); // 👈 Run only once on mount
+
+  // console.log(viewerRef.current?.getFov());
 
   useEffect(() => {
     if (!viewerRef.current) return;
     // Sync hotspots ref
     hotspotsRef.current = hotspots;
 
-    const handleImageLoaded = () => {
-      // update positions after image loads
-      updateHotspots();
+    //  Animate current view to FOV 75 (zoom in)
+    viewerRef.current.lookAt({ fov: MIN_FOV }, ZOOM_IN_TIME);
+
+    // Step 2: After zoom-in completes, switch image
+    const switchImage = () => {
+      viewerRef.current.setImage(image);
+      // setImage() is asynchronous — it starts loading but doesn’t block.
     };
 
-    viewerRef.current.once("imageLoaded", handleImageLoaded);
-    // var fov = viewerRef.current.getFove();
-    // console.log(fov);
-
-    viewerRef.current.lookAt({ yaw: 0, pitch: 0, fov: 75 }, 400);
-    viewerRef.current.setImage(image);
+    // Wait for zoom-in to finish before switching
+    const zoomInTimeout = setTimeout(switchImage, ZOOM_IN_TIME);
 
     return () => {
-      viewerRef.current?.off("imageLoaded", handleImageLoaded);
+      console.log("Cleanup");
+      clearTimeout(zoomInTimeout);
     };
-  }, [image, hotspots]);
+  }, [room]);
 
   const findRoomById = (roomLabel) => {
     return floors.flatMap(floor => floor.rooms).find(room => room.name === roomLabel);

@@ -187,7 +187,7 @@ export default function App() {
             </button>
           </div>
           <div className="absolute inset-0">
-            <Panorama apartment={currentItem} />
+            <Panorama key="panorama-viewer" apartment={currentItem} />
           </div>
         </div>
         
