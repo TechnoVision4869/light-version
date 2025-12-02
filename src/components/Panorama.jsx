@@ -1,178 +1,181 @@
-import { useState, useEffect, useRef } from "react";
-import { PanoViewer } from "@egjs/view360";
-import { DATA } from "../data/layers";
-import Pin from "./pin";
+import { useMemo, useRef, useState, useCallback, useEffect } from "react";
+import View360, { EquirectProjection, EVENTS } from "@egjs/react-view360";
+import "@egjs/react-view360/css/view360.min.css";
+import styles from "./Panorama.module.css";
 
-export default function Panorama({ apartment }) {
-  const MIN_FOV = 60;
-  const MAX_FOV = 105;
-  const NORMAL_FOV = 90;
-
-  const ZOOM_IN_TIME = 1000;
-  const ZOOM_OUT_TIME = 1000;
-
-  const containerRef = useRef(null);
+export default function Panorama() {
+  const [currentScene, setCurrentScene] = useState(1);
+  const [fadeOpacity, setFadeOpacity] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [preloadedScene, setPreloadedScene] = useState(null);
   const viewerRef = useRef(null);
-  const [hotspotPositions, setHotspotPositions] = useState({});
+  const transitionTimeoutRef = useRef(null);
 
-  const apartmentData = DATA.apartments.find((a) => a.id === apartment.id);
-  const interior = apartmentData.interior;
-
-  const floors = interior.floors;
-  const [room, setRoom] = useState(floors[0].rooms[0]);
-
-  const image = room.image;
-  const hotspots = room.hotspots;
-  const hotspotsRef = useRef(hotspots);
-
-  // const readyRef = useRef(false);
-
-  const getHotspotScreenPosition = (viewer, yaw, pitch) => {
-    const oyaw = viewer.getYaw();
-    const opitch = viewer.getPitch();
-    const fov = viewer.getFov();
-
-    let deltaYaw = yaw - oyaw;
-    if (deltaYaw < -180) deltaYaw += 360;
-    if (deltaYaw > 180) deltaYaw -= 360;
-
-    // Hide if behind camera
-    if (Math.abs(deltaYaw) > 90) return null;
-
-    const toRadian = (deg) => (deg * Math.PI) / 180;
-    const rect = containerRef.current?.getBoundingClientRect();
-    const width = rect?.width;
-    const height = rect?.height;
-
-    const hFov =
-      Math.atan((width / height) * Math.tan(toRadian(fov) / 2)) *
-      (180 / Math.PI) *
-      2;
-
-    const rx = Math.tan(toRadian(hFov) / 2);
-    const ry = Math.tan(toRadian(fov) / 2);
-
-    const pointX = Math.tan(toRadian(-deltaYaw)) / rx;
-    const pointY = Math.tan(toRadian(-pitch + opitch)) / ry;
-
-    const x = width / 2 + (pointX * width) / 2;
-    const y = height / 2 + (pointY * height) / 2;
-
-    return { x, y };
+  const scenes = {
+    1: {
+      src: "/src/assets/panorama/livingroom.png",
+      name: "Living Room",
+      hotspots: [
+        { yaw: 90, pitch: -10, text: "Kitchen", targetScene: 3 },
+        { yaw: 180, pitch: -5, text: "Bedroom", targetScene: 2 }
+      ]
+    },
+    2: {
+      src: "/src/assets/panorama/bedroom.png",
+      name: "Bedroom",
+      hotspots: [
+        { yaw: 270, pitch: 0, text: "Back to Living", targetScene: 1 }
+      ]
+    },
+    3: {
+      src: "/src/assets/panorama/dinning_kitchen.png",
+      name: "Kitchen",
+      hotspots: [
+        { yaw: 180, pitch: -10, text: "Living Room", targetScene: 1 }
+      ]
+    }
   };
 
-  const updateHotspots = () => {
-    if (!viewerRef.current) return;
+  const projection = useMemo(
+    () => new EquirectProjection({ src: scenes[currentScene].src }),
+    [currentScene]
+  );
 
-    const positions = {};
-    hotspotsRef.current.forEach((spot) => {
-      const pos = getHotspotScreenPosition(
-        viewerRef.current,
-        spot.yaw,
-        spot.pitch
-      );
-      positions[spot.id] = pos;
-    });
-    setHotspotPositions(positions);
-  };
+  // Preload next image silently
+  const preloadImage = useCallback((sceneId) => {
+    const img = new Image();
+    img.src = scenes[sceneId].src;
+    setPreloadedScene(sceneId);
+  }, []);
 
-  // Initialize viewer ONCE
-  useEffect(() => {
-    if (!containerRef.current) return;
+  // Handle hotspot click with coordinated loading and fade
+  const handleHotspotClick = useCallback((hotspot) => {
+    if (isTransitioning) return;
 
-    viewerRef.current = new PanoViewer(containerRef.current, {
-      image: image,
-      useZoom: true,
-      fovRange: [MIN_FOV, MAX_FOV],
-      showPolePoint: true,
-      fov: 95,
-      // fovRange: [45, 65],
-    });
+    setIsTransitioning(true);
+    setFadeOpacity(1); // Start fade out
 
-    // Smaller FOV = more zoomed-in (e.g., 45°)
-    // Larger FOV = more zoomed-out (e.g., 110°)
+    // Clear any pending timeouts
+    if (transitionTimeoutRef.current) {
+      clearTimeout(transitionTimeoutRef.current);
+    }
 
-    // The "ready" event fires once: only when the viewer is fully initialized and ready for interaction.
-    viewerRef.current.on("ready", () => {
-      // if (readyRef.current) return
-      // readyRef.current = true;
-      console.log("Viewer is ready!");
-      viewerRef.current.lookAt({ yaw: 0, pitch: 0, fov: NORMAL_FOV }, 1000);
-      updateHotspots();
-    });
+    const viewer = viewerRef.current;
+    if (!viewer) return;
 
-    // The "animationEnd" event fires when lookAt finished its animation
-    viewerRef.current.on("animationEnd", () => {
-      console.log("animation end");
-    });
+    // Start camera zoom immediately
+    // Zoom duration matches fade animation (1000ms)
+    viewer.camera.animateTo(
+      {
+        yaw: hotspot.targetYaw || 0,
+        pitch: hotspot.targetPitch || 0,
+        zoom: 3
+      },
+      1000
+    );
 
-    viewerRef.current.on("viewChange", updateHotspots);
+    // Preload the next scene image immediately
+    preloadImage(hotspot.targetScene);
 
-    const handleResize = () => {
-      viewerRef.current?.updateViewportDimensions();
-      updateHotspots();
-    };
+    // Wait for animation + load to complete
+    // Total time: 1000ms for zoom + extra buffer for loading
+    transitionTimeoutRef.current = setTimeout(() => {
+      setCurrentScene(hotspot.targetScene);
+      setFadeOpacity(0); // Fade in
+      setIsTransitioning(false);
+    }, 1100); // Slightly longer than zoom for safety
+  }, [isTransitioning, preloadImage]);
 
-    window.addEventListener("resize", handleResize);
+  // Handle load event (v4 specific - fires when image is ready)
+  const handleLoad = useCallback((evt) => {
+    console.log("Image loaded and ready to display:", evt);
+  }, []);
 
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      viewerRef.current?.destroy();
-      console.log("viewer ref is destroyed");
-      viewerRef.current = null; //
-    };
-  }, []); // 👈 Run only once on mount
+  // Handle loadStart event (v4 specific - fires when loading begins)
+  const handleLoadStart = useCallback((evt) => {
+    console.log("Started loading panorama:", evt.src);
+  }, []);
 
-  // console.log(viewerRef.current?.getFov());
+  // Handle projectionChange (v4 specific - fires when switching to new image)
+  const handleProjectionChange = useCallback((evt) => {
+    console.log("Projection changed, displaying new image");
+  }, []);
 
-  useEffect(() => {
-    if (!viewerRef.current) return;
-    // Sync hotspots ref
-    hotspotsRef.current = hotspots;
+  // Handle beforeRender for smooth fade coordination (v4 specific)
+  const handleBeforeRender = useCallback(() => {
+    // This fires every frame before rendering
+    // Use for precise fade opacity timing if needed
+  }, []);
 
-    //  Animate current view to FOV 75 (zoom in)
-    viewerRef.current.lookAt({ fov: MIN_FOV }, ZOOM_IN_TIME);
-
-    // Step 2: After zoom-in completes, switch image
-    const switchImage = () => {
-      viewerRef.current.setImage(image);
-      // setImage() is asynchronous — it starts loading but doesn’t block.
-    };
-
-    // Wait for zoom-in to finish before switching
-    const zoomInTimeout = setTimeout(switchImage, ZOOM_IN_TIME);
-
-    return () => {
-      console.log("Cleanup");
-      clearTimeout(zoomInTimeout);
-    };
-  }, [room]);
-
-  const findRoomById = (roomLabel) => {
-    return floors.flatMap(floor => floor.rooms).find(room => room.name === roomLabel);
-  };
+  const currentSceneData = scenes[currentScene];
 
   return (
-    <div className="relative w-full h-full">
-      <div ref={containerRef} className="w-screen h-screen bg-[#2f2f2f]" />
-      {hotspots.map((spot) => {
-        const pos = hotspotPositions[spot.id];
-        if (!pos) return null;
+    <div className={styles.tourContainer}>
+      <div className={styles.viewerWrapper}>
+        <View360
+          ref={viewerRef}
+          className={styles.viewer}
+          projection={projection}
+          on={{
+            [EVENTS.LOAD]: handleLoad,
+            [EVENTS.LOAD_START]: handleLoadStart,
+            [EVENTS.PROJECTION_CHANGE]: handleProjectionChange,
+            [EVENTS.BEFORE_RENDER]: handleBeforeRender
+          }}
+        />
 
-        return (
-          <Pin
-            key={spot.id}
-            type={spot.type}
-            label={spot.label}
-            onClick={() => setRoom(findRoomById(spot.label))}
-            style={{
-              left: `${pos.x}px`,
-              top: `${pos.y}px`,
-              transform: "translate(-50%, -50%)",
-            }}
-          />
-        );
-      })}
+        {/* Fade overlay with smooth transition */}
+        <div
+          className={styles.fadeOverlay}
+          style={{
+            opacity: fadeOpacity,
+            transition: isTransitioning ? "opacity 1s ease-in-out" : "none",
+            pointerEvents: fadeOpacity > 0.5 ? "auto" : "none"
+          }}
+        />
+
+        {/* Hotspots - disabled during transition */}
+        <div className={styles.hotspotsLayer}>
+          {currentSceneData.hotspots.map((hotspot, idx) => (
+            <button
+              key={idx}
+              className={styles.hotspot}
+              style={{
+                left: `${((hotspot.yaw || 0) / 360) * 100}%`,
+                top: `${50 + ((hotspot.pitch || 0) / 90) * 50}%`,
+              }}
+              onClick={() => handleHotspotClick({
+                targetScene: hotspot.targetScene,
+                targetYaw: hotspot.yaw || 0,
+                targetPitch: hotspot.pitch || 0
+              })}
+              disabled={isTransitioning}
+              title={hotspot.text}
+            >
+              {hotspot.text}
+            </button>
+          ))}
+        </div>
+
+        {/* Loading indicator (optional) */}
+        {isTransitioning && (
+          <div className={styles.loadingIndicator}>
+            <div className={styles.spinner} />
+          </div>
+        )}
+      </div>
+
+      <div className={styles.info}>
+        <p>Room: {currentSceneData.name}</p>
+        <p className={styles.subtitle}>
+          {isTransitioning ? "Transitioning..." : "Click room names to navigate"}
+        </p>
+        {preloadedScene && preloadedScene !== currentScene && (
+          <p className={styles.preloadStatus}>
+            (Preloading: {scenes[preloadedScene].name})
+          </p>
+        )}
+      </div>
     </div>
   );
 }
