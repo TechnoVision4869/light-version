@@ -5,9 +5,9 @@ import Pin from "./pin";
 import "@egjs/react-view360/css/view360.min.css";
 
 export default function Panorama({ apartment }) {
-  const MIN_FOV = 60;
-  const MAX_FOV = 105;
-  const NORMAL_FOV = 90;
+  const ZOOM_MIN = 0.85; // = FOV 105 (max zoom-out)
+  const ZOOM_MAX = 1.5;  // = FOV 60 (max zoom-in)
+  const ZOOM_NORMAL = 1.0; // = FPV 90
 
   const ZOOM_IN_TIME = 1000;
   const ZOOM_OUT_TIME = 1000;
@@ -80,7 +80,7 @@ export default function Panorama({ apartment }) {
   // ✅ Handle initial load
   const handleReady = useCallback(() => {
     // Initial view
-    console.log("ready");
+    // console.log("ready");
 
     viewerRef.current.camera.animateTo({
       // yaw: 0,
@@ -98,13 +98,13 @@ export default function Panorama({ apartment }) {
 
   // ✅ Handle new image load (v4's "imageLoaded" equivalent)
   const handleLoad = useCallback(() => {
-    console.log("load");
+    // console.log("load");
 
     // Animate to default view AFTER image loads
     viewerRef.current.camera.animateTo({
       // yaw: 0,
       // pitch: 0,
-      zoom: 1,
+      zoom: ZOOM_NORMAL,
       duration: 100,
     });
     updateHotspots();
@@ -122,7 +122,7 @@ export default function Panorama({ apartment }) {
     // Zoom in current room
     viewerRef.current.camera.animateTo({
       yaw: room.yaw,
-      pitch: room.pitch,
+      // pitch: room.pitch,
       zoom: 1.5,
       duration: ZOOM_IN_TIME,
     });
@@ -130,7 +130,7 @@ export default function Panorama({ apartment }) {
     // Switch room AFTER zoom completes
     setTimeout(() => {
       const targetRoom = findRoomById(room.label);
-      console.log(targetRoom.image);
+      // console.log(targetRoom.image);
 
       if (targetRoom) {
         setRoom(targetRoom);
@@ -150,9 +150,11 @@ export default function Panorama({ apartment }) {
         onReady={handleReady}
         onLoad={handleLoad}
         onViewChange={handleViewChange}
-        camera={{
-          fovRange: [MIN_FOV, MAX_FOV],
+        zoomRange={{
+          "min": ZOOM_MIN,
+          "max": ZOOM_MAX
         }}
+      //The default zoom range is from 0.6 to 10
       />
 
       {/* Hotspots */}

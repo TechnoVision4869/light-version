@@ -6,7 +6,6 @@ import { useVideoViewer } from "./components/hooks/useVideoViewer";
 
 // Components
 import LandscapePrompt from "./components/LandscapePrompt";
-import Loading from "./components/Loading";
 import InfoPopup from "./components/InfoPopup";
 import ZoneButton from "./components/buttons/ZoneButton";
 import AmenityButton from "./components/buttons/AmenityButton";
