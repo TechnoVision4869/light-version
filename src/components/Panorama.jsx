@@ -8,6 +8,7 @@ export default function Panorama() {
   const [fadeOpacity, setFadeOpacity] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [preloadedScene, setPreloadedScene] = useState(null);
+  const [hotspotPositions, setHotspotPositions] = useState({});
   const viewerRef = useRef(null);
   const transitionTimeoutRef = useRef(null);
 
@@ -109,9 +110,24 @@ export default function Panorama() {
 
   const currentSceneData = scenes[currentScene];
 
+  const updateHotspots = () => {
+    if (!viewerRef.current) return;
+
+    const positions = {};
+    hotspotsRef.current.forEach((spot) => {
+      const pos = getHotspotScreenPosition(
+        viewerRef.current,
+        spot.yaw,
+        spot.pitch
+      );
+      positions[spot.id] = pos;
+    });
+    setHotspotPositions(positions);
+  };
+
   return (
-    <div className={styles.tourContainer}>
-      <div className={styles.viewerWrapper}>
+    <div className="relative w-full h-full">
+      <div className="w-screen h-screen">
         <View360
           ref={viewerRef}
           className={styles.viewer}
@@ -136,45 +152,36 @@ export default function Panorama() {
 
         {/* Hotspots - disabled during transition */}
         <div className={styles.hotspotsLayer}>
-          {currentSceneData.hotspots.map((hotspot, idx) => (
-            <button
-              key={idx}
-              className={styles.hotspot}
-              style={{
-                left: `${((hotspot.yaw || 0) / 360) * 100}%`,
-                top: `${50 + ((hotspot.pitch || 0) / 90) * 50}%`,
-              }}
-              onClick={() => handleHotspotClick({
-                targetScene: hotspot.targetScene,
-                targetYaw: hotspot.yaw || 0,
-                targetPitch: hotspot.pitch || 0
-              })}
-              disabled={isTransitioning}
-              title={hotspot.text}
-            >
-              {hotspot.text}
-            </button>
-          ))}
+          {currentSceneData.hotspots.map((hotspot, idx) => {
+            const pos = hotspotPositions[hotspot.id];
+            return (
+              <button
+                key={idx}
+                className={styles.hotspot}
+                style={{
+                  left: `${((hotspot.yaw || 0) / 360) * 100}%`,
+                  top: `${50 + ((hotspot.pitch || 0) / 90) * 50}%`,
+                }}
+                onClick={() => handleHotspotClick({
+                  targetScene: hotspot.targetScene,
+                  targetYaw: hotspot.yaw || 0,
+                  targetPitch: hotspot.pitch || 0
+                })}
+                disabled={isTransitioning}
+                title={hotspot.text}
+              >
+                {hotspot.text}
+              </button>
+            )
+          })}
         </div>
 
         {/* Loading indicator (optional) */}
-        {isTransitioning && (
+        {/* {isTransitioning && (
           <div className={styles.loadingIndicator}>
             <div className={styles.spinner} />
           </div>
-        )}
-      </div>
-
-      <div className={styles.info}>
-        <p>Room: {currentSceneData.name}</p>
-        <p className={styles.subtitle}>
-          {isTransitioning ? "Transitioning..." : "Click room names to navigate"}
-        </p>
-        {preloadedScene && preloadedScene !== currentScene && (
-          <p className={styles.preloadStatus}>
-            (Preloading: {scenes[preloadedScene].name})
-          </p>
-        )}
+        )} */}
       </div>
     </div>
   );
