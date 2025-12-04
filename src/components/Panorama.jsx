@@ -1,188 +1,179 @@
-import { useMemo, useRef, useState, useCallback, useEffect } from "react";
-import View360, { EquirectProjection, EVENTS } from "@egjs/react-view360";
+import { useState, useMemo, useRef, useEffect, useCallback } from "react";
+import View360, { EquirectProjection } from "@egjs/react-view360";
+import { DATA } from "../data/layers";
+import Pin from "./pin";
 import "@egjs/react-view360/css/view360.min.css";
-import styles from "./Panorama.module.css";
 
-export default function Panorama() {
-  const [currentScene, setCurrentScene] = useState(1);
-  const [fadeOpacity, setFadeOpacity] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [preloadedScene, setPreloadedScene] = useState(null);
-  const [hotspotPositions, setHotspotPositions] = useState({});
+export default function Panorama({ apartment }) {
+  const MIN_FOV = 60;
+  const MAX_FOV = 105;
+  const NORMAL_FOV = 90;
+
+  const ZOOM_IN_TIME = 1000;
+  const ZOOM_OUT_TIME = 1000;
+
   const viewerRef = useRef(null);
-  const transitionTimeoutRef = useRef(null);
+  const [hotspotPositions, setHotspotPositions] = useState({});
+  const containerRef = useRef(null);
 
-  const scenes = {
-    1: {
-      src: "/src/assets/panorama/livingroom.png",
-      name: "Living Room",
-      hotspots: [
-        { yaw: 90, pitch: -10, text: "Kitchen", targetScene: 3 },
-        { yaw: 180, pitch: -5, text: "Bedroom", targetScene: 2 }
-      ]
-    },
-    2: {
-      src: "/src/assets/panorama/bedroom.png",
-      name: "Bedroom",
-      hotspots: [
-        { yaw: 270, pitch: 0, text: "Back to Living", targetScene: 1 }
-      ]
-    },
-    3: {
-      src: "/src/assets/panorama/dinning_kitchen.png",
-      name: "Kitchen",
-      hotspots: [
-        { yaw: 180, pitch: -10, text: "Living Room", targetScene: 1 }
-      ]
-    }
-  };
+  // Get apartment data
+  const apartmentData = DATA.apartments.find((a) => a.id === apartment.id);
+  const interior = apartmentData.interior;
+  const floors = interior.floors;
+  const [room, setRoom] = useState(floors[0].rooms[0]);
 
-  const projection = useMemo(
-    () => new EquirectProjection({ src: scenes[currentScene].src }),
-    [currentScene]
-  );
+  const image = room.image;
 
-  // Preload next image silently
-  const preloadImage = useCallback((sceneId) => {
-    const img = new Image();
-    img.src = scenes[sceneId].src;
-    setPreloadedScene(sceneId);
+  const hotspots = room.hotspots;
+  const hotspotsRef = useRef();
+  hotspotsRef.current = hotspots; // ✅ Sync on every render
+
+  useEffect(() => {
+    const allImages = floors.flatMap(f => f.rooms.map(r => r.image));
+    allImages.forEach(src => new Image().src = src);
+  }, [floors]);
+
+  // ✅ Calculate hotspot screen position (v4-compatible)
+  const getHotspotScreenPosition = useCallback((viewer, yaw, pitch) => {
+    const oyaw = viewer.camera.yaw;
+    const opitch = viewer.camera.pitch;
+    const fov = viewer.camera.fov;
+
+    let deltaYaw = yaw - oyaw;
+    if (deltaYaw < -180) deltaYaw += 360;
+    if (deltaYaw > 180) deltaYaw -= 360;
+    if (Math.abs(deltaYaw) > 90) return null;
+
+    const toRadian = (deg) => (deg * Math.PI) / 180;
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect || rect.width === 0 || rect.height === 0) return null;
+
+    const { width, height } = rect;
+    const hFov = Math.atan((width / height) * Math.tan(toRadian(fov) / 2)) * (180 / Math.PI) * 2;
+    const rx = Math.tan(toRadian(hFov) / 2);
+    const ry = Math.tan(toRadian(fov) / 2);
+
+    const pointX = Math.tan(toRadian(-deltaYaw)) / rx;
+    const pointY = Math.tan(toRadian(-pitch + opitch)) / ry;
+
+    const x = width / 2 + (pointX * width) / 2;
+    const y = height / 2 + (pointY * height) / 2;
+
+    return { x, y };
   }, []);
 
-  // Handle hotspot click with coordinated loading and fade
-  const handleHotspotClick = useCallback((hotspot) => {
-    if (isTransitioning) return;
-
-    setIsTransitioning(true);
-    setFadeOpacity(1); // Start fade out
-
-    // Clear any pending timeouts
-    if (transitionTimeoutRef.current) {
-      clearTimeout(transitionTimeoutRef.current);
-    }
-
-    const viewer = viewerRef.current;
-    if (!viewer) return;
-
-    // Start camera zoom immediately
-    // Zoom duration matches fade animation (1000ms)
-    viewer.camera.animateTo(
-      {
-        yaw: hotspot.targetYaw || 0,
-        pitch: hotspot.targetPitch || 0,
-        zoom: 3
-      },
-      1000
-    );
-
-    // Preload the next scene image immediately
-    preloadImage(hotspot.targetScene);
-
-    // Wait for animation + load to complete
-    // Total time: 1000ms for zoom + extra buffer for loading
-    transitionTimeoutRef.current = setTimeout(() => {
-      setCurrentScene(hotspot.targetScene);
-      setFadeOpacity(0); // Fade in
-      setIsTransitioning(false);
-    }, 1100); // Slightly longer than zoom for safety
-  }, [isTransitioning, preloadImage]);
-
-  // Handle load event (v4 specific - fires when image is ready)
-  const handleLoad = useCallback((evt) => {
-    console.log("Image loaded and ready to display:", evt);
-  }, []);
-
-  // Handle loadStart event (v4 specific - fires when loading begins)
-  const handleLoadStart = useCallback((evt) => {
-    console.log("Started loading panorama:", evt.src);
-  }, []);
-
-  // Handle projectionChange (v4 specific - fires when switching to new image)
-  const handleProjectionChange = useCallback((evt) => {
-    console.log("Projection changed, displaying new image");
-  }, []);
-
-  // Handle beforeRender for smooth fade coordination (v4 specific)
-  const handleBeforeRender = useCallback(() => {
-    // This fires every frame before rendering
-    // Use for precise fade opacity timing if needed
-  }, []);
-
-  const currentSceneData = scenes[currentScene];
-
-  const updateHotspots = () => {
+  // ✅ Update hotspot positions
+  const updateHotspots = useCallback(() => {
     if (!viewerRef.current) return;
 
     const positions = {};
     hotspotsRef.current.forEach((spot) => {
-      const pos = getHotspotScreenPosition(
-        viewerRef.current,
-        spot.yaw,
-        spot.pitch
-      );
-      positions[spot.id] = pos;
+      const pos = getHotspotScreenPosition(viewerRef.current, spot.yaw, spot.pitch);
+      if (pos) positions[spot.id] = pos;
     });
     setHotspotPositions(positions);
-  };
+  }, [getHotspotScreenPosition]);
+
+  // ✅ Projection (memoized)
+  const projection = useMemo(() => new EquirectProjection({ src: image }), [image]);
+
+  // ✅ Handle initial load
+  const handleReady = useCallback(() => {
+    // Initial view
+    console.log("ready");
+
+    viewerRef.current.camera.animateTo({
+      // yaw: 0,
+      // pitch: 0,
+      zoom: 0.85,
+      duration: ZOOM_OUT_TIME,
+    });
+    updateHotspots();
+  }, [updateHotspots]);
+
+  // ✅ Handle view changes (pan/zoom)
+  const handleViewChange = useCallback(() => {
+    updateHotspots();
+  }, [updateHotspots]);
+
+  // ✅ Handle new image load (v4's "imageLoaded" equivalent)
+  const handleLoad = useCallback(() => {
+    console.log("load");
+
+    // Animate to default view AFTER image loads
+    viewerRef.current.camera.animateTo({
+      // yaw: 0,
+      // pitch: 0,
+      zoom: 1,
+      duration: 100,
+    });
+    updateHotspots();
+  }, [updateHotspots]);
+
+  // ✅ Find room by name
+  const findRoomById = useCallback((roomLabel) => {
+    return floors.flatMap(floor => floor.rooms).find(room => room.name === roomLabel);
+  }, [floors]);
+
+  // ✅ Handle hotspot click: zoom in → switch room
+  const handleHotspotClick = useCallback((room) => {
+    if (!viewerRef.current) return;
+
+    // Zoom in current room
+    viewerRef.current.camera.animateTo({
+      yaw: room.yaw,
+      pitch: room.pitch,
+      zoom: 1.5,
+      duration: ZOOM_IN_TIME,
+    });
+
+    // Switch room AFTER zoom completes
+    setTimeout(() => {
+      const targetRoom = findRoomById(room.label);
+      console.log(targetRoom.image);
+
+      if (targetRoom) {
+        setRoom(targetRoom);
+      }
+
+    }, ZOOM_IN_TIME);
+  }, [findRoomById]);
 
   return (
-    <div className="relative w-full h-full">
-      <div className="w-screen h-screen">
-        <View360
-          ref={viewerRef}
-          className={styles.viewer}
-          projection={projection}
-          on={{
-            [EVENTS.LOAD]: handleLoad,
-            [EVENTS.LOAD_START]: handleLoadStart,
-            [EVENTS.PROJECTION_CHANGE]: handleProjectionChange,
-            [EVENTS.BEFORE_RENDER]: handleBeforeRender
-          }}
-        />
+    <div className="relative w-full h-full" ref={containerRef}>
+      {/* View360 v4 React Component */}
+      <View360
+        ref={viewerRef}
+        className="w-screen h-screen"
+        projection={projection}
+        style={{ backgroundColor: "#2f2f2f" }}
+        onReady={handleReady}
+        onLoad={handleLoad}
+        onViewChange={handleViewChange}
+        camera={{
+          fovRange: [MIN_FOV, MAX_FOV],
+        }}
+      />
 
-        {/* Fade overlay with smooth transition */}
-        <div
-          className={styles.fadeOverlay}
-          style={{
-            opacity: fadeOpacity,
-            transition: isTransitioning ? "opacity 1s ease-in-out" : "none",
-            pointerEvents: fadeOpacity > 0.5 ? "auto" : "none"
-          }}
-        />
-
-        {/* Hotspots - disabled during transition */}
-        <div className={styles.hotspotsLayer}>
-          {currentSceneData.hotspots.map((hotspot, idx) => {
-            const pos = hotspotPositions[hotspot.id];
-            return (
-              <button
-                key={idx}
-                className={styles.hotspot}
-                style={{
-                  left: `${((hotspot.yaw || 0) / 360) * 100}%`,
-                  top: `${50 + ((hotspot.pitch || 0) / 90) * 50}%`,
-                }}
-                onClick={() => handleHotspotClick({
-                  targetScene: hotspot.targetScene,
-                  targetYaw: hotspot.yaw || 0,
-                  targetPitch: hotspot.pitch || 0
-                })}
-                disabled={isTransitioning}
-                title={hotspot.text}
-              >
-                {hotspot.text}
-              </button>
-            )
-          })}
-        </div>
-
-        {/* Loading indicator (optional) */}
-        {/* {isTransitioning && (
-          <div className={styles.loadingIndicator}>
-            <div className={styles.spinner} />
-          </div>
-        )} */}
-      </div>
+      {/* Hotspots */}
+      {hotspots.map((spot) => {
+        const pos = hotspotPositions[spot.id];
+        if (!pos) return null;
+        return (
+          <Pin
+            key={spot.id}
+            type={spot.type}
+            label={spot.label}
+            onClick={() => handleHotspotClick(spot)}
+            style={{
+              left: `${pos.x}px`,
+              top: `${pos.y}px`,
+              transform: "translate(-50%, -50%)",
+              zIndex: 40,
+            }}
+          />
+        );
+      })}
     </div>
   );
 }
