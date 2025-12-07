@@ -89,3 +89,21 @@ body {
 .fade-in-element.fade-in-started {
   opacity: 1;
 }
+
+/* Ensure View360 fills its container */
+.view360-fullscreen {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: #2f2f2f;
+}
+
+.view360-fullscreen .view360-container {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}

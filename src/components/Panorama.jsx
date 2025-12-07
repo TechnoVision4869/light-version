@@ -7,10 +7,11 @@ import "@egjs/react-view360/css/view360.min.css";
 export default function Panorama({ apartment }) {
   const ZOOM_MIN = 0.85; // = FOV 105 (max zoom-out)
   const ZOOM_MAX = 1.5;  // = FOV 60 (max zoom-in)
-  const ZOOM_NORMAL = 1.0; // = FPV 90
+  const ZOOM_NORMAL = 1.0; // = FOV 90
 
-  const ZOOM_IN_TIME = 1000;
+  const ZOOM_IN_TIME = 500;
   const ZOOM_OUT_TIME = 1000;
+  const FADE_DURATION = 750;
 
   const viewerRef = useRef(null);
   const [hotspotPositions, setHotspotPositions] = useState({});
@@ -22,7 +23,9 @@ export default function Panorama({ apartment }) {
   const floors = interior.floors;
   const [room, setRoom] = useState(floors[0].rooms[0]);
 
-  const image = room.image;
+  const [currentImage, setCurrentImage] = useState(room.image);
+  const [nextImage, setNextImage] = useState(null);
+  const [isFading, setIsFading] = useState(false);
 
   const hotspots = room.hotspots;
   const hotspotsRef = useRef();
@@ -46,7 +49,7 @@ export default function Panorama({ apartment }) {
 
     const toRadian = (deg) => (deg * Math.PI) / 180;
     const rect = containerRef.current?.getBoundingClientRect();
-    if (!rect || rect.width === 0 || rect.height === 0) return null;
+    // if (!rect || rect.width === 0 || rect.height === 0) return null;
 
     const { width, height } = rect;
     const hFov = Math.atan((width / height) * Math.tan(toRadian(fov) / 2)) * (180 / Math.PI) * 2;
@@ -75,7 +78,10 @@ export default function Panorama({ apartment }) {
   }, [getHotspotScreenPosition]);
 
   // ✅ Projection (memoized)
-  const projection = useMemo(() => new EquirectProjection({ src: image }), [image]);
+  const projection = useMemo(() => new EquirectProjection({ src: currentImage }), [currentImage]);
+  const nextProjection = useMemo(() => {
+    return nextImage ? new EquirectProjection({ src: nextImage }) : null;
+  }, [nextImage]);
 
   // ✅ Handle initial load
   const handleReady = useCallback(() => {
@@ -85,7 +91,7 @@ export default function Panorama({ apartment }) {
     viewerRef.current.camera.animateTo({
       // yaw: 0,
       // pitch: 0,
-      zoom: 0.85,
+      zoom: ZOOM_NORMAL,
       duration: ZOOM_OUT_TIME,
     });
     updateHotspots();
@@ -98,14 +104,14 @@ export default function Panorama({ apartment }) {
 
   // ✅ Handle new image load (v4's "imageLoaded" equivalent)
   const handleLoad = useCallback(() => {
-    // console.log("load");
+    console.log("load");
 
     // Animate to default view AFTER image loads
     viewerRef.current.camera.animateTo({
       // yaw: 0,
       // pitch: 0,
       zoom: ZOOM_NORMAL,
-      duration: 100,
+      duration: 10,
     });
     updateHotspots();
   }, [updateHotspots]);
@@ -115,6 +121,26 @@ export default function Panorama({ apartment }) {
     return floors.flatMap(floor => floor.rooms).find(room => room.name === roomLabel);
   }, [floors]);
 
+  const switchRoomWithFade = useCallback((newRoom) => {
+    if (isFading) return; // prevent rapid clicks
+
+    // 1. PREPARE next image (render next viewer WHILE current is still visible)
+    setNextImage(newRoom.image);
+
+    // 2. AFTER next viewer is rendered, START fade
+    requestAnimationFrame(() => {
+      setIsFading(true);
+    });
+
+    // 3. CLEANUP after fade completes
+    setTimeout(() => {
+      setCurrentImage(newRoom.image);
+      setNextImage(null);
+      setIsFading(false);
+      setRoom(newRoom);
+    }, FADE_DURATION); // must match CSS duration
+  }, [isFading]);
+
   // ✅ Handle hotspot click: zoom in → switch room
   const handleHotspotClick = useCallback((room) => {
     if (!viewerRef.current) return;
@@ -123,7 +149,7 @@ export default function Panorama({ apartment }) {
     viewerRef.current.camera.animateTo({
       yaw: room.yaw,
       // pitch: room.pitch,
-      zoom: 1.5,
+      zoom: ZOOM_MAX,
       duration: ZOOM_IN_TIME,
     });
 
@@ -133,32 +159,46 @@ export default function Panorama({ apartment }) {
       // console.log(targetRoom.image);
 
       if (targetRoom) {
-        setRoom(targetRoom);
+        switchRoomWithFade(targetRoom);
       }
 
-    }, ZOOM_IN_TIME);
+    }, ZOOM_IN_TIME - ZOOM_IN_TIME / 2);
   }, [findRoomById]);
 
   return (
-    <div className="relative w-full h-full" ref={containerRef}>
-      {/* View360 v4 React Component */}
+    <div className="relative w-screen h-screen" ref={containerRef}>
+      {/* Next viewer */}
+      {isFading && (
+        <View360
+          className="view360-fullscreen opacity-100"
+          projection={nextProjection}
+        // zoomRange={{ min: ZOOM_MIN, max: ZOOM_MAX }}
+        // draggable={false}
+        // pinchZoom={false}
+        // keyboard={false}
+        // wheel={false}
+        />
+      )}
+
+      {/* Current viewer */}
       <View360
         ref={viewerRef}
-        className="w-screen h-screen"
+        className="view360-fullscreen"
+        style={{
+          opacity: isFading ? 0 : 1,
+          transition: isFading
+            ? `opacity ${FADE_DURATION}ms ease-in`
+            : 'none', // ← no transition when fading in (not needed here)
+        }}
         projection={projection}
-        style={{ backgroundColor: "#2f2f2f" }}
         onReady={handleReady}
         onLoad={handleLoad}
         onViewChange={handleViewChange}
-        zoomRange={{
-          "min": ZOOM_MIN,
-          "max": ZOOM_MAX
-        }}
-      //The default zoom range is from 0.6 to 10
+        zoomRange={{ min: ZOOM_MIN, max: ZOOM_MAX }}
       />
 
       {/* Hotspots */}
-      {hotspots.map((spot) => {
+      {!isFading && (hotspots.map((spot) => {
         const pos = hotspotPositions[spot.id];
         if (!pos) return null;
         return (
@@ -175,7 +215,7 @@ export default function Panorama({ apartment }) {
             }}
           />
         );
-      })}
+      }))}
     </div>
   );
 }
