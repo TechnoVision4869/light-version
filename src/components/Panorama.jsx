@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import View360, { EquirectProjection } from "@egjs/react-view360";
 import { DATA } from "../data/layers";
-import Pin from "./pin";
+import Pin from "./Pin";
 import "@egjs/react-view360/css/view360.min.css";
 
 export default function Panorama({ apartment }) {
