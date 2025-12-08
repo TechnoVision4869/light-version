@@ -332,7 +332,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -361,7 +361,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -390,7 +390,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -405,7 +405,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -427,7 +427,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -465,7 +465,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "0", // must match the hotspot label
-                image: "/src/assets/panorama/0.jpg",
+                image: "/panorama/0.jpg",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -480,7 +480,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "100",
-                image: "/src/assets/panorama/100.jpg",
+                image: "/panorama/100.jpg",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -492,8 +492,8 @@ export const DATA = {
                   },
                   {
                     id: 'spot2',
-                    yaw: 10,
-                    pitch: -5,
+                    yaw: -6,
+                    pitch: -6,
                     type: 'scene',
                     label: "250",
                   },
@@ -502,7 +502,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "250",
-                image: "/src/assets/panorama/250.jpg",
+                image: "/panorama/250.jpg",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -524,7 +524,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "300",
-                image: "/src/assets/panorama/300.jpg",
+                image: "/panorama/300.jpg",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -539,7 +539,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -577,7 +577,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -606,7 +606,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -635,7 +635,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -650,7 +650,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -672,7 +672,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -710,7 +710,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -739,7 +739,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -768,7 +768,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -783,7 +783,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -805,7 +805,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -843,7 +843,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -872,7 +872,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -901,7 +901,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -916,7 +916,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -938,7 +938,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -977,7 +977,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -1006,7 +1006,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -1035,7 +1035,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -1050,7 +1050,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -1072,7 +1072,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -1110,7 +1110,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -1139,7 +1139,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -1168,7 +1168,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -1183,7 +1183,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -1205,7 +1205,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -1243,7 +1243,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -1272,7 +1272,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -1301,7 +1301,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -1316,7 +1316,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -1338,7 +1338,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -1376,7 +1376,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -1405,7 +1405,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -1434,7 +1434,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -1449,7 +1449,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -1471,7 +1471,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -1509,7 +1509,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -1538,7 +1538,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -1567,7 +1567,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -1582,7 +1582,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -1604,7 +1604,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -1642,7 +1642,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -1671,7 +1671,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -1700,7 +1700,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -1715,7 +1715,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -1737,7 +1737,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -1776,7 +1776,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -1805,7 +1805,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -1834,7 +1834,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -1849,7 +1849,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -1871,7 +1871,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -1909,7 +1909,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -1938,7 +1938,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -1967,7 +1967,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -1982,7 +1982,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -2004,7 +2004,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -2042,7 +2042,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -2071,7 +2071,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -2100,7 +2100,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -2115,7 +2115,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -2137,7 +2137,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -2175,7 +2175,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -2204,7 +2204,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -2233,7 +2233,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -2248,7 +2248,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -2270,7 +2270,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -2308,7 +2308,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -2337,7 +2337,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -2366,7 +2366,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -2381,7 +2381,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -2403,7 +2403,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -2442,7 +2442,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -2471,7 +2471,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -2500,7 +2500,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -2515,7 +2515,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -2537,7 +2537,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -2575,7 +2575,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -2604,7 +2604,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -2633,7 +2633,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -2648,7 +2648,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -2670,7 +2670,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -2708,7 +2708,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -2737,7 +2737,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -2766,7 +2766,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -2781,7 +2781,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -2803,7 +2803,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -2841,7 +2841,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -2870,7 +2870,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -2899,7 +2899,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -2914,7 +2914,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -2936,7 +2936,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
@@ -2974,7 +2974,7 @@ export const DATA = {
               {
                 id: "room1",
                 name: "Livingroom", // must match the hotspot label
-                image: "/src/assets/panorama/livingroom.png",
+                image: "/panorama/livingroom.png",
                 description: "A spacious livingroom where all the family can spend their time together.",
                 hotspots: [
                   {
@@ -3003,7 +3003,7 @@ export const DATA = {
               {
                 id: "room2",
                 name: "Dinning and Kitchen",
-                image: "/src/assets/panorama/dinning_kitchen.png",
+                image: "/panorama/dinning_kitchen.png",
                 description: "A comfortable dinning room with a table and chairs.",
                 hotspots: [
                   {
@@ -3032,7 +3032,7 @@ export const DATA = {
               {
                 id: "room3",
                 name: "Bedroom",
-                image: "/src/assets/panorama/bedroom.png",
+                image: "/panorama/bedroom.png",
                 description: "A cozy bedroom with a comfortable bed and a wardrobe.",
                 hotspots: [
                   {
@@ -3047,7 +3047,7 @@ export const DATA = {
               {
                 id: "room4",
                 name: "Master Bedroom",
-                image: "/src/assets/panorama/master_bedroom.png",
+                image: "/panorama/master_bedroom.png",
                 description: "A luxurious master bedroom with a king-size bed and an ensuite bathroom.",
                 hotspots: [
                   {
@@ -3069,7 +3069,7 @@ export const DATA = {
               {
                 id: "room5",
                 name: "Bathroom",
-                image: "/src/assets/panorama/bathroom.png",
+                image: "/panorama/bathroom.png",
                 description: "A modern bathroom with all the necessary amenities.",
                 hotspots: [
                   {
