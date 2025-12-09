@@ -441,7 +441,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     {
       id: "apartment102",
@@ -553,7 +607,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     {
       id: "apartment103",
@@ -686,7 +794,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     {
       id: "apartment104",
@@ -819,7 +981,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     {
       id: "apartment105",
@@ -952,7 +1168,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     // Zone 1 - Tower 1 - Floor 2
     {
@@ -1086,7 +1356,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     {
       id: "apartment202",
@@ -1219,7 +1543,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     {
       id: "apartment203",
@@ -1352,7 +1730,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     {
       id: "apartment204",
@@ -1485,7 +1917,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     {
       id: "apartment205",
@@ -1618,7 +2104,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     {
       id: "apartment206",
@@ -1751,7 +2291,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     // Zone 1 - Tower 2 - Floor 1
     {
@@ -1885,7 +2479,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     {
       id: "apartment112",
@@ -2018,7 +2666,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     {
       id: "apartment113",
@@ -2151,7 +2853,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     {
       id: "apartment114",
@@ -2284,7 +3040,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     {
       id: "apartment115",
@@ -2417,7 +3227,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     // Zone 1 - Tower 2 - Floor 2
     {
@@ -2551,7 +3415,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     {
       id: "apartment222",
@@ -2684,7 +3602,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     {
       id: "apartment223",
@@ -2817,7 +3789,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     {
       id: "apartment224",
@@ -2950,7 +3976,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
     {
       id: "apartment225",
@@ -3083,7 +4163,61 @@ export const DATA = {
               }
             ]
           }]
-      }
+      },
+      gallery: [
+        {
+          id: "gallery1",
+          src: "/images/v1.svg",
+        },
+        {
+          id: "gallery2",
+          src: "/images/v2.svg",
+        },
+        {
+          id: "gallery3",
+          src: "/images/v3.svg",
+        },
+        {
+          id: "gallery4",
+          src: "/images/v4.svg",
+        },
+      ],
+      cutSections: [
+        {
+          id: "cut1",
+          src: "/images/c1.png"
+        },
+        {
+          id: "cut2",
+          src: "/images/c2.png"
+        },
+        {
+          id: "cut3",
+          src: "/images/c3.png"
+        },
+        {
+          id: "cut4",
+          src: "/images/c4.png"
+        },
+      ],
+      paymentPlans: [
+        {
+          downPayment: 4999999,
+          monthly: 499999,
+          years: 8,
+        },
+        {
+          downPayment: 2999999,
+          monthly: 299999,
+          years: 20,
+        }
+      ],
+      floorPlans: [
+        {
+          id: "floor1",
+          src: "/images/fp1.png"
+        },
+      ]
     },
   ],
 

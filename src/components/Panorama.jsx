@@ -29,7 +29,7 @@ export default function Panorama({ apartment }) {
 
   const hotspots = room.hotspots;
   const hotspotsRef = useRef();
-  hotspotsRef.current = hotspots; // ✅ Sync on every render
+  hotspotsRef.current = hotspots; // Sync on every render
 
   useEffect(() => {
     const allImages = floors.flatMap(f => f.rooms.map(r => r.image));
@@ -38,45 +38,45 @@ export default function Panorama({ apartment }) {
 
   // Calculate hotspot screen position (v4-compatible)
   const getHotspotScreenPosition = useCallback((viewer, yaw, pitch) => {
-  const oyaw = viewer.camera.yaw;
-  const opitch = viewer.camera.pitch;
+    const oyaw = viewer.camera.yaw;
+    const opitch = viewer.camera.pitch;
 
-  const rect = containerRef.current?.getBoundingClientRect();
-  if (!rect || rect.width === 0 || rect.height === 0) return null;
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect || rect.width === 0 || rect.height === 0) return null;
 
-  const { width, height } = rect;
-  const aspectRatio = height / width;
+    const { width, height } = rect;
+    const aspectRatio = height / width;
 
-  // v4 returns HORIZONTAL FOV
-  const hfov = viewer.camera.fov; // in degrees
+    // v4 returns HORIZONTAL FOV
+    const hfov = viewer.camera.fov; // in degrees
 
-  // Convert HFOV → VFOV (vertical field of view)
-  const hfovRad = (hfov * Math.PI) / 180;
-  const vfovRad = 2 * Math.atan(Math.tan(hfovRad / 2) * aspectRatio);
-  const vfov = (vfovRad * 180) / Math.PI; // in degrees
+    // Convert HFOV → VFOV (vertical field of view)
+    const hfovRad = (hfov * Math.PI) / 180;
+    const vfovRad = 2 * Math.atan(Math.tan(hfovRad / 2) * aspectRatio);
+    const vfov = (vfovRad * 180) / Math.PI; // in degrees
 
-  // Normalize yaw delta
-  let deltaYaw = yaw - oyaw;
-  if (deltaYaw < -180) deltaYaw += 360;
-  if (deltaYaw > 180) deltaYaw -= 360;
-  if (Math.abs(deltaYaw) > 90) return null; // hide behind camera
+    // Normalize yaw delta
+    let deltaYaw = yaw - oyaw;
+    if (deltaYaw < -180) deltaYaw += 360;
+    if (deltaYaw > 180) deltaYaw -= 360;
+    if (Math.abs(deltaYaw) > 90) return null; // hide behind camera
 
-  const toRadian = (deg) => (deg * Math.PI) / 180;
+    const toRadian = (deg) => (deg * Math.PI) / 180;
 
-  // Compute horizontal FOV for screen projection (used only for rx)
-  const hFovForProjection = Math.atan((width / height) * Math.tan(toRadian(vfov) / 2)) * (180 / Math.PI) * 2;
+    // Compute horizontal FOV for screen projection (used only for rx)
+    const hFovForProjection = Math.atan((width / height) * Math.tan(toRadian(vfov) / 2)) * (180 / Math.PI) * 2;
 
-  const rx = Math.tan(toRadian(hFovForProjection) / 2);
-  const ry = Math.tan(toRadian(vfov) / 2);
+    const rx = Math.tan(toRadian(hFovForProjection) / 2);
+    const ry = Math.tan(toRadian(vfov) / 2);
 
-  const pointX = Math.tan(toRadian(-deltaYaw)) / rx;
-  const pointY = Math.tan(toRadian(-pitch + opitch)) / ry;
+    const pointX = Math.tan(toRadian(-deltaYaw)) / rx;
+    const pointY = Math.tan(toRadian(-pitch + opitch)) / ry;
 
-  const x = width / 2 + (pointX * width) / 2;
-  const y = height / 2 + (pointY * height) / 2;
+    const x = width / 2 + (pointX * width) / 2;
+    const y = height / 2 + (pointY * height) / 2;
 
-  return { x, y };
-}, []);
+    return { x, y };
+  }, []);
 
   // Update hotspot positions
   const updateHotspots = useCallback(() => {
@@ -90,13 +90,13 @@ export default function Panorama({ apartment }) {
     setHotspotPositions(positions);
   }, [getHotspotScreenPosition]);
 
-  // ✅ Projection (memoized)
+  // Projection (memoized)
   const projection = useMemo(() => new EquirectProjection({ src: currentImage }), [currentImage]);
   const nextProjection = useMemo(() => {
     return nextImage ? new EquirectProjection({ src: nextImage }) : null;
   }, [nextImage]);
 
-  // ✅ Handle initial load
+  // Handle initial load
   const handleReady = useCallback(() => {
     // Initial view
     // console.log("ready");
@@ -110,12 +110,12 @@ export default function Panorama({ apartment }) {
     updateHotspots();
   }, [updateHotspots]);
 
-  // ✅ Handle view changes (pan/zoom)
+  // Handle view changes (pan/zoom)
   const handleViewChange = useCallback(() => {
     updateHotspots();
   }, [updateHotspots]);
 
-  // ✅ Handle new image load (v4's "imageLoaded" equivalent)
+  // Handle new image load (v4's "imageLoaded" equivalent)
   const handleLoad = useCallback(() => {
     // console.log("load");
 
@@ -129,7 +129,7 @@ export default function Panorama({ apartment }) {
     updateHotspots();
   }, [updateHotspots]);
 
-  // ✅ Find room by name
+  // Find room by name
   const findRoomById = useCallback((roomLabel) => {
     return floors.flatMap(floor => floor.rooms).find(room => room.name === roomLabel);
   }, [floors]);
@@ -154,7 +154,7 @@ export default function Panorama({ apartment }) {
     }, FADE_DURATION); // must match CSS duration
   }, [isFading]);
 
-  // ✅ Handle hotspot click: zoom in → switch room
+  // Handle hotspot click: zoom in → switch room
   const handleHotspotClick = useCallback((room) => {
     if (!viewerRef.current) return;
 
