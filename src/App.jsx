@@ -32,26 +32,15 @@ export default function App() {
   const [showInfoPopup, setShowInfoPopup] = useState(false);
   const [isFilter, setIsFilter] = useState(false); // 'navigate' or 'filter'
   const [isPanorama, setIsPanorama] = useState(false);
-  const [isGallery, setIsGallery] = useState({
-    state: false,
-    images: []
-  });
-
-
+  const [galleryType, setGalleryType] = useState(null);
 
   const handleBack = () => {
-    setIsPanorama(false)
-    setIsGallery({
-      state: false,
-      images: []
-    })
+    setIsPanorama(false);
+    setGalleryType(null);
   };
   const handleInterior = () => setIsPanorama(true);
-  const handleGallery = (images) => {
-    setIsGallery({
-      state: true,
-      images: images
-    })
+  const handleGallery = (type) => {
+    setGalleryType(type);
   };
 
   // Ref
@@ -210,11 +199,10 @@ export default function App() {
         </div>
 
       )}
-      {isGallery.state && (
-        
+      {galleryType && (
         <div className="absolute inset-0 z-60">
           {/* Blurred Background */}
-            <div className="absolute inset-0 blurred-layer" />
+          <div className="absolute inset-0 blurred-layer" />
           <div className={`w-screen h-screen p-2 sm:p-4`} />
           <div className="absolute top-4 left-8 z-40">
             <button
@@ -241,7 +229,7 @@ export default function App() {
             </button>
           </div>
           <div className="absolute inset-0">
-            <Gallery key="gallery-viewer" images={isGallery.images} />
+            <Gallery key="gallery-viewer" currentItem={currentItem} galleryType={galleryType} />
           </div>
         </div>
 

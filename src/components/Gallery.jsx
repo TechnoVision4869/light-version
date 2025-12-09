@@ -1,8 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
+import { DATA } from '../data/layers';
 
 // Carousel component for gallery
-export default function Gallery({ images, autoPlay = true, interval = 5000 }) {
+export default function Gallery({ currentItem, galleryType, autoPlay = true, interval = 5000 }) {
     const [currentIndex, setCurrentIndex] = useState(0);
+
+    const currentApartment = DATA.apartments.find(a => a.id === currentItem?.id);
+    const images = currentApartment?.[galleryType] || [];
+
     const nextSlide = useCallback(() => {
         setCurrentIndex((prev) => (prev + 1) % images.length);
     }, [images.length]);
@@ -37,20 +42,25 @@ export default function Gallery({ images, autoPlay = true, interval = 5000 }) {
             </div>
 
             {/* Navigation Arrows */}
-            <button
-                onClick={prevSlide}
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 text-white p-3 rounded-full hover:bg-black/75 pointer-events-auto"
-                aria-label="Previous slide"
-            >
-                &#8249;
-            </button>
-            <button
-                onClick={nextSlide}
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 text-white p-3 rounded-full hover:bg-black/75 pointer-events-auto"
-                aria-label="Next slide"
-            >
-                &#8250;
-            </button>
+            {
+                (images.length > 1) && (
+                    <>  <button
+                        onClick={prevSlide}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 text-white p-3 rounded-full hover:bg-black/75 pointer-events-auto"
+                        aria-label="Previous slide"
+                    >
+                        &#8249;
+                    </button>
+                        <button
+                            onClick={nextSlide}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 text-white p-3 rounded-full hover:bg-black/75 pointer-events-auto"
+                            aria-label="Next slide"
+                        >
+                            &#8250;
+                        </button>
+                    </>
+                )}
+
 
             {/* Indicators */}
             <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-10 flex space-x-2 pointer-events-auto">

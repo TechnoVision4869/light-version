@@ -64,7 +64,7 @@ export default function UnitPanel({ unit, onInterior, onGallery }) {
                                 Interior
                             </button>
                             <button className="flex-1 border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition"
-                                onClick={() => onGallery(floorPlans)}
+                                onClick={() => onGallery("floorPlans")}
                             >
                                 Floor Plan
                             </button>
@@ -101,7 +101,7 @@ export default function UnitPanel({ unit, onInterior, onGallery }) {
                     {isVisualsOpen && (
                         <div className="grid grid-cols-2 gap-2 mt-2">
                             {visuals.map((img) => (
-                                <button className='hover:opacity-70' key={img.id} onClick={() => onGallery(visuals)}>
+                                <button className='hover:opacity-70' key={img.id} onClick={() => onGallery("gallery")}>
                                     <img
                                         src={img.src}
                                         alt="Visual"
@@ -137,7 +137,7 @@ export default function UnitPanel({ unit, onInterior, onGallery }) {
                     {isCutSectionsOpen && (
                         <div className="grid grid-cols-2 gap-2 mt-2">
                             {cutSections.map((img) => (
-                                <button className='hover:opacity-70' key={img.id} onClick={() => onGallery(cutSections)}>
+                                <button className='hover:opacity-70' key={img.id} onClick={() => onGallery("cutSections")}>
                                     <img
                                         src={img.src}
                                         alt="Visual"
