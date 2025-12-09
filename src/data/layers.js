@@ -324,6 +324,7 @@ export const DATA = {
       area: 85, // Store as number for range queries
       price: 250000, // Store as number for range queries
       x: 0.40, y: 0.60,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -511,6 +512,7 @@ export const DATA = {
       area: 200,
       price: 400000,
       x: 0.25, y: 0.4,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -677,6 +679,7 @@ export const DATA = {
       serviceRooms: ["Hard Kitchen"],
       price: 300000,
       x: 0.438, y: 0.3,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -864,6 +867,7 @@ export const DATA = {
       serviceRooms: ["Hard Kitchen"],
       price: 350000,
       x: 0.65, y: 0.33,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -1051,6 +1055,7 @@ export const DATA = {
       area: 250,
       price: 500000,
       x: 0.7, y: 0.65,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -1239,6 +1244,7 @@ export const DATA = {
       area: 115,
       price: 275000,
       x: 0.4, y: 0.64,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -1426,6 +1432,7 @@ export const DATA = {
       area: 125,
       price: 300000,
       x: 0.22, y: 0.55,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -1613,6 +1620,7 @@ export const DATA = {
       area: 125,
       price: 300000,
       x: 0.225, y: 0.23,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -1800,6 +1808,7 @@ export const DATA = {
       area: 115,
       price: 275000,
       x: 0.42, y: 0.25,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -1987,6 +1996,7 @@ export const DATA = {
       area: 145,
       price: 325000,
       x: 0.65, y: 0.25,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -2174,6 +2184,7 @@ export const DATA = {
       area: 200,
       price: 400000,
       x: 0.67, y: 0.65,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -2362,6 +2373,7 @@ export const DATA = {
       area: 140,
       price: 260000,
       x: 0.4, y: 0.58,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -2549,6 +2561,7 @@ export const DATA = {
       area: 150,
       price: 325000,
       x: 0.21, y: 0.43,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -2736,6 +2749,7 @@ export const DATA = {
       area: 85,
       price: 240000,
       x: 0.23, y: 0.2,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -2923,6 +2937,7 @@ export const DATA = {
       area: 185,
       price: 375000,
       x: 0.6, y: 0.25,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -3110,6 +3125,7 @@ export const DATA = {
       area: 220,
       price: 450000,
       x: 0.7, y: 0.65,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -3298,6 +3314,7 @@ export const DATA = {
       area: 185,
       price: 275000,
       x: 0.2, y: 0.4,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -3485,6 +3502,7 @@ export const DATA = {
       area: 85,
       price: 240000,
       x: 0.24, y: 0.2,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -3672,6 +3690,7 @@ export const DATA = {
       area: 125,
       price: 300000,
       x: 0.475, y: 0.24,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -3859,6 +3878,7 @@ export const DATA = {
       area: 115,
       price: 275000,
       x: 0.715, y: 0.21,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {
@@ -4046,6 +4066,7 @@ export const DATA = {
       area: 145,
       price: 325000,
       x: 0.55, y: 0.5,
+      balconyView: "/panorama/balcony.jpg",
       interior: {
         floors: [
           {

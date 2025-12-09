@@ -1,12 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { DATA } from '../data/layers';
 
 // Carousel component for gallery
-export default function Gallery({ currentItem, galleryType, autoPlay = true, interval = 5000 }) {
+export default function Gallery({ apartment, galleryType, autoPlay = true, interval = 5000 }) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const currentApartment = DATA.apartments.find(a => a.id === currentItem?.id);
-    const images = currentApartment?.[galleryType] || [];
+    const images = apartment?.[galleryType] || [];
 
     const nextSlide = useCallback(() => {
         setCurrentIndex((prev) => (prev + 1) % images.length);

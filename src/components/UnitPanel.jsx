@@ -2,19 +2,16 @@ import { useState } from 'react';
 
 import AREA_ICON from "../assets/icons/area.svg"
 import DOOR_ICON from "../assets/icons/door.svg"
-import { DATA } from '../data/layers';
 
-export default function UnitPanel({ unit, onInterior, onGallery }) {
+export default function UnitPanel({ unit, onInterior, onBalconyView, onGallery }) {
     const [isVisualsOpen, setIsVisualsOpen] = useState(true);
     const [isCutSectionsOpen, setIsCutSectionsOpen] = useState(false);
     const [isPaymentPlanOpen, setIsPaymentPlanOpen] = useState(false);
 
     //temporary visuals and payment plan
-    const apartmentData = DATA.apartments.find((a) => a.id === unit.id);
-    const visuals = apartmentData.gallery;
-    const cutSections = apartmentData.cutSections;
-    const floorPlans = apartmentData.floorPlans;
-    const paymentPlans = apartmentData.paymentPlans;
+    const visuals = unit.gallery;
+    const cutSections = unit.cutSections;
+    const paymentPlans = unit.paymentPlans;
 
     return (
         <div className="h-full pr-1">
@@ -74,7 +71,9 @@ export default function UnitPanel({ unit, onInterior, onGallery }) {
 
                 <hr className="h-divider" />
 
-                <button className="w-full border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition">
+                <button className="w-full border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition"
+                    onClick={onBalconyView}
+                >
                     View From Balcony
                 </button>
 

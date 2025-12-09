@@ -19,6 +19,7 @@ import Floating from "./components/Floating";
 import FilterPanel from "./components/FilterPanel";
 import UnitPanel from "./components/UnitPanel";
 import Panorama from "./components/Panorama";
+import Balcony from "./components/Balcony";
 import Gallery from "./components/Gallery";
 
 // logo
@@ -32,13 +33,16 @@ export default function App() {
   const [showInfoPopup, setShowInfoPopup] = useState(false);
   const [isFilter, setIsFilter] = useState(false); // 'navigate' or 'filter'
   const [isPanorama, setIsPanorama] = useState(false);
+  const [isBalconyView, setIsBalconyView] = useState(false);
   const [galleryType, setGalleryType] = useState(null);
 
   const handleBack = () => {
     setIsPanorama(false);
+    setIsBalconyView(false);
     setGalleryType(null);
   };
   const handleInterior = () => setIsPanorama(true);
+  const handleBalconyView = () => setIsBalconyView(true);
   const handleGallery = (type) => {
     setGalleryType(type);
   };
@@ -197,8 +201,42 @@ export default function App() {
             <Panorama key="panorama-viewer" apartment={currentItem} />
           </div>
         </div>
-
       )}
+
+      {isBalconyView && (
+        <div className="absolute inset-0 z-60">
+          <div className={`w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4`} />
+          <div className="absolute top-4 left-8 z-40">
+            <button
+              onClick={handleBack}
+              className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center
+                hover:bg-white/7 transition
+                disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M31 12H2M2 12L9 6M2 12L9 18"
+                  stroke="black"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div className="absolute inset-0">
+            <Balcony apartment={currentItem} />
+          </div>
+        </div>
+      )
+      }
+
       {galleryType && (
         <div className="absolute inset-0 z-60">
           {/* Blurred Background */}
@@ -229,10 +267,9 @@ export default function App() {
             </button>
           </div>
           <div className="absolute inset-0">
-            <Gallery key="gallery-viewer" currentItem={currentItem} galleryType={galleryType} />
+            <Gallery apartment={currentItem} galleryType={galleryType} />
           </div>
         </div>
-
       )}
       <div className={`w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4`}>
         <LandscapePrompt />
@@ -338,7 +375,7 @@ export default function App() {
                 }`}
             >
               {activeTab === TABS.ZONES && activeLayer === LAYERS.APARTMENT ? (
-                <UnitPanel unit={currentItem} onInterior={handleInterior} onGallery={handleGallery} />
+                <UnitPanel unit={currentItem} onInterior={handleInterior} onBalconyView={handleBalconyView} onGallery={handleGallery} />
               ) : (
                 <div className="h-full pr-1">
                   {activeLayer === LAYERS.FLOOR && (
