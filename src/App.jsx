@@ -19,6 +19,8 @@ import Floating from "./components/Floating";
 import FilterPanel from "./components/FilterPanel";
 import UnitPanel from "./components/UnitPanel";
 import Panorama from "./components/Panorama";
+import Balcony from "./components/Balcony";
+import Gallery from "./components/Gallery";
 
 // logo
 import TECHNO_LOGO from "./assets/techno.png";
@@ -31,9 +33,19 @@ export default function App() {
   const [showInfoPopup, setShowInfoPopup] = useState(false);
   const [isFilter, setIsFilter] = useState(false); // 'navigate' or 'filter'
   const [isPanorama, setIsPanorama] = useState(false);
+  const [isBalconyView, setIsBalconyView] = useState(false);
+  const [galleryType, setGalleryType] = useState(null);
 
-  const handleBack = () => setIsPanorama(false);
+  const handleBack = () => {
+    setIsPanorama(false);
+    setIsBalconyView(false);
+    setGalleryType(null);
+  };
   const handleInterior = () => setIsPanorama(true);
+  const handleBalconyView = () => setIsBalconyView(true);
+  const handleGallery = (type) => {
+    setGalleryType(type);
+  };
 
   // Ref
   const mediaContainerRef = useRef(null);
@@ -160,8 +172,8 @@ export default function App() {
     <>
       {isPanorama && (
         <div className="absolute inset-0 z-60">
-          <div className={`w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4`}/>
-          <div className="absolute top-4 left-6 z-40">
+          <div className={`w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4`} />
+          <div className="absolute top-4 left-8 z-40">
             <button
               onClick={handleBack}
               className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center
@@ -189,7 +201,75 @@ export default function App() {
             <Panorama key="panorama-viewer" apartment={currentItem} />
           </div>
         </div>
-        
+      )}
+
+      {isBalconyView && (
+        <div className="absolute inset-0 z-60">
+          <div className={`w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4`} />
+          <div className="absolute top-4 left-8 z-40">
+            <button
+              onClick={handleBack}
+              className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center
+                hover:bg-white/7 transition
+                disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M31 12H2M2 12L9 6M2 12L9 18"
+                  stroke="black"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div className="absolute inset-0">
+            <Balcony apartment={currentItem} />
+          </div>
+        </div>
+      )
+      }
+
+      {galleryType && (
+        <div className="absolute inset-0 z-60">
+          {/* Blurred Background */}
+          <div className="absolute inset-0 blurred-layer" />
+          <div className={`w-screen h-screen p-2 sm:p-4`} />
+          <div className="absolute top-4 left-8 z-40">
+            <button
+              onClick={handleBack}
+              className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center
+                hover:bg-white/7 transition
+                disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M31 12H2M2 12L9 6M2 12L9 18"
+                  stroke="black"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <div className="absolute inset-0">
+            <Gallery apartment={currentItem} galleryType={galleryType} />
+          </div>
+        </div>
       )}
       <div className={`w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4`}>
         <LandscapePrompt />
@@ -207,7 +287,7 @@ export default function App() {
                       activeLayer === null
                     )
                       setSidebarOpen(false);
-                    viewerProps.StartReverse(false, () => {});
+                    viewerProps.StartReverse(false, () => { });
                   }}
                   disabled={isDisabled || history.length <= 1}
                   className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
@@ -236,31 +316,28 @@ export default function App() {
             <div className="flex items-center gap-6">
               <button
                 onClick={() => handleActiveTab(TABS.SURROUNDINGS)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                  activeTab === TABS.SURROUNDINGS
-                    ? "bg-white/85 text-black"
-                    : "text-white"
-                }`}
+                className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.SURROUNDINGS
+                  ? "bg-white/85 text-black"
+                  : "text-white"
+                  }`}
               >
                 SURROUNDINGS
               </button>
               <button
                 onClick={() => handleActiveTab(TABS.ZONES)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                  activeTab === TABS.ZONES
-                    ? "bg-white/85 text-black"
-                    : "text-white"
-                }`}
+                className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.ZONES
+                  ? "bg-white/85 text-black"
+                  : "text-white"
+                  }`}
               >
                 ZONES
               </button>
               <button
                 onClick={() => handleActiveTab(TABS.AMENITIES)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                  activeTab === TABS.AMENITIES
-                    ? "bg-white/85 text-black"
-                    : "text-white"
-                }`}
+                className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.AMENITIES
+                  ? "bg-white/85 text-black"
+                  : "text-white"
+                  }`}
               >
                 AMENITIES
               </button>
@@ -273,7 +350,7 @@ export default function App() {
                     activeTab === TABS.SURROUNDINGS) &&
                   activeLayer === null
                 ) {
-                  viewerProps.StartReverse(false, () => {});
+                  viewerProps.StartReverse(false, () => { });
                   return;
                 }
                 goToHome();
@@ -282,25 +359,23 @@ export default function App() {
           </div>
 
           <div
-            className={`flex ${
-              sidebarOpen ? "gap-3" : "gap-0"
-            } flex-1 min-h-0 overflow-hidden`}
+            className={`flex ${sidebarOpen ? "gap-3" : "gap-0"
+              } flex-1 min-h-0 overflow-hidden`}
           >
             {/* Sidebar */}
             <aside
               className={`bg-white/9 rounded-2xl p-2 py-3 md:py-4 flex-shrink-0 transition-all duration-700 overflow-hidden
-             ${
-               activeTab === TABS.HOME ||
-               activeLayer === LAYERS.AMENITY_DETAIL ||
-               viewerProps.currentViewIndex !== 0
-                 ? "w-0 opacity-0 pointer-events-none"
-                 : sidebarOpen
-                 ? "w-44 md:w-68 opacity-100"
-                 : "w-0 opacity-0 pointer-events-none"
-             }`}
+             ${activeTab === TABS.HOME ||
+                  activeLayer === LAYERS.AMENITY_DETAIL ||
+                  viewerProps.currentViewIndex !== 0
+                  ? "w-0 opacity-0 pointer-events-none"
+                  : sidebarOpen
+                    ? "w-44 md:w-68 opacity-100"
+                    : "w-0 opacity-0 pointer-events-none"
+                }`}
             >
               {activeTab === TABS.ZONES && activeLayer === LAYERS.APARTMENT ? (
-                <UnitPanel unit={currentItem} onInterior={handleInterior} />
+                <UnitPanel unit={currentItem} onInterior={handleInterior} onBalconyView={handleBalconyView} onGallery={handleGallery} />
               ) : (
                 <div className="h-full pr-1">
                   {activeLayer === LAYERS.FLOOR && (
@@ -309,11 +384,10 @@ export default function App() {
                       <button
                         onClick={() => setIsFilter(false)}
                         className={`flex-1 px-4 py-2 font-semibold transition rounded-l-md 
-                    ${
-                      !isFilter
-                        ? "bg-white text-black"
-                        : "bg-[#2e2e2e] text-white hover:bg-white/7"
-                    }`}
+                    ${!isFilter
+                            ? "bg-white text-black"
+                            : "bg-[#2e2e2e] text-white hover:bg-white/7"
+                          }`}
                       >
                         Navigate
                       </button>
@@ -322,11 +396,10 @@ export default function App() {
                       <button
                         onClick={() => setIsFilter(true)}
                         className={`flex-1 px-4 py-2 font-semibold transition rounded-r-md 
-                    ${
-                      isFilter
-                        ? "bg-white text-black"
-                        : "bg-[#2e2e2e] text-white hover:bg-white/7"
-                    }`}
+                    ${isFilter
+                            ? "bg-white text-black"
+                            : "bg-[#2e2e2e] text-white hover:bg-white/7"
+                          }`}
                       >
                         Filter
                       </button>
@@ -594,11 +667,10 @@ export default function App() {
                   <div className=""> Views </div>
                   {/* prev button */}
                   <button
-                    className={`w-auto text-white mx-2 ${
-                      isDisabled
-                        ? "opacity-50 cursor-not-allowed"
-                        : "cursor-pointer"
-                    }`}
+                    className={`w-auto text-white mx-2 ${isDisabled
+                      ? "opacity-50 cursor-not-allowed"
+                      : "cursor-pointer"
+                      }`}
                     disabled={isDisabled}
                     onClick={() => {
                       viewerProps.changeView("prev");
@@ -647,11 +719,10 @@ export default function App() {
 
                   {/* next button */}
                   <button
-                    className={`w-auto text-white mx-2 ${
-                      isDisabled
-                        ? "opacity-50 cursor-not-allowed"
-                        : "cursor-pointer"
-                    }`}
+                    className={`w-auto text-white mx-2 ${isDisabled
+                      ? "opacity-50 cursor-not-allowed"
+                      : "cursor-pointer"
+                      }`}
                     disabled={isDisabled}
                     onClick={() => {
                       viewerProps.changeView("next");
