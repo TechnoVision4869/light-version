@@ -271,11 +271,11 @@ export default function App() {
           </div>
         </div>
       )}
-      <div className={`w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4`}>
+      <div className={`w-screen h-screen bg-[#2f2f2f] p-2 xl:p-4`}>
         <LandscapePrompt />
         <div className="w-full h-full flex flex-col">
           {/* Top Tabs */}
-          <div className="flex items-center justify-between mb-4 px-4">
+          <div className="flex items-center justify-between mb-2 xl:mb-4 px-4">
             <div className="flex items-center gap-3">
               {viewerProps.currentViewIndex === 0 && (
                 <button
@@ -651,7 +651,7 @@ export default function App() {
 
           {/* Breadcrumbs */}
 
-          <div className="flex px-6 pt-3">
+          <div className="flex px-4 pt-2 xl:pt-3">
             {history.length > 1 && (
               <div className="flex-shrink-0">
                 <HistoryBreadcrumbs

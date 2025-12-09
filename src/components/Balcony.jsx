@@ -3,8 +3,6 @@ import View360, { EquirectProjection } from "@egjs/react-view360";
 import "@egjs/react-view360/css/view360.min.css";
 
 export default function Panorama({ apartment }) {
-    console.log("enter");
-
     const ZOOM_MIN = 0.75; // = FOV 105 (max zoom-out)
     const ZOOM_MAX = 1.5; // = FOV 60 (max zoom-in)
     const ZOOM_NORMAL = 0.85; // = FOV 90
@@ -14,14 +12,13 @@ export default function Panorama({ apartment }) {
     const viewerRef = useRef(null);
 
     const view = apartment.balconyView;
-    console.log(view);
 
     const projection = new EquirectProjection({ src: view });
 
     // Handle initial load
     const handleReady = () => {
         // Initial view
-        console.log("ready");
+        // console.log("ready");
 
         viewerRef.current.camera.animateTo({
             // yaw: 0,
