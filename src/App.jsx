@@ -234,8 +234,7 @@ export default function App() {
             <Balcony apartment={currentItem} />
           </div>
         </div>
-      )
-      }
+      )}
 
       {galleryType && (
         <div className="absolute inset-0 z-60">
@@ -277,7 +276,7 @@ export default function App() {
           {/* Top Tabs */}
           <div className="flex items-center justify-between mb-2 xl:mb-4 px-4">
             <div className="flex items-center gap-3">
-              {viewerProps.currentViewIndex === 0 && (
+              {viewerProps.currentViewIndex === 0 ? (
                 <button
                   onClick={() => {
                     if (
@@ -287,10 +286,41 @@ export default function App() {
                       activeLayer === null
                     )
                       setSidebarOpen(false);
-                    viewerProps.StartReverse(false, () => { });
+                    viewerProps.StartReverse(false, () => {});
                   }}
                   disabled={isDisabled || history.length <= 1}
                   className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
+              hover:bg-white/7 transition
+              disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {/* back chev icon */}
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M31 12H2M2 12L9 6M2 12L9 18"
+                      stroke="black"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    if (viewerProps.currentViewIndex === 3) {
+                      viewerProps.changeView("next");
+                      return;
+                    }
+                    viewerProps.changeView("prev");
+                  }}
+                  disabled={isDisabled || history.length <= 1}
+                  className="w-10 h-10 rounded-xl bg-white/95 flex items-center justify-center 
               hover:bg-white/7 transition
               disabled:opacity-50 disabled:cursor-not-allowed"
                 >
@@ -316,28 +346,31 @@ export default function App() {
             <div className="flex items-center gap-6">
               <button
                 onClick={() => handleActiveTab(TABS.SURROUNDINGS)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.SURROUNDINGS
-                  ? "bg-white/85 text-black"
-                  : "text-white"
-                  }`}
+                className={`px-4 py-2 rounded-full text-sm font-semibold ${
+                  activeTab === TABS.SURROUNDINGS
+                    ? "bg-white/85 text-black"
+                    : "text-white"
+                }`}
               >
                 SURROUNDINGS
               </button>
               <button
                 onClick={() => handleActiveTab(TABS.ZONES)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.ZONES
-                  ? "bg-white/85 text-black"
-                  : "text-white"
-                  }`}
+                className={`px-4 py-2 rounded-full text-sm font-semibold ${
+                  activeTab === TABS.ZONES
+                    ? "bg-white/85 text-black"
+                    : "text-white"
+                }`}
               >
                 ZONES
               </button>
               <button
                 onClick={() => handleActiveTab(TABS.AMENITIES)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.AMENITIES
-                  ? "bg-white/85 text-black"
-                  : "text-white"
-                  }`}
+                className={`px-4 py-2 rounded-full text-sm font-semibold ${
+                  activeTab === TABS.AMENITIES
+                    ? "bg-white/85 text-black"
+                    : "text-white"
+                }`}
               >
                 AMENITIES
               </button>
@@ -350,7 +383,7 @@ export default function App() {
                     activeTab === TABS.SURROUNDINGS) &&
                   activeLayer === null
                 ) {
-                  viewerProps.StartReverse(false, () => { });
+                  viewerProps.StartReverse(false, () => {});
                   return;
                 }
                 goToHome();
@@ -359,23 +392,28 @@ export default function App() {
           </div>
 
           <div
-            className={`flex ${sidebarOpen ? "gap-3" : "gap-0"
-              } flex-1 min-h-0 overflow-hidden`}
+            className={`flex ${
+              sidebarOpen ? "gap-3" : "gap-0"
+            } flex-1 min-h-0 overflow-hidden`}
           >
             {/* Sidebar */}
             <aside
               className={`bg-white/9 rounded-2xl p-2 py-3 md:py-4 flex-shrink-0 transition-all duration-700 overflow-hidden
-             ${activeTab === TABS.HOME ||
-                  activeLayer === LAYERS.AMENITY_DETAIL ||
-                  viewerProps.currentViewIndex !== 0
-                  ? "w-0 opacity-0 pointer-events-none"
-                  : sidebarOpen
-                    ? "w-44 md:w-68 opacity-100"
-                    : "w-0 opacity-0 pointer-events-none"
-                }`}
+             ${
+               activeTab === TABS.HOME || activeLayer === LAYERS.AMENITY_DETAIL
+                 ? "w-0 opacity-0 pointer-events-none"
+                 : sidebarOpen
+                 ? "w-44 md:w-68 opacity-100"
+                 : "w-0 opacity-0 pointer-events-none"
+             }`}
             >
               {activeTab === TABS.ZONES && activeLayer === LAYERS.APARTMENT ? (
-                <UnitPanel unit={currentItem} onInterior={handleInterior} onBalconyView={handleBalconyView} onGallery={handleGallery} />
+                <UnitPanel
+                  unit={currentItem}
+                  onInterior={handleInterior}
+                  onBalconyView={handleBalconyView}
+                  onGallery={handleGallery}
+                />
               ) : (
                 <div className="h-full pr-1">
                   {activeLayer === LAYERS.FLOOR && (
@@ -384,10 +422,11 @@ export default function App() {
                       <button
                         onClick={() => setIsFilter(false)}
                         className={`flex-1 px-4 py-2 font-semibold transition rounded-l-md 
-                    ${!isFilter
-                            ? "bg-white text-black"
-                            : "bg-[#2e2e2e] text-white hover:bg-white/7"
-                          }`}
+                    ${
+                      !isFilter
+                        ? "bg-white text-black"
+                        : "bg-[#2e2e2e] text-white hover:bg-white/7"
+                    }`}
                       >
                         Navigate
                       </button>
@@ -396,10 +435,11 @@ export default function App() {
                       <button
                         onClick={() => setIsFilter(true)}
                         className={`flex-1 px-4 py-2 font-semibold transition rounded-r-md 
-                    ${isFilter
-                            ? "bg-white text-black"
-                            : "bg-[#2e2e2e] text-white hover:bg-white/7"
-                          }`}
+                    ${
+                      isFilter
+                        ? "bg-white text-black"
+                        : "bg-[#2e2e2e] text-white hover:bg-white/7"
+                    }`}
                       >
                         Filter
                       </button>
@@ -577,7 +617,8 @@ export default function App() {
                   )}
 
                 {activeLayer === LAYERS.BUILDING &&
-                  viewerProps.floatingOpacity && (
+                  viewerProps.floatingOpacity &&
+                  viewerProps.currentViewIndex === 0 && (
                     <Floating
                       items={LAYER_CONFIG[LAYERS.BUILDING].getItems(
                         currentItem
@@ -598,11 +639,10 @@ export default function App() {
 
                 {/* left floating chevron to collapse sidebar */}
                 {activeTab !== TABS.HOME &&
-                  activeLayer !== LAYERS.AMENITY_DETAIL &&
-                  viewerProps.currentViewIndex === 0 && (
+                  activeLayer !== LAYERS.AMENITY_DETAIL && (
                     <button
                       onClick={() => setSidebarOpen((s) => !s)}
-                      className="absolute left-[-18px] top-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow z-50"
+                      className="absolute left-[-16px] top-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow z-50"
                       aria-label={
                         sidebarOpen ? "close sidebar" : "open sidebar"
                       }
@@ -667,10 +707,11 @@ export default function App() {
                   <div className=""> Views </div>
                   {/* prev button */}
                   <button
-                    className={`w-auto text-white mx-2 ${isDisabled
-                      ? "opacity-50 cursor-not-allowed"
-                      : "cursor-pointer"
-                      }`}
+                    className={`w-auto text-white mx-2 ${
+                      isDisabled
+                        ? "opacity-50 cursor-not-allowed"
+                        : "cursor-pointer"
+                    }`}
                     disabled={isDisabled}
                     onClick={() => {
                       viewerProps.changeView("prev");
@@ -719,10 +760,11 @@ export default function App() {
 
                   {/* next button */}
                   <button
-                    className={`w-auto text-white mx-2 ${isDisabled
-                      ? "opacity-50 cursor-not-allowed"
-                      : "cursor-pointer"
-                      }`}
+                    className={`w-auto text-white mx-2 ${
+                      isDisabled
+                        ? "opacity-50 cursor-not-allowed"
+                        : "cursor-pointer"
+                    }`}
                     disabled={isDisabled}
                     onClick={() => {
                       viewerProps.changeView("next");
