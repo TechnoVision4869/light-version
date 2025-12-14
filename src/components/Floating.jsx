@@ -1,8 +1,9 @@
-import { useState, useEffect, useMemo } from "react";
-import { DATA } from "../data/layers";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import FloatingButton from "./buttons/FloatingButton";
 
-export default function FloatingFilter({ items, mediaRef, tab, layer, filters = null }) {
+export default function Floating({ items, mediaRef, tab, layer, filters = null, onSelectItem }) {
+    const container = mediaRef.current;
+
     // Filter items based on current filter state
     const filteredItems = useMemo(() => {
         if (!filters) return items;
@@ -41,36 +42,32 @@ export default function FloatingFilter({ items, mediaRef, tab, layer, filters = 
         items.map(() => ({ left: 0, top: 0 }))
     );
 
+    const updatePositions = useCallback(() => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        const videoW = h * (16 / 9);
+        const videoLeft = (w - videoW) / 2;
+
+        const newPositions = filteredItems.map(surr => ({
+            left: videoLeft + videoW * surr.x,
+            top: h * surr.y,
+        }));
+        setButtonPositions(newPositions);
+    }, [filteredItems, buttonPositions]);
+
+    // Update button positions whenever filteredItems changes
     useEffect(() => {
-        // Update button positions whenever filteredItems changes
-        const container = mediaRef.current;
         if (!container || filteredItems.length === 0) {
             setButtonPositions([]);
             return;
         }
-
-        const updatePositions = () => {
-            const w = container.clientWidth;
-            const h = container.clientHeight;
-            const videoW = h * (16 / 9);
-            const videoLeft = (w - videoW) / 2;
-
-            const newPositions = filteredItems.map(surr => ({
-                left: videoLeft + videoW * surr.x,
-                top: h * surr.y,
-            }));
-            setButtonPositions(newPositions);
-        };
-
         updatePositions();
 
         const resizeObserver = new ResizeObserver(updatePositions);
         resizeObserver.observe(container);
 
-        return () => {
-            resizeObserver.disconnect();
-        };
-    }, [mediaRef, DATA, filteredItems]); // Remove DATA dependency if it's not needed here
+        return () => resizeObserver.disconnect();
+    }, [filteredItems]);
 
     // Don't render anything if there are no filtered items or no positions calculated yet
     if (filteredItems.length === 0 || buttonPositions.length !== filteredItems.length) {
@@ -78,17 +75,18 @@ export default function FloatingFilter({ items, mediaRef, tab, layer, filters = 
     }
 
     return (
-        filteredItems.map((btn, i) => (
+        filteredItems.map((item, i) => (
             <FloatingButton
-                key={btn.id}
-                name={btn.name}
-                iconType={btn.icon}
+                key={item.id}
+                name={item.displayName}
+                icon={item.iconSrc}
                 tabType={tab}
                 layerType={layer}
                 style={{
                     left: `${buttonPositions[i].left}px`,
                     top: `${buttonPositions[i].top}px`,
                 }}
+                onSelect={() => onSelectItem(item, layer)}
             />
         ))
     );

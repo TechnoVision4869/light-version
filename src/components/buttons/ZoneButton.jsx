@@ -12,7 +12,7 @@ export default function ZoneButton({ zone, isDisabled, isSelected, goToZone }) {
         >
             <div className="text-left">
                 <div className="text-md font-bold text-white leading-tight">
-                    {zone.name}
+                    {zone.displayName}
                 </div>
                 <div className="text-xs text-white/60 leading-tight py-1">
                     {zone.subtitle}
@@ -21,7 +21,7 @@ export default function ZoneButton({ zone, isDisabled, isSelected, goToZone }) {
             <div className="w-full rounded-lg overflow-hidden bg-black/10">
                 <img
                     src={zone.thumbnail}
-                    alt={zone.name}
+                    alt={zone.displayName}
                     className="w-full h-full object-cover"
                 />
             </div>

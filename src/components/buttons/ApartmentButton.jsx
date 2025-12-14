@@ -18,7 +18,7 @@ export default function ApartmentButton({ apartment, isDisabled = true, isSelect
             <div className="flex items-center justify-between">
                 {/* Floor Name */}
                 <div className="text-md font-semibold text-white leading-tight">
-                    {apartment.name}
+                    {apartment.displayName}
                 </div>
 
                 {/* Vertical Divider + Floor Type */}

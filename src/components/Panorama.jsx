@@ -129,7 +129,7 @@ export default function Panorama({ apartment }) {
 
   // Find room by name
   const findRoomById = useCallback((roomLabel) => {
-    return floors.flatMap(floor => floor.rooms).find(room => room.name === roomLabel);
+    return floors.flatMap(floor => floor.rooms).find(room => room.displayName === roomLabel);
   }, [floors]);
 
   const switchRoomWithFade = useCallback((newRoom) => {

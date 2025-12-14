@@ -82,8 +82,8 @@ function Discrete({ name, options, array, onValueChange }) {
             onClick={() => toggleOption(option)}
             className={`py-2 px-3 rounded-lg
                                 ${isSelected(option)
-                ? "bg-white/10"
-                : "bg-[#2e2e2e] hover:bg-white/7"
+                ? "bg-white/10 border border-white/90 hover:bg-[#2e2e2e]"
+                : "bg-[#2e2e2e] border border-[#2e2e2e] hover:bg-white/7 hover:border-white/7"
               }`}
           >
             {option}

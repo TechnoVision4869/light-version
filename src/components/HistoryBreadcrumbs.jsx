@@ -8,8 +8,8 @@ export default function HistoryBreadcrumbs({ history, currentItem }) {
                             <button
                                 className="w-auto cursor-pointer text-white"
                             >
-                                {String(entry.item.name).charAt(0).toUpperCase() +
-                                    String(entry.item.name).slice(1)}
+                                {String(entry.item.displayName).charAt(0).toUpperCase() +
+                                    String(entry.item.displayName).slice(1)}
                             </button>
                             {entry.item.id !== currentItem.id && (
                                 <span className="text-white">›</span>
