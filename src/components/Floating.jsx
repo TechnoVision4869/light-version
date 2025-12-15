@@ -1,7 +1,9 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import FloatingButton from "./buttons/FloatingButton";
+import { TABS, LAYERS } from '../data/layers';
+import AnimButton from "./buttons/AnimButton";
 
-export default function Floating({ items, mediaRef, tab, layer, filters = null, onSelectItem }) {
+export default function Floating({ items, mediaRef, tab, layer, filters = null, onSelectItem, onChangePoints }) {
     const container = mediaRef.current;
 
     // Filter items based on current filter state
@@ -49,11 +51,32 @@ export default function Floating({ items, mediaRef, tab, layer, filters = null, 
         const videoLeft = (w - videoW) / 2;
 
         const newPositions = filteredItems.map(surr => ({
-            left: videoLeft + videoW * surr.x,
+            left: (videoLeft + videoW * surr.x),
             top: h * surr.y,
         }));
         setButtonPositions(newPositions);
     }, [filteredItems, buttonPositions]);
+
+    const updatePoints = (points) => {        
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        const videoW = h * (16 / 9);
+        const videoLeft = (w - videoW) / 2;
+
+        const newPoints = points.map(point => ({
+            // rounded = Math.round(number * 100) / 100;
+            x: Math.round(((videoLeft + videoW * point.x)/1000)*100) / 100,
+            y: Math.round(((h * point.y)/1000)*100) / 100,
+        }))
+        return newPoints;
+    }
+
+    useEffect(() => {
+        const resizeObserver = new ResizeObserver(updatePositions);
+        resizeObserver.observe(container);
+
+        return () => resizeObserver.disconnect();
+    },[]); // Empty dependency array ensures this runs once on mount
 
     // Update button positions whenever filteredItems changes
     useEffect(() => {
@@ -62,11 +85,7 @@ export default function Floating({ items, mediaRef, tab, layer, filters = null, 
             return;
         }
         updatePositions();
-
-        const resizeObserver = new ResizeObserver(updatePositions);
-        resizeObserver.observe(container);
-
-        return () => resizeObserver.disconnect();
+        
     }, [filteredItems]);
 
     // Don't render anything if there are no filtered items or no positions calculated yet
@@ -74,12 +93,32 @@ export default function Floating({ items, mediaRef, tab, layer, filters = null, 
         return null;
     }
 
+    if(tab === TABS.SURROUNDINGS) {
+        return (
+        filteredItems.map((item, i) => (
+            <AnimButton
+                key={item.id}
+                name={item.displayName}
+                icon={item.iconSrc}
+                style={{
+                    left: `${buttonPositions[i].left}px`,
+                    top: `${buttonPositions[i].top}px`,
+                }}
+                onSelect={() => {
+                    onSelectItem(item, LAYERS.SURROUNDING_DETAIL);
+                    onChangePoints(updatePoints(item.points));
+                }
+                }
+            />
+        ))
+    );
+}
+
     return (
         filteredItems.map((item, i) => (
             <FloatingButton
                 key={item.id}
                 name={item.displayName}
-                icon={item.iconSrc}
                 tabType={tab}
                 layerType={layer}
                 style={{

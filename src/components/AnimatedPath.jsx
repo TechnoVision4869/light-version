@@ -1,8 +1,10 @@
 // AnimatedPath.jsx
 import { useEffect, useRef } from 'react';
 
-export default function AnimatedPath({ points, curve = true, color = "white", strokeWidth = 0.005 }) {
+export default function AnimatedPath({ points = null, curve = true, color = "white", strokeWidth = 0.005 }) {
   const pathRef = useRef(null);
+  console.log(points);
+  
 
   useEffect(() => {
     const path = pathRef.current;

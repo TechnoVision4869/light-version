@@ -36,6 +36,7 @@ export default function App() {
   const [isPanorama, setIsPanorama] = useState(false);
   const [isBalconyView, setIsBalconyView] = useState(false);
   const [galleryType, setGalleryType] = useState(null);
+  const [points, setPoints] = useState(null);
 
   const handleBack = () => {
     setIsPanorama(false);
@@ -579,15 +580,9 @@ export default function App() {
                     preload="auto"
                     loop
                   />
-                  {
-                    // activeLayer === LAYERS.SURROUNDING_DETAIL && 
-                    activeTab === TABS.SURROUNDINGS && (<AnimatedPath points={[
-                      { x: 0.50, y: 0.51 },
-                      { x: 0.40, y: 0.50 },
-                      { x: 0.30, y: 0.49 },
-                      { x: 0.15, y: 0.455 },
-                    ]} />)
-                  }
+                  {activeLayer === LAYERS.SURROUNDING_DETAIL && (
+                    <AnimatedPath points={points}/>
+                  )}
                 </div>
 
                 {activeTab === TABS.SURROUNDINGS &&
@@ -597,6 +592,8 @@ export default function App() {
                       items={DATA.surroundings}
                       mediaRef={mediaContainerRef}
                       tab={activeTab}
+                      onSelectItem={handleGoToItem}
+                      onChangePoints={(points) => setPoints(points)}
                     />
                   )}
 
@@ -642,6 +639,8 @@ export default function App() {
                       items={LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem)}
                       mediaRef={mediaContainerRef}
                       filters={filters}
+                      layer={LAYERS.APARTMENT}
+                      onSelectItem={handleGoToItem}
                     />
                   )}
 

@@ -19,6 +19,7 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
 
   const currentHistoryEntry = history[history.length - 1]; // Get the current (top) entry
   const activeTab = currentHistoryEntry?.tab || null;
+  const activeLayer = currentHistoryEntry?.layer || null;
   const currentItem = currentHistoryEntry?.item || null;
   const numViews = 4;
 
@@ -235,6 +236,10 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
   const StartReverse = useCallback(
     (isFromAnotherTab, onReverseEnded) => {
       if (history.length <= 1) return;
+      if(activeLayer === LAYERS.SURROUNDING_DETAIL) {
+        onGoBack();
+        return;
+      }
       // console.log("StartReverse called with current reverse video:", currentVideosPaths.reverseVideo);
       playReverseVideo(isFromAnotherTab, onReverseEnded);
     },
@@ -242,7 +247,10 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
   );
 
   useEffect(() => {
-    setIsVideosLoaded(false);
+    console.log(activeLayer);
+    
+    if(activeLayer !== LAYERS.SURROUNDING_DETAIL)
+      setIsVideosLoaded(false);
 
     const loadVideoAssets = async () => {
       const shouldStayIdle = justNavigatedBackRef.current;

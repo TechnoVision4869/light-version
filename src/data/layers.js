@@ -5,6 +5,8 @@ import AirportIcon from '../assets/icons/airport.svg';
 import TowerIcon from '../assets/icons/tower.svg';
 import MuscleIcon from '../assets/icons/muscle.svg';
 
+const START = { x: 0.50, y: 0.51 };
+
 // Navigation Tabs (top-level categories)
 export const TABS = {
   HOME: "home",
@@ -4250,13 +4252,19 @@ export const DATA = {
   surroundings: [
     {
       id: "surrounding1",
-      displaydisplayName: "Cairo Airport",
+      displayName: "Cairo Airport",
       iconSrc: AirportIcon,
       thumbnail: "thumbnails/cairo_airboart.jpg",
       distance: "38 min | 55 km",
       description:
         "Cairo International Airport is the principal international airport of Cairo and the largest and busiest airport in Egypt. It serves as the primary hub for Egyptair and Nile Air as well as several other airlines.",
       x: 0.75, y: 0.85,
+      points: [
+        START,
+        { x: 0.70, y: 0.80},
+        {x: 0.65, y: 0.78},
+        {x: 0.60, y: 0.75},
+      ]
     },
     {
       id: "surrounding2",
@@ -4266,6 +4274,11 @@ export const DATA = {
       distance: "3 min | 1 km",
       description: "Gym...",
       x: 0.545, y: 0.56,
+      points: [
+        START,
+        { x: 0.52, y: 0.55},
+        {x: 0.50, y: 0.53},
+      ]
     },
     {
       id: "surrounding3",
@@ -4275,6 +4288,11 @@ export const DATA = {
       distance: "8 min | 5 km",
       description: "Iconic tower...",
       x: 0.27, y: 0.43,
+      points: [
+        START,
+        {x: 0.30, y: 0.40},
+        {x: 0.28, y: 0.38},
+      ]
     },
   ],
   amenities: [
