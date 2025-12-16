@@ -4254,7 +4254,7 @@ export const DATA = {
       id: "surrounding1",
       displayName: "Cairo Airport",
       iconSrc: AirportIcon,
-      thumbnail: "thumbnails/cairo_airboart.jpg",
+      thumbnail: "thumbnails/surroundings/cairo_airboart.jpg",
       distance: "38 min | 55 km",
       description:
         "Cairo International Airport is the principal international airport of Cairo and the largest and busiest airport in Egypt. It serves as the primary hub for Egyptair and Nile Air as well as several other airlines.",
@@ -4275,9 +4275,9 @@ export const DATA = {
       id: "surrounding2",
       displayName: "Gym",
       iconSrc: MuscleIcon,
-      thumbnail: "thumbnails/gym.jpg",
+      thumbnail: "thumbnails/surroundings/gym.jpg",
       distance: "3 min | 1 km",
-      description: "Gym...",
+      description: "A modern fully equipped gym that support strength, cardio and everyday wellness.",
       x: 0.545, y: 0.56,
       points: [
         START, // { x: 0.50, y: 0.51 }
@@ -4290,9 +4290,9 @@ export const DATA = {
       id: "surrounding3",
       displayName: "Iconic Tower",
       iconSrc: TowerIcon,
-      thumbnail: "thumbnails/iconic_tower.jpg",
+      thumbnail: "thumbnails/surroundings/iconic_tower.jpg",
       distance: "8 min | 5 km",
-      description: "Iconic tower...",
+      description: "An architectural landmark that defines the city skyline.",
       x: 0.27, y: 0.43,
       points: [
         START, //{ x: 0.50, y: 0.51 }

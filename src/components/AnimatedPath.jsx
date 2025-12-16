@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 export default function AnimatedPath({
   points = null,
-  color = "#3f3f3f",
+  color = "white",
   strokeWidth = 0.005
 }) {
   const pathRef = useRef(null);

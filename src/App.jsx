@@ -397,7 +397,7 @@ export default function App() {
             {/* Sidebar */}
             <aside
               className={`bg-white/9 rounded-2xl p-2 py-3 md:py-4 flex-shrink-0 transition-all duration-700 overflow-hidden
-             ${activeTab === TABS.HOME || activeLayer === LAYERS.AMENITY_DETAIL
+             ${activeTab === TABS.HOME || activeLayer === LAYERS.AMENITY_DETAIL || activeLayer === LAYERS.SURROUNDING_DETAIL
                   ? "w-0 opacity-0 pointer-events-none"
                   : sidebarOpen
                     ? "w-44 md:w-68 opacity-100"
@@ -646,7 +646,8 @@ export default function App() {
 
                 {/* left floating chevron to collapse sidebar */}
                 {activeTab !== TABS.HOME &&
-                  activeLayer !== LAYERS.AMENITY_DETAIL && (
+                  activeLayer !== LAYERS.AMENITY_DETAIL && 
+                  activeLayer !== LAYERS.SURROUNDING_DETAIL && (
                     <button
                       onClick={() => setSidebarOpen((s) => !s)}
                       className="absolute left-[-16px] top-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow z-50"
