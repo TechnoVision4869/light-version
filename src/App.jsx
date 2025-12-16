@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { TABS, LAYERS, TAB_CONFIG, LAYER_CONFIG, DATA } from "./data/layers";
 // Hooks
 import { useNavigation } from "./components/hooks/useNavigation";
@@ -36,10 +36,11 @@ export default function App() {
   const [isPanorama, setIsPanorama] = useState(false);
   const [isBalconyView, setIsBalconyView] = useState(false);
   const [galleryType, setGalleryType] = useState(null);
-  const [points, setPoints] = useState(null);
+  const [selectedSurroundingId, setSelectedSurroundingId] = useState(null);
 
   const handleBack = () => {
     setIsPanorama(false);
+    setSelectedSurroundingId(null);
     setIsBalconyView(false);
     setGalleryType(null);
   };
@@ -51,6 +52,26 @@ export default function App() {
 
   // Ref
   const mediaContainerRef = useRef(null);
+
+  const selectedSurrounding = useMemo(() => {
+    if (!selectedSurroundingId) return null;
+    return DATA.surroundings.find(s => s.id === selectedSurroundingId);
+  }, [selectedSurroundingId]);
+
+  const currentPathPoints = useMemo(() => {
+    if (!selectedSurrounding || !mediaContainerRef.current) return null;
+
+    const container = mediaContainerRef.current;
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    const videoW = h * (16 / 9);
+    const videoLeft = (w - videoW) / 2;
+
+    return (selectedSurrounding.points || []).map(p => ({
+      x: (videoLeft + videoW * p.x) / w,
+      y: p.y, // since y is already normalized to [0,1] in your data
+    }));
+  }, [selectedSurrounding, mediaContainerRef.current?.clientWidth, mediaContainerRef.current?.clientHeight]);
 
   // Navigation hook
   const {
@@ -581,7 +602,7 @@ export default function App() {
                     loop
                   />
                   {activeLayer === LAYERS.SURROUNDING_DETAIL && (
-                    <AnimatedPath points={points}/>
+                    <AnimatedPath points={currentPathPoints} />
                   )}
                 </div>
 
@@ -593,7 +614,7 @@ export default function App() {
                       mediaRef={mediaContainerRef}
                       tab={activeTab}
                       onSelectItem={handleGoToItem}
-                      onChangePoints={(points) => setPoints(points)}
+                      onChangeItem={(id) => setSelectedSurroundingId(id)}
                     />
                   )}
 
@@ -646,7 +667,7 @@ export default function App() {
 
                 {/* left floating chevron to collapse sidebar */}
                 {activeTab !== TABS.HOME &&
-                  activeLayer !== LAYERS.AMENITY_DETAIL && 
+                  activeLayer !== LAYERS.AMENITY_DETAIL &&
                   activeLayer !== LAYERS.SURROUNDING_DETAIL && (
                     <button
                       onClick={() => setSidebarOpen((s) => !s)}

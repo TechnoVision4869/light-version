@@ -3,9 +3,8 @@ import FloatingButton from "./buttons/FloatingButton";
 import { TABS, LAYERS } from '../data/layers';
 import AnimButton from "./buttons/AnimButton";
 
-export default function Floating({ items, mediaRef, tab, layer, filters = null, onSelectItem, onChangePoints }) {
+export default function Floating({ items, mediaRef, tab, layer, filters = null, onSelectItem, onChangeItem }) {
     const container = mediaRef.current;
-
     // Filter items based on current filter state
     const filteredItems = useMemo(() => {
         if (!filters) return items;
@@ -40,42 +39,27 @@ export default function Floating({ items, mediaRef, tab, layer, filters = null, 
         });
     }, [items, filters]);
 
-    const [itemLayouts, setItemLayouts] = useState([]);
+    const [buttonPositions, setButtonPositions] = useState(
+        items.map(() => ({ left: 0, top: 0 }))
+    );
 
-    const computeItemLayouts = useCallback(() => {
-        if (!container || filteredItems.length === 0) {
-            setItemLayouts([]);
-            return;
-        }
-
+    const updatePositions = useCallback(() => {
         const w = container.clientWidth;
         const h = container.clientHeight;
         const videoW = h * (16 / 9);
         const videoLeft = (w - videoW) / 2;
 
-        const layouts = filteredItems.map(item => {
-            // 1. Button position (in pixels, for CSS)
-            const buttonPos = {
-                left: videoLeft + videoW * item.x,
-                top: h * item.y,
-            };
-
-            // 2. Path points (normalized to [0,1] for SVG viewBox)
-            const pathPoints = (item.points || []).map(p => ({
-                x: (videoLeft + videoW * p.x) / w, // normalized to full container width
-                y: (h * p.y) / h                   // = p.y, but keep for clarity; or just p.y
-            }));
-
-            return { item, buttonPos, pathPoints };
-        });
-
-        setItemLayouts(layouts);
-    }, []);
+        const newPositions = filteredItems.map(surr => ({
+            left: videoLeft + videoW * surr.x,
+            top: h * surr.y,
+        }));
+        setButtonPositions(newPositions);
+    }, [filteredItems]);
 
     useEffect(() => {
         if (!container) return;
 
-        const resizeObserver = new ResizeObserver(computeItemLayouts);
+        const resizeObserver = new ResizeObserver(updatePositions);
         resizeObserver.observe(container);
 
         return () => resizeObserver.disconnect();
@@ -83,18 +67,18 @@ export default function Floating({ items, mediaRef, tab, layer, filters = null, 
 
     if (tab === TABS.SURROUNDINGS) {
         return (
-            itemLayouts.map(({ item, buttonPos, pathPoints }) => (
+            filteredItems.map((item, i) => (
                 <AnimButton
                     key={item.id}
                     name={item.displayName}
                     icon={item.iconSrc}
                     style={{
-                        left: `${buttonPos.left}px`,
-                        top: `${buttonPos.top}px`,
+                        left: `${buttonPositions[i].left}px`,
+                        top: `${buttonPositions[i].top}px`,
                     }}
                     onSelect={() => {
                         onSelectItem(item, LAYERS.SURROUNDING_DETAIL);
-                        onChangePoints(pathPoints);
+                        onChangeItem(item.id);
                     }}
                 />
             ))
@@ -102,15 +86,15 @@ export default function Floating({ items, mediaRef, tab, layer, filters = null, 
     }
 
     return (
-        itemLayouts.map(({ item, buttonPos }) => (
+        filteredItems.map((item, i) => (
             <FloatingButton
                 key={item.id}
                 name={item.displayName}
                 tabType={tab}
                 layerType={layer}
                 style={{
-                    left: `${buttonPos.left}px`,
-                    top: `${buttonPos.top}px`,
+                    left: `${buttonPositions[i].left}px`,
+                    top: `${buttonPositions[i].top}px`,
                 }}
                 onSelect={() => onSelectItem(item, layer)}
             />
