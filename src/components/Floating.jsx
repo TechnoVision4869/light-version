@@ -40,90 +40,77 @@ export default function Floating({ items, mediaRef, tab, layer, filters = null, 
         });
     }, [items, filters]);
 
-    const [buttonPositions, setButtonPositions] = useState(
-        items.map(() => ({ left: 0, top: 0 }))
-    );
+    const [itemLayouts, setItemLayouts] = useState([]);
 
-    const updatePositions = useCallback(() => {
+    const computeItemLayouts = useCallback(() => {
+        if (!container || filteredItems.length === 0) {
+            setItemLayouts([]);
+            return;
+        }
+
         const w = container.clientWidth;
         const h = container.clientHeight;
         const videoW = h * (16 / 9);
         const videoLeft = (w - videoW) / 2;
 
-        const newPositions = filteredItems.map(surr => ({
-            left: (videoLeft + videoW * surr.x),
-            top: h * surr.y,
-        }));
-        setButtonPositions(newPositions);
-    }, [filteredItems, buttonPositions]);
+        const layouts = filteredItems.map(item => {
+            // 1. Button position (in pixels, for CSS)
+            const buttonPos = {
+                left: videoLeft + videoW * item.x,
+                top: h * item.y,
+            };
 
-    const updatePoints = (points) => {        
-        const w = container.clientWidth;
-        const h = container.clientHeight;
-        const videoW = h * (16 / 9);
-        const videoLeft = (w - videoW) / 2;
+            // 2. Path points (normalized to [0,1] for SVG viewBox)
+            const pathPoints = (item.points || []).map(p => ({
+                x: (videoLeft + videoW * p.x) / w, // normalized to full container width
+                y: (h * p.y) / h                   // = p.y, but keep for clarity; or just p.y
+            }));
 
-        const newPoints = points.map(point => ({
-            // rounded = Math.round(number * 100) / 100;
-            x: Math.round(((videoLeft + videoW * point.x)/1000)*100) / 100,
-            y: Math.round(((h * point.y)/1000)*100) / 100,
-        }))
-        return newPoints;
-    }
+            return { item, buttonPos, pathPoints };
+        });
+
+        setItemLayouts(layouts);
+    }, []);
 
     useEffect(() => {
-        const resizeObserver = new ResizeObserver(updatePositions);
+        if (!container) return;
+
+        const resizeObserver = new ResizeObserver(computeItemLayouts);
         resizeObserver.observe(container);
 
         return () => resizeObserver.disconnect();
-    },[]); // Empty dependency array ensures this runs once on mount
+    }, []); // Empty dependency array ensures this runs once on mount
 
-    // Update button positions whenever filteredItems changes
-    useEffect(() => {
-        if (!container || filteredItems.length === 0) {
-            setButtonPositions([]);
-            return;
-        }
-        updatePositions();
-        
-    }, [filteredItems]);
-
-    // Don't render anything if there are no filtered items or no positions calculated yet
-    if (filteredItems.length === 0 || buttonPositions.length !== filteredItems.length) {
-        return null;
+    if (tab === TABS.SURROUNDINGS) {
+        return (
+            itemLayouts.map(({ item, buttonPos, pathPoints }) => (
+                <AnimButton
+                    key={item.id}
+                    name={item.displayName}
+                    icon={item.iconSrc}
+                    style={{
+                        left: `${buttonPos.left}px`,
+                        top: `${buttonPos.top}px`,
+                    }}
+                    onSelect={() => {
+                        onSelectItem(item, LAYERS.SURROUNDING_DETAIL);
+                        onChangePoints(pathPoints);
+                    }}
+                />
+            ))
+        );
     }
 
-    if(tab === TABS.SURROUNDINGS) {
-        return (
-        filteredItems.map((item, i) => (
-            <AnimButton
-                key={item.id}
-                name={item.displayName}
-                icon={item.iconSrc}
-                style={{
-                    left: `${buttonPositions[i].left}px`,
-                    top: `${buttonPositions[i].top}px`,
-                }}
-                onSelect={() => {
-                    onSelectItem(item, LAYERS.SURROUNDING_DETAIL);
-                    onChangePoints(updatePoints(item.points));
-                }
-                }
-            />
-        ))
-    );
-}
-
     return (
-        filteredItems.map((item, i) => (
+        itemLayouts.map(({ item, buttonPos }) => (
             <FloatingButton
                 key={item.id}
                 name={item.displayName}
                 tabType={tab}
                 layerType={layer}
                 style={{
-                    left: `${buttonPositions[i].left}px`,
-                    top: `${buttonPositions[i].top}px`,
+                    left: `${buttonPos.left}px`,
+                    top: `${buttonPos.top}px`,
                 }}
                 onSelect={() => onSelectItem(item, layer)}
             />

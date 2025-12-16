@@ -4260,10 +4260,15 @@ export const DATA = {
         "Cairo International Airport is the principal international airport of Cairo and the largest and busiest airport in Egypt. It serves as the primary hub for Egyptair and Nile Air as well as several other airlines.",
       x: 0.75, y: 0.85,
       points: [
-        START,
-        { x: 0.70, y: 0.80},
-        {x: 0.65, y: 0.78},
-        {x: 0.60, y: 0.75},
+        START, // { x: 0.50, y: 0.51 }
+        { x: 0.555, y: 0.507 },
+        { x: 0.605, y: 0.495 },
+        { x: 0.618, y: 0.535 },
+        { x: 0.63, y: 0.563 },
+        { x: 0.65, y: 0.545},
+        { x: 0.665, y: 0.57 },
+        { x: 0.765, y: 0.855 },
+        { x: 0.755, y: 0.865 },
       ]
     },
     {
@@ -4275,9 +4280,10 @@ export const DATA = {
       description: "Gym...",
       x: 0.545, y: 0.56,
       points: [
-        START,
-        { x: 0.52, y: 0.55},
-        {x: 0.50, y: 0.53},
+        START, // { x: 0.50, y: 0.51 }
+        { x: 0.55, y: 0.51 },
+        { x: 0.55, y: 0.58 },
+        { x: 0.54, y: 0.585 },
       ]
     },
     {
@@ -4289,9 +4295,12 @@ export const DATA = {
       description: "Iconic tower...",
       x: 0.27, y: 0.43,
       points: [
-        START,
-        {x: 0.30, y: 0.40},
-        {x: 0.28, y: 0.38},
+        START, //{ x: 0.50, y: 0.51 }
+        { x: 0.455, y: 0.505 },
+        { x: 0.4, y: 0.495 },
+        { x: 0.34, y: 0.475 },
+        { x: 0.31, y: 0.47 },
+        { x: 0.292, y: 0.48 },
       ]
     },
   ],

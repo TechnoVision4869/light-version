@@ -247,8 +247,6 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
   );
 
   useEffect(() => {
-    console.log(activeLayer);
-    
     if(activeLayer !== LAYERS.SURROUNDING_DETAIL)
       setIsVideosLoaded(false);
 
