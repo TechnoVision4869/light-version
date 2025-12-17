@@ -95,9 +95,9 @@ function Discrete({ name, options, array, onValueChange }) {
 }
 
 export default function FilterPanel({ onFilterChange }) {
-  const [unitType, setUnitType] = useState(UNIT_TYPES);
-  const [bedrooms, setBedrooms] = useState(BEDROOM_OPTIONS);
-  const [bathrooms, setBathrooms] = useState(BATHROOM_OPTIONS);
+  const [unitType, setUnitType] = useState([]);
+  const [bedrooms, setBedrooms] = useState([]);
+  const [bathrooms, setBathrooms] = useState([]);
   const [area, setArea] = useState(AREA_RANGE.MAX);
   const [price, setPrice] = useState(BUDGET_RANGE.MAX);
 
