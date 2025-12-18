@@ -125,6 +125,8 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
     if (!videoPath) {
       return;
     }
+    console.log(navigatedBetweenTabs);
+    
     console.log("StartReverse called with reverse video:", currentVideosPaths.reverseVideo);
     setFloatingOpacity(0);
 
@@ -243,8 +245,7 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
   );
 
   useEffect(() => {
-    if (activeLayer !== LAYERS.SURROUNDING_DETAIL)
-      setIsVideosLoaded(false);
+    if (activeLayer !== LAYERS.SURROUNDING_DETAIL) setIsVideosLoaded(false);
 
     const loadVideoAssets = async () => {
       const shouldStayIdle = justNavigatedBackRef.current;
@@ -252,7 +253,7 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
 
       // Check if we are in the middle of a view transition, if so, don't interfere
       if (isViewTransitioningRef.current) {
-        // console.log("Main videos paths changed, but a view transition is ongoing, skipping main load logic.");
+        console.log("Main videos paths changed, but a view transition is ongoing, skipping main load logic.");
         return;
       }
 
@@ -265,7 +266,7 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
           playIdleVideo();
         } else {
           if (activeTab === TABS.HOME && isInitPlayedRef.current) {
-            // console.log("initial HOME tab, playing idle video.");
+            console.log("initial HOME tab, playing idle video.");
             setTimeout(() => {
               playIdleVideo();
               isInitPlayedRef.current = false;
