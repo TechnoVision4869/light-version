@@ -4,10 +4,10 @@ import { TABS, TAB_CONFIG, LAYER_CONFIG } from "../../data/layers";
 export function useNavigation() {
     const initHistory = [
         {
-            tab: TABS.HOME,
+            tab: TABS.PROJECT,
             layer: null,
             item: null,
-            videosPath: TAB_CONFIG[TABS.HOME].videosPath,
+            videosPath: null,
         },
     ];
 
@@ -23,13 +23,25 @@ export function useNavigation() {
         videosPath: currentVideosPaths,
     } = currentEntry;
 
+    const goToProject = useCallback((project) => {
+        setHistory(() => [
+            ...initHistory,
+            {
+                tab: TABS.HOME,
+                layer: null,
+                item: project,
+                videosPath: TAB_CONFIG[TABS.HOME].videosPath(project.id),
+            },
+        ]);
+    }, []);
+
     // Navigate to a main tab (ZONES, SURROUNDINGS, AMENITIES)
     const goToTab = useCallback((tabKey, isFromHome = true) => {
         const config = TAB_CONFIG[tabKey];
         // console.log(tabKey);
 
-        setHistory(() => [
-            ...initHistory,
+        setHistory((prevHistory) => [
+            ...prevHistory,
             {
                 tab: tabKey,
                 layer: null,
@@ -82,6 +94,7 @@ export function useNavigation() {
         activeLayer,
         currentItem,
         currentVideosPaths,
+        goToProject,
         goToTab,
         goToItem,
         goBack,

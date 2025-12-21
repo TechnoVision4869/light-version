@@ -1,12 +1,13 @@
 import HOME_ICON from "../../assets/icons/home.svg?react";
 
-export default function HomeButton({ onHomeClick }) {
+export default function HomeButton({disabled, onHomeClick }) {
     return (
         <div>
             <button
                 onClick={onHomeClick}
-                className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
-              hover:bg-white/7 transition"
+                disabled={disabled}
+                className={`w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
+              hover:bg-white/7 transition ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
                 aria-label="Home"
             >
                 <img

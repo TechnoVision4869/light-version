@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { TABS, LAYERS, TAB_CONFIG, LAYER_CONFIG, DATA } from "./data/layers";
+import { setProject } from "./data/ProjectState";
 // Hooks
 import { useNavigation } from "./components/hooks/useNavigation";
 import { useVideoViewer } from "./components/hooks/useVideoViewer";
@@ -80,11 +81,20 @@ export default function App() {
     activeLayer,
     currentItem,
     currentVideosPaths, // This is the main navigation video path
+    goToProject,
     goToTab,
     goToItem,
     goBack,
     goToHome,
   } = useNavigation();
+
+  useEffect(() => {
+    setProject(history[1]?.item);    
+  }, [history]);
+
+  const navigationDisabled = activeTab === TABS.PROJECT;
+
+  console.log(history);
 
   const videoViewer = useVideoViewer({
     currentVideosPaths,
@@ -124,6 +134,10 @@ export default function App() {
     setShowInfoPopup(false);
   };
 
+  const handleActiveProject = (project) => {
+    goToProject(project);
+  }
+
   const handleActiveTab = (tab) => {
     if (tab === activeTab) return;
 
@@ -139,7 +153,7 @@ export default function App() {
         viewerProps.StartReverse(isFromAnotherTab, () => goToTab(tab, true));
         return;
       }
-      goToTab(tab, isFromHome, isFromAnotherTab);
+      goToTab(tab, isFromHome);
     }
 
     setTimeout(() => {
@@ -295,6 +309,7 @@ export default function App() {
       <div className={`w-screen h-screen bg-[#2f2f2f] py-2 px-3 xl:p-4`}>
         <LandscapePrompt />
         <div className="w-full h-full flex flex-col">
+
           {/* Top Tabs */}
           <div className="flex items-center justify-between mb-2 xl:mb-4 px-4">
             <div className="flex items-center gap-3">
@@ -368,33 +383,31 @@ export default function App() {
             <div className="flex items-center gap-6">
               <button
                 onClick={() => handleActiveTab(TABS.SURROUNDINGS)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.SURROUNDINGS
-                  ? "bg-white/85 text-black"
-                  : "text-white"
-                  }`}
+                disabled={navigationDisabled}
+                className={`px-4 py-2 rounded-full text-sm font-semibold ${navigationDisabled ? "opacity-50 cursor-not-allowed" : ""}
+                ${activeTab === TABS.SURROUNDINGS ? "bg-white/85 text-black" : "text-white"}`}
               >
                 SURROUNDINGS
               </button>
               <button
                 onClick={() => handleActiveTab(TABS.ZONES)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.ZONES
-                  ? "bg-white/85 text-black"
-                  : "text-white"
-                  }`}
+                disabled={navigationDisabled}
+                className={`px-4 py-2 rounded-full text-sm font-semibold ${navigationDisabled ? "opacity-50 cursor-not-allowed" : ""}
+                ${activeTab === TABS.ZONES ? "bg-white/85 text-black" : "text-white"}`}
               >
                 ZONES
               </button>
               <button
                 onClick={() => handleActiveTab(TABS.AMENITIES)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.AMENITIES
-                  ? "bg-white/85 text-black"
-                  : "text-white"
-                  }`}
+                disabled={navigationDisabled}
+                className={`px-4 py-2 rounded-full text-sm font-semibold ${navigationDisabled ? "opacity-50 cursor-not-allowed" : ""}
+                ${activeTab === TABS.AMENITIES ? "bg-white/85 text-black" : "text-white"}`}
               >
                 AMENITIES
               </button>
             </div>
             <HomeButton
+              disabled={navigationDisabled}
               onHomeClick={() => {
                 if (
                   (activeTab === TABS.ZONES ||
@@ -410,6 +423,7 @@ export default function App() {
             />
           </div>
 
+          {/* side bar & main content */}
           <div
             className={`flex ${sidebarOpen ? "gap-3" : "gap-0"
               } flex-1 min-h-0 overflow-hidden`}
@@ -609,7 +623,7 @@ export default function App() {
                   activeLayer === null &&
                   viewerProps.floatingOpacity && (
                     <Floating
-                      items={DATA.surroundings}
+                      items={TAB_CONFIG[TABS.SURROUNDINGS].getItems()}
                       mediaRef={mediaContainerRef}
                       tab={activeTab}
                       onSelectItem={handleGoToItem}
@@ -621,7 +635,7 @@ export default function App() {
                   activeLayer === null &&
                   viewerProps.floatingOpacity && (
                     <Floating
-                      items={DATA.amenities}
+                      items={TAB_CONFIG[TABS.AMENITIES].getItems()}
                       mediaRef={mediaContainerRef}
                       layer={LAYERS.AMENITY_DETAIL}
                       onSelectItem={handleGoToItem}
@@ -717,8 +731,33 @@ export default function App() {
             </main>
           </div>
 
-          {/* Breadcrumbs */}
+          {activeTab === TABS.PROJECT &&
+            (
+              <div className="w-full h-full flex items-center">
+                {DATA.projects.map((project) =>
+                  <button key={project.id}
+                    onClick={() => handleActiveProject(project)}
+                    className="w-64 max-w-full mx-auto px-4 pt-4 pb-2 rounded-2xl transition bg-black/10 hover:bg-white/7"
+                  >
+                    <div className="w-full rounded-lg overflow-hidden bg-black/10">
+                      <img
+                        src={project.thumbnail}
+                        alt={project.displayName}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="text-center pt-2">
+                      <div className="text-md font-bold text-white leading-tight">
+                        {project.displayName}
+                      </div>
+                    </div>
+                  </button>)
+                }
+              </div>
+            )
+          }
 
+          {/* Breadcrumbs */}
           <div className="flex px-4 pt-2 xl:pt-3">
             {history.length > 1 && (
               <div className="flex-shrink-0">
