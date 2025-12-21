@@ -463,7 +463,7 @@ export default function App() {
                   )}
 
                   {isFilter ? (
-                    <FilterPanel onFilterChange={setFilters} />
+                    <FilterPanel currentItem={currentItem} onFilterChange={setFilters} />
                   ) : (
                     <>
                       {/* Dynamic sidebar title based on active tab */}

@@ -190,8 +190,8 @@ export const LAYER_CONFIG = {
     },
     getData: (apartmentId) => DATA.apartments.find((a) => a.id === apartmentId),
 
-    getMinMaxRange: (filterName) => {
-      const apartments = DATA.apartments;
+    getMinMaxRange: (apartments = DATA.apartments, filterName) => {
+      // const apartments = DATA.apartments;
 
       if (apartments.length === 0) {
         return { min: 0, max: 0 };
@@ -210,8 +210,8 @@ export const LAYER_CONFIG = {
         max: max,
       }
     },
-    getDiscreteValues: (filterName) => {
-      return [...new Set(DATA.apartments.map(a => a[filterName]))].sort((a, b) => a - b);
+    getDiscreteValues: (apartments = DATA.apartments, filterName) => {
+      return [...new Set(apartments.map(a => a[filterName]))].sort((a, b) => a - b);
     },
   },
   [LAYERS.SURROUNDING_DETAIL]: {

@@ -1,30 +1,5 @@
 import { useState, useEffect } from "react";
-
 import { LAYER_CONFIG, LAYERS, FILTER_ENUM } from "../data/layers";
-
-const UNIT_TYPES = LAYER_CONFIG[LAYERS.APARTMENT].getDiscreteValues(FILTER_ENUM.TYPE);
-
-// Surface area range (in square meters)
-const AREA_RANGE = {
-  MIN: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(FILTER_ENUM.AREA).min,
-  MAX: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(FILTER_ENUM.AREA).max,
-  UNIT: "m²",
-};
-
-// Budget range (in local currency)
-const BUDGET_RANGE = {
-  MIN: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(FILTER_ENUM.PRICE).min,
-  MAX: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(FILTER_ENUM.PRICE).max,
-  UNIT: "L.E",
-};
-
-// Bedroom/Bathroom options
-const BEDROOM_OPTIONS = LAYER_CONFIG[LAYERS.APARTMENT].getDiscreteValues(
-  FILTER_ENUM.BEDROOMS
-);
-const BATHROOM_OPTIONS = LAYER_CONFIG[LAYERS.APARTMENT].getDiscreteValues(
-  FILTER_ENUM.BATHROOMS
-);
 
 function Slider({ name, unit, min, max, step = 1, value, onValueChange }) {
   const fillColor = "white";
@@ -94,7 +69,32 @@ function Discrete({ name, options, array, onValueChange }) {
   )
 }
 
-export default function FilterPanel({ onFilterChange }) {
+export default function FilterPanel({ currentItem, onFilterChange }) {
+  // console.log(currentItem);
+
+  const currentApartments = LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem);
+  // console.log(currentApartments);
+
+  const UNIT_TYPES = LAYER_CONFIG[LAYERS.APARTMENT].getDiscreteValues(currentApartments, FILTER_ENUM.TYPE);
+
+  // Surface area range (in square meters)
+  const AREA_RANGE = {
+    MIN: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(currentApartments, FILTER_ENUM.AREA).min,
+    MAX: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(currentApartments, FILTER_ENUM.AREA).max,
+    UNIT: "m²",
+  };
+
+  // Budget range (in local currency)
+  const BUDGET_RANGE = {
+    MIN: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(currentApartments, FILTER_ENUM.PRICE).min,
+    MAX: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(currentApartments, FILTER_ENUM.PRICE).max,
+    UNIT: "L.E",
+  };
+
+  // Bedroom/Bathroom options
+  const BEDROOM_OPTIONS = LAYER_CONFIG[LAYERS.APARTMENT].getDiscreteValues(currentApartments, FILTER_ENUM.BEDROOMS);
+  const BATHROOM_OPTIONS = LAYER_CONFIG[LAYERS.APARTMENT].getDiscreteValues(currentApartments, FILTER_ENUM.BATHROOMS);
+
   const [unitType, setUnitType] = useState([]);
   const [bedrooms, setBedrooms] = useState([]);
   const [bathrooms, setBathrooms] = useState([]);
