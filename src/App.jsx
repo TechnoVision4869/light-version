@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { TABS, LAYERS, TAB_CONFIG, LAYER_CONFIG, DATA } from "./data/layers";
 // Hooks
 import { useNavigation } from "./components/hooks/useNavigation";
@@ -21,6 +21,7 @@ import UnitPanel from "./components/UnitPanel";
 import Panorama from "./components/Panorama";
 import Balcony from "./components/Balcony";
 import Gallery from "./components/Gallery";
+import AnimatedPath from "./components/AnimatedPath";
 
 // logo
 import TECHNO_LOGO from "./assets/techno.png";
@@ -35,9 +36,11 @@ export default function App() {
   const [isPanorama, setIsPanorama] = useState(false);
   const [isBalconyView, setIsBalconyView] = useState(false);
   const [galleryType, setGalleryType] = useState(null);
+  const [selectedSurroundingId, setSelectedSurroundingId] = useState(null);
 
   const handleBack = () => {
     setIsPanorama(false);
+    setSelectedSurroundingId(null);
     setIsBalconyView(false);
     setGalleryType(null);
   };
@@ -49,6 +52,26 @@ export default function App() {
 
   // Ref
   const mediaContainerRef = useRef(null);
+
+  const selectedSurrounding = useMemo(() => {
+    if (!selectedSurroundingId) return null;
+    return DATA.surroundings.find(s => s.id === selectedSurroundingId);
+  }, [selectedSurroundingId]);
+
+  const currentPathPoints = useMemo(() => {
+    if (!selectedSurrounding || !mediaContainerRef.current) return null;
+
+    const container = mediaContainerRef.current;
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    const videoW = h * (16 / 9);
+    const videoLeft = (w - videoW) / 2;
+
+    return (selectedSurrounding.points || []).map(p => ({
+      x: (videoLeft + videoW * p.x) / w,
+      y: p.y, // since y is already normalized to [0,1] in your data
+    }));
+  }, [selectedSurrounding, mediaContainerRef.current?.clientWidth, mediaContainerRef.current?.clientHeight]);
 
   // Navigation hook
   const {
@@ -78,7 +101,6 @@ export default function App() {
     secondVideoOpacity: videoViewer.secondVideoOpacity,
     floatingOpacity: videoViewer.floatingOpacity,
     StartReverse: videoViewer.StartReverse,
-    playViewTransitionAndIdle: videoViewer.playViewTransitionAndIdle,
     currentViewIndex: videoViewer.currentViewIndex, // Now managed by the hook
     changeView: videoViewer.changeView, // Now managed by the hook
   };
@@ -234,8 +256,7 @@ export default function App() {
             <Balcony apartment={currentItem} />
           </div>
         </div>
-      )
-      }
+      )}
 
       {galleryType && (
         <div className="absolute inset-0 z-60">
@@ -271,13 +292,13 @@ export default function App() {
           </div>
         </div>
       )}
-      <div className={`w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4`}>
+      <div className={`w-screen h-screen bg-[#2f2f2f] py-2 px-3 xl:p-4`}>
         <LandscapePrompt />
         <div className="w-full h-full flex flex-col">
           {/* Top Tabs */}
-          <div className="flex items-center justify-between mb-4 px-4">
+          <div className="flex items-center justify-between mb-2 xl:mb-4 px-4">
             <div className="flex items-center gap-3">
-              {viewerProps.currentViewIndex === 0 && (
+              {viewerProps.currentViewIndex === 0 ? (
                 <button
                   onClick={() => {
                     if (
@@ -291,6 +312,37 @@ export default function App() {
                   }}
                   disabled={isDisabled || history.length <= 1}
                   className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
+              hover:bg-white/7 transition
+              disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {/* back chev icon */}
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M31 12H2M2 12L9 6M2 12L9 18"
+                      stroke="black"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    if (viewerProps.currentViewIndex === 3) {
+                      viewerProps.changeView("next");
+                      return;
+                    }
+                    viewerProps.changeView("prev");
+                  }}
+                  disabled={isDisabled || history.length <= 1}
+                  className="w-10 h-10 rounded-xl bg-white/95 flex items-center justify-center 
               hover:bg-white/7 transition
               disabled:opacity-50 disabled:cursor-not-allowed"
                 >
@@ -365,9 +417,7 @@ export default function App() {
             {/* Sidebar */}
             <aside
               className={`bg-white/9 rounded-2xl p-2 py-3 md:py-4 flex-shrink-0 transition-all duration-700 overflow-hidden
-             ${activeTab === TABS.HOME ||
-                  activeLayer === LAYERS.AMENITY_DETAIL ||
-                  viewerProps.currentViewIndex !== 0
+             ${activeTab === TABS.HOME || activeLayer === LAYERS.AMENITY_DETAIL || activeLayer === LAYERS.SURROUNDING_DETAIL
                   ? "w-0 opacity-0 pointer-events-none"
                   : sidebarOpen
                     ? "w-44 md:w-68 opacity-100"
@@ -375,7 +425,12 @@ export default function App() {
                 }`}
             >
               {activeTab === TABS.ZONES && activeLayer === LAYERS.APARTMENT ? (
-                <UnitPanel unit={currentItem} onInterior={handleInterior} onBalconyView={handleBalconyView} onGallery={handleGallery} />
+                <UnitPanel
+                  unit={currentItem}
+                  onInterior={handleInterior}
+                  onBalconyView={handleBalconyView}
+                  onGallery={handleGallery}
+                />
               ) : (
                 <div className="h-full pr-1">
                   {activeLayer === LAYERS.FLOOR && (
@@ -407,13 +462,13 @@ export default function App() {
                   )}
 
                   {isFilter ? (
-                    <FilterPanel onFilterChange={setFilters} />
+                    <FilterPanel currentItem={currentItem} onFilterChange={setFilters} />
                   ) : (
                     <>
                       {/* Dynamic sidebar title based on active tab */}
                       <div className="text-white font-semibold my-1 px-3">
-                        {String(currentItem?.name).charAt(0).toUpperCase() +
-                          String(currentItem?.name).slice(1)}
+                        {String(currentItem?.displayName).charAt(0).toUpperCase() +
+                          String(currentItem?.displayName).slice(1)}
                         {/* {activeTab === TABS.ZONES
                     ? TAB_CONFIG[TABS.ZONES]?.title
                     : activeTab === TABS.SURROUNDINGS
@@ -435,7 +490,7 @@ export default function App() {
                                 zone={zone}
                                 key={zone.id}
                                 isDisabled={isDisabled}
-                                isSeected={currentItem === zone}
+                                isSelected={currentItem === zone}
                                 goToZone={handleGoToItem}
                               />
                             ))}
@@ -545,6 +600,9 @@ export default function App() {
                     preload="auto"
                     loop
                   />
+                  {activeLayer === LAYERS.SURROUNDING_DETAIL && (
+                    <AnimatedPath points={currentPathPoints} />
+                  )}
                 </div>
 
                 {activeTab === TABS.SURROUNDINGS &&
@@ -554,6 +612,8 @@ export default function App() {
                       items={DATA.surroundings}
                       mediaRef={mediaContainerRef}
                       tab={activeTab}
+                      onSelectItem={handleGoToItem}
+                      onChangeItem={(id) => setSelectedSurroundingId(id)}
                     />
                   )}
 
@@ -563,6 +623,8 @@ export default function App() {
                     <Floating
                       items={DATA.amenities}
                       mediaRef={mediaContainerRef}
+                      layer={LAYERS.AMENITY_DETAIL}
+                      onSelectItem={handleGoToItem}
                     />
                   )}
 
@@ -573,17 +635,21 @@ export default function App() {
                         currentItem
                       )}
                       mediaRef={mediaContainerRef}
+                      layer={LAYERS.BUILDING}
+                      onSelectItem={handleGoToItem}
                     />
                   )}
 
                 {activeLayer === LAYERS.BUILDING &&
-                  viewerProps.floatingOpacity && (
+                  viewerProps.floatingOpacity &&
+                  viewerProps.currentViewIndex === 0 && (
                     <Floating
                       items={LAYER_CONFIG[LAYERS.BUILDING].getItems(
                         currentItem
                       )}
                       mediaRef={mediaContainerRef}
-                      layer={activeLayer}
+                      layer={LAYERS.FLOOR}
+                      onSelectItem={handleGoToItem}
                     />
                   )}
 
@@ -593,16 +659,18 @@ export default function App() {
                       items={LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem)}
                       mediaRef={mediaContainerRef}
                       filters={filters}
+                      layer={LAYERS.APARTMENT}
+                      onSelectItem={handleGoToItem}
                     />
                   )}
 
                 {/* left floating chevron to collapse sidebar */}
                 {activeTab !== TABS.HOME &&
                   activeLayer !== LAYERS.AMENITY_DETAIL &&
-                  viewerProps.currentViewIndex === 0 && (
+                  activeLayer !== LAYERS.SURROUNDING_DETAIL && (
                     <button
                       onClick={() => setSidebarOpen((s) => !s)}
-                      className="absolute left-[-18px] top-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow z-50"
+                      className="absolute left-[-16px] top-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow z-50"
                       aria-label={
                         sidebarOpen ? "close sidebar" : "open sidebar"
                       }
@@ -651,7 +719,7 @@ export default function App() {
 
           {/* Breadcrumbs */}
 
-          <div className="flex px-6 pt-3">
+          <div className="flex px-4 pt-2 xl:pt-3">
             {history.length > 1 && (
               <div className="flex-shrink-0">
                 <HistoryBreadcrumbs

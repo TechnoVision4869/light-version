@@ -18,7 +18,7 @@ export default function UnitPanel({ unit, onInterior, onBalconyView, onGallery }
             <div className="flex flex-col gap-3 max-h-[calc(100vh-200px)] scrollbar-custom overflow-auto px-2 py-2 text-white">
                 {/* name and area */}
                 <div>
-                    <h1 className="text-xl font-bold mb-2">{unit.name}</h1>
+                    <h1 className="text-xl font-bold mb-2">{unit.displayName}</h1>
                     <div className="flex items-center gap-1">
                         <div className="w-6 h-6 items-center justify-center">
                             <img src={AREA_ICON} alt="Area icon" className="w-6 h-6 p-[1px]" />

@@ -1,49 +1,24 @@
-import { TABS, LAYERS } from '../../data/layers';
+import { LAYERS } from '../../data/layers';
 
-import AirportIcon from '../../assets/icons/airport.svg';
-import TowerIcon from '../../assets/icons/tower.svg';
-import MuscleIcon from '../../assets/icons/muscle.svg';
-
-const getIcon = (type) => {
-    switch (type) {
-        case 'airport':
-            return AirportIcon;
-        case 'tower':
-            return TowerIcon;
-        case 'muscle':
-            return MuscleIcon;
-        default:
-            return null;
-    }
-};
-
-export default function FloatingButton({ name, iconType = null, tabType = null, layerType = null, isSelected = false,
-    style = {}, }) {
-    const icon = getIcon(iconType);
-    const isSurrounding = tabType === TABS.SURROUNDINGS;
-    const isFloor = layerType === LAYERS.BUILDING;    
-
-    const color = isSurrounding ? 'bg-[#94846D]/75 hover:bg-[#94846D]/85' : 'bg-[#418AFF] hover:bg-[#357AEE]';
+export default function FloatingButton({ 
+    name, 
+    layerType = null,
+    style = {},
+    onSelect 
+    }) {
+    const isFloor = layerType === LAYERS.FLOOR;
 
     return (
-        <button className={`${color} text-white px-4 py-2 rounded-lg flex items-center gap-2 z-20`}
+        <button className="bg-[#418AFF] hover:bg-[#357AEE] text-white px-3 py-1 rounded-lg flex items-center gap-2 z-20"
             style={{
                 position: 'absolute',
                 transform: 'translate(-50%, -50%)',
                 ...style, // apply computed left/top
             }}
+            onClick={onSelect}
         >
-            {/* Icon Circle */}
-            {(isSurrounding && icon) && (
-                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
-                    <img src={icon} alt={iconType} className="w-4 h-4 p-[1px]" />
-                </div>
-            )}
-
-            {/* Text */}
+            
             <span className='whitespace-nowrap text-sm'>{name}</span>
-
-            {/* Pointed Bottom Triangle */}
             {isFloor ? <span className='triangle-right'></span> : <span className='triangle'></span>}
         </button>
     )

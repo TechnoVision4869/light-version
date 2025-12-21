@@ -1,8 +1,11 @@
-import { useState, useEffect, useMemo } from "react";
-import { DATA } from "../data/layers";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import FloatingButton from "./buttons/FloatingButton";
+import { TABS, LAYERS } from '../data/layers';
+import AnimButton from "./buttons/AnimButton";
 
-export default function FloatingFilter({ items, mediaRef, tab, layer, filters = null }) {
+export default function Floating({ items, mediaRef, tab, layer, filters = null, onSelectItem, onChangeItem }) {
+    const container = mediaRef.current;
+
     // Filter items based on current filter state
     const filteredItems = useMemo(() => {
         if (!filters) return items;
@@ -37,59 +40,87 @@ export default function FloatingFilter({ items, mediaRef, tab, layer, filters = 
         });
     }, [items, filters]);
 
-    const [buttonPositions, setButtonPositions] = useState(
-        items.map(() => ({ left: 0, top: 0 }))
-    );
+    const [buttonPositions, setButtonPositions] = useState([]);
 
+    const updatePositions = useCallback(() => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        const videoW = h * (16 / 9);
+        const videoLeft = (w - videoW) / 2;
+
+        const newPositions = items.map(item => ({
+            left: videoLeft + videoW * item.x,
+            top: h * item.y,
+        }));
+        setButtonPositions(newPositions);
+    }, [items]);
+
+    // Create a map for O(1) lookup: id → position
+    const itemIdToPosition = useMemo(() => {
+    const map = new Map();
+    items.forEach((item, index) => {
+        map.set(item.id, buttonPositions[index]);
+    });
+    return map;
+    }, [items, buttonPositions]);   
+
+    // Observe resize
     useEffect(() => {
-        // Update button positions whenever filteredItems changes
-        const container = mediaRef.current;
-        if (!container || filteredItems.length === 0) {
-            setButtonPositions([]);
-            return;
-        }
-
-        const updatePositions = () => {
-            const w = container.clientWidth;
-            const h = container.clientHeight;
-            const videoW = h * (16 / 9);
-            const videoLeft = (w - videoW) / 2;
-
-            const newPositions = filteredItems.map(surr => ({
-                left: videoLeft + videoW * surr.x,
-                top: h * surr.y,
-            }));
-            setButtonPositions(newPositions);
-        };
-
-        updatePositions();
+        if (!container) return;
 
         const resizeObserver = new ResizeObserver(updatePositions);
         resizeObserver.observe(container);
 
-        return () => {
-            resizeObserver.disconnect();
-        };
-    }, [mediaRef, DATA, filteredItems]); // Remove DATA dependency if it's not needed here
+        updatePositions();
 
-    // Don't render anything if there are no filtered items or no positions calculated yet
-    if (filteredItems.length === 0 || buttonPositions.length !== filteredItems.length) {
-        return null;
+        return () => resizeObserver.disconnect();
+    }, []); // Empty dependency array ensures this runs once on mount
+
+     // Only render when positions are ready for all items
+    if (buttonPositions.length !== items.length) {
+        return null; // or return <></>
+    }
+
+    // Don't render until positions are ready
+    if (buttonPositions.length !== items.length) return null;
+
+    if (tab === TABS.SURROUNDINGS) {
+        return (
+            items.map((item, i) => (
+                <AnimButton
+                    key={item.id}
+                    name={item.displayName}
+                    icon={item.iconSrc}
+                    style={{
+                        left: `${buttonPositions[i].left}px`,
+                        top: `${buttonPositions[i].top}px`,
+                    }}
+                    onSelect={() => {
+                        onSelectItem(item, LAYERS.SURROUNDING_DETAIL);
+                        onChangeItem(item.id);
+                    }}
+                />
+            ))
+        );
     }
 
     return (
-        filteredItems.map((btn, i) => (
+        filteredItems.map((item) => {
+            const pos = itemIdToPosition.get(item.id);
+                if (!pos) return null;
+            return (
             <FloatingButton
-                key={btn.id}
-                name={btn.name}
-                iconType={btn.icon}
+                key={item.id}
+                name={item.displayName}
                 tabType={tab}
                 layerType={layer}
                 style={{
-                    left: `${buttonPositions[i].left}px`,
-                    top: `${buttonPositions[i].top}px`,
+                    left: `${pos.left}px`,
+                    top: `${pos.top}px`,
                 }}
+                onSelect={() => onSelectItem(item, layer)}
             />
-        ))
+        )
+    })
     );
 }

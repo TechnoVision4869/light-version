@@ -35,7 +35,7 @@ export function useNavigation() {
                 layer: null,
                 item: {
                     id: tabKey,
-                    name: tabKey,
+                    displayName: tabKey,
                 },
                 videosPath: config.videosPath(isFromHome),
             },

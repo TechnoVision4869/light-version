@@ -25,7 +25,7 @@ export default function FloorButton({
       <div className="flex items-center justify-between">
         {/* Floor Name */}
         <div className="text-md font-semibold text-white leading-tight">
-          {floor.name}
+          {floor.displayName}
         </div>
 
         {/* Vertical Divider + Floor Type */}

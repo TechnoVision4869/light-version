@@ -15,7 +15,7 @@ export default function BuildingButton({ building, isDisabled, isSelected, goToB
         >
             <div className="text-left">
                 <div className="text-md font-bold text-white leading-tight">
-                    {building.name}
+                    {building.displayName}
                 </div>
                
             </div>

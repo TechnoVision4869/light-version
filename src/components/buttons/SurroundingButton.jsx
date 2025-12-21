@@ -15,7 +15,7 @@ export default function SurroundingButton({ surrounding, isDisabled = true, isSe
         >
             <div className="text-left">
                 <div className="text-md font-bold text-white leading-tight">
-                    {surrounding.name}
+                    {surrounding.displayName}
                 </div>
                 <div className="text-xs text-white/60 leading-tight py-1">
                     {surrounding.distance}
