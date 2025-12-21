@@ -12,7 +12,6 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
   const firstVideoRef = useRef(null);
   const secondVideoRef = useRef(null);
   const justNavigatedBackRef = useRef(false);
-  const isViewTransitioningRef = useRef(false); // Flag to indicate if we are in a view transition process
   const isInitPlayedRef = useRef(true); // Flag to indicate if we have played the initial video (Home idle)
 
   const [currentViewIndex, setCurrentViewIndex] = useState(0);
@@ -51,28 +50,20 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
       }
 
       if (direction === "next") {
-        playViewTransitionAndIdle(
-          newViewVideos.forwardVideo,
-          newViewVideos.idleVideo
-        );
+        // console.log("Starting view transition from:", newViewVideos.forwardVideo, "to idle:", newViewVideos.idleVideo);
+        playTransitionVideo(newViewVideos.forwardVideo, newViewVideos.idleVideo);
       } else {
         const buildingViewVideos = buildingConfig.getVideosPathForView(
           currentItem,
           currentViewIndex
         );
         if (!buildingViewVideos?.reverseVideo) {
-          console.error(
-            "Could not get reverse video path for current view index:",
-            currentViewIndex
-          );
+          console.error("Could not get reverse video path for current view index:", currentViewIndex);
           return;
         }
-        playViewTransitionAndIdle(
-          buildingViewVideos.reverseVideo,
-          newViewVideos.idleVideo
-        );
+        // console.log("Starting view reverse from:", buildingViewVideos.reverseVideo, "to idle:", newViewVideos.idleVideo);
+        playTransitionVideo(buildingViewVideos.reverseVideo, newViewVideos.idleVideo);
       }
-
       setCurrentViewIndex(newIndex);
     },
     [history, currentViewIndex]
@@ -106,8 +97,8 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
     transitionVideoPath = currentVideosPaths?.forwardVideo,
     idleVideoPath = currentVideosPaths?.idleVideo
   ) => {
-    if (!transitionVideoPath) return;
-    console.log("playTransitionVideo called with videoPath:", transitionVideoPath);
+    if (!transitionVideoPath || !idleVideoPath) return;
+    // console.log("playTransitionVideo called with videoPath:", transitionVideoPath);
     setFloatingOpacity(0);
 
     const onloaded = () => {
@@ -125,9 +116,9 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
     if (!videoPath) {
       return;
     }
-    console.log(navigatedBetweenTabs);
-    
-    console.log("StartReverse called with reverse video:", currentVideosPaths.reverseVideo);
+    // console.log(navigatedBetweenTabs);
+
+    // console.log("StartReverse called with reverse video:", currentVideosPaths.reverseVideo);
     setFloatingOpacity(0);
 
     const onloaded = () => {
@@ -138,7 +129,7 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
     const onEnded = () => {
       if (navigatedBetweenTabs) {
         onGoBack();
-        console.log(currentVideosPaths);
+        // console.log(currentVideosPaths);
 
         onReverseEnded();
         return;
@@ -154,10 +145,7 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
 
   const playIdleVideo = useCallback((videoPath = currentVideosPaths?.idleVideo) => {
     if (!videoPath) return;
-    console.log("playIdleVideo called with idleVideo:", videoPath);
-
-    // Ensure we are not in a view transition when this runs due to main navigation
-    isViewTransitioningRef.current = false;
+    // console.log("playIdleVideo called with idleVideo:", videoPath);
 
     const onloaded = () => {
       setFirstVideoOpacity(0);
@@ -167,70 +155,6 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
 
     playVideo(videoPath, true, onloaded, null, "second");
   }, [currentVideosPaths, playVideo]);
-
-  // NEW: Dedicated function for view transitions
-  const playViewTransitionAndIdle = useCallback(
-    (transitionVideoPath, idleVideoPath) => {
-      // console.log(`transition vieo path: ${transitionVideoPath},
-      //  idle video path: ${idleVideoPath},
-      //  videoRef current: ${videoRef.current}`);
-      if (!transitionVideoPath || !idleVideoPath || !firstVideoRef.current)
-        return;
-
-      // console.log("Starting view transition from:", transitionVideoPath, "to idle:", idleVideoPath);
-
-      // Set flag to indicate we are now transitioning views
-      isViewTransitioningRef.current = true;
-      setIsPlaying(true);
-
-      const video1 = firstVideoRef.current;
-      const video2 = secondVideoRef.current;
-
-      // Define the handler for the *transition* video ending
-      const onTransitionEnded = () => {
-        // console.log("View transition video ended, switching to idle:", idleVideoPath);
-        // Remove the handler from the transition video
-        video1.onended = null;
-
-        // Check the flag again before proceeding (in case another transition started)
-
-        // Switch to the new idle video
-        video2.src = idleVideoPath;
-        video2.load();
-        // video2.loop = true;
-
-        video2.onloadeddata = () => {
-          setFirstVideoOpacity(0);
-          setSecondVideoOpacity(1);
-          setFloatingOpacity(1);
-
-          // console.log("View idle video loaded, playing...");
-          video2
-            .play()
-            .catch((e) => console.error("View idle video play failed:", e));
-          // Set playing state to false for idle video
-          setIsPlaying(false);
-          // Transition process is complete, unset the flag
-          isViewTransitioningRef.current = false;
-        };
-      };
-
-      video1.src = transitionVideoPath;
-      video1.load();
-      // video1.loop = false;
-      video1.onended = onTransitionEnded; // Attach handler for *this* transition
-
-      video1.onloadeddata = () => {
-        // console.log("View transition video loaded, playing...");
-        setFirstVideoOpacity(1);
-        setSecondVideoOpacity(0);
-        video1
-          .play()
-          .catch((e) => console.error("View transition play failed:", e));
-      };
-    },
-    []
-  );
 
   const StartReverse = useCallback(
     (isFromAnotherTab, onReverseEnded) => {
@@ -251,12 +175,6 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
       const shouldStayIdle = justNavigatedBackRef.current;
       justNavigatedBackRef.current = false;
 
-      // Check if we are in the middle of a view transition, if so, don't interfere
-      if (isViewTransitioningRef.current) {
-        console.log("Main videos paths changed, but a view transition is ongoing, skipping main load logic.");
-        return;
-      }
-
       try {
         setIsVideosLoaded(true);
 
@@ -266,7 +184,7 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
           playIdleVideo();
         } else {
           if (activeTab === TABS.HOME && isInitPlayedRef.current) {
-            console.log("initial HOME tab, playing idle video.");
+            // console.log("initial HOME tab, playing idle video.");
             setTimeout(() => {
               playIdleVideo();
               isInitPlayedRef.current = false;
@@ -307,7 +225,6 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
     secondVideoOpacity,
     floatingOpacity,
     StartReverse,
-    playViewTransitionAndIdle,
     currentViewIndex,
     changeView,
   };

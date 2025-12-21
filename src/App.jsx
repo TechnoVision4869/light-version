@@ -101,7 +101,6 @@ export default function App() {
     secondVideoOpacity: videoViewer.secondVideoOpacity,
     floatingOpacity: videoViewer.floatingOpacity,
     StartReverse: videoViewer.StartReverse,
-    playViewTransitionAndIdle: videoViewer.playViewTransitionAndIdle,
     currentViewIndex: videoViewer.currentViewIndex, // Now managed by the hook
     changeView: videoViewer.changeView, // Now managed by the hook
   };
