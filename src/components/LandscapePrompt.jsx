@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import Lottie from "lottie-react";
-import LandscapeAnim from "../assets/animation/Rotate Phone.json";
+import LandscapeAnim from "../assets/animation/Rotate Phone.gif";
+
 
 export default function LandscapePrompt() {
     // state to show prompt for landscape orientation
@@ -23,10 +23,10 @@ export default function LandscapePrompt() {
             {showLandscapePrompt && (
                 <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center">
                     <div className="text-center text-white p-6">
-                        <Lottie
-                            animationData={LandscapeAnim}
-                            loop={true}
-                            style={{ width: 250, height: 250 }}
+                        <img
+                            src={LandscapeAnim}
+                            alt="Rotate your phone"
+                            style={{ width: 165, height: 165 }}
                         />
                     </div>
                 </div>
