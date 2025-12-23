@@ -292,7 +292,7 @@ export default function App() {
           </div>
         </div>
       )}
-      <div className={`w-screen h-screen bg-[#2f2f2f] py-2 px-3 xl:p-4`}>
+      <div className="w-full h-screen bg-[#2f2f2f] py-2 px-3 xl:p-4 overflow-hidden">        
         <LandscapePrompt />
         <div className="w-full h-full flex flex-col">
           {/* Top Tabs */}
