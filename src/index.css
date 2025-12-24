@@ -24,6 +24,10 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
+.app-container {
+  padding-top: env(safe-area-inset-top);
+}
+
 .triangle {
   /* display: block; */
   height: 20px;

@@ -1,4 +1,4 @@
-package com.technovision.lightversion;
+package com.technovision.light;
 
 import com.getcapacitor.BridgeActivity;
 

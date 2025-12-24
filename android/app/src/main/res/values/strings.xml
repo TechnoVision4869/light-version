@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Light Version</string>
-    <string name="title_activity_main">Light Version</string>
-    <string name="package_name">com.technovision.lightversion</string>
-    <string name="custom_url_scheme">com.technovision.lightversion</string>
+    <string name="app_name">Light</string>
+    <string name="title_activity_main">Light</string>
+    <string name="package_name">com.technovision.light</string>
+    <string name="custom_url_scheme">com.technovision.light</string>
 </resources>

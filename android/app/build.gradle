@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace = "com.technovision.lightversion"
+    namespace = "com.technovision.light"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.technovision.lightversion"
+        applicationId "com.technovision.light"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
