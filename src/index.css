@@ -39,6 +39,7 @@ body {
   left: calc(50% - 10px);
   bottom: -24%;
   clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
+  -webkit-clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
   transform: rotate(-45deg);
 }
 
@@ -116,7 +117,6 @@ body {
 .blurred-layer {
   background: rgba(55, 55, 55, 0.3);
   backdrop-filter: blur(14px);
-  backdrop-filter: blur;
   -webkit-backdrop-filter: blur(14px);
   z-index: 4;
 }

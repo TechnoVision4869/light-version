@@ -1,9 +1,8 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
-import { visualizer } from "rollup-plugin-visualizer";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
+// import { visualizer } from 'rollup-plugin-visualizer';
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react({
@@ -12,6 +11,16 @@ export default defineConfig({
       },
     }),
     tailwindcss(),
-    visualizer(),
+    // visualizer(),
   ],
-})
+
+  // 👇 Critical for Huawei SE 11 (older WebView)
+  build: {
+    target: 'es2018', // Safe for Chromium ≥70 (Huawei SE 11 is ~Chromium 89–95)
+  },
+
+  // Optional: make dev server compatible too (not strictly needed)
+  esbuild: {
+    target: 'es2018',
+  },
+});

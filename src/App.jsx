@@ -298,7 +298,7 @@ export default function App() {
         <div className="w-full h-full flex flex-col">
           {/* Top Tabs */}
           <div className="flex items-center justify-between mb-2 xl:mb-4 px-4">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center space-x-3">
               {viewerProps.currentViewIndex === 0 ? (
                 <button
                   onClick={() => {
@@ -366,7 +366,7 @@ export default function App() {
                 </button>
               )}
             </div>
-            <div className="flex items-center gap-6">
+            <div className="flex items-center space-x-6">
               <button
                 onClick={() => handleActiveTab(TABS.SURROUNDINGS)}
                 className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.SURROUNDINGS
@@ -412,7 +412,7 @@ export default function App() {
           </div>
 
           <div
-            className={`flex ${sidebarOpen ? "gap-3" : "gap-0"
+            className={`flex ${sidebarOpen ? "space-x-3" : "space-x-0"
               } flex-1 min-h-0 overflow-hidden`}
           >
             {/* Sidebar */}
@@ -731,8 +731,8 @@ export default function App() {
             )}
             {/* Views visuals */}
             {activeLayer === LAYERS.BUILDING && (
-              <div className="flex-1 flex items-center justify-center text-white gap-3 px-4 py-2 text-sm">
-                <div className=" flex gap-2">
+              <div className="flex-1 flex items-center justify-center text-white space-x-3 px-4 py-2 text-sm">
+                <div className=" flex space-x-2">
                   <div className=""> Views </div>
                   {/* prev button */}
                   <button
