@@ -7,14 +7,14 @@ export default function BuildingButton({ building, isDisabled, isSelected, goToB
                 goToBuilding(building, LAYERS.BUILDING);
             }}
             disabled={isDisabled}
-            className={`w-64 max-w-full mx-auto p-4 rounded-2xl transition
+            className={`w-full max-w-full mx-auto p-4 rounded-2xl transition
             ${isDisabled
                     ? "opacity-50 cursor-not-allowed"
                     : isSelected ? "bg-white/10" : "bg-black/10 hover:bg-white/7"
                 }`}
         >
             <div className="text-left">
-                <div className="text-md font-bold text-white leading-tight">
+                <div className="text-md font-bold text-white leading-tight whitespace-nowrap">
                     {building.displayName}
                 </div>
                

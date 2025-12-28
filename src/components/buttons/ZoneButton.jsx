@@ -4,7 +4,7 @@ export default function ZoneButton({ zone, isDisabled, isSelected, goToZone }) {
         <button
             onClick={() => { goToZone(zone, LAYERS.ZONE_DETAIL); }}
             disabled={isDisabled}
-            className={`w-64 max-w-full mx-auto p-4 rounded-2xl transition
+            className={`w-full max-w-full mx-auto p-4 rounded-2xl transition
                         ${isDisabled
                     ? "opacity-50 cursor-not-allowed"
                     : isSelected ? "bg-white/10" : "bg-black/10 hover:bg-white/7"

@@ -13,7 +13,7 @@ export default function FloorButton({
         goToFloor(floor, LAYERS.FLOOR);
       }}
       disabled={isDisabled}
-      className={`w-64 max-w-full mx-auto p-4 rounded-2xl transition whitespace-nowrap
+      className={`w-full max-w-full mx-auto p-4 rounded-2xl transition whitespace-nowrap
         ${
           isDisabled
             ? "opacity-50 cursor-not-allowed"

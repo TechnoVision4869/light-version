@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import { StatusBar } from "@capacitor/status-bar";
 import { TABS, LAYERS, TAB_CONFIG, LAYER_CONFIG, DATA } from "./data/layers";
 // Hooks
 import { useNavigation } from "./components/hooks/useNavigation";
@@ -58,7 +59,7 @@ export default function App() {
     return DATA.surroundings.find(s => s.id === selectedSurroundingId);
   }, [selectedSurroundingId]);
 
-  
+
   const currentPathPoints = useMemo(() => {
     if (!selectedSurrounding || !mediaContainerRef.current) return null;
 
@@ -168,6 +169,14 @@ export default function App() {
   };
 
   useEffect(() => {
+    const hideBars = async () => {
+      await StatusBar.hide();
+      await StatusBar.setOverlaysWebView({ overlay: true });
+    };
+    hideBars();
+  }, []);
+
+  useEffect(() => {
     if (activeLayer !== LAYERS.FLOOR) {
       setIsFilter(false);
     }
@@ -196,7 +205,7 @@ export default function App() {
       {isPanorama && (
         <div className="absolute inset-0 z-60">
           <div className={`w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4`} />
-          <div className="absolute top-4 left-8 z-40">
+          <div className="absolute top-2 left-7 z-40">
             <button
               onClick={handleBack}
               className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center
@@ -229,7 +238,7 @@ export default function App() {
       {isBalconyView && (
         <div className="absolute inset-0 z-60">
           <div className={`w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4`} />
-          <div className="absolute top-4 left-8 z-40">
+          <div className="absolute top-2 left-7 z-40">
             <button
               onClick={handleBack}
               className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center
@@ -264,7 +273,7 @@ export default function App() {
           {/* Blurred Background */}
           <div className="absolute inset-0 blurred-layer" />
           <div className={`w-screen h-screen p-2 sm:p-4`} />
-          <div className="absolute top-4 left-8 z-40">
+          <div className="absolute top-2 left-7 z-40">
             <button
               onClick={handleBack}
               className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center
@@ -293,7 +302,7 @@ export default function App() {
           </div>
         </div>
       )}
-      <div className="app-container w-full h-screen bg-[#2f2f2f] py-2 px-3 xl:p-4 overflow-hidden">        
+      <div className="w-full h-screen bg-[#2f2f2f] py-2 px-3 xl:p-4 overflow-hidden">        
         <LandscapePrompt />
         <div className="w-full h-full flex flex-col">
           {/* Top Tabs */}
@@ -467,20 +476,13 @@ export default function App() {
                   ) : (
                     <>
                       {/* Dynamic sidebar title based on active tab */}
-                      <div className="text-white font-semibold my-1 px-3">
+                      <div className="text-white font-semibold my-1 px-3 whitespace-nowrap">
                         {String(currentItem?.displayName).charAt(0).toUpperCase() +
                           String(currentItem?.displayName).slice(1)}
-                        {/* {activeTab === TABS.ZONES
-                    ? TAB_CONFIG[TABS.ZONES]?.title
-                    : activeTab === TABS.SURROUNDINGS
-                      ? TAB_CONFIG[TABS.SURROUNDINGS]?.title
-                      : activeTab === TABS.AMENITIES
-                        ? TAB_CONFIG[TABS.AMENITIES]?.title
-                        : ""} */}
                       </div>
                       <div className="h-0.5 bg-white/50 mx-3 mb-4"></div>
 
-                      <div className="max-h-[calc(100vh-285px)] scrollbar-custom overflow-auto space-y-3 px-2 py-2">
+                      <div className="max-h-[calc(100vh-285px)] scrollbar-custom overflow-y-auto overflow-x-hidden space-y-3 px-2 py-2">
                         {/* Render different content based on active tab */}
                         {activeTab === TABS.ZONES &&
                           activeLayer === null &&
