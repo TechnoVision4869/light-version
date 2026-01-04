@@ -14,7 +14,7 @@ export default defineConfig({
     // visualizer(),
   ],
 
-  // 👇 Critical for Huawei SE 11 (older WebView)
+  // Critical for Huawei SE 11 (older WebView)
   build: {
     target: 'es2018', // Safe for Chromium ≥70 (Huawei SE 11 is ~Chromium 89–95)
   },

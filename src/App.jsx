@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { StatusBar } from "@capacitor/status-bar";
+import { App as CapApp } from "@capacitor/app"
 import { TABS, LAYERS, TAB_CONFIG, LAYER_CONFIG, DATA } from "./data/layers";
 // Hooks
 import { useNavigation } from "./components/hooks/useNavigation";
@@ -26,9 +27,13 @@ import AnimatedPath from "./components/AnimatedPath";
 
 // logo
 import TECHNO_LOGO from "./assets/techno.png";
+const color = "green";
 
 export default function App() {
   // console.log("App renders");
+
+  //Debug
+  const [debugBorder, setDebugBorder] = useState(true);
 
   //states
   const [sidebarOpen, setSidebarOpen] = useState(false); // set true when sidebar is open
@@ -170,10 +175,17 @@ export default function App() {
 
   useEffect(() => {
     const hideBars = async () => {
-      await StatusBar.hide();
-      await StatusBar.setOverlaysWebView({ overlay: true });
+      if (Capacitor.getPlatform() !== 'web') {
+        await StatusBar.hide();
+        await StatusBar.setOverlaysWebView({ overlay: true });
+      }
     };
     hideBars();
+    const resumeListener = CapApp.addListener("resume", hideBars);
+
+    return () => {
+      resumeListener.then(listener => listener.remove());
+    }
   }, []);
 
   useEffect(() => {
@@ -302,7 +314,7 @@ export default function App() {
           </div>
         </div>
       )}
-      <div className="w-full h-screen bg-[#2f2f2f] py-2 px-3 xl:p-4 overflow-hidden">        
+      <div className="w-full h-screen bg-[#2f2f2f] py-2 px-3 xl:p-4 overflow-hidden">
         <LandscapePrompt />
         <div className="w-full h-full flex flex-col">
           {/* Top Tabs */}
@@ -818,8 +830,11 @@ export default function App() {
                 </div>
               </div>
             )}
+            {debugBorder && <div className={`w-3 h-2 bg-white border-4 border-${color}-600`}></div>}
             <div className="w-18 h-auto ml-auto">
-              <img src={TECHNO_LOGO} alt="Techno Vision Logo" />
+              <button onClick={() => { setDebugBorder((prevState) => !prevState) }}>
+                <img src={TECHNO_LOGO} alt="Techno Vision Logo" />
+              </button>
             </div>
           </div>
         </div>
