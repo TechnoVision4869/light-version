@@ -46,7 +46,7 @@ export function useNavigation() {
     const goToItem = useCallback((item, layerKey) => {
         // console.log("item: ", item);
         // console.log("layer: ", layerKey);
-        // console.log(videosPath);
+
         const config = LAYER_CONFIG[layerKey];
         const path = config.path?.(item.id);
         const videosPath = config.videosPath?.(item);
