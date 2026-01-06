@@ -48,8 +48,8 @@ export function useNavigation() {
         // console.log("layer: ", layerKey);
 
         const config = LAYER_CONFIG[layerKey];
-        const path = config.path?.(item.id);
         const videosPath = config.videosPath?.(item);
+        // console.log(videosPath);
 
         setHistory((prev) => [
             ...prev,
@@ -57,7 +57,6 @@ export function useNavigation() {
                 tab: activeTab,
                 layer: layerKey,
                 item: item,
-                path: path,
                 videosPath: videosPath,
             },
         ]);

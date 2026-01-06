@@ -1,7 +1,7 @@
-import { PROJECT_MIX as PROJECT } from "./project-mix";
+// import { PROJECT_MIX as PROJECT } from "./project-mix";
+import {PROJECT_HORIZONTAL as PROJECT} from "./project-horizontal";
 
-export const MODE_CONFIG = "videos";
-
+const projectId = PROJECT.project.id;
 export const DATA = PROJECT;
 
 // Navigation Tabs (top-level categories)
@@ -45,19 +45,19 @@ export const FILTER_TYPE = {
 export const TAB_CONFIG = {
   [TABS.HOME]: {
     videosPath: {
-      forwardVideo: `${MODE_CONFIG}/home/home_out.mp4`,
+      forwardVideo: `${projectId}/videos/home/home_out.mp4`,
       reverseVideo: null,
-      idleVideo: `/${MODE_CONFIG}/home/home_idle.mp4`,
+      idleVideo: `/${projectId}/videos/home/home_idle.mp4`,
     },
   },
   [TABS.ZONES]: {
     title: "Zoya Zones",
     videosPath: (isFromHome) => ({
       forwardVideo: isFromHome
-        ? `/${MODE_CONFIG}/zones/zones_gen_trans.mp4`
-        : `/${MODE_CONFIG}/home/home_out.mp4`,
-      reverseVideo: `/${MODE_CONFIG}/zones/zones_gen_rev.mp4`,
-      idleVideo: `/${MODE_CONFIG}/zones/zones_gen_idle.mp4`,
+        ? `/${projectId}/videos/zones/zones_gen_trans.mp4`
+        : `/${projectId}/videos/home/home_out.mp4`,
+      reverseVideo: `/${projectId}/videos/zones/zones_gen_rev.mp4`,
+      idleVideo: `/${projectId}/videos/zones/zones_gen_idle.mp4`,
     }),
 
     getItems: () => PROJECT.zones,
@@ -71,10 +71,10 @@ export const TAB_CONFIG = {
 
     videosPath: (isFromHome) => ({
       forwardVideo: isFromHome
-        ? `/${MODE_CONFIG}/surroundings/surr_gen_trans_from_home.mp4`
-        : `/${MODE_CONFIG}/surroundings/surr_out.mp4`,
-      reverseVideo: `/${MODE_CONFIG}/surroundings/surr_gen_rev_trans_to_home.mp4`,
-      idleVideo: `/${MODE_CONFIG}/surroundings/surr_idle.mp4`,
+        ? `/${projectId}/videos/surroundings/surr_gen_trans_from_home.mp4`
+        : `/${projectId}/videos/surroundings/surr_out.mp4`,
+      reverseVideo: `/${projectId}/videos/surroundings/surr_gen_rev_trans_to_home.mp4`,
+      idleVideo: `/${projectId}/videos/surroundings/surr_idle.mp4`,
     }),
 
     getItems: () => PROJECT.surroundings,
@@ -84,10 +84,10 @@ export const TAB_CONFIG = {
 
     videosPath: (isFromHome) => ({
       forwardVideo: isFromHome
-        ? `/${MODE_CONFIG}/amenities/amenities_gen_trans_from_home.mp4`
-        : `/${MODE_CONFIG}/amenities/amenities_out.mp4`,
-      reverseVideo: `/${MODE_CONFIG}/amenities/amenities_gen_rev_trans_to_home.mp4`,
-      idleVideo: `/${MODE_CONFIG}/amenities/amenities_gen_idle.mp4`,
+        ? `/${projectId}/videos/amenities/amenities_gen_trans_from_home.mp4`
+        : `/${projectId}/videos/amenities/amenities_out.mp4`,
+      reverseVideo: `/${projectId}/videos/amenities/amenities_gen_rev_trans_to_home.mp4`,
+      idleVideo: `/${projectId}/videos/amenities/amenities_gen_idle.mp4`,
     }),
 
     getItems: () => PROJECT.amenities,
@@ -101,9 +101,9 @@ export const LAYER_CONFIG = {
     videosPath: (zone) => {
       const zoneId = zone.id;
       return {
-        forwardVideo: `/${MODE_CONFIG}/zones/${zoneId}/${zoneId}_gen_trans.mp4`,
-        reverseVideo: `/${MODE_CONFIG}/zones/${zoneId}/${zoneId}_gen_rev.mp4`,
-        idleVideo: `/${MODE_CONFIG}/zones/${zoneId}/${zoneId}_gen_idle.mp4`,
+        forwardVideo: `/${projectId}/videos/zones/${zoneId}/${zoneId}_gen_trans.mp4`,
+        reverseVideo: `/${projectId}/videos/zones/${zoneId}/${zoneId}_gen_rev.mp4`,
+        idleVideo: `/${projectId}/videos/zones/${zoneId}/${zoneId}_gen_idle.mp4`,
       };
     },
     getData: (zoneId) => PROJECT.zones.find((z) => z.id === zoneId),
@@ -116,9 +116,9 @@ export const LAYER_CONFIG = {
       const buildingId = building.id;
       const zoneId = building.zoneId;
       return {
-        forwardVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_gen_trans.mp4`,
-        reverseVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_gen_rev.mp4`,
-        idleVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/views/view1/${zoneId}_${buildingId}_view1_idle.mp4`,
+        forwardVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_gen_trans.mp4`,
+        reverseVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_gen_rev.mp4`,
+        idleVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view1/${zoneId}_${buildingId}_view1_idle.mp4`,
       };
     },
     getData: (buildingId) => PROJECT.buildings.find((b) => b.id === buildingId),
@@ -140,9 +140,9 @@ export const LAYER_CONFIG = {
       const zoneId = building.zoneId;
       const viewNum = viewIndex + 1; // Convert 0-based index to 1-based view number
       return {
-        forwardVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_trans.mp4`,
-        reverseVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_rev.mp4`,
-        idleVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_idle.mp4`,
+        forwardVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_trans.mp4`,
+        reverseVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_rev.mp4`,
+        idleVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_idle.mp4`,
       };
     },
   },
@@ -152,9 +152,9 @@ export const LAYER_CONFIG = {
       const buildingId = floor.buildingId;
       const zoneId = floor.zoneId;
       return {
-        forwardVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/floors/${zoneId}_${buildingId}_floor1_trans.mp4`,
-        reverseVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/floors/${zoneId}_${buildingId}_floor1_rev.mp4`,
-        idleVideo: `/${MODE_CONFIG}/zones/${zoneId}/${buildingId}/floors/${floorId}/${zoneId}_${buildingId}_${floorId}_idle.mp4`,
+        forwardVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/floors/${zoneId}_${buildingId}_floor1_trans.mp4`,
+        reverseVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/floors/${zoneId}_${buildingId}_floor1_rev.mp4`,
+        idleVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/floors/${floorId}/${zoneId}_${buildingId}_${floorId}_idle.mp4`,
       };
     },
     getData: (floorId) => PROJECT.floors.find((f) => f.id === floorId),
@@ -216,9 +216,9 @@ export const LAYER_CONFIG = {
     videosPath: (amenity) => {
       const amenityId = amenity.id;
       return {
-        forwardVideo: `/${MODE_CONFIG}/amenities/${amenityId}/${amenityId}_trans.mp4`,
-        reverseVideo: `/${MODE_CONFIG}/amenities/${amenityId}/${amenityId}_rev.mp4`,
-        idleVideo: `/${MODE_CONFIG}/amenities/${amenityId}/${amenityId}_idle.mp4`,
+        forwardVideo: `/${projectId}/videos/amenities/${amenityId}/${amenityId}_trans.mp4`,
+        reverseVideo: `/${projectId}/videos/amenities/${amenityId}/${amenityId}_rev.mp4`,
+        idleVideo: `/${projectId}/videos/amenities/${amenityId}/${amenityId}_idle.mp4`,
       };
     },
     getData: (amenityId) => PROJECT.amenities.find((a) => a.id === amenityId),

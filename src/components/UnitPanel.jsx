@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { DATA } from '../data/layers';
 
 import AREA_ICON from "../assets/icons/area.svg"
 import DOOR_ICON from "../assets/icons/door.svg"
@@ -9,9 +10,12 @@ export default function UnitPanel({ unit, onInterior, onBalconyView, onGallery }
     const [isPaymentPlanOpen, setIsPaymentPlanOpen] = useState(false);
 
     //temporary visuals and payment plan
-    const visuals = unit.gallery;
-    const cutSections = unit.cutSections;
-    const paymentPlans = unit.paymentPlans;
+    const unitType = DATA.unitTypes[unit.unitTypeId];
+    const serviceRooms = unitType.serviceRooms;
+    const gallery = unitType.gallery;
+    const cutSections = unitType.cutSections;
+    const paymentPlans = unitType.paymentPlans;
+
 
     return (
         <div className="h-full pr-1">
@@ -43,7 +47,7 @@ export default function UnitPanel({ unit, onInterior, onBalconyView, onGallery }
                         <hr className="flex-grow border-b border-white opacity-50" />
                     </div>
                     <div className="grid grid-cols-2 gap-2">
-                        {unit.serviceRooms.map((room, i) => (
+                        {serviceRooms.map((room, i) => (
                             <div key={i} className="flex items-center gap-1 text-xs text-[#E4E3E3]">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white/70">
                                     <path d="M12 12C12 10.8954 11.1046 10 10 10C8.89543 10 8 10.8954 8 12C8 13.1046 8.89543 14 10 14C11.1046 14 12 13.1046 12 12Z" stroke="currentColor" strokeWidth="2" />
@@ -99,7 +103,7 @@ export default function UnitPanel({ unit, onInterior, onBalconyView, onGallery }
                     </button>
                     {isVisualsOpen && (
                         <div className="grid grid-cols-2 gap-2 mt-2">
-                            {visuals.map((img) => (
+                            {gallery.map((img) => (
                                 <button className='hover:opacity-70' key={img.id} onClick={() => onGallery("gallery")}>
                                     <img
                                         src={img.src}

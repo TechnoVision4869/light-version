@@ -116,9 +116,9 @@ body {
 
 .blurred-layer {
   background: rgba(55, 55, 55, 0.3);
-  backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  z-index: 4;
+  backdrop-filter: blur(14px);
+  z-index: 30;
 }
 
 .animate-draw {

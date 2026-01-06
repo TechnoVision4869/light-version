@@ -1,4 +1,11 @@
-const PROJECT_HORIZONTAL = {
+// icons
+import AirportIcon from '../assets/icons/airport.svg';
+import TowerIcon from '../assets/icons/tower.svg';
+import MuscleIcon from '../assets/icons/muscle.svg';
+
+const START = { x: 0.50, y: 0.51 };
+
+export const PROJECT_HORIZONTAL = {
   project: {
     id: "horizontal",
     name: "Horizontal",
@@ -11,6 +18,7 @@ const PROJECT_HORIZONTAL = {
       projectId: "horizontal",
       displayName: "Villas & Townhouses",
       subtitle: "Residential Zone",
+      thumbnail: "horizontal/thumbnails/zones/zone1.png",
       description: "A serene community of luxury villas and modern townhouses nestled in nature."
     }
   ],
@@ -272,5 +280,88 @@ const PROJECT_HORIZONTAL = {
     { id: "th3-301", projectId: "horizontal", zoneId: "zone1", buildingId: "townhouse3", buildingType: "townhouse", unitTypeId: "townhouse-floor3", floorNumber: 3, displayName: "TH3-301", price: 1020000, area: 110, bedrooms: 2, bathrooms: 2, balconyView: "/panorama/townhouse/balcony.jpg", position: { x: 0.6, y: 0.3 } },
     { id: "th3-302", projectId: "horizontal", zoneId: "zone1", buildingId: "townhouse3", buildingType: "townhouse", unitTypeId: "townhouse-floor3", floorNumber: 3, displayName: "TH3-302", price: 1020000, area: 110, bedrooms: 2, bathrooms: 2, balconyView: "/panorama/townhouse/balcony.jpg", position: { x: 0.65, y: 0.3 } },
 
-  ]
+  ],
+
+  surroundings: [
+    {
+      id: "surrounding1",
+      displayName: "Cairo Airport",
+      iconSrc: AirportIcon,
+      thumbnail: "horizontal/thumbnails/surroundings/cairo_airboart.jpg",
+      distance: "38 min | 55 km",
+      description:
+        "Cairo International Airport is the principal international airport of Cairo and the largest and busiest airport in Egypt. It serves as the primary hub for Egyptair and Nile Air as well as several other airlines.",
+      x: 0.75, y: 0.85,
+      points: [
+        START, // { x: 0.50, y: 0.51 }
+        { x: 0.555, y: 0.507 },
+        { x: 0.605, y: 0.495 },
+        { x: 0.618, y: 0.535 },
+        { x: 0.63, y: 0.563 },
+        { x: 0.65, y: 0.545 },
+        { x: 0.665, y: 0.57 },
+        { x: 0.765, y: 0.855 },
+        { x: 0.755, y: 0.865 },
+      ]
+    },
+    {
+      id: "surrounding2",
+      displayName: "Gym",
+      iconSrc: MuscleIcon,
+      thumbnail: "horizontal/thumbnails/surroundings/gym.jpg",
+      distance: "3 min | 1 km",
+      description: "A modern fully equipped gym that support strength, cardio and everyday wellness.",
+      x: 0.545, y: 0.56,
+      points: [
+        START, // { x: 0.50, y: 0.51 }
+        { x: 0.55, y: 0.51 },
+        { x: 0.55, y: 0.58 },
+        { x: 0.54, y: 0.585 },
+      ]
+    },
+    {
+      id: "surrounding3",
+      displayName: "Iconic Tower",
+      iconSrc: TowerIcon,
+      thumbnail: "horizontal/thumbnails/surroundings/iconic_tower.jpg",
+      distance: "8 min | 5 km",
+      description: "An architectural landmark that defines the city skyline.",
+      x: 0.27, y: 0.43,
+      points: [
+        START, //{ x: 0.50, y: 0.51 }
+        { x: 0.455, y: 0.505 },
+        { x: 0.4, y: 0.495 },
+        { x: 0.34, y: 0.475 },
+        { x: 0.31, y: 0.47 },
+        { x: 0.292, y: 0.48 },
+      ]
+    },
+  ],
+
+  amenities: [
+    {
+      id: "amenity1",
+      displayName: "Lush Gardens",
+      subtitle: "Amenity",
+      thumbnail: `horizontal/thumbnails/amenities/f1.png`,
+      description: "Serene, landscaped gardens offering peaceful green spaces for relaxation and leisure.",
+      x: 0.59, y: 0.33,
+    },
+    {
+      id: "amenity2",
+      displayName: "Nature Landscapes",
+      subtitle: "Amenity",
+      thumbnail: `horizontal/thumbnails/amenities/f2.png`,
+      description: "Expansive natural scenery integrated into the development for a harmonious living environment.",
+      x: 0.46, y: 0.29,
+    },
+    {
+      id: "amenity3",
+      displayName: "Scenic Roadways",
+      subtitle: "Amenity",
+      thumbnail: `horizontal/thumbnails/amenities/f3.png`,
+      description: "Thoughtfully designed roads with tree-lined avenues and pedestrian-friendly pathways.",
+      x: 0.38, y: 0.11,
+    },
+  ],
 };

@@ -242,7 +242,7 @@ export default function App() {
             </button>
           </div>
           <div className="absolute inset-0">
-            <Panorama key="panorama-viewer" apartment={currentItem} />
+            <Panorama key="panorama-viewer" unit={currentItem} />
           </div>
         </div>
       )}
@@ -281,10 +281,10 @@ export default function App() {
       )}
 
       {galleryType && (
-        <div className="absolute inset-0 z-60">
+        <div className="fixed inset-0 z-60">
           {/* Blurred Background */}
           <div className="absolute inset-0 blurred-layer" />
-          <div className={`w-screen h-screen p-2 sm:p-4`} />
+          {/* <div className={`w-screen h-screen p-2 sm:p-4`} /> */}
           <div className="absolute top-2 left-7 z-40">
             <button
               onClick={handleBack}
@@ -310,7 +310,7 @@ export default function App() {
             </button>
           </div>
           <div className="absolute inset-0">
-            <Gallery apartment={currentItem} galleryType={galleryType} />
+            <Gallery unit={currentItem} galleryType={galleryType} />
           </div>
         </div>
       )}

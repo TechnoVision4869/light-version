@@ -1,9 +1,11 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import View360, { EquirectProjection } from "@egjs/react-view360";
+
+import { DATA } from "../data/layers";
 import Pin from "./Pin";
 import "@egjs/react-view360/css/view360.min.css";
 
-export default function Panorama({ apartment }) {
+export default function Panorama({ unit }) {
   const ZOOM_MIN = 0.85; // = FOV 105 (max zoom-out)
   const ZOOM_MAX = 1.5; // = FOV 60 (max zoom-in)
   const ZOOM_NORMAL = 1.0; // = FOV 90
@@ -16,9 +18,9 @@ export default function Panorama({ apartment }) {
   const [hotspotPositions, setHotspotPositions] = useState({});
   const containerRef = useRef(null);
 
-  // Get apartment data
-  const interior = apartment.interior;
-  const floors = interior.floors;
+  // Get unit data
+  const unitType = DATA.unitTypes[unit.unitTypeId];
+  const floors = unitType.interior.floors;
   const [room, setRoom] = useState(floors[0].rooms[0]);
 
   const [currentImage, setCurrentImage] = useState(room.image);
@@ -181,7 +183,7 @@ export default function Panorama({ apartment }) {
       {/* Next viewer */}
       {isFading && (
         <View360
-          className="view360-fullscreen opacity-100"
+          className="view360-fullscreen opacity-100 border-6 border-green-600"
           projection={nextProjection}
         // zoomRange={{ min: ZOOM_MIN, max: ZOOM_MAX }}
         // draggable={false}
