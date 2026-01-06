@@ -426,7 +426,22 @@ export const PROJECT_MIX = {
 
   units: [
     // Tower 1, Floor 1
-    { id: "apartment101", projectId: "mix", zoneId: "zone1", buildingId: "tower1", buildingType: "tower", unitTypeId: "unit-type-a", floorId: "floor1", displayName: "A101", area: 85, price: 250000, bedrooms: 2, bathrooms: 1, balconyView: "/mix/panorama/balcony.jpg", x: 0.40, y: 0.60 },
+    {
+      id: "apartment101",
+      projectId: "mix",
+      zoneId: "zone1",
+      buildingId: "tower1",
+      buildingType: "tower",
+      unitTypeId: "unit-type-a",
+      floorId: "floor1",
+      displayName: "A101",
+      area: 85,
+      price: 250000,
+      bedrooms: 2,
+      bathrooms: 1,
+      balconyView: "/mix/panorama/balcony.jpg",
+      x: 0.40, y: 0.60,
+    },
     { id: "apartment102", projectId: "mix", zoneId: "zone1", buildingId: "tower1", buildingType: "tower", unitTypeId: "unit-type-b", floorId: "floor1", displayName: "A102", area: 200, price: 400000, bedrooms: 4, bathrooms: 2, balconyView: "/mix/panorama/balcony.jpg", x: 0.25, y: 0.4 },
     { id: "apartment103", projectId: "mix", zoneId: "zone1", buildingId: "tower1", buildingType: "tower", unitTypeId: "unit-type-c", floorId: "floor1", displayName: "A103", area: 120, price: 300000, bedrooms: 2, bathrooms: 2, balconyView: "/mix/panorama/balcony.jpg", x: 0.438, y: 0.3 },
     { id: "apartment104", projectId: "mix", zoneId: "zone1", buildingId: "tower1", buildingType: "tower", unitTypeId: "unit-type-d", floorId: "floor1", displayName: "A104", area: 185, price: 350000, bedrooms: 3, bathrooms: 2, balconyView: "/mix/panorama/balcony.jpg", x: 0.65, y: 0.33 },
