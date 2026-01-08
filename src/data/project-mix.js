@@ -269,8 +269,8 @@ export const PROJECT_MIX = {
               hotspots: [
                 {
                   id: 'spot1',
-                  yaw: 30,
-                  pitch: -10,
+                  yaw: 25,
+                  pitch: -9,
                   type: 'scene',
                   label: "Entrance 2", // must match the room displayName
                 },
@@ -283,22 +283,22 @@ export const PROJECT_MIX = {
               hotspots: [
                 {
                   id: 'spot1',
-                  yaw: -65,
-                  pitch: -25,
+                  yaw: -135,
+                  pitch: -10,
                   type: 'scene',
                   label: "Entrance 1",
                 },
                 {
                   id: 'spot2',
-                  yaw: 83,
-                  pitch: 0,
+                  yaw: -20,
+                  pitch: -2,
                   type: 'scene',
                   label: "Entrance 3-1",
                 },
                 {
                   id: 'spot3',
-                  yaw: 83,
-                  pitch: -10,
+                  yaw: 27,
+                  pitch: -12,
                   type: 'scene',
                   label: "Entrance 3-2",
                 }
@@ -311,13 +311,13 @@ export const PROJECT_MIX = {
               hotspots: [
                 {
                   id: 'spot1',
-                  yaw: -105,
-                  pitch: -10,
+                  yaw: -140,
+                  pitch: -7,
                   type: 'scene',
                   label: "Entrance 2",
                 },
                 {
-                  id: 'spot1',
+                  id: 'spot2',
                   yaw: -105,
                   pitch: -10,
                   type: 'scene',
@@ -332,10 +332,17 @@ export const PROJECT_MIX = {
               hotspots: [
                 {
                   id: 'spot1',
-                  yaw: -115,
-                  pitch: -5,
+                  yaw: -165,
+                  pitch: -8,
                   type: 'scene',
                   label: "Entrance 2",
+                },
+                {
+                  id: 'spot2',
+                  yaw: -80,
+                  pitch: -5,
+                  type: 'scene',
+                  label: "Entrance 4",
                 },
               ]
             },

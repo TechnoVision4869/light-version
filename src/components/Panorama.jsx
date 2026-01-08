@@ -6,9 +6,9 @@ import Pin from "./Pin";
 import "@egjs/react-view360/css/view360.min.css";
 
 export default function Panorama({ unit }) {
-  const ZOOM_MIN = 0.85; // = FOV 105 (max zoom-out)
+  const ZOOM_MIN = 0.8; // = FOV 105 (max zoom-out)
   const ZOOM_MAX = 1.5; // = FOV 60 (max zoom-in)
-  const ZOOM_NORMAL = 1.0; // = FOV 90
+  const ZOOM_NORMAL = 0.85; // = FOV 90
 
   const ZOOM_IN_TIME = 500;
   const ZOOM_OUT_TIME = 1000;

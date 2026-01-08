@@ -64,7 +64,7 @@ export default function UnitPanel({ unit, onInterior, onBalconyView, onGallery }
                             >
                                 Interior
                             </button>
-                            <button className="flex-1 border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition"
+                            <button className="flex-1 border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition whitespace-nowrap"
                                 onClick={() => onGallery("floorPlans")}
                             >
                                 Floor Plan

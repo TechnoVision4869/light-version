@@ -27,13 +27,13 @@ import AnimatedPath from "./components/AnimatedPath";
 
 // logo
 import TECHNO_LOGO from "./assets/techno.png";
-const color = "green";
+// const color = "green";
 
 export default function App() {
   // console.log("App renders");
 
   //Debug
-  const [debugBorder, setDebugBorder] = useState(true);
+  // const [debugBorder, setDebugBorder] = useState(true);
 
   //states
   const [sidebarOpen, setSidebarOpen] = useState(false); // set true when sidebar is open
@@ -189,6 +189,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    console.log(activeLayer);
     if (activeLayer !== LAYERS.FLOOR) {
       setIsFilter(false);
     }
@@ -830,11 +831,11 @@ export default function App() {
                 </div>
               </div>
             )}
-            {debugBorder && <div className={`w-3 h-2 bg-white border-4 border-${color}-600`}></div>}
+            {/* {debugBorder && <div className={`w-3 h-2 bg-white border-4 border-${color}-600`}></div>} */}
             <div className="w-18 h-auto ml-auto">
-              <button onClick={() => { setDebugBorder((prevState) => !prevState) }}>
+              {/* <button onClick={() => { setDebugBorder((prevState) => !prevState) }}> */}
                 <img src={TECHNO_LOGO} alt="Techno Vision Logo" />
-              </button>
+              {/* </button> */}
             </div>
           </div>
         </div>
