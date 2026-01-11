@@ -3,7 +3,7 @@ import FloatingButton from "./buttons/FloatingButton";
 import { TABS, LAYERS } from '../data/layers';
 import AnimButton from "./buttons/AnimButton";
 
-export default function Floating({ items, mediaRef, tab, layer, filters = null, onSelectItem, onChangeItem }) {
+export default function Floating({ items, mediaRef, tab, layer, filters = null, onSelectItem }) {
     const container = mediaRef.current;
 
     // Filter items based on current filter state
@@ -76,11 +76,6 @@ export default function Floating({ items, mediaRef, tab, layer, filters = null, 
         return () => resizeObserver.disconnect();
     }, []); // Empty dependency array ensures this runs once on mount
 
-     // Only render when positions are ready for all items
-    if (buttonPositions.length !== items.length) {
-        return null; // or return <></>
-    }
-
     // Don't render until positions are ready
     if (buttonPositions.length !== items.length) return null;
 
@@ -97,7 +92,7 @@ export default function Floating({ items, mediaRef, tab, layer, filters = null, 
                     }}
                     onSelect={() => {
                         onSelectItem(item, LAYERS.SURROUNDING_DETAIL);
-                        onChangeItem(item.id);
+                        // onChangeItem(item.id);
                     }}
                 />
             ))

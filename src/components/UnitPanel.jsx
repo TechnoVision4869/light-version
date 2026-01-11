@@ -177,17 +177,17 @@ export default function UnitPanel({ unit, onInterior, onBalconyView, onGallery }
                         paymentPlans.map((plan, index) => (
                             <div className="mt-2 mb-3 flex justify-between gap-2 whitespace-nowrap" key={index}>
                                 <div className="flex-1 text-center">
-                                    <div className="font-bold text-sm">{plan.downPayment.toLocaleString()} L.E</div>
+                                    <div className="font-bold text-xs">{plan.downPayment.toLocaleString()} L.E</div>
                                     <div className="text-xs text-white/70">Down Payment</div>
                                 </div>
                                 <div className="v-divider"></div>
                                 <div className="flex-1 text-center">
-                                    <div className="font-bold text-sm">{plan.monthly.toLocaleString()} L.E</div>
+                                    <div className="font-bold text-xs">{plan.monthly.toLocaleString()} L.E</div>
                                     <div className="text-xs text-white/70">Monthly</div>
                                 </div>
                                 <div className="v-divider"></div>
                                 <div className="flex-1 text-center">
-                                    <div className="font-bold text-sm">{plan.years}</div>
+                                    <div className="font-bold text-xs">{plan.years}</div>
                                     <div className="text-xs text-white/70">Years</div>
                                 </div>
                             </div>

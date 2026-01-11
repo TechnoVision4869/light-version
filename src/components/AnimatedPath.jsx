@@ -1,42 +1,36 @@
-import { useEffect, useRef } from 'react';
+import { motion } from "motion/react";
 
-export default function AnimatedPath({
-  points = null,
-  color = "white",
-  strokeWidth = 0.005
-}) {
-  const pathRef = useRef(null);
+export default function AnimatedPath({ path }) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(path, 'image/svg+xml');
 
-  useEffect(() => {
-    const path = pathRef.current;
-    if (path) {
-      const length = path.getTotalLength();
-      path.style.strokeDasharray = length;
-      path.style.strokeDashoffset = length;
-    }
-  }, [points]);
+  const svgElement = doc.querySelector('svg');
+  const x = svgElement?.getAttribute('x');
+  const y = svgElement?.getAttribute('y');
 
-  if (!points || points.length < 2) return null;
-
-  // Always generate a polyline with straight segments unless curve=true
-  const pathData = 'M ' + points.map(p => `${p.x} ${p.y}`).join(' L ');
+  const pathElement = doc.querySelector('path');
+  const d = pathElement?.getAttribute('d');
 
   return (
     <svg
-      viewBox="0 0 1 1"
-      width="100%"
-      height="100%"
-      preserveAspectRatio="none"
-      className="absolute inset-0 pointer-events-none"
+      viewBox="0 0 1920 1080"
+      preserveAspectRatio="xMidYMid slice"
+      fill="none"
+      className="w-full h-full absolute inset-0"
     >
-      <path
-        ref={pathRef}
-        d={pathData}
-        stroke={color}
-        strokeWidth={strokeWidth}
-        fill="none"
-        className="animate-draw"
-      />
+      <g transform={`translate(${x}, ${y})`}>
+        <motion.path
+          initial={{ pathLength: 0 }}
+          whileInView={{ pathLength: 1 }}
+          transition={{
+            duration: 1.7,
+            ease: "easeInOut",
+          }}
+          d={d}
+          stroke="#ffffff"
+          strokeWidth="5"
+        />
+      </g>
     </svg>
   );
 }

@@ -42,11 +42,9 @@ export default function App() {
   const [isPanorama, setIsPanorama] = useState(false);
   const [isBalconyView, setIsBalconyView] = useState(false);
   const [galleryType, setGalleryType] = useState(null);
-  const [selectedSurroundingId, setSelectedSurroundingId] = useState(null);
 
   const handleBack = () => {
     setIsPanorama(false);
-    setSelectedSurroundingId(null);
     setIsBalconyView(false);
     setGalleryType(null);
   };
@@ -58,27 +56,6 @@ export default function App() {
 
   // Ref
   const mediaContainerRef = useRef(null);
-
-  const selectedSurrounding = useMemo(() => {
-    if (!selectedSurroundingId) return null;
-    return DATA.surroundings.find(s => s.id === selectedSurroundingId);
-  }, [selectedSurroundingId]);
-
-
-  const currentPathPoints = useMemo(() => {
-    if (!selectedSurrounding || !mediaContainerRef.current) return null;
-
-    const container = mediaContainerRef.current;
-    const w = container.clientWidth;
-    const h = container.clientHeight;
-    const videoW = h * (16 / 9);
-    const videoLeft = (w - videoW) / 2;
-
-    return (selectedSurrounding.points || []).map(p => ({
-      x: (videoLeft + videoW * p.x) / w,
-      y: p.y, // since y is already normalized to [0,1] in your data
-    }));
-  }, [selectedSurrounding, mediaContainerRef.current?.clientWidth, mediaContainerRef.current?.clientHeight]);
 
   // Navigation hook
   const {
@@ -617,19 +594,17 @@ export default function App() {
                     loop
                   />
                   {activeLayer === LAYERS.SURROUNDING_DETAIL && (
-                    <AnimatedPath points={currentPathPoints} />
+                    <AnimatedPath path={currentItem.svgPath} />
                   )}
                 </div>
 
                 {activeTab === TABS.SURROUNDINGS &&
-                  activeLayer === null &&
                   viewerProps.floatingOpacity && (
                     <Floating
                       items={DATA.surroundings}
                       mediaRef={mediaContainerRef}
                       tab={activeTab}
                       onSelectItem={handleGoToItem}
-                      onChangeItem={(id) => setSelectedSurroundingId(id)}
                     />
                   )}
 
@@ -834,7 +809,7 @@ export default function App() {
             {/* {debugBorder && <div className={`w-3 h-2 bg-white border-4 border-${color}-600`}></div>} */}
             <div className="w-18 h-auto ml-auto">
               {/* <button onClick={() => { setDebugBorder((prevState) => !prevState) }}> */}
-                <img src={TECHNO_LOGO} alt="Techno Vision Logo" />
+              <img src={TECHNO_LOGO} alt="Techno Vision Logo" />
               {/* </button> */}
             </div>
           </div>

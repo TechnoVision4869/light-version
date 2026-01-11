@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
-import { DATA
+import {
+    DATA
 
- } from '../data/layers';
+} from '../data/layers';
 // Carousel component for gallery
-export default function Gallery({ unit, galleryType, autoPlay = true, interval = 5000 }) {
+export default function Gallery({ unit, galleryType }) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const unitType = DATA.unitTypes[unit.unitTypeId];
@@ -17,16 +18,8 @@ export default function Gallery({ unit, galleryType, autoPlay = true, interval =
         setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
     };
 
-    // Auto-play logic
-    useEffect(() => {
-        if (!autoPlay) return;
-        const play = setInterval(nextSlide, interval);
-        return () => clearInterval(play);
-    }, [autoPlay, interval, nextSlide]);
-
     return (
         <div className="fixed inset-0 z-30 overflow-hidden">
-            {/* Centered Sharp Image */}
             <div
                 className="absolute inset-0 flex transition-transform duration-800 ease-in-out"
                 style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -68,7 +61,7 @@ export default function Gallery({ unit, galleryType, autoPlay = true, interval =
                 {images.map((_, index) => (
                     <button
                         key={index}
-                        onClick={() => setCurrentIndex(index)}
+                        // onClick={() => setCurrentIndex(index)}
                         className={`w-3 h-3 rounded-full transition-colors ${index === currentIndex ? 'bg-white' : 'bg-white/50'
                             }`}
                         aria-label={`Go to slide ${index + 1}`}
