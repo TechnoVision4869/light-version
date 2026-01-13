@@ -19,37 +19,26 @@ export default function Gallery({ unit, galleryType }) {
     // Swipe States
     const [startX, setStartX] = useState(0);
     const [translateX, setTranslateX] = useState(0);
+    const threshold = 50;
 
     const handleMouseDown = (e) => {
-        console.log("mouse down", e);
         setStartX(e.clientX);
     };
     const handleMouseUp = (e) => {
-        console.log("mouse up", e);
         setTranslateX(startX - e.clientX);
     };
 
     const handleTouchStart = (e) => {
-        console.log("touch start", e);
         setStartX(e.changedTouches[0].clientX)
-        // setStartX(e.touches[0].clientX);
     };
 
     const handleTouchEnd = (e) => {
-        console.log("touch end", e);
         setTranslateX(startX - e.changedTouches[0].clientX);
     }
 
-    const handleTouchMove = (e) => {
-        // e.preventDefault();
-        // setTranslateX(startX - e.touches[0].clientX);
-    };
-
     useEffect(() => {
-        console.log("change happened", translateX);
-
-        if (translateX > 50) nextSlide()
-        else if (translateX < -50) prevSlide();
+        if (translateX > threshold) nextSlide()
+        else if (translateX < -threshold) prevSlide();
     }, [translateX]);
 
     return (
@@ -60,7 +49,6 @@ export default function Gallery({ unit, galleryType }) {
                 onMouseDown={handleMouseDown}
                 onMouseUp={handleMouseUp}
                 onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
             />
             {/* Slides */}
@@ -80,14 +68,24 @@ export default function Gallery({ unit, galleryType }) {
             </div>
 
             {/* Indicators */}
-            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-10 flex space-x-2 pointer-events-auto">
+            <div className="absolute bottom-7 left-1/2 transform -translate-x-1/2 z-10 flex space-x-2 pointer-events-auto">
                 {images.map((_, index) => (
-                    <button
-                        key={index}
-                        className={`w-3 h-3 rounded-full transition-colors ${index === currentIndex ? 'bg-white' : 'bg-white/50'
-                            }`}
-                        aria-label={`Go to slide ${index + 1}`}
-                    />
+                    <span key={index}
+                        className={`w-3 h-3 rounded-full`}>
+                        <svg
+                            width="21"
+                            height="21"
+                            viewBox="0 0 21 21"
+                            fill={index === currentIndex ? "white" : "#ffffff80"}
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <circle
+                                cx="10"
+                                cy="10"
+                                r="6"
+                            />
+                        </svg>
+                    </span>
                 ))}
             </div>
         </div>

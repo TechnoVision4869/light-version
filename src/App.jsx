@@ -134,6 +134,7 @@ export default function App() {
   // Swipe States
   const [startX, setStartX] = useState(0);
   const [translateX, setTranslateX] = useState(0);
+  const threshold = 50;
 
   const handleMouseDown = (e) => {
     setStartX(e.clientX);
@@ -143,23 +144,20 @@ export default function App() {
   };
 
   const handleTouchStart = (e) => {
-    setStartX(e.touches[0].clientX);
+    setStartX(e.changedTouches[0].clientX)
   };
 
-  const handleTouchMove = (e) => {
-    console.log("touch move");
-    setTranslateX(startX - e.touches[0].clientX);
-  };
-  
+  const handleTouchEnd = (e) => {
+    setTranslateX(startX - e.changedTouches[0].clientX);
+  }
+
   useEffect(() => {
-    console.log("change happened");
-    
     if (activeLayer !== LAYERS.BUILDING) return;
     if (isDisabled) return;
     // console.log(translateX);
 
-    if (translateX > 0) viewerProps.changeView("next");
-    else if (translateX < 0) viewerProps.changeView("prev");
+    if (translateX > threshold) viewerProps.changeView("next");
+    else if (translateX < -threshold) viewerProps.changeView("prev");
   }, [translateX]);
 
   useEffect(() => {
@@ -571,7 +569,7 @@ export default function App() {
                 onMouseDown={handleMouseDown}
                 onMouseUp={handleMouseUp}
                 onTouchStart={handleTouchStart}
-                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
               >
                 {/* video element */}
                 <div className="absolute inset-0">
