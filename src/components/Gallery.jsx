@@ -32,6 +32,7 @@ export default function Gallery({ unit, galleryType }) {
     };
 
     const handleTouchMove = (e) => {
+        e.preventDefault();
         setTranslateX(startX - e.touches[0].clientX);
     };
 
@@ -44,11 +45,16 @@ export default function Gallery({ unit, galleryType }) {
     }, [translateX]);
 
     return (
-        <div className="fixed inset-0 z-30 overflow-hidden"
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}>
+        <div className="fixed inset-0 z-30 overflow-hidden">
+            <div
+                className="absolute inset-0 z-10"
+                style={{ background: 'transparent', touchAction: 'none' }}
+                onMouseDown={handleMouseDown}
+                onMouseUp={handleMouseUp}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+            />
+            {/* Slides */}
             <div
                 className="absolute inset-0 flex transition-transform duration-800 ease-in-out"
                 style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -64,32 +70,11 @@ export default function Gallery({ unit, galleryType }) {
                 ))}
             </div>
 
-            <div className="absolute w-50 h-50 top-50 left-50 z-10 bg-black/50 pointer-events-auto" />
-            {/* Navigation Arrows */}
-            {(images.length > 1) && (
-                <>  <button
-                    // onClick={prevSlide}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 text-white p-3 rounded-full hover:bg-black/75 pointer-events-auto"
-                    aria-label="Previous slide"
-                >
-                    &#8249;
-                </button>
-                    <button
-                        // onClick={nextSlide}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/50 text-white p-3 rounded-full hover:bg-black/75 pointer-events-auto"
-                        aria-label="Next slide"
-                    >
-                        &#8250;
-                    </button>
-                </>
-            )}
-
             {/* Indicators */}
             <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-10 flex space-x-2 pointer-events-auto">
                 {images.map((_, index) => (
                     <button
                         key={index}
-                        // onClick={() => setCurrentIndex(index)}
                         className={`w-3 h-3 rounded-full transition-colors ${index === currentIndex ? 'bg-white' : 'bg-white/50'
                             }`}
                         aria-label={`Go to slide ${index + 1}`}
