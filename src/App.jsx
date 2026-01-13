@@ -695,6 +695,17 @@ export default function App() {
                       </svg>
                     </button>
                   )}
+                
+                <button className="absolute bottom-2 right-2 w-8 h-8 rounded-full bg-black/10 flex items-center justify-center z-10"
+                >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M18 6L6 18M6 6L18 18"
+                            stroke="white"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                        />
+                    </svg></button>
 
                 {/* bottom info popup */}
                 {showInfoPopup && currentItem?.id && (
