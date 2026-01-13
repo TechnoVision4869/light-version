@@ -22,20 +22,22 @@ export default function Gallery({ unit, galleryType }) {
 
     const handleMouseDown = (e) => {
         console.log("mouse down", e);
-        // setStartX(e.clientX);
+        setStartX(e.clientX);
     };
     const handleMouseUp = (e) => {
-        // setTranslateX(startX - e.clientX);
         console.log("mouse up", e);
+        setTranslateX(startX - e.clientX);
     };
 
     const handleTouchStart = (e) => {
         console.log("touch start", e);
+        setStartX(e.changedTouches[0].clientX)
         // setStartX(e.touches[0].clientX);
     };
 
     const handleTouchEnd = (e) => {
         console.log("touch end", e);
+        setTranslateX(startX - e.changedTouches[0].clientX);
     }
 
     const handleTouchMove = (e) => {
@@ -44,11 +46,10 @@ export default function Gallery({ unit, galleryType }) {
     };
 
     useEffect(() => {
-        console.log("change happened");
-        console.log(translateX);
+        console.log("change happened", translateX);
 
-        if (translateX > 0) nextSlide()
-        else if (translateX < 0) prevSlide();
+        if (translateX > 50) nextSlide()
+        else if (translateX < -50) prevSlide();
     }, [translateX]);
 
     return (
