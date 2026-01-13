@@ -21,19 +21,26 @@ export default function Gallery({ unit, galleryType }) {
     const [translateX, setTranslateX] = useState(0);
 
     const handleMouseDown = (e) => {
-        setStartX(e.clientX);
+        console.log("mouse down", e);
+        // setStartX(e.clientX);
     };
     const handleMouseUp = (e) => {
-        setTranslateX(startX - e.clientX);
+        // setTranslateX(startX - e.clientX);
+        console.log("mouse up", e);
     };
 
     const handleTouchStart = (e) => {
-        setStartX(e.touches[0].clientX);
+        console.log("touch start", e);
+        // setStartX(e.touches[0].clientX);
     };
 
+    const handleTouchEnd = (e) => {
+        console.log("touch end", e);
+    }
+
     const handleTouchMove = (e) => {
-        e.preventDefault();
-        setTranslateX(startX - e.touches[0].clientX);
+        // e.preventDefault();
+        // setTranslateX(startX - e.touches[0].clientX);
     };
 
     useEffect(() => {
@@ -53,6 +60,7 @@ export default function Gallery({ unit, galleryType }) {
                 onMouseUp={handleMouseUp}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
             />
             {/* Slides */}
             <div
