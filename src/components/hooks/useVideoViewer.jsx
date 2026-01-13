@@ -25,7 +25,7 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
   // Function to handle view changes (uses activeTab and currentItem derived above)
   const changeView = useCallback(
     (direction) => {
-      // console.log("useVideoViewer: changeView called with direction:", direction);
+      console.log("useVideoViewer: changeView called with direction:", direction);
       // Use the locally derived activeTab and currentItem
 
       const buildingConfig = LAYER_CONFIG[LAYERS.BUILDING];

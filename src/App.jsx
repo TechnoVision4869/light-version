@@ -147,8 +147,20 @@ export default function App() {
   };
 
   const handleTouchMove = (e) => {
+    console.log("touch move");
     setTranslateX(startX - e.touches[0].clientX);
   };
+  
+  useEffect(() => {
+    console.log("change happened");
+    
+    if (activeLayer !== LAYERS.BUILDING) return;
+    if (isDisabled) return;
+    // console.log(translateX);
+
+    if (translateX > 0) viewerProps.changeView("next");
+    else if (translateX < 0) viewerProps.changeView("prev");
+  }, [translateX]);
 
   useEffect(() => {
     const hideBars = async () => {
@@ -171,15 +183,6 @@ export default function App() {
       setIsFilter(false);
     }
   }, [activeLayer]);
-
-  useEffect(() => {
-    if (activeLayer !== LAYERS.BUILDING) return;
-    if (isDisabled) return;
-    // console.log(translateX);
-
-    if (translateX > 0) viewerProps.changeView("next");
-    else if (translateX < 0) viewerProps.changeView("prev");
-  }, [translateX]);
 
   //filters variables
   const [filters, setFilters] = useState({

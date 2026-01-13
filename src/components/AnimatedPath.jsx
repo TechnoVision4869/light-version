@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { useEffect, useRef } from 'react';
 
 export default function AnimatedPath({ path }) {
   const parser = new DOMParser();
@@ -11,6 +11,24 @@ export default function AnimatedPath({ path }) {
   const pathElement = doc.querySelector('path');
   const d = pathElement?.getAttribute('d');
 
+  const pathRef = useRef(null);
+
+  useEffect(() => {
+    const path = pathRef.current;
+    if (!path) return;
+
+    const length = path.getTotalLength();
+    path.style.strokeDasharray = length;
+    path.style.strokeDashoffset = length;
+
+    // Trigger reflow
+    path.getBoundingClientRect();
+
+    // Animate
+    path.style.transition = 'stroke-dashoffset 1.25s ease-in-out';
+    path.style.strokeDashoffset = '0';
+  }, [d]);
+
   return (
     <svg
       viewBox="0 0 1920 1080"
@@ -19,14 +37,10 @@ export default function AnimatedPath({ path }) {
       className="w-full h-full absolute inset-0"
     >
       <g transform={`translate(${x}, ${y})`}>
-        <motion.path
-          initial={{ pathLength: 0 }}
-          whileInView={{ pathLength: 1 }}
-          transition={{
-            duration: 1.7,
-            ease: "easeInOut",
-          }}
+        <path
+          ref={pathRef}
           d={d}
+          fill="none"
           stroke="#ffffff"
           strokeWidth="5"
         />
