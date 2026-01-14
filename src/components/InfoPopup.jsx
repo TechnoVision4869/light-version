@@ -1,15 +1,9 @@
-// components/InfoPopup.jsx
 import { LAYER_CONFIG, LAYERS } from "../data/layers";
 
 import CAR_ICON from "../assets/icons/car.svg"
 
 // components/InfoPopup.jsx
-export default function InfoPopup({
-    showInfoPopup,
-    layer,
-    itemId,
-    onClose
-}) {
+export default function InfoPopup({ showInfoPopup, layer, itemId, onClose }) {
     if (!showInfoPopup || !itemId || !layer) {
         return null;
     }

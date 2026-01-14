@@ -43,6 +43,8 @@ export default function App() {
   const [isBalconyView, setIsBalconyView] = useState(false);
   const [galleryType, setGalleryType] = useState(null);
 
+  const [showI, setShowI] = useState(false);
+
   const handleBack = () => {
     setIsPanorama(false);
     setIsBalconyView(false);
@@ -94,18 +96,21 @@ export default function App() {
   // Show info popup when item has description
   const handleGoToItem = (item, layerKey) => {
     goToItem(item, layerKey);
-
-    // Show info popup if item has description
-    const itemData = LAYER_CONFIG[layerKey].getData(item.id);
-
-    if (itemData?.description) {
-      setShowInfoPopup(true);
-    }
   };
+
+  useEffect(() => {
+    // Show info popup if item has description
+    const itemData = LAYER_CONFIG[activeLayer]?.getData(currentItem.id);
+
+    if (itemData?.description) setShowInfoPopup(true);
+    setShowI(false);
+
+  }, [currentItem])
 
   // Close popup
   const closeInfoPopup = () => {
     setShowInfoPopup(false);
+    setShowI(true);
   };
 
   const handleActiveTab = (tab) => {
@@ -695,17 +700,20 @@ export default function App() {
                       </svg>
                     </button>
                   )}
-                
-                <button className="absolute bottom-2 right-2 w-8 h-8 rounded-full bg-black/10 flex items-center justify-center z-10"
+
+                {/* info re-open button */}
+                {showI && <button className={`absolute -bottom-1 -right-1 flex items-center justify-center
+                  ${activeTab === TABS.SURROUNDINGS ? "bg-[#94846D]/70 backdrop-blur" : 'bg-black/70 backdrop-blur-sm'}
+                  w-8 h-8 hover:w-9 hover:h-9 
+                  transition-all duration-500 ease-in-out
+                  rounded-tl-xl rounded-bl-xl rounded-tr-xl`}
+                  onClick={() => setShowInfoPopup(true)}
                 >
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                        <path
-                            d="M18 6L6 18M6 6L18 18"
-                            stroke="white"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                        />
-                    </svg></button>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="11" cy="5" r="1.5" fill="white" />
+                    <path d="M11 9 C11.8 11, 10.2 13, 11 15" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+                  </svg>
+                </button>}
 
                 {/* bottom info popup */}
                 {showInfoPopup && currentItem?.id && (

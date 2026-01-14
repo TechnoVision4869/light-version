@@ -120,13 +120,3 @@ body {
   backdrop-filter: blur(14px);
   z-index: 30;
 }
-
-.animate-draw {
-  animation: drawPath 1.5s ease-out forwards;
-}
-
-@keyframes drawPath {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
