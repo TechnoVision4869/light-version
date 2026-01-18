@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { StatusBar } from "@capacitor/status-bar";
 import { App as CapApp } from "@capacitor/app"
-import { TABS, LAYERS, TAB_CONFIG, LAYER_CONFIG, DATA } from "./data/layers";
+import { TABS, LAYERS, LAYER_CONFIG, DATA } from "./data/layers";
 // Hooks
 import { useNavigation } from "./components/hooks/useNavigation";
 import { useVideoViewer } from "./components/hooks/useVideoViewer";
@@ -9,21 +9,20 @@ import { useVideoViewer } from "./components/hooks/useVideoViewer";
 // Components
 import LandscapePrompt from "./components/LandscapePrompt";
 import InfoPopup from "./components/InfoPopup";
-import ZoneButton from "./components/buttons/ZoneButton";
-import AmenityButton from "./components/buttons/AmenityButton";
-import SurroundingButton from "./components/buttons/SurroundingButton";
+
 import HomeButton from "./components/buttons/HomeButton";
-import BuildingButton from "./components/buttons/BuildingButton";
-import FloorButton from "./components/buttons/FloorButton";
-import ApartmentButton from "./components/buttons/ApartmentButton";
+
 import HistoryBreadcrumbs from "./components/HistoryBreadcrumbs";
 import Floating from "./components/Floating";
-import FilterPanel from "./components/FilterPanel";
-import UnitPanel from "./components/UnitPanel";
+
 import Panorama from "./components/Panorama";
 import Balcony from "./components/Balcony";
 import Gallery from "./components/Gallery";
 import AnimatedPath from "./components/AnimatedPath";
+
+import SidebarContextProvider, { SidebarContext } from "./store/SidebarContextProvider";
+import Sidebar from "./components/Sidebar";
+
 
 // logo
 import TECHNO_LOGO from "./assets/techno.png";
@@ -36,9 +35,7 @@ export default function App() {
   // const [debugBorder, setDebugBorder] = useState(true);
 
   //states
-  const [sidebarOpen, setSidebarOpen] = useState(false); // set true when sidebar is open
   const [showInfoPopup, setShowInfoPopup] = useState(false);
-  const [isFilter, setIsFilter] = useState(false); // 'navigate' or 'filter'
   const [isPanorama, setIsPanorama] = useState(false);
   const [isBalconyView, setIsBalconyView] = useState(false);
   const [galleryType, setGalleryType] = useState(null);
@@ -58,6 +55,9 @@ export default function App() {
 
   // Ref
   const mediaContainerRef = useRef(null);
+
+  // Context
+  const { sidebarOpen, handleSidebarState } = useContext(SidebarContext);
 
   // Navigation hook
   const {
@@ -93,7 +93,6 @@ export default function App() {
 
   const isDisabled = !viewerProps.isMediaLoaded || viewerProps.isPlaying;
 
-  // Show info popup when item has description
   const handleGoToItem = (item, layerKey) => {
     goToItem(item, layerKey);
   };
@@ -132,7 +131,7 @@ export default function App() {
     }
 
     setTimeout(() => {
-      setSidebarOpen(true);
+      handleSidebarState(true);
     }, 800);
   };
 
@@ -180,12 +179,6 @@ export default function App() {
     }
   }, []);
 
-  useEffect(() => {
-    console.log(activeLayer);
-    if (activeLayer !== LAYERS.FLOOR) {
-      setIsFilter(false);
-    }
-  }, [activeLayer]);
 
   //filters variables
   const [filters, setFilters] = useState({
@@ -313,7 +306,7 @@ export default function App() {
                         activeTab === TABS.SURROUNDINGS) &&
                       activeLayer === null
                     )
-                      setSidebarOpen(false);
+                      handleSidebarState(false);
                     viewerProps.StartReverse(false, () => { });
                   }}
                   disabled={isDisabled || history.length <= 1}
@@ -417,154 +410,12 @@ export default function App() {
           </div>
 
           <div
-            className={`flex ${sidebarOpen ? "space-x-3" : "space-x-0"
-              } flex-1 min-h-0 overflow-hidden`}
+            className={`flex ${sidebarOpen ? "space-x-3" : "space-x-0"} flex-1 min-h-0 overflow-hidden`}
           >
             {/* Sidebar */}
-            <aside
-              className={`bg-white/9 rounded-2xl p-2 py-3 md:py-4 flex-shrink-0 transition-all duration-700 overflow-hidden
-             ${activeTab === TABS.HOME || activeLayer === LAYERS.AMENITY_DETAIL || activeLayer === LAYERS.SURROUNDING_DETAIL
-                  ? "w-0 opacity-0 pointer-events-none"
-                  : sidebarOpen
-                    ? "w-44 md:w-68 opacity-100"
-                    : "w-0 opacity-0 pointer-events-none"
-                }`}
-            >
-              {activeTab === TABS.ZONES && activeLayer === LAYERS.APARTMENT ? (
-                <UnitPanel
-                  unit={currentItem}
-                  onInterior={handleInterior}
-                  onBalconyView={handleBalconyView}
-                  onGallery={handleGallery}
-                />
-              ) : (
-                <div className="h-full pr-1">
-                  {activeLayer === LAYERS.FLOOR && (
-                    <div className="flex rounded-md overflow-hidden mb-4">
-                      {/* Navigate Button */}
-                      <button
-                        onClick={() => setIsFilter(false)}
-                        className={`flex-1 px-4 py-2 font-semibold transition rounded-l-md 
-                    ${!isFilter
-                            ? "bg-white text-black"
-                            : "bg-[#2e2e2e] text-white hover:bg-white/7"
-                          }`}
-                      >
-                        Navigate
-                      </button>
-
-                      {/* Filter Button */}
-                      <button
-                        onClick={() => setIsFilter(true)}
-                        className={`flex-1 px-4 py-2 font-semibold transition rounded-r-md 
-                    ${isFilter
-                            ? "bg-white text-black"
-                            : "bg-[#2e2e2e] text-white hover:bg-white/7"
-                          }`}
-                      >
-                        Filter
-                      </button>
-                    </div>
-                  )}
-
-                  {isFilter ? (
-                    <FilterPanel currentItem={currentItem} onFilterChange={setFilters} />
-                  ) : (
-                    <>
-                      {/* Dynamic sidebar title based on active tab */}
-                      <div className="text-white font-semibold my-1 px-3 whitespace-nowrap">
-                        {String(currentItem?.displayName).charAt(0).toUpperCase() +
-                          String(currentItem?.displayName).slice(1)}
-                      </div>
-                      <div className="h-0.5 bg-white/50 mx-3 mb-4"></div>
-
-                      <div className="max-h-[calc(100vh-285px)] scrollbar-custom overflow-y-auto overflow-x-hidden space-y-3 px-2 py-2">
-                        {/* Render different content based on active tab */}
-                        {activeTab === TABS.ZONES &&
-                          activeLayer === null &&
-                          TAB_CONFIG[TABS.ZONES]
-                            .getItems()
-                            .map((zone) => (
-                              <ZoneButton
-                                zone={zone}
-                                key={zone.id}
-                                isDisabled={isDisabled}
-                                isSelected={currentItem === zone}
-                                goToZone={handleGoToItem}
-                              />
-                            ))}
-                        {activeTab === TABS.SURROUNDINGS &&
-                          activeLayer === null &&
-                          TAB_CONFIG[TABS.SURROUNDINGS]
-                            .getItems()
-                            .map((item) => (
-                              <SurroundingButton
-                                surrounding={item}
-                                key={item.id}
-                                isDisabled={isDisabled}
-                                isSelected={currentItem === item}
-                                goToSurrounding={handleGoToItem}
-                              />
-                            ))}
-
-                        {activeTab === TABS.AMENITIES &&
-                          activeLayer === null &&
-                          TAB_CONFIG[TABS.AMENITIES]
-                            .getItems()
-                            .map((item) => (
-                              <AmenityButton
-                                amenity={item}
-                                key={item.id}
-                                isDisabled={isDisabled}
-                                isSelected={currentItem === item}
-                                goToAmenity={handleGoToItem}
-                              />
-                            ))}
-                        {activeTab === TABS.ZONES &&
-                          activeLayer === LAYERS.ZONE_DETAIL &&
-                          LAYER_CONFIG[LAYERS.ZONE_DETAIL]
-                            .getItems(currentItem)
-                            .map((building) => (
-                              <BuildingButton
-                                building={building}
-                                key={building.id}
-                                isDisabled={isDisabled}
-                                isSelected={currentItem === building}
-                                goToBuilding={handleGoToItem}
-                              />
-                            ))}
-                        {activeTab === TABS.ZONES &&
-                          activeLayer === LAYERS.BUILDING &&
-                          LAYER_CONFIG[LAYERS.BUILDING]
-                            .getItems(currentItem)
-                            .map((floor) => (
-                              <FloorButton
-                                floor={floor}
-                                key={floor.id}
-                                isDisabled={isDisabled}
-                                isSelected={currentItem === floor}
-                                goToFloor={handleGoToItem}
-                              />
-                            ))}
-                        {activeTab === TABS.ZONES &&
-                          activeLayer === LAYERS.FLOOR &&
-                          LAYER_CONFIG[LAYERS.FLOOR]
-                            .getItems(currentItem)
-                            .map((apartment) => (
-                              <ApartmentButton
-                                apartment={apartment}
-                                key={apartment.id}
-                                isDisabled={isDisabled}
-                                isSelected={currentItem === apartment}
-                                goToApartment={handleGoToItem}
-                              />
-                            ))}
-                      </div>
-                    </>
-                  )}
-                </div>
-              )}
-            </aside>
+            <SidebarContextProvider value>
+              <Sidebar />
+            </SidebarContextProvider>
 
             {/* Main content area */}
             <main className="flex-1 relative">
@@ -666,7 +517,7 @@ export default function App() {
                   activeLayer !== LAYERS.AMENITY_DETAIL &&
                   activeLayer !== LAYERS.SURROUNDING_DETAIL && (
                     <button
-                      onClick={() => setSidebarOpen((s) => !s)}
+                      onClick={() => handleSidebarState((s) => !s)}
                       className="absolute left-[-16px] top-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow z-50"
                       aria-label={
                         sidebarOpen ? "close sidebar" : "open sidebar"

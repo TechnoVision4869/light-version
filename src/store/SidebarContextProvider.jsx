@@ -1,0 +1,95 @@
+import { createContext, useCallback, useState } from "react";
+
+import { TABS, LAYERS, TAB_CONFIG, LAYER_CONFIG, DATA } from "../data/layers";
+
+export const SidebarContext = createContext({
+    history: [],
+    activeTab: "",
+    activeLayer: "",
+    currentItem: {},
+    currentVideosPath: {},
+
+    sidebarOpen: false,
+    handleSidebarState: () => { },
+
+    goToItem: () => { },
+});
+
+export default function SidebarContextProvider({ children }) {
+    const initHistory = [
+        {
+            tab: TABS.HOME,
+            layer: null,
+            item: null,
+            videosPath: TAB_CONFIG[TABS.HOME].videosPath,
+        },
+    ];
+
+    const [history, setHistory] = useState(initHistory);
+    const [sidebarOpen, setSidebarOpen] = useState(false); // set true when sidebar is open
+
+
+    // Get current state from history
+    const currentEntry = history[history.length - 1];
+    const {
+        tab: activeTab,
+        layer: activeLayer,
+        item: currentItem,
+        videosPath: currentVideosPaths,
+    } = currentEntry;
+
+    const handleGoToItem = useCallback((item, layerKey) => {
+        console.log("item: ", item);
+        console.log("layer: ", layerKey);
+
+        const config = LAYER_CONFIG[layerKey];
+        const videosPath = config.videosPath?.(item);
+        console.log(videosPath);
+
+        setHistory((prev) => [
+            ...prev,
+            {
+                tab: activeTab,
+                layer: layerKey,
+                item: item,
+                videosPath: videosPath,
+            },
+        ]);
+    }, [activeTab]);
+
+    // Go back one step
+    const handleGoBack = useCallback(() => {
+        // console.log(history);
+
+        if (history.length <= 1) return; // Can't go back from home
+        setHistory((prev) => prev.slice(0, -1));
+    }, [history.length]);
+
+    // Go to home (reset everything)
+    const handleGoHome = useCallback(() => {
+        setHistory(initHistory);
+    }, []);
+
+    const handleSidebarState = useCallback((state) => {
+        console.log(state);
+        
+        setSidebarOpen(state);
+    })
+
+    const ctxValue = {
+        history,
+        activeTab,
+        activeLayer,
+        currentItem,
+        currentVideosPaths,
+
+        sidebarOpen,
+        handleSidebarState,
+
+        goToItem: handleGoToItem,
+        goBack: handleGoBack,
+        goHome: handleGoHome
+    }
+
+    return <SidebarContext.Provider value={ctxValue}>{children}</SidebarContext.Provider>
+}
