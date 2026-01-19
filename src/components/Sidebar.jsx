@@ -1,15 +1,23 @@
 import { useContext, useState, useEffect } from "react";
 import { SidebarContext } from "../store/SidebarContextProvider";
 
-import { TABS, LAYERS, LAYER_CONFIG, DATA } from "../data/layers";
+import { TABS, LAYERS, LAYER_CONFIG, TAB_CONFIG } from "../data/layers";
 
 import UnitPanel from "../components/UnitPanel";
 import FilterPanel from "../components/FilterPanel";
 
 import ZoneButton from "./buttons/ZoneButton";
+import BuildingButton from "./buttons/BuildingButton";
+import FloorButton from "./buttons/FloorButton";
+import ApartmentButton from "./buttons/ApartmentButton";
+
+import AmenityButton from "./buttons/AmenityButton";
+import SurroundingButton from "./buttons/SurroundingButton";
 
 export default function Sidebar() {
-    const { activeTab, activeLayer, currentItem, sidebarOpen } = useContext(SidebarContext);
+    const { activeTab, activeLayer, currentItem, sidebarOpen, goToItem } = useContext(SidebarContext);
+    // console.log(activeTab);
+    // console.log(sidebarOpen)
 
     const [isFilter, setIsFilter] = useState(false); // 'navigate' or 'filter'
 
@@ -79,7 +87,7 @@ export default function Sidebar() {
                             </div>
                             <div className="h-0.5 bg-white/50 mx-3 mb-4"></div>
 
-                            <div className="max-h-[calc(100vh-285px)] scrollbar-custom overflow-y-auto overflow-x-hidden space-y-3 px-2 py-2">
+                            <div className="max-h-[calc(100vh-205px)] scrollbar-custom overflow-y-auto overflow-x-hidden space-y-3 px-2 py-2">
                                 {/* Render different content based on active tab */}
                                 {activeTab === TABS.ZONES &&
                                     activeLayer === null &&
@@ -89,9 +97,9 @@ export default function Sidebar() {
                                             <ZoneButton
                                                 zone={zone}
                                                 key={zone.id}
-                                                isDisabled={isDisabled}
+                                                // isDisabled={isDisabled}
                                                 isSelected={currentItem === zone}
-                                                goToZone={handleGoToItem}
+                                                goToZone={goToItem}
                                             />
                                         ))}
                                 {activeTab === TABS.SURROUNDINGS &&
@@ -102,9 +110,9 @@ export default function Sidebar() {
                                             <SurroundingButton
                                                 surrounding={item}
                                                 key={item.id}
-                                                isDisabled={isDisabled}
+                                                // isDisabled={isDisabled}
                                                 isSelected={currentItem === item}
-                                                goToSurrounding={handleGoToItem}
+                                                goToSurrounding={goToItem}
                                             />
                                         ))}
 
@@ -116,9 +124,9 @@ export default function Sidebar() {
                                             <AmenityButton
                                                 amenity={item}
                                                 key={item.id}
-                                                isDisabled={isDisabled}
+                                                // isDisabled={isDisabled}
                                                 isSelected={currentItem === item}
-                                                goToAmenity={handleGoToItem}
+                                                goToAmenity={goToItem}
                                             />
                                         ))}
                                 {activeTab === TABS.ZONES &&
@@ -129,9 +137,9 @@ export default function Sidebar() {
                                             <BuildingButton
                                                 building={building}
                                                 key={building.id}
-                                                isDisabled={isDisabled}
+                                                // isDisabled={isDisabled}
                                                 isSelected={currentItem === building}
-                                                goToBuilding={handleGoToItem}
+                                                goToBuilding={goToItem}
                                             />
                                         ))}
                                 {activeTab === TABS.ZONES &&
@@ -142,9 +150,9 @@ export default function Sidebar() {
                                             <FloorButton
                                                 floor={floor}
                                                 key={floor.id}
-                                                isDisabled={isDisabled}
+                                                // isDisabled={isDisabled}
                                                 isSelected={currentItem === floor}
-                                                goToFloor={handleGoToItem}
+                                                goToFloor={goToItem}
                                             />
                                         ))}
                                 {activeTab === TABS.ZONES &&
@@ -155,9 +163,9 @@ export default function Sidebar() {
                                             <ApartmentButton
                                                 apartment={apartment}
                                                 key={apartment.id}
-                                                isDisabled={isDisabled}
+                                                // isDisabled={isDisabled}
                                                 isSelected={currentItem === apartment}
-                                                goToApartment={handleGoToItem}
+                                                goToApartment={goToItem}
                                             />
                                         ))}
                             </div>

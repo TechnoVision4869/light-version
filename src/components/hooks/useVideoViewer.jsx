@@ -1,7 +1,11 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useContext, useState, useRef, useEffect, useCallback } from "react";
 import { TABS, LAYERS, LAYER_CONFIG } from "../../data/layers";
 
-export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
+import { SidebarContext } from "../../store/SidebarContextProvider";
+
+export function useVideoViewer() {
+  const { currentVideosPaths, history, goBack } = useContext(SidebarContext);
+
   const [isVideosLoaded, setIsVideosLoaded] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -128,19 +132,19 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
 
     const onEnded = () => {
       if (navigatedBetweenTabs) {
-        onGoBack();
+        goBack();
         // console.log(currentVideosPaths);
 
         onReverseEnded();
         return;
       }
       justNavigatedBackRef.current = true;
-      onGoBack();
+      goBack();
     }
 
     playVideo(videoPath, false, onloaded, onEnded, "first");
   },
-    [currentVideosPaths, playVideo, onGoBack]
+    [currentVideosPaths, playVideo, goBack]
   );
 
   const playIdleVideo = useCallback((videoPath = currentVideosPaths?.idleVideo) => {
@@ -160,7 +164,7 @@ export function useVideoViewer({ currentVideosPaths, history, onGoBack }) {
     (isFromAnotherTab, onReverseEnded) => {
       if (history.length <= 1) return;
       if (activeLayer === LAYERS.SURROUNDING_DETAIL) {
-        onGoBack();
+        goBack();
         return;
       }
       playReverseVideo(isFromAnotherTab, onReverseEnded);

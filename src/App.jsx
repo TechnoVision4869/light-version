@@ -3,7 +3,6 @@ import { StatusBar } from "@capacitor/status-bar";
 import { App as CapApp } from "@capacitor/app"
 import { TABS, LAYERS, LAYER_CONFIG, DATA } from "./data/layers";
 // Hooks
-import { useNavigation } from "./components/hooks/useNavigation";
 import { useVideoViewer } from "./components/hooks/useVideoViewer";
 
 // Components
@@ -20,9 +19,8 @@ import Balcony from "./components/Balcony";
 import Gallery from "./components/Gallery";
 import AnimatedPath from "./components/AnimatedPath";
 
-import SidebarContextProvider, { SidebarContext } from "./store/SidebarContextProvider";
+import { SidebarContext } from "./store/SidebarContextProvider";
 import Sidebar from "./components/Sidebar";
-
 
 // logo
 import TECHNO_LOGO from "./assets/techno.png";
@@ -57,26 +55,17 @@ export default function App() {
   const mediaContainerRef = useRef(null);
 
   // Context
-  const { sidebarOpen, handleSidebarState } = useContext(SidebarContext);
-
-  // Navigation hook
   const {
-    history,
     activeTab,
     activeLayer,
     currentItem,
-    currentVideosPaths, // This is the main navigation video path
+    sidebarOpen,
+    handleSidebarState,
     goToTab,
     goToItem,
-    goBack,
-    goToHome,
-  } = useNavigation();
+    goHome } = useContext(SidebarContext);
 
-  const videoViewer = useVideoViewer({
-    currentVideosPaths,
-    history,
-    onGoBack: goBack,
-  });
+  const videoViewer = useVideoViewer();
 
   let viewerProps = {
     isMediaLoaded: videoViewer.isVideosLoaded,
@@ -93,10 +82,6 @@ export default function App() {
 
   const isDisabled = !viewerProps.isMediaLoaded || viewerProps.isPlaying;
 
-  const handleGoToItem = (item, layerKey) => {
-    goToItem(item, layerKey);
-  };
-
   useEffect(() => {
     // Show info popup if item has description
     const itemData = LAYER_CONFIG[activeLayer]?.getData(currentItem.id);
@@ -110,29 +95,6 @@ export default function App() {
   const closeInfoPopup = () => {
     setShowInfoPopup(false);
     setShowI(true);
-  };
-
-  const handleActiveTab = (tab) => {
-    if (tab === activeTab) return;
-
-    if (tab === TABS.HOME) {
-      goToHome();
-    } else {
-      const isFromHome = activeTab === TABS.HOME;
-      const isFromAnotherTab =
-        activeTab === TABS.ZONES ||
-        activeTab === TABS.AMENITIES ||
-        activeTab === TABS.SURROUNDINGS;
-      if (isFromAnotherTab && activeLayer === null) {
-        viewerProps.StartReverse(isFromAnotherTab, () => goToTab(tab, true));
-        return;
-      }
-      goToTab(tab, isFromHome, isFromAnotherTab);
-    }
-
-    setTimeout(() => {
-      handleSidebarState(true);
-    }, 800);
   };
 
   // Swipe States
@@ -366,7 +328,7 @@ export default function App() {
             </div>
             <div className="flex items-center space-x-6">
               <button
-                onClick={() => handleActiveTab(TABS.SURROUNDINGS)}
+                onClick={() => goToTab(TABS.SURROUNDINGS)}
                 className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.SURROUNDINGS
                   ? "bg-white/85 text-black"
                   : "text-white"
@@ -375,7 +337,7 @@ export default function App() {
                 SURROUNDINGS
               </button>
               <button
-                onClick={() => handleActiveTab(TABS.ZONES)}
+                onClick={() => goToTab(TABS.ZONES)}
                 className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.ZONES
                   ? "bg-white/85 text-black"
                   : "text-white"
@@ -384,7 +346,7 @@ export default function App() {
                 ZONES
               </button>
               <button
-                onClick={() => handleActiveTab(TABS.AMENITIES)}
+                onClick={() => goToTab(TABS.AMENITIES)}
                 className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.AMENITIES
                   ? "bg-white/85 text-black"
                   : "text-white"
@@ -404,7 +366,7 @@ export default function App() {
                   viewerProps.StartReverse(false, () => { });
                   return;
                 }
-                goToHome();
+                goHome();
               }}
             />
           </div>
@@ -413,9 +375,8 @@ export default function App() {
             className={`flex ${sidebarOpen ? "space-x-3" : "space-x-0"} flex-1 min-h-0 overflow-hidden`}
           >
             {/* Sidebar */}
-            <SidebarContextProvider value>
-              <Sidebar />
-            </SidebarContextProvider>
+            <Sidebar />
+
 
             {/* Main content area */}
             <main className="flex-1 relative">
@@ -461,7 +422,7 @@ export default function App() {
                       items={DATA.surroundings}
                       mediaRef={mediaContainerRef}
                       tab={activeTab}
-                      onSelectItem={handleGoToItem}
+                      onSelectItem={goToItem}
                     />
                   )}
 
@@ -472,7 +433,7 @@ export default function App() {
                       items={DATA.amenities}
                       mediaRef={mediaContainerRef}
                       layer={LAYERS.AMENITY_DETAIL}
-                      onSelectItem={handleGoToItem}
+                      onSelectItem={goToItem}
                     />
                   )}
 
@@ -484,7 +445,7 @@ export default function App() {
                       )}
                       mediaRef={mediaContainerRef}
                       layer={LAYERS.BUILDING}
-                      onSelectItem={handleGoToItem}
+                      onSelectItem={goToItem}
                     />
                   )}
 
@@ -497,7 +458,7 @@ export default function App() {
                       )}
                       mediaRef={mediaContainerRef}
                       layer={LAYERS.FLOOR}
-                      onSelectItem={handleGoToItem}
+                      onSelectItem={goToItem}
                     />
                   )}
 
@@ -508,7 +469,7 @@ export default function App() {
                       mediaRef={mediaContainerRef}
                       filters={filters}
                       layer={LAYERS.APARTMENT}
-                      onSelectItem={handleGoToItem}
+                      onSelectItem={goToItem}
                     />
                   )}
 

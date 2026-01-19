@@ -1,6 +1,6 @@
 import { createContext, useCallback, useState } from "react";
 
-import { TABS, LAYERS, TAB_CONFIG, LAYER_CONFIG, DATA } from "../data/layers";
+import { TABS, TAB_CONFIG, LAYER_CONFIG } from "../data/layers";
 
 export const SidebarContext = createContext({
     history: [],
@@ -13,6 +13,9 @@ export const SidebarContext = createContext({
     handleSidebarState: () => { },
 
     goToItem: () => { },
+    goToTab: () => { },
+    goBack: () => { },
+    goHome: () => { },
 });
 
 export default function SidebarContextProvider({ children }) {
@@ -38,9 +41,50 @@ export default function SidebarContextProvider({ children }) {
         videosPath: currentVideosPaths,
     } = currentEntry;
 
-    const handleGoToItem = useCallback((item, layerKey) => {
-        console.log("item: ", item);
-        console.log("layer: ", layerKey);
+    const handleActiveTab = (tab) => {
+        if (tab === activeTab) return;
+
+        if (tab === TABS.HOME) {
+            goToHome();
+        } else {
+            const isFromHome = activeTab === TABS.HOME;
+            const isFromAnotherTab =
+                activeTab === TABS.ZONES ||
+                activeTab === TABS.AMENITIES ||
+                activeTab === TABS.SURROUNDINGS;
+            if (isFromAnotherTab && activeLayer === null) {
+                viewerProps.StartReverse(isFromAnotherTab, () => goToTab(tab, true));
+                return;
+            }
+            goToTab(tab, isFromHome, isFromAnotherTab);
+        }
+
+        setTimeout(() => {
+            setSidebarOpen(true);
+        }, 750);
+    };
+
+    const goToTab = useCallback((tabKey, isFromHome = true) => {
+        const config = TAB_CONFIG[tabKey];
+        // console.log(tabKey);
+
+        setHistory(() => [
+            ...initHistory,
+            {
+                tab: tabKey,
+                layer: null,
+                item: {
+                    id: tabKey,
+                    displayName: tabKey,
+                },
+                videosPath: config.videosPath(isFromHome),
+            },
+        ]);
+    }, []);
+
+    const handleCurrentItem = useCallback((item, layerKey) => {
+        // console.log("item: ", item);
+        // console.log("layer: ", layerKey);
 
         const config = LAYER_CONFIG[layerKey];
         const videosPath = config.videosPath?.(item);
@@ -72,7 +116,7 @@ export default function SidebarContextProvider({ children }) {
 
     const handleSidebarState = useCallback((state) => {
         console.log(state);
-        
+
         setSidebarOpen(state);
     })
 
@@ -86,7 +130,8 @@ export default function SidebarContextProvider({ children }) {
         sidebarOpen,
         handleSidebarState,
 
-        goToItem: handleGoToItem,
+        goToItem: handleCurrentItem,
+        goToTab: handleActiveTab,
         goBack: handleGoBack,
         goHome: handleGoHome
     }
