@@ -77,7 +77,7 @@ export default function Sidebar() {
                     )}
 
                     {isFilter ? (
-                        <FilterPanel currentItem={currentItem} onFilterChange={setFilters} />
+                        <FilterPanel />
                     ) : (
                         <>
                             {/* Dynamic sidebar title based on active tab */}

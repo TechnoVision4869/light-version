@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { FilterContext } from "../store/FilterContextProvider";
+import { SidebarContext } from "../store/SidebarContextProvider";
 import { LAYER_CONFIG, LAYERS, FILTER_ENUM } from "../data/layers";
 
 function Slider({ name, unit, min, max, step = 1, value, onValueChange }) {
@@ -33,6 +35,8 @@ function Slider({ name, unit, min, max, step = 1, value, onValueChange }) {
 }
 
 function Discrete({ name, options, array, onValueChange }) {
+  // console.log(options);
+
   const toggleOption = (option) => {
     if (array.includes(option)) {
       // Remove if already selected
@@ -69,7 +73,9 @@ function Discrete({ name, options, array, onValueChange }) {
   )
 }
 
-export default function FilterPanel({ currentItem, onFilterChange }) {
+export default function FilterPanel() {
+  const { filters, onFilterChange } = useContext(FilterContext);
+  const { currentItem } = useContext(SidebarContext);
   // console.log(currentItem);
 
   const currentApartments = LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem);
@@ -102,6 +108,8 @@ export default function FilterPanel({ currentItem, onFilterChange }) {
   const [price, setPrice] = useState(BUDGET_RANGE.MAX);
 
   useEffect(() => {
+    console.log(filters);
+
     onFilterChange({
       unitType,
       bedrooms,

@@ -1,49 +1,13 @@
 import { useState, useEffect, useMemo, useCallback, useContext } from "react";
-import { FilterContext } from "../store/FilterContextProvider";
 import { SidebarContext } from "../store/SidebarContextProvider";
 import FloatingButton from "./buttons/FloatingButton";
 import AnimButton from "./buttons/AnimButton";
 import { TABS, LAYERS } from '../data/layers';
 
-export default function Floating({ items, mediaRef }) {
+export default function Pins({ items, mediaRef }) {
     const container = mediaRef.current;
 
-    const { filters } = useContext(FilterContext);
     const { activeTab, activeLayer, goToItem } = useContext(SidebarContext);
-
-    // Filter items based on current filter state
-    const filteredItems = useMemo(() => {
-        if (!filters) return items;
-
-        return items.filter(item => {
-            // Apply unit type filter - check if item's unitType is in the selected array
-            if (filters.unitType.length > 0 && !filters.unitType.includes(item.unitType)) {
-                return false;
-            }
-
-            // Apply bedroom filter - check if item's bedroom count is in the selected array
-            if (filters.bedrooms.length > 0 && !filters.bedrooms.includes(item.bedrooms)) {
-                return false;
-            }
-
-            // Apply bathroom filter - check if item's bathroom count is in the selected array
-            if (filters.bathrooms.length > 0 && !filters.bathrooms.includes(item.bathrooms)) {
-                return false;
-            }
-
-            // Apply surface area filter (assuming item has area property)
-            if (filters.area !== null && item.area > filters.area) {
-                return false;
-            }
-
-            // Apply budget filter (assuming item has price property)
-            if (filters.price !== null && item.price > filters.price) {
-                return false;
-            }
-
-            return true;
-        });
-    }, [items, filters]);
 
     const [buttonPositions, setButtonPositions] = useState([]);
 
@@ -105,7 +69,7 @@ export default function Floating({ items, mediaRef }) {
     }
 
     return (
-        filteredItems.map((item) => {
+        items.map((item) => {
             const pos = itemIdToPosition.get(item.id);
             if (!pos) return null;
             return (

@@ -88,7 +88,7 @@ export default function SidebarContextProvider({ children }) {
 
         const config = LAYER_CONFIG[layerKey];
         const videosPath = config.videosPath?.(item);
-        console.log(videosPath);
+        // console.log(videosPath);
 
         setHistory((prev) => [
             ...prev,
@@ -134,7 +134,7 @@ export default function SidebarContextProvider({ children }) {
         goToTab: handleActiveTab,
         goBack: handleGoBack,
         goHome: handleGoHome
-    }
+    };
 
     return <SidebarContext.Provider value={ctxValue}>{children}</SidebarContext.Provider>
 }

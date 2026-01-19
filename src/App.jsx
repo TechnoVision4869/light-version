@@ -13,6 +13,7 @@ import HomeButton from "./components/buttons/HomeButton";
 
 import HistoryBreadcrumbs from "./components/HistoryBreadcrumbs";
 import Floating from "./components/Floating";
+import Pins from "./components/Pins";
 
 import Panorama from "./components/Panorama";
 import Balcony from "./components/Balcony";
@@ -24,6 +25,7 @@ import Sidebar from "./components/Sidebar";
 
 // logo
 import TECHNO_LOGO from "./assets/techno.png";
+import FilterContextProvider from "./store/FilterContextProvider";
 // const color = "green";
 
 export default function App() {
@@ -140,16 +142,6 @@ export default function App() {
       resumeListener.then(listener => listener.remove());
     }
   }, []);
-
-
-  //filters variables
-  const [filters, setFilters] = useState({
-    unitType: [],
-    bedrooms: [],
-    bathrooms: [],
-    area: null,
-    price: null,
-  });
 
   return (
     <>
@@ -415,64 +407,49 @@ export default function App() {
                     <AnimatedPath path={currentItem.svgPath} />
                   )}
                 </div>
+                <FilterContextProvider>
+                  {activeTab === TABS.SURROUNDINGS &&
+                    viewerProps.floatingOpacity && (
+                      <Pins
+                        items={DATA.surroundings}
+                        mediaRef={mediaContainerRef}
+                      />
+                    )}
 
-                {activeTab === TABS.SURROUNDINGS &&
-                  viewerProps.floatingOpacity && (
-                    <Floating
-                      items={DATA.surroundings}
-                      mediaRef={mediaContainerRef}
-                      tab={activeTab}
-                      onSelectItem={goToItem}
-                    />
-                  )}
+                  {activeTab === TABS.AMENITIES &&
+                    activeLayer === null &&
+                    viewerProps.floatingOpacity && (
+                      <Pins
+                        items={DATA.amenities}
+                        mediaRef={mediaContainerRef}
+                      />
+                    )}
 
-                {activeTab === TABS.AMENITIES &&
-                  activeLayer === null &&
-                  viewerProps.floatingOpacity && (
-                    <Floating
-                      items={DATA.amenities}
-                      mediaRef={mediaContainerRef}
-                      layer={LAYERS.AMENITY_DETAIL}
-                      onSelectItem={goToItem}
-                    />
-                  )}
+                  {activeLayer === LAYERS.ZONE_DETAIL &&
+                    viewerProps.floatingOpacity && (
+                      <Pins
+                        items={LAYER_CONFIG[LAYERS.ZONE_DETAIL].getItems(currentItem)}
+                        mediaRef={mediaContainerRef}
+                      />
+                    )}
 
-                {activeLayer === LAYERS.ZONE_DETAIL &&
-                  viewerProps.floatingOpacity && (
-                    <Floating
-                      items={LAYER_CONFIG[LAYERS.ZONE_DETAIL].getItems(
-                        currentItem
-                      )}
-                      mediaRef={mediaContainerRef}
-                      layer={LAYERS.BUILDING}
-                      onSelectItem={goToItem}
-                    />
-                  )}
+                  {activeLayer === LAYERS.BUILDING &&
+                    viewerProps.floatingOpacity &&
+                    viewerProps.currentViewIndex === 0 && (
+                      <Pins
+                        items={LAYER_CONFIG[LAYERS.BUILDING].getItems(currentItem)}
+                        mediaRef={mediaContainerRef}
+                      />
+                    )}
 
-                {activeLayer === LAYERS.BUILDING &&
-                  viewerProps.floatingOpacity &&
-                  viewerProps.currentViewIndex === 0 && (
-                    <Floating
-                      items={LAYER_CONFIG[LAYERS.BUILDING].getItems(
-                        currentItem
-                      )}
-                      mediaRef={mediaContainerRef}
-                      layer={LAYERS.FLOOR}
-                      onSelectItem={goToItem}
-                    />
-                  )}
-
-                {activeLayer === LAYERS.FLOOR &&
-                  viewerProps.floatingOpacity && (
-                    <Floating
-                      items={LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem)}
-                      mediaRef={mediaContainerRef}
-                      filters={filters}
-                      layer={LAYERS.APARTMENT}
-                      onSelectItem={goToItem}
-                    />
-                  )}
-
+                  {activeLayer === LAYERS.FLOOR &&
+                    viewerProps.floatingOpacity && (
+                      <Floating
+                        items={LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem)}
+                        mediaRef={mediaContainerRef}
+                      />
+                    )}
+                </FilterContextProvider>
                 {/* left floating chevron to collapse sidebar */}
                 {activeTab !== TABS.HOME &&
                   activeLayer !== LAYERS.AMENITY_DETAIL &&
