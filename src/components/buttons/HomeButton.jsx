@@ -5,8 +5,7 @@ export default function HomeButton({ onHomeClick }) {
         <div>
             <button
                 onClick={onHomeClick}
-                className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
-              hover:bg-white/7 transition"
+                className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center hover:bg-white/7 transition"
                 aria-label="Home"
             >
                 <img

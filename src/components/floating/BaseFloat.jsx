@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, useContext } from "react";
+import { useSelect } from "../hooks/useSelect";
 import { SidebarContext } from "../../store/SidebarContextProvider";
 import BaseFloatButton from "./BaseFloatButton";
 import AnimFloatButton from "./AnimFloatButton";
@@ -8,6 +9,8 @@ export default function BaseFloating({ items, mediaRef }) {
     const container = mediaRef.current;
 
     const { activeTab, activeLayer, goToItem } = useContext(SidebarContext);
+
+    const { isSelected, select } = useSelect();
 
     const [buttonPositions, setButtonPositions] = useState([]);
 
@@ -60,9 +63,10 @@ export default function BaseFloating({ items, mediaRef }) {
                         top: `${buttonPositions[i].top}px`,
                     }}
                     onSelect={() => {
+                        select(item.id);
                         goToItem(item, LAYERS.SURROUNDING_DETAIL);
-                        // onChangeItem(item.id);
                     }}
+                    isSelected={isSelected(item.id)}
                 />
             ))
         );

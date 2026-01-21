@@ -1,6 +1,6 @@
 import { createContext, useCallback, useState } from "react";
 
-import { TABS, TAB_CONFIG, LAYER_CONFIG } from "../data/layers";
+import { TABS, TAB_CONFIG, LAYER_CONFIG, LAYERS } from "../data/layers";
 
 export const SidebarContext = createContext({
     history: [],
@@ -86,9 +86,24 @@ export default function SidebarContextProvider({ children }) {
         // console.log("item: ", item);
         // console.log("layer: ", layerKey);
 
+        if (history[2]?.layer === LAYERS.SURROUNDING_DETAIL) {
+
+            const tempHistory = history.slice(0, -1);
+
+            setHistory([
+                ...tempHistory, {
+                    tab: activeTab,
+                    layer: layerKey,
+                    item: item,
+                    videosPath: null,
+                },
+            ]);
+
+            return;
+        }
+
         const config = LAYER_CONFIG[layerKey];
         const videosPath = config.videosPath?.(item);
-        // console.log(videosPath);
 
         setHistory((prev) => [
             ...prev,
@@ -99,11 +114,11 @@ export default function SidebarContextProvider({ children }) {
                 videosPath: videosPath,
             },
         ]);
-    }, [activeTab]);
+    }, [history]);
 
     // Go back one step
     const handleGoBack = useCallback(() => {
-        // console.log(history);
+        // console.log("go back: ", history);
 
         if (history.length <= 1) return; // Can't go back from home
         setHistory((prev) => prev.slice(0, -1));
