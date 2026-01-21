@@ -74,7 +74,7 @@ function Discrete({ name, options, array, onValueChange }) {
 }
 
 export default function FilterPanel() {
-  const { filters, onFilterChange } = useContext(FilterContext);
+  const { onFilterChange } = useContext(FilterContext);
   const { currentItem } = useContext(SidebarContext);
   // console.log(currentItem);
 
@@ -108,8 +108,6 @@ export default function FilterPanel() {
   const [price, setPrice] = useState(BUDGET_RANGE.MAX);
 
   useEffect(() => {
-    console.log(filters);
-
     onFilterChange({
       unitType,
       bedrooms,
@@ -117,16 +115,16 @@ export default function FilterPanel() {
       area,
       price,
     });
-  }, [unitType, bedrooms, bathrooms, area, price, onFilterChange]);
+  }, [unitType, bedrooms, bathrooms, area, price]);
 
   return (
-    <div className="flex flex-col gap-2 max-h-[calc(100vh-235px)] scrollbar-custom overflow-auto pe-2 text-white font-light text-sm">
-      <Discrete
+    <div className="flex flex-col gap-2 max-h-[calc(100vh-205px)] scrollbar-custom overflow-auto pe-2 text-white font-light text-sm">
+      {/* <Discrete
         name="Type"
         options={UNIT_TYPES}
         array={unitType}
         onValueChange={setUnitType}
-      />
+      /> */}
 
       <div className="h-divider"></div>
 

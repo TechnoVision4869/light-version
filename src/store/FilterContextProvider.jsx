@@ -1,5 +1,4 @@
 import { createContext, useState } from "react";
-import { SidebarContext } from "./SidebarContextProvider";
 
 export const FilterContext = createContext({
     filters: {},
@@ -7,7 +6,6 @@ export const FilterContext = createContext({
 });
 
 export default function FilterContextProvider({ children }) {
-
     const initFilters = {
         unitType: [],
         bedrooms: [],
@@ -16,7 +14,7 @@ export default function FilterContextProvider({ children }) {
         price: null,
     };
 
-    const [filters, setFilters] = useState(null);
+    const [filters, setFilters] = useState(initFilters);
 
     function onFilterChange(f) {
         setFilters(f);
@@ -27,5 +25,5 @@ export default function FilterContextProvider({ children }) {
         onFilterChange,
     };
 
-    return <SidebarContext.Provider value={ctxValue}>{children}</SidebarContext.Provider>
+    return <FilterContext.Provider value={ctxValue}>{children}</FilterContext.Provider>
 }

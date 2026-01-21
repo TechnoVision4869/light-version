@@ -20,12 +20,12 @@ import Balcony from "./components/Balcony";
 import Gallery from "./components/Gallery";
 import AnimatedPath from "./components/AnimatedPath";
 
+import FilterContextProvider from "./store/FilterContextProvider";
 import { SidebarContext } from "./store/SidebarContextProvider";
 import Sidebar from "./components/Sidebar";
 
 // logo
 import TECHNO_LOGO from "./assets/techno.png";
-import FilterContextProvider from "./store/FilterContextProvider";
 // const color = "green";
 
 export default function App() {
@@ -363,51 +363,51 @@ export default function App() {
             />
           </div>
 
-          <div
-            className={`flex ${sidebarOpen ? "space-x-3" : "space-x-0"} flex-1 min-h-0 overflow-hidden`}
-          >
-            {/* Sidebar */}
-            <Sidebar />
+          <FilterContextProvider>
+            <div
+              className={`flex ${sidebarOpen ? "space-x-3" : "space-x-0"} flex-1 min-h-0 overflow-hidden`}
+            >
+              {/* Sidebar */}
+              <Sidebar />
 
+              {/* Main content area */}
+              <main className="flex-1 relative">
+                <div
+                  className="w-full h-full bg-white/9 rounded-2xl overflow-hidden shadow-inner"
+                  ref={mediaContainerRef}
+                  onMouseDown={handleMouseDown}
+                  onMouseUp={handleMouseUp}
+                  onTouchStart={handleTouchStart}
+                  onTouchEnd={handleTouchEnd}
+                >
+                  {/* video element */}
+                  <div className="absolute inset-0">
+                    {/* First Video (e.g., transition, or initial idle) */}
+                    <video
+                      ref={viewerProps.firstMediaRef}
+                      className="w-full h-full object-cover object-center rounded-2xl absolute inset-0"
+                      style={{ opacity: viewerProps.firstVideoOpacity }}
+                      alt="Video 1"
+                      muted
+                      playsInline
+                      preload="auto"
+                    />
+                    {/* Second Video (e.g., target idle after transition) */}
+                    <video
+                      ref={viewerProps.secondMediaRef}
+                      className="w-full h-full object-cover object-center rounded-2xl absolute inset-0"
+                      style={{ opacity: viewerProps.secondVideoOpacity }}
+                      alt="Video 2"
+                      muted
+                      playsInline
+                      preload="auto"
+                      loop
+                    />
+                    {activeLayer === LAYERS.SURROUNDING_DETAIL && (
+                      <AnimatedPath path={currentItem.svgPath} />
+                    )}
+                  </div>
 
-            {/* Main content area */}
-            <main className="flex-1 relative">
-              <div
-                className="w-full h-full bg-white/9 rounded-2xl overflow-hidden shadow-inner"
-                ref={mediaContainerRef}
-                onMouseDown={handleMouseDown}
-                onMouseUp={handleMouseUp}
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-              >
-                {/* video element */}
-                <div className="absolute inset-0">
-                  {/* First Video (e.g., transition, or initial idle) */}
-                  <video
-                    ref={viewerProps.firstMediaRef}
-                    className="w-full h-full object-cover object-center rounded-2xl absolute inset-0"
-                    style={{ opacity: viewerProps.firstVideoOpacity }}
-                    alt="Video 1"
-                    muted
-                    playsInline
-                    preload="auto"
-                  />
-                  {/* Second Video (e.g., target idle after transition) */}
-                  <video
-                    ref={viewerProps.secondMediaRef}
-                    className="w-full h-full object-cover object-center rounded-2xl absolute inset-0"
-                    style={{ opacity: viewerProps.secondVideoOpacity }}
-                    alt="Video 2"
-                    muted
-                    playsInline
-                    preload="auto"
-                    loop
-                  />
-                  {activeLayer === LAYERS.SURROUNDING_DETAIL && (
-                    <AnimatedPath path={currentItem.svgPath} />
-                  )}
-                </div>
-                <FilterContextProvider>
                   {activeTab === TABS.SURROUNDINGS &&
                     viewerProps.floatingOpacity && (
                       <Pins
@@ -449,85 +449,81 @@ export default function App() {
                         mediaRef={mediaContainerRef}
                       />
                     )}
-                </FilterContextProvider>
-                {/* left floating chevron to collapse sidebar */}
-                {activeTab !== TABS.HOME &&
-                  activeLayer !== LAYERS.AMENITY_DETAIL &&
-                  activeLayer !== LAYERS.SURROUNDING_DETAIL && (
-                    <button
-                      onClick={() => handleSidebarState((s) => !s)}
-                      className="absolute left-[-16px] top-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow z-50"
-                      aria-label={
-                        sidebarOpen ? "close sidebar" : "open sidebar"
-                      }
-                    >
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                      >
-                        {sidebarOpen ? (
-                          // Chevron pointing left (close sidebar)
-                          <path
-                            d="M15 18L9 12L15 6"
-                            stroke="#111827"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        ) : (
-                          // Chevron pointing right (open sidebar)
-                          <path
-                            d="M9 18L15 12L9 6"
-                            stroke="#111827"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        )}
-                      </svg>
-                    </button>
-                  )}
 
-                {/* info re-open button */}
-                {showI && <button className={`absolute -bottom-1 -right-1 flex items-center justify-center
+                  {/* left floating chevron to collapse sidebar */}
+                  {activeTab !== TABS.HOME &&
+                    activeLayer !== LAYERS.AMENITY_DETAIL &&
+                    activeLayer !== LAYERS.SURROUNDING_DETAIL && (
+                      <button
+                        onClick={() => handleSidebarState((s) => !s)}
+                        className="absolute left-[-16px] top-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow z-50"
+                        aria-label={
+                          sidebarOpen ? "close sidebar" : "open sidebar"
+                        }
+                      >
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                        >
+                          {sidebarOpen ? (
+                            // Chevron pointing left (close sidebar)
+                            <path
+                              d="M15 18L9 12L15 6"
+                              stroke="#111827"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          ) : (
+                            // Chevron pointing right (open sidebar)
+                            <path
+                              d="M9 18L15 12L9 6"
+                              stroke="#111827"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          )}
+                        </svg>
+                      </button>
+                    )}
+
+                  {/* info re-open button */}
+                  {showI && <button className={`absolute -bottom-1 -right-1 flex items-center justify-center
                   ${activeTab === TABS.SURROUNDINGS ? "bg-[#94846D]/70 backdrop-blur" : 'bg-black/70 backdrop-blur-sm'}
                   w-8 h-8 hover:w-9 hover:h-9 
                   transition-all duration-500 ease-in-out
                   rounded-tl-xl rounded-bl-xl rounded-tr-xl`}
-                  onClick={() => setShowInfoPopup(true)}
-                >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <circle cx="11" cy="5" r="1.5" fill="white" />
-                    <path d="M11 9 C11.8 11, 10.2 13, 11 15" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
-                  </svg>
-                </button>}
+                    onClick={() => setShowInfoPopup(true)}
+                  >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <circle cx="11" cy="5" r="1.5" fill="white" />
+                      <path d="M11 9 C11.8 11, 10.2 13, 11 15" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+                    </svg>
+                  </button>}
 
-                {/* bottom info popup */}
-                {showInfoPopup && currentItem?.id && (
-                  <InfoPopup
-                    showInfoPopup={showInfoPopup}
-                    layer={activeLayer}
-                    itemId={currentItem.id}
-                    onClose={closeInfoPopup}
-                  />
-                )}
-              </div>
-            </main>
-          </div>
+                  {/* bottom info popup */}
+                  {showInfoPopup && currentItem?.id && (
+                    <InfoPopup
+                      showInfoPopup={showInfoPopup}
+                      layer={activeLayer}
+                      itemId={currentItem.id}
+                      onClose={closeInfoPopup}
+                    />
+                  )}
+                </div>
+              </main>
+            </div>
+          </FilterContextProvider>
 
           {/* Breadcrumbs */}
-
           <div className="flex px-4 pt-2 xl:pt-3">
-            {history.length > 1 && (
-              <div className="flex-shrink-0">
-                <HistoryBreadcrumbs
-                  history={history}
-                  currentItem={currentItem}
-                />
-              </div>
-            )}
+            <div className="flex-shrink-0">
+              <HistoryBreadcrumbs />
+            </div>
+
             {/* Views visuals */}
             {activeLayer === LAYERS.BUILDING && (
               <div className="flex-1 flex items-center justify-center text-white space-x-3 px-4 py-2 text-sm">
