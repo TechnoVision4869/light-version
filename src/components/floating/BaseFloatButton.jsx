@@ -1,6 +1,6 @@
 import { LAYERS } from '../../data/layers';
 
-export default function FloatingButton({ 
+export default function BaseFloatButton({ 
     name, 
     layerType = null,
     style = {},

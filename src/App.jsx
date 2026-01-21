@@ -12,8 +12,8 @@ import InfoPopup from "./components/InfoPopup";
 import HomeButton from "./components/buttons/HomeButton";
 
 import HistoryBreadcrumbs from "./components/HistoryBreadcrumbs";
-import Floating from "./components/Floating";
-import Pins from "./components/Pins";
+import FilterFloat from "./components/floating/FilterFloat";
+import BaseFloat from "./components/floating/BaseFloat";
 
 import Panorama from "./components/Panorama";
 import Balcony from "./components/Balcony";
@@ -64,7 +64,6 @@ export default function App() {
     sidebarOpen,
     handleSidebarState,
     goToTab,
-    goToItem,
     goHome } = useContext(SidebarContext);
 
   const videoViewer = useVideoViewer();
@@ -410,7 +409,7 @@ export default function App() {
 
                   {activeTab === TABS.SURROUNDINGS &&
                     viewerProps.floatingOpacity && (
-                      <Pins
+                      <BaseFloat
                         items={DATA.surroundings}
                         mediaRef={mediaContainerRef}
                       />
@@ -419,7 +418,7 @@ export default function App() {
                   {activeTab === TABS.AMENITIES &&
                     activeLayer === null &&
                     viewerProps.floatingOpacity && (
-                      <Pins
+                      <BaseFloat
                         items={DATA.amenities}
                         mediaRef={mediaContainerRef}
                       />
@@ -427,7 +426,7 @@ export default function App() {
 
                   {activeLayer === LAYERS.ZONE_DETAIL &&
                     viewerProps.floatingOpacity && (
-                      <Pins
+                      <BaseFloat
                         items={LAYER_CONFIG[LAYERS.ZONE_DETAIL].getItems(currentItem)}
                         mediaRef={mediaContainerRef}
                       />
@@ -436,7 +435,7 @@ export default function App() {
                   {activeLayer === LAYERS.BUILDING &&
                     viewerProps.floatingOpacity &&
                     viewerProps.currentViewIndex === 0 && (
-                      <Pins
+                      <BaseFloat
                         items={LAYER_CONFIG[LAYERS.BUILDING].getItems(currentItem)}
                         mediaRef={mediaContainerRef}
                       />
@@ -444,7 +443,7 @@ export default function App() {
 
                   {activeLayer === LAYERS.FLOOR &&
                     viewerProps.floatingOpacity && (
-                      <Floating
+                      <FilterFloat
                         items={LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem)}
                         mediaRef={mediaContainerRef}
                       />

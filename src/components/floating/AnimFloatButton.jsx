@@ -1,4 +1,4 @@
-export default function AnimButton({ 
+export default function AnimFloatButton({ 
     icon,
     name, 
     style = {},

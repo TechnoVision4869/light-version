@@ -1,10 +1,10 @@
 import { useState, useEffect, useMemo, useCallback, useContext } from "react";
-import { SidebarContext } from "../store/SidebarContextProvider";
-import FloatingButton from "./buttons/FloatingButton";
-import AnimButton from "./buttons/AnimButton";
-import { TABS, LAYERS } from '../data/layers';
+import { SidebarContext } from "../../store/SidebarContextProvider";
+import BaseFloatButton from "./BaseFloatButton";
+import AnimFloatButton from "./AnimFloatButton";
+import { TABS, LAYERS } from '../../data/layers';
 
-export default function Pins({ items, mediaRef }) {
+export default function BaseFloating({ items, mediaRef }) {
     const container = mediaRef.current;
 
     const { activeTab, activeLayer, goToItem } = useContext(SidebarContext);
@@ -51,7 +51,7 @@ export default function Pins({ items, mediaRef }) {
     if (activeTab === TABS.SURROUNDINGS) {
         return (
             items.map((item, i) => (
-                <AnimButton
+                <AnimFloatButton
                     key={item.id}
                     name={item.displayName}
                     icon={item.iconSrc}
@@ -73,7 +73,7 @@ export default function Pins({ items, mediaRef }) {
             const pos = itemIdToPosition.get(item.id);
             if (!pos) return null;
             return (
-                <FloatingButton
+                <BaseFloatButton
                     key={item.id}
                     name={item.displayName}
                     tabType={activeTab}

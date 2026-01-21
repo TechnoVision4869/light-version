@@ -1,11 +1,9 @@
 import { useState, useEffect, useMemo, useCallback, useContext } from "react";
-import { FilterContext } from "../store/FilterContextProvider";
-import { SidebarContext } from "../store/SidebarContextProvider";
-import FloatingButton from "./buttons/FloatingButton";
-import AnimButton from "./buttons/AnimButton";
-import { TABS, LAYERS } from '../data/layers';
+import { FilterContext } from "../../store/FilterContextProvider";
+import { SidebarContext } from "../../store/SidebarContextProvider";
+import BaseFloatButton from "./BaseFloatButton";
 
-export default function Floating({ items, mediaRef }) {
+export default function BaseFloating({ items, mediaRef }) {
     const container = mediaRef.current;
 
     const { filters } = useContext(FilterContext);
@@ -84,32 +82,12 @@ export default function Floating({ items, mediaRef }) {
     // Don't render until positions are ready
     if (buttonPositions.length !== items.length) return null;
 
-    if (activeTab === TABS.SURROUNDINGS) {
-        return (
-            items.map((item, i) => (
-                <AnimButton
-                    key={item.id}
-                    name={item.displayName}
-                    icon={item.iconSrc}
-                    style={{
-                        left: `${buttonPositions[i].left}px`,
-                        top: `${buttonPositions[i].top}px`,
-                    }}
-                    onSelect={() => {
-                        goToItem(item, LAYERS.SURROUNDING_DETAIL);
-                        // onChangeItem(item.id);
-                    }}
-                />
-            ))
-        );
-    }
-
     return (
         filteredItems.map((item) => {
             const pos = itemIdToPosition.get(item.id);
             if (!pos) return null;
             return (
-                <FloatingButton
+                <BaseFloatButton
                     key={item.id}
                     name={item.displayName}
                     tabType={activeTab}
