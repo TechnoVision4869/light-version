@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo, useCallback, useContext } from "react";
-import { useSelect } from "../hooks/useSelect";
 import { SidebarContext } from "../../store/SidebarContextProvider";
 import BaseFloatButton from "./BaseFloatButton";
 import AnimFloatButton from "./AnimFloatButton";
@@ -8,9 +7,8 @@ import { TABS, LAYERS } from '../../data/layers';
 export default function BaseFloating({ items, mediaRef }) {
     const container = mediaRef.current;
 
-    const { activeTab, activeLayer, goToItem } = useContext(SidebarContext);
+    const { activeTab, activeLayer, currentItem, goToItem } = useContext(SidebarContext);
 
-    const { isSelected, select } = useSelect();
 
     const [buttonPositions, setButtonPositions] = useState([]);
 
@@ -53,7 +51,9 @@ export default function BaseFloating({ items, mediaRef }) {
 
     if (activeTab === TABS.SURROUNDINGS) {
         return (
-            items.map((item, i) => (
+            items.map((item, i) => {
+                const isSelected = currentItem?.id === item.id;
+                return (
                 <AnimFloatButton
                     key={item.id}
                     name={item.displayName}
@@ -63,12 +63,12 @@ export default function BaseFloating({ items, mediaRef }) {
                         top: `${buttonPositions[i].top}px`,
                     }}
                     onSelect={() => {
-                        select(item.id);
                         goToItem(item, LAYERS.SURROUNDING_DETAIL);
                     }}
-                    isSelected={isSelected(item.id)}
+                    isSelected={isSelected}
                 />
-            ))
+            );
+        })
         );
     }
 
@@ -86,7 +86,28 @@ export default function BaseFloating({ items, mediaRef }) {
                         left: `${pos.left}px`,
                         top: `${pos.top}px`,
                     }}
-                    onSelect={() => goToItem(item, activeLayer)}
+                    onSelect={() => {
+                        switch (activeLayer) {
+                            case null:
+                                if(activeTab === TABS.ZONES) goToItem(item, LAYERS.ZONE_DETAIL);
+                                else if(activeTab === TABS.AMENITIES) goToItem(item, LAYERS.AMENITY_DETAIL);
+                                break;
+                            case LAYERS.ZONE_DETAIL:
+                                goToItem(item, LAYERS.BUILDING);
+                                break;
+
+                            case LAYERS.BUILDING:
+                                goToItem(item, LAYERS.FLOOR);
+                                break;
+
+                            case LAYERS.FLOOR:
+                                goToItem(item, LAYERS.APARTMENT);
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                    }}
                 />
             )
         })

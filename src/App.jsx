@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef, useCallback, useContext } from "react";
 import { StatusBar } from "@capacitor/status-bar";
+import { Capacitor } from '@capacitor/core';
 import { App as CapApp } from "@capacitor/app"
 import { TABS, LAYERS, LAYER_CONFIG, DATA } from "./data/layers";
 // Hooks
@@ -58,6 +59,7 @@ export default function App() {
 
   // Context
   const {
+    history,
     activeTab,
     activeLayer,
     currentItem,
@@ -82,6 +84,29 @@ export default function App() {
   };
 
   const isDisabled = !viewerProps.isMediaLoaded || viewerProps.isPlaying;
+
+  const handleActiveTab = useCallback((tab) => {
+        if (tab === activeTab) return;
+
+        if (tab === TABS.HOME) {
+            goHome();
+        } else {
+            const isFromHome = activeTab === TABS.HOME;
+            const isFromAnotherTab =
+                activeTab === TABS.ZONES ||
+                activeTab === TABS.AMENITIES ||
+                activeTab === TABS.SURROUNDINGS;
+            if (isFromAnotherTab && activeLayer === null) {
+                viewerProps.StartReverse(isFromAnotherTab, () => goToTab(tab, true));
+                return;
+            }
+            goToTab(tab, isFromHome, isFromAnotherTab);
+        }
+
+        setTimeout(() => {
+            handleSidebarState(true);
+        }, 750);
+    }, [activeTab, goToTab, videoViewer.StartReverse]);
 
   useEffect(() => {
     // Show info popup if item has description
@@ -319,7 +344,7 @@ export default function App() {
             </div>
             <div className="flex items-center space-x-6">
               <button
-                onClick={() => goToTab(TABS.SURROUNDINGS)}
+                onClick={() => handleActiveTab(TABS.SURROUNDINGS)}
                 className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.SURROUNDINGS
                   ? "bg-white/85 text-black"
                   : "text-white"
@@ -328,7 +353,7 @@ export default function App() {
                 SURROUNDINGS
               </button>
               <button
-                onClick={() => goToTab(TABS.ZONES)}
+                onClick={() => handleActiveTab(TABS.ZONES)}
                 className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.ZONES
                   ? "bg-white/85 text-black"
                   : "text-white"
@@ -337,7 +362,7 @@ export default function App() {
                 ZONES
               </button>
               <button
-                onClick={() => goToTab(TABS.AMENITIES)}
+                onClick={() => handleActiveTab(TABS.AMENITIES)}
                 className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.AMENITIES
                   ? "bg-white/85 text-black"
                   : "text-white"

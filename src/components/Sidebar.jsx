@@ -23,7 +23,7 @@ export default function Sidebar() {
 
 
     useEffect(() => {
-        console.log(activeLayer);
+        // console.log(activeLayer);
         if (activeLayer !== LAYERS.FLOOR) {
             setIsFilter(false);
         }

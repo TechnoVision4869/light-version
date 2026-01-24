@@ -41,29 +41,6 @@ export default function SidebarContextProvider({ children }) {
         videosPath: currentVideosPaths,
     } = currentEntry;
 
-    const handleActiveTab = (tab) => {
-        if (tab === activeTab) return;
-
-        if (tab === TABS.HOME) {
-            goToHome();
-        } else {
-            const isFromHome = activeTab === TABS.HOME;
-            const isFromAnotherTab =
-                activeTab === TABS.ZONES ||
-                activeTab === TABS.AMENITIES ||
-                activeTab === TABS.SURROUNDINGS;
-            if (isFromAnotherTab && activeLayer === null) {
-                viewerProps.StartReverse(isFromAnotherTab, () => goToTab(tab, true));
-                return;
-            }
-            goToTab(tab, isFromHome, isFromAnotherTab);
-        }
-
-        setTimeout(() => {
-            setSidebarOpen(true);
-        }, 750);
-    };
-
     const goToTab = useCallback((tabKey, isFromHome = true) => {
         const config = TAB_CONFIG[tabKey];
         // console.log(tabKey);
@@ -130,10 +107,10 @@ export default function SidebarContextProvider({ children }) {
     }, []);
 
     const handleSidebarState = useCallback((state) => {
-        console.log(state);
+        // console.log(state);
 
         setSidebarOpen(state);
-    })
+    },[]);
 
     const ctxValue = {
         history,
@@ -146,7 +123,7 @@ export default function SidebarContextProvider({ children }) {
         handleSidebarState,
 
         goToItem: handleCurrentItem,
-        goToTab: handleActiveTab,
+        goToTab,
         goBack: handleGoBack,
         goHome: handleGoHome
     };

@@ -77,7 +77,7 @@ export default function FilterPanel() {
   const { onFilterChange } = useContext(FilterContext);
   const { currentItem } = useContext(SidebarContext);
   // console.log(currentItem);
-
+  
   const currentApartments = LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem);
   // console.log(currentApartments);
 
@@ -116,6 +116,8 @@ export default function FilterPanel() {
       price,
     });
   }, [unitType, bedrooms, bathrooms, area, price]);
+
+  if(!currentItem) return null;
 
   return (
     <div className="flex flex-col gap-2 max-h-[calc(100vh-205px)] scrollbar-custom overflow-auto pe-2 text-white font-light text-sm">
