@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from "react";
 import { SidebarContext } from "../store/SidebarContextProvider";
-
 import { TABS, LAYERS, LAYER_CONFIG, TAB_CONFIG } from "../data/layers";
 
 import UnitPanel from "../components/UnitPanel";
@@ -16,11 +15,7 @@ import SurroundingButton from "./buttons/SurroundingButton";
 
 export default function Sidebar() {
     const { activeTab, activeLayer, currentItem, sidebarOpen, goToItem } = useContext(SidebarContext);
-    // console.log(activeTab);
-    // console.log(sidebarOpen)
-
     const [isFilter, setIsFilter] = useState(false); // 'navigate' or 'filter'
-
 
     useEffect(() => {
         // console.log(activeLayer);
@@ -40,12 +35,7 @@ export default function Sidebar() {
                 }`}
         >
             {activeTab === TABS.ZONES && activeLayer === LAYERS.APARTMENT ? (
-                <UnitPanel
-                    unit={currentItem}
-                    onInterior={handleInterior}
-                    onBalconyView={handleBalconyView}
-                    onGallery={handleGallery}
-                />
+                <UnitPanel />
             ) : (
                 <div className="h-full pr-1">
                     {activeLayer === LAYERS.FLOOR && (

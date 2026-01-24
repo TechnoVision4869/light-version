@@ -1,16 +1,22 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { DATA } from '../data/layers';
+
+import { SidebarContext } from '../store/SidebarContextProvider';
+import { MainContext } from '../store/MainContextProvider';
 
 import AREA_ICON from "../assets/icons/area.svg"
 import DOOR_ICON from "../assets/icons/door.svg"
 
-export default function UnitPanel({ unit, onInterior, onBalconyView, onGallery }) {
+export default function UnitPanel() {
+    const { currentItem } = useContext(SidebarContext);
+    const { handleInterior, handleBalconyView, handleGalleryType } = useContext(MainContext);   
+
     const [isVisualsOpen, setIsVisualsOpen] = useState(true);
     const [isCutSectionsOpen, setIsCutSectionsOpen] = useState(false);
     const [isPaymentPlanOpen, setIsPaymentPlanOpen] = useState(false);
 
     //temporary visuals and payment plan
-    const unitType = DATA.unitTypes[unit.unitTypeId];
+    const unitType = DATA.unitTypes[currentItem.unitTypeId];
     const serviceRooms = unitType.serviceRooms;
     const gallery = unitType.gallery;
     const cutSections = unitType.cutSections;
@@ -22,12 +28,12 @@ export default function UnitPanel({ unit, onInterior, onBalconyView, onGallery }
             <div className="flex flex-col gap-3 max-h-[calc(100vh-200px)] scrollbar-custom overflow-auto px-2 py-2 text-white">
                 {/* name and area */}
                 <div>
-                    <h1 className="text-xl font-bold mb-2">{unit.displayName}</h1>
+                    <h1 className="text-xl font-bold mb-2">{currentItem.displayName}</h1>
                     <div className="flex items-center gap-1">
                         <div className="w-6 h-6 items-center justify-center">
                             <img src={AREA_ICON} alt="Area icon" className="w-6 h-6 p-[1px]" />
                         </div>
-                        <span>Area : {unit.area} m²</span>
+                        <span>Area : {currentItem.area} m²</span>
                     </div>
                 </div>
 
@@ -39,7 +45,7 @@ export default function UnitPanel({ unit, onInterior, onBalconyView, onGallery }
                         <div className="w-6 h-6 flex items-center justify-center">
                             <img src={DOOR_ICON} alt="Area icon" className="w-6 h-6 p-[1px]" />
                         </div>
-                        <span>Rooms : {unit.bedrooms}</span>
+                        <span>Rooms : {currentItem.bedrooms}</span>
                     </div>
 
                     <div className="flex items-center gap-2 mb-4">
@@ -60,12 +66,12 @@ export default function UnitPanel({ unit, onInterior, onBalconyView, onGallery }
                     <div className="flex flex-col gap-2 mt-4">
                         <div className="flex gap-2">
                             <button className="flex-1 border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition"
-                                onClick={onInterior}
+                                onClick={handleInterior}
                             >
                                 Interior
                             </button>
                             <button className="flex-1 border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition whitespace-nowrap"
-                                onClick={() => onGallery("floorPlans")}
+                                onClick={() => handleGalleryType("floorPlans")}
                             >
                                 Floor Plan
                             </button>
@@ -76,7 +82,7 @@ export default function UnitPanel({ unit, onInterior, onBalconyView, onGallery }
                 <hr className="h-divider" />
 
                 <button className="w-full border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition"
-                    onClick={onBalconyView}
+                    onClick={handleBalconyView}
                 >
                     View From Balcony
                 </button>
@@ -104,7 +110,7 @@ export default function UnitPanel({ unit, onInterior, onBalconyView, onGallery }
                     {isVisualsOpen && (
                         <div className="grid grid-cols-2 gap-2 mt-2">
                             {gallery.map((img) => (
-                                <button className='hover:opacity-70' key={img.id} onClick={() => onGallery("gallery")}>
+                                <button className='hover:opacity-70' key={img.id} onClick={() => handleGalleryType("gallery")}>
                                     <img
                                         src={img.src}
                                         alt="Visual"
@@ -140,7 +146,7 @@ export default function UnitPanel({ unit, onInterior, onBalconyView, onGallery }
                     {isCutSectionsOpen && (
                         <div className="grid grid-cols-2 gap-2 mt-2">
                             {cutSections.map((img) => (
-                                <button className='hover:opacity-70' key={img.id} onClick={() => onGallery("cutSections")}>
+                                <button className='hover:opacity-70' key={img.id} onClick={() => handleGalleryType("cutSections")}>
                                     <img
                                         src={img.src}
                                         alt="Visual"

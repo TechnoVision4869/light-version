@@ -16,6 +16,7 @@ export function useVideoViewer() {
   const firstVideoRef = useRef(null);
   const secondVideoRef = useRef(null);
   const justNavigatedBackRef = useRef(false);
+  const playSurroundingsIdleRef = useRef(false);
   const isInitPlayedRef = useRef(true); // Flag to indicate if we have played the initial video (Home idle)
 
   const [currentViewIndex, setCurrentViewIndex] = useState(0);
@@ -189,6 +190,7 @@ export function useVideoViewer() {
     (isFromAnotherTab, onReverseEnded) => {
       if (history.length <= 1) return;
       if (activeLayer === LAYERS.SURROUNDING_DETAIL) {
+        playSurroundingsIdleRef.current = true;
         goBack();
         return;
       }
@@ -209,7 +211,7 @@ export function useVideoViewer() {
 
         setCurrentViewIndex(0);
 
-        if (shouldStayIdle) {
+        if (shouldStayIdle) {          
           playIdleVideo();
         } else {
           if (activeTab === TABS.HOME && isInitPlayedRef.current) {
@@ -218,6 +220,8 @@ export function useVideoViewer() {
               playIdleVideo();
               isInitPlayedRef.current = false;
             }, 200);
+          } else if (playSurroundingsIdleRef.current) {
+            playSurroundingsIdleRef.current = false;
           } else {
             playTransitionVideo();
           }
@@ -230,7 +234,7 @@ export function useVideoViewer() {
     if (currentVideosPaths) {
       loadVideoAssets();
     }
-  }, [currentVideosPaths]); // Watch history and videoRef
+  }, [currentVideosPaths]); // Watch history
 
   useEffect(() => {
     return () => {

@@ -21,9 +21,11 @@ import Balcony from "./components/Balcony";
 import Gallery from "./components/Gallery";
 import AnimatedPath from "./components/AnimatedPath";
 
+// Context
 import FilterContextProvider from "./store/FilterContextProvider";
 import { SidebarContext } from "./store/SidebarContextProvider";
 import Sidebar from "./components/Sidebar";
+import { MainContext } from "./store/MainContextProvider.jsx";
 
 // logo
 import TECHNO_LOGO from "./assets/techno.png";
@@ -37,22 +39,7 @@ export default function App() {
 
   //states
   const [showInfoPopup, setShowInfoPopup] = useState(false);
-  const [isPanorama, setIsPanorama] = useState(false);
-  const [isBalconyView, setIsBalconyView] = useState(false);
-  const [galleryType, setGalleryType] = useState(null);
-
   const [showI, setShowI] = useState(false);
-
-  const handleBack = () => {
-    setIsPanorama(false);
-    setIsBalconyView(false);
-    setGalleryType(null);
-  };
-  const handleInterior = () => setIsPanorama(true);
-  const handleBalconyView = () => setIsBalconyView(true);
-  const handleGallery = (type) => {
-    setGalleryType(type);
-  };
 
   // Ref
   const mediaContainerRef = useRef(null);
@@ -67,6 +54,8 @@ export default function App() {
     handleSidebarState,
     goToTab,
     goHome } = useContext(SidebarContext);
+
+  const { isPanorama, isBalconyView, galleryType, handleBack } = useContext(MainContext); 
 
   const videoViewer = useVideoViewer();
 

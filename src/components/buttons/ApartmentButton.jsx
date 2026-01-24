@@ -1,5 +1,5 @@
 import { LAYERS } from "../../data/layers";
-export default function ApartmentButton({ apartment, isDisabled = true, isSelected, goToApartment }) {
+export default function ApartmentButton({ apartment, isDisabled = false, isSelected, goToApartment }) {
     return (
         <button
             key={apartment.id}
