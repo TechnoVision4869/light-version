@@ -22,7 +22,9 @@ export const PROJECT_HORIZONTAL = {
       displayName: "Villas & Townhouses",
       subtitle: "Residential Zone",
       thumbnail: "horizontal/thumbnails/zones/zone1.png",
-      description: "A serene community of luxury villas and modern townhouses nestled in nature."
+      highlight:"horizontal/highlight/zones/zone1.png",
+      description: "A serene community of luxury villas and modern townhouses nestled in nature.",
+      x: 0.12, y: 0.25,
     }
   ],
 
@@ -34,8 +36,9 @@ export const PROJECT_HORIZONTAL = {
       type: "villa",
       displayName: "4BR Villa",
       totalFloors: 3,
+      highlight: "horizontal/highlight/types/type1.png",
       description: "Luxury 4-bedroom villa with rooftop lounge.",
-      x: 0.45, y: 0.53,
+      x: 0.3, y: 0.45,
     },
      {
       id: "town1",
@@ -44,8 +47,9 @@ export const PROJECT_HORIZONTAL = {
       type: "townhouse",
       displayName: "Townhouse",
       totalFloors: 3,
+      highlight: "horizontal/highlight/types/type2.png",
       description: "Modern 3-story townhouse with private balcony.",
-      x: 0.6, y: 0.25,
+      x: 0.67, y: 0.6,
     },
   ],
 

@@ -29,6 +29,7 @@ import { MainContext } from "./store/MainContextProvider.jsx";
 
 // logo
 import TECHNO_LOGO from "./assets/techno.png";
+import Highlight from "./components/Highlight.jsx";
 // const color = "green";
 
 export default function App() {
@@ -50,12 +51,13 @@ export default function App() {
     activeTab,
     activeLayer,
     currentItem,
+    setHighlightedButton,
     sidebarOpen,
     handleSidebarState,
     goToTab,
     goHome } = useContext(SidebarContext);
 
-  const { isPanorama, isBalconyView, galleryType, handleBack } = useContext(MainContext); 
+  const { isPanorama, isBalconyView, galleryType, handleBack } = useContext(MainContext);
 
   const videoViewer = useVideoViewer();
 
@@ -75,27 +77,27 @@ export default function App() {
   const isDisabled = !viewerProps.isMediaLoaded || viewerProps.isPlaying;
 
   const handleActiveTab = useCallback((tab) => {
-        if (tab === activeTab) return;
+    if (tab === activeTab) return;
 
-        if (tab === TABS.HOME) {
-            goHome();
-        } else {
-            const isFromHome = activeTab === TABS.HOME;
-            const isFromAnotherTab =
-                activeTab === TABS.ZONES ||
-                activeTab === TABS.AMENITIES ||
-                activeTab === TABS.SURROUNDINGS;
-            if (isFromAnotherTab && activeLayer === null) {
-                viewerProps.StartReverse(isFromAnotherTab, () => goToTab(tab, true));
-                return;
-            }
-            goToTab(tab, isFromHome, isFromAnotherTab);
-        }
+    if (tab === TABS.HOME) {
+      goHome();
+    } else {
+      const isFromHome = activeTab === TABS.HOME;
+      const isFromAnotherTab =
+        activeTab === TABS.ZONES ||
+        activeTab === TABS.AMENITIES ||
+        activeTab === TABS.SURROUNDINGS;
+      if (isFromAnotherTab && activeLayer === null) {
+        viewerProps.StartReverse(isFromAnotherTab, () => goToTab(tab, true));
+        return;
+      }
+      goToTab(tab, isFromHome, isFromAnotherTab);
+    }
 
-        setTimeout(() => {
-            handleSidebarState(true);
-        }, 750);
-    }, [activeTab, goToTab, videoViewer.StartReverse]);
+    setTimeout(() => {
+      handleSidebarState(true);
+    }, 750);
+  }, [activeTab, goToTab, videoViewer.StartReverse]);
 
   useEffect(() => {
     // Show info popup if item has description
@@ -273,7 +275,9 @@ export default function App() {
                         activeTab === TABS.SURROUNDINGS) &&
                       activeLayer === null
                     )
+
                       handleSidebarState(false);
+                      setHighlightedButton(null);
                     viewerProps.StartReverse(false, () => { });
                   }}
                   disabled={isDisabled || history.length <= 1}
@@ -395,10 +399,11 @@ export default function App() {
                 >
                   {/* video element */}
                   <div className="absolute inset-0">
+                    <Highlight/>
                     {/* First Video (e.g., transition, or initial idle) */}
                     <video
                       ref={viewerProps.firstMediaRef}
-                      className="w-full h-full object-cover object-center rounded-2xl absolute inset-0"
+                      className="w-full h-full object-cover object-center rounded-2xl absolute inset-0 z-10"
                       style={{ opacity: viewerProps.firstVideoOpacity }}
                       alt="Video 1"
                       muted
@@ -408,7 +413,7 @@ export default function App() {
                     {/* Second Video (e.g., target idle after transition) */}
                     <video
                       ref={viewerProps.secondMediaRef}
-                      className="w-full h-full object-cover object-center rounded-2xl absolute inset-0"
+                      className="w-full h-full object-cover object-center rounded-2xl absolute inset-0 z-10"
                       style={{ opacity: viewerProps.secondVideoOpacity }}
                       alt="Video 2"
                       muted
@@ -416,6 +421,7 @@ export default function App() {
                       preload="auto"
                       loop
                     />
+
                     {activeLayer === LAYERS.SURROUNDING_DETAIL && (
                       <AnimatedPath path={currentItem.svgPath} />
                     )}
@@ -434,6 +440,15 @@ export default function App() {
                     viewerProps.floatingOpacity && (
                       <BaseFloat
                         items={DATA.amenities}
+                        mediaRef={mediaContainerRef}
+                      />
+                    )}
+
+                  {activeTab === TABS.ZONES &&
+                    activeLayer === null &&
+                    viewerProps.floatingOpacity && (
+                      <BaseFloat
+                        items={DATA.zones}
                         mediaRef={mediaContainerRef}
                       />
                     )}

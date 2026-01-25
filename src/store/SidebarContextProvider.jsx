@@ -9,6 +9,9 @@ export const SidebarContext = createContext({
     currentItem: {},
     currentVideosPath: {},
 
+    highlightedButton: null,
+    setHighlightedButton: () => { },
+
     sidebarOpen: false,
     handleSidebarState: () => { },
 
@@ -31,6 +34,7 @@ export default function SidebarContextProvider({ children }) {
     const [history, setHistory] = useState(initHistory);
     const [sidebarOpen, setSidebarOpen] = useState(false); // set true when sidebar is open
 
+    const [highlightedButton, setHighlightedButton] = useState(null);
 
     // Get current state from history
     const currentEntry = history[history.length - 1];
@@ -109,7 +113,7 @@ export default function SidebarContextProvider({ children }) {
     const handleSidebarState = useCallback((state) => {
         // console.log(state);
         setSidebarOpen(state);
-    },[]);
+    }, []);
 
     const ctxValue = {
         history,
@@ -117,6 +121,9 @@ export default function SidebarContextProvider({ children }) {
         activeLayer,
         currentItem,
         currentVideosPaths,
+
+        highlightedButton,
+        setHighlightedButton,
 
         sidebarOpen,
         handleSidebarState,

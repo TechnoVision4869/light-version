@@ -83,15 +83,15 @@ export default function Sidebar() {
                                     activeLayer === null &&
                                     TAB_CONFIG[TABS.ZONES]
                                         .getItems()
-                                        .map((zone) => (
-                                            <ZoneButton
-                                                zone={zone}
-                                                key={zone.id}
-                                                // isDisabled={isDisabled}
-                                                isSelected={currentItem === zone}
-                                                goToZone={goToItem}
-                                            />
-                                        ))}
+                                        .map((zone) => {
+                                            return (
+                                                <ZoneButton
+                                                    zone={zone}
+                                                    key={zone.id}
+                                                    goToZone={goToItem}
+                                                />
+                                            )
+                                        })}
                                 {activeTab === TABS.SURROUNDINGS &&
                                     activeLayer === null &&
                                     TAB_CONFIG[TABS.SURROUNDINGS]
@@ -127,8 +127,6 @@ export default function Sidebar() {
                                             <BuildingButton
                                                 building={building}
                                                 key={building.id}
-                                                // isDisabled={isDisabled}
-                                                isSelected={currentItem === building}
                                                 goToBuilding={goToItem}
                                             />
                                         ))}
@@ -140,8 +138,6 @@ export default function Sidebar() {
                                             <FloorButton
                                                 floor={floor}
                                                 key={floor.id}
-                                                // isDisabled={isDisabled}
-                                                isSelected={currentItem === floor}
                                                 goToFloor={goToItem}
                                             />
                                         ))}
@@ -153,8 +149,6 @@ export default function Sidebar() {
                                             <ApartmentButton
                                                 apartment={apartment}
                                                 key={apartment.id}
-                                                // isDisabled={isDisabled}
-                                                isSelected={currentItem === apartment}
                                                 goToApartment={goToItem}
                                             />
                                         ))}

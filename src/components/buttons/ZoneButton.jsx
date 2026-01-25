@@ -1,8 +1,23 @@
+import { useContext } from "react";
+import { SidebarContext } from "../../store/SidebarContextProvider";
 import { LAYERS } from "../../data/layers";
-export default function ZoneButton({ zone, isDisabled, isSelected, goToZone }) {
+
+export default function ZoneButton({ zone, isDisabled, goToZone }) {
+    const { highlightedButton, setHighlightedButton } = useContext(SidebarContext);
+
+    const isSelected = highlightedButton === zone;
+
+    const handleClick = () => {
+        if (isSelected) {
+            goToZone(zone, LAYERS.ZONE_DETAIL);
+            setHighlightedButton(null);
+        }
+        else setHighlightedButton(zone);
+    };
+
     return (
         <button
-            onClick={() => { goToZone(zone, LAYERS.ZONE_DETAIL); }}
+            onClick={handleClick}
             disabled={isDisabled}
             className={`w-full max-w-full mx-auto p-4 rounded-2xl transition
                         ${isDisabled

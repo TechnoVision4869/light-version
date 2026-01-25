@@ -7,8 +7,7 @@ import { TABS, LAYERS } from '../../data/layers';
 export default function BaseFloating({ items, mediaRef }) {
     const container = mediaRef.current;
 
-    const { activeTab, activeLayer, currentItem, goToItem } = useContext(SidebarContext);
-
+    const { activeTab, activeLayer, currentItem, goToItem, highlightedButton, setHighlightedButton } = useContext(SidebarContext);
 
     const [buttonPositions, setButtonPositions] = useState([]);
 
@@ -54,21 +53,21 @@ export default function BaseFloating({ items, mediaRef }) {
             items.map((item, i) => {
                 const isSelected = currentItem?.id === item.id;
                 return (
-                <AnimFloatButton
-                    key={item.id}
-                    name={item.displayName}
-                    icon={item.iconSrc}
-                    style={{
-                        left: `${buttonPositions[i].left}px`,
-                        top: `${buttonPositions[i].top}px`,
-                    }}
-                    onSelect={() => {
-                        goToItem(item, LAYERS.SURROUNDING_DETAIL);
-                    }}
-                    isSelected={isSelected}
-                />
-            );
-        })
+                    <AnimFloatButton
+                        key={item.id}
+                        name={item.displayName}
+                        icon={item.iconSrc}
+                        style={{
+                            left: `${buttonPositions[i].left}px`,
+                            top: `${buttonPositions[i].top}px`,
+                        }}
+                        onSelect={() => {
+                            goToItem(item, LAYERS.SURROUNDING_DETAIL);
+                        }}
+                        isSelected={isSelected}
+                    />
+                );
+            })
         );
     }
 
@@ -76,6 +75,10 @@ export default function BaseFloating({ items, mediaRef }) {
         items.map((item) => {
             const pos = itemIdToPosition.get(item.id);
             if (!pos) return null;
+
+            const isOpaque = (highlightedButton === null || highlightedButton?.id === item.id);
+            const isSelected = highlightedButton?.id === item.id;
+
             return (
                 <BaseFloatButton
                     key={item.id}
@@ -86,27 +89,32 @@ export default function BaseFloating({ items, mediaRef }) {
                         left: `${pos.left}px`,
                         top: `${pos.top}px`,
                     }}
+                    isOpaque={isOpaque}
                     onSelect={() => {
-                        switch (activeLayer) {
-                            case null:
-                                if(activeTab === TABS.ZONES) goToItem(item, LAYERS.ZONE_DETAIL);
-                                else if(activeTab === TABS.AMENITIES) goToItem(item, LAYERS.AMENITY_DETAIL);
-                                break;
-                            case LAYERS.ZONE_DETAIL:
-                                goToItem(item, LAYERS.BUILDING);
-                                break;
+                        if (isSelected) {
+                            switch (activeLayer) {
+                                case null:
+                                    if (activeTab === TABS.ZONES) goToItem(item, LAYERS.ZONE_DETAIL);
+                                    else if (activeTab === TABS.AMENITIES) goToItem(item, LAYERS.AMENITY_DETAIL);
+                                    break;
+                                case LAYERS.ZONE_DETAIL:
+                                    goToItem(item, LAYERS.BUILDING);
+                                    break;
 
-                            case LAYERS.BUILDING:
-                                goToItem(item, LAYERS.FLOOR);
-                                break;
+                                case LAYERS.BUILDING:
+                                    goToItem(item, LAYERS.FLOOR);
+                                    break;
 
-                            case LAYERS.FLOOR:
-                                goToItem(item, LAYERS.APARTMENT);
-                                break;
-                        
-                            default:
-                                break;
+                                case LAYERS.FLOOR:
+                                    goToItem(item, LAYERS.APARTMENT);
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                            setHighlightedButton(null);
                         }
+                        else setHighlightedButton(item);
                     }}
                 />
             )

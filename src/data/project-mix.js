@@ -21,18 +21,22 @@ export const PROJECT_MIX = {
     {
       id: "zone1",
       projectId: "mix",
-      displayName: "Towers",
+      displayName: "Zone 1",
       subtitle: "Zone",
       thumbnail: "mix/thumbnails/zones/zone1.png",
-      description: "Our towers hold different apartments options. They are at the center of the city."
+      highlight: "mix/highlight/zones/zone1.png",
+      description: "Our towers hold different apartments options. They are at the center of the city.",
+      x: 0.93, y: 0.53,
     },
     {
       id: "zone2",
       projectId: "mix",
-      displayName: "Towers",
+      displayName: "Zone 2",
       subtitle: "Zone",
       thumbnail: "mix/thumbnails/zones/zone2.png",
-      description: "Our towers hold different apartments options. They are at the center of the city."
+      highlight: "mix/highlight/zones/zone2.png",
+      description: "Our towers hold different apartments options. They are at the center of the city.",
+      x: 0.73, y: 0.53,
     },
   ],
 
