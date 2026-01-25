@@ -277,7 +277,7 @@ export default function App() {
                     )
 
                       handleSidebarState(false);
-                      setHighlightedButton(null);
+                    setHighlightedButton(null);
                     viewerProps.StartReverse(false, () => { });
                   }}
                   disabled={isDisabled || history.length <= 1}
@@ -399,7 +399,7 @@ export default function App() {
                 >
                   {/* video element */}
                   <div className="absolute inset-0">
-                    <Highlight/>
+                    <Highlight />
                     {/* First Video (e.g., transition, or initial idle) */}
                     <video
                       ref={viewerProps.firstMediaRef}
@@ -641,9 +641,9 @@ export default function App() {
             )}
             {/* {debugBorder && <div className={`w-3 h-2 bg-white border-4 border-${color}-600`}></div>} */}
             <div className="w-18 h-auto ml-auto">
-              {/* <button onClick={() => { setDebugBorder((prevState) => !prevState) }}> */}
-              <img src={TECHNO_LOGO} alt="Techno Vision Logo" />
-              {/* </button> */}
+              <button onClick={() => { console.log(history); }}>
+                <img src={TECHNO_LOGO} alt="Techno Vision Logo" />
+              </button>
             </div>
           </div>
         </div>

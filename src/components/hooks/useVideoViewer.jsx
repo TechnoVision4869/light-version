@@ -234,6 +234,8 @@ export function useVideoViewer() {
     if (currentVideosPaths) {
       loadVideoAssets();
     }
+    else setIsVideosLoaded(true);
+    
   }, [currentVideosPaths]); // Watch history
 
   useEffect(() => {

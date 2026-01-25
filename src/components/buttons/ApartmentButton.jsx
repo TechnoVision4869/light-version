@@ -4,6 +4,8 @@ export default function ApartmentButton({ apartment, isDisabled = false, isSelec
         <button
             key={apartment.id}
             onClick={() => {
+                console.log("unit choosen: ", apartment);
+                
                 goToApartment(apartment, LAYERS.APARTMENT);
             }}
             disabled={isDisabled}
