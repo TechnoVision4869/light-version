@@ -108,7 +108,6 @@ export default function SidebarContextProvider({ children }) {
 
     const handleSidebarState = useCallback((state) => {
         // console.log(state);
-
         setSidebarOpen(state);
     },[]);
 
