@@ -130,8 +130,8 @@ export default function Sidebar() {
                                                 goToBuilding={goToItem}
                                             />
                                         ))}
-                                {activeTab === TABS.ZONES &&
-                                    activeLayer === LAYERS.BUILDING &&
+                                {/* {activeTab === TABS.ZONES &&
+                                    activeLayer === LAYERS.BUILDING && currentItem.type !== "villa" &&
                                     LAYER_CONFIG[LAYERS.BUILDING]
                                         .getItems(currentItem)
                                         .map((floor) => (
@@ -139,6 +139,17 @@ export default function Sidebar() {
                                                 floor={floor}
                                                 key={floor.id}
                                                 goToFloor={goToItem}
+                                            />
+                                        ))} */}
+                                {activeTab === TABS.ZONES &&
+                                    activeLayer === LAYERS.BUILDING && currentItem.type === "villa" &&
+                                    LAYER_CONFIG[LAYERS.BUILDING]
+                                        .getItems(currentItem)
+                                        .map((unit) => (
+                                            <ApartmentButton
+                                                apartment={unit}
+                                                key={unit.id}
+                                                goToApartment={goToItem}
                                             />
                                         ))}
                                 {activeTab === TABS.ZONES &&

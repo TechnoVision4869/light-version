@@ -64,8 +64,6 @@ export default function SidebarContextProvider({ children }) {
     }, []);
 
     const handleCurrentItem = useCallback((item, layerKey) => {
-        // console.log("item: ", item);
-        // console.log("layer: ", layerKey);
 
         if (history[2]?.layer === LAYERS.SURROUNDING_DETAIL) {
 
@@ -83,8 +81,15 @@ export default function SidebarContextProvider({ children }) {
             return;
         }
 
-        const config = LAYER_CONFIG[layerKey];
-        const videosPath = config.videosPath?.(item);
+        let videosPath = null;
+
+        if (layerKey === LAYERS.BUILDING) {
+            console.log("type: ", item.type);
+        }
+        else {
+            const config = LAYER_CONFIG[layerKey];
+            videosPath = config.videosPath?.(item);
+        }
 
         setHistory((prev) => [
             ...prev,

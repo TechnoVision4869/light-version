@@ -102,7 +102,8 @@ export default function BaseFloating({ items, mediaRef }) {
                                     break;
 
                                 case LAYERS.BUILDING:
-                                    goToItem(item, LAYERS.FLOOR);
+                                    if (currentItem.type == "villa") goToItem(item, LAYERS.APARTMENT);
+                                    else goToItem(item, LAYERS.FLOOR);
                                     break;
 
                                 case LAYERS.FLOOR:

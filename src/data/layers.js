@@ -1,5 +1,5 @@
 // import { PROJECT_MIX as PROJECT } from "./project-mix";
-import {PROJECT_HORIZONTAL as PROJECT} from "./project-horizontal";
+import { PROJECT_HORIZONTAL as PROJECT } from "./project-horizontal";
 
 const projectId = PROJECT.project.id;
 export const DATA = PROJECT;
@@ -128,12 +128,16 @@ export const LAYER_CONFIG = {
     // here there's a potential bug if building id isn't unique
     // which is predictable, same for floors and units
     getItems: (building) => {
+      if (building.type === "villa")
+        return PROJECT.units.filter((a) => a.buildingType === building.type);
+
       const buildingId = building.id;
       const zoneId = building.zoneId;
       return PROJECT.floors.filter(
         (f) => f.buildingId === buildingId && f.zoneId === zoneId
       );
     },
+
     // Function to get video paths for a specific view of this building
     getVideosPathForView: (building, viewIndex) => {
       const buildingId = building.id;
@@ -174,6 +178,23 @@ export const LAYER_CONFIG = {
   },
   [LAYERS.APARTMENT]: {
     videosPath: (apartment) => {
+      const buildingId = apartment.buildingId;
+      const zoneId = apartment.zoneId;
+
+      if (apartment.buildingType === "villa")
+        return {
+          forwardVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_trans.mp4`,
+          reverseVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_rev.mp4`,
+          idleVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view1/${zoneId}_${buildingId}_view1_idle.mp4`,
+        };
+
+      if (apartment.buildingType === "townhouse")
+        return {
+          forwardVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_trans.mp4`,
+          reverseVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_rev.mp4`,
+          idleVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_idle.mp4`,
+        };
+
       return {
         forwardVideo: "/cutsection.mp4",
         reverseVideo: "/cutsection.mp4",
@@ -207,16 +228,16 @@ export const LAYER_CONFIG = {
     },
   },
   [LAYERS.SURROUNDING_DETAIL]: {
-    path: (surroundingId) => `/${surroundingId}_zoom`,
+    path: (surroundingId) => `/ ${surroundingId} _zoom`,
     getData: (surroundingId) =>
       PROJECT.surroundings.find((s) => s.id === surroundingId),
   },
   [LAYERS.AMENITY_DETAIL]: {
-    path: (amenityId) => `/${amenityId}_zoom`,
+    path: (amenityId) => `/ ${amenityId} _zoom`,
     videosPath: (amenity) => {
       const amenityId = amenity.id;
       return {
-        forwardVideo: `/${projectId}/videos/amenities/${amenityId}/${amenityId}_trans.mp4`,
+        forwardVideo: `/ ${projectId} /videos/amenities / ${amenityId}/${amenityId}_trans.mp4`,
         reverseVideo: `/${projectId}/videos/amenities/${amenityId}/${amenityId}_rev.mp4`,
         idleVideo: `/${projectId}/videos/amenities/${amenityId}/${amenityId}_idle.mp4`,
       };
