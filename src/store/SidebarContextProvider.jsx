@@ -1,4 +1,4 @@
-import { createContext, useCallback, useState } from "react";
+import { createContext, useCallback, useState, useMemo } from "react";
 
 import { TABS, TAB_CONFIG, LAYER_CONFIG, LAYERS } from "../data/layers";
 
@@ -115,6 +115,26 @@ export default function SidebarContextProvider({ children }) {
         setSidebarOpen(state);
     }, []);
 
+    const currentItems = useMemo(() => {
+    // Top-level tabs
+    if (activeLayer === null && activeTab !== TABS.HOME) {
+        const items = TAB_CONFIG[activeTab]?.getItems() || [];
+
+        console.log(items.map(item => ({ ...item, __type: activeTab })));
+        
+        return items.map(item => ({ ...item, __type: activeTab })); // e.g., __type: 'zones'
+    }
+
+    // Nested layers
+    if (activeLayer !== null && currentItem) {
+        console.log(LAYER_CONFIG[activeLayer]?.getItems(currentItem) || []);
+        
+        return LAYER_CONFIG[activeLayer]?.getItems(currentItem) || [];
+    }
+
+    return [];
+    }, [history]);
+
     const ctxValue = {
         history,
         activeTab,
@@ -128,6 +148,7 @@ export default function SidebarContextProvider({ children }) {
         sidebarOpen,
         handleSidebarState,
 
+        currentItems,
         goToItem: handleCurrentItem,
         goToTab,
         goBack: handleGoBack,

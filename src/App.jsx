@@ -100,6 +100,7 @@ export default function App() {
   }, [activeTab, goToTab, videoViewer.StartReverse]);
 
   useEffect(() => {
+    setHighlightedButton(null);
     // Show info popup if item has description
     const itemData = LAYER_CONFIG[activeLayer]?.getData(currentItem.id);
 
@@ -269,15 +270,9 @@ export default function App() {
               {viewerProps.currentViewIndex === 0 ? (
                 <button
                   onClick={() => {
-                    if (
-                      (activeTab === TABS.ZONES ||
-                        activeTab === TABS.AMENITIES ||
-                        activeTab === TABS.SURROUNDINGS) &&
-                      activeLayer === null
-                    )
-
+                    if ((activeTab === TABS.ZONES ||activeTab === TABS.AMENITIES ||activeTab === TABS.SURROUNDINGS) &&activeLayer === null)
                       handleSidebarState(false);
-                    setHighlightedButton(null);
+
                     viewerProps.StartReverse(false, () => { });
                   }}
                   disabled={isDisabled || history.length <= 1}

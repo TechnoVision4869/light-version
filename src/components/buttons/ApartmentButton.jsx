@@ -1,10 +1,9 @@
-import { LAYERS } from "../../data/layers";
-export default function ApartmentButton({ apartment, isDisabled = false, isSelected, goToApartment }) {
+export default function ApartmentButton({ apartment, isDisabled = false, isSelected, goToItem }) {
     return (
         <button
             key={apartment.id}
             onClick={() => {
-                goToApartment(apartment, LAYERS.APARTMENT);
+                goToItem();
             }}
             disabled={isDisabled}
             className={`w-full max-w-full mx-auto p-4 rounded-2xl transition

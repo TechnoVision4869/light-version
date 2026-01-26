@@ -7,8 +7,10 @@ import { TABS, LAYERS } from '../../data/layers';
 export default function BaseFloating({ items, mediaRef }) {
     const container = mediaRef.current;
 
-    const { activeTab, activeLayer, currentItem, goToItem, highlightedButton, setHighlightedButton } = useContext(SidebarContext);
+    const { activeTab, activeLayer, currentItem, currentItems, goToItem, highlightedButton, setHighlightedButton } = useContext(SidebarContext);
 
+    console.log(currentItems);
+    
     const [buttonPositions, setButtonPositions] = useState([]);
 
     const updatePositions = useCallback(() => {
@@ -50,7 +52,7 @@ export default function BaseFloating({ items, mediaRef }) {
 
     if (activeTab === TABS.SURROUNDINGS) {
         return (
-            items.map((item, i) => {
+            currentItems.map((item, i) => {
                 const isSelected = currentItem?.id === item.id;
                 return (
                     <AnimFloatButton
@@ -72,7 +74,7 @@ export default function BaseFloating({ items, mediaRef }) {
     }
 
     return (
-        items.map((item) => {
+        currentItems.map((item) => {
             const pos = itemIdToPosition.get(item.id);
             if (!pos) return null;
 

@@ -54,9 +54,33 @@ export const PROJECT_HORIZONTAL = {
   ],
 
   floors: [
-    { id: "townhouse1", projectId: "horizontal", zoneId: "zone1", buildingId: "town1", floorNumber: 1, type: "Residential", displayName: "Floor 1", description: "Ground floor with kitchen and living area.", x: 0.1, y: 0.1, },
-    { id: "townhouse2", projectId: "horizontal", zoneId: "zone1", buildingId: "town1", floorNumber: 1, type: "Residential", displayName: "Floor 1", description: "Ground floor with kitchen and living area.", x: 0.1, y: 0.1, },
-    { id: "townhouse3", projectId: "horizontal", zoneId: "zone1", buildingId: "town1", floorNumber: 1, type: "Residential", displayName: "Floor 1", description: "Ground floor with kitchen and living area.", x: 0.1, y: 0.1, },
+    {
+      id: "townhouse1",
+      projectId: "horizontal",
+      zoneId: "zone1",
+      buildingId: "town1",
+      displayName: "TownHouse 1",
+      description: "...",
+      x: 0.1, y: 0.15,
+    },
+    {
+      id: "townhouse2",
+      projectId: "horizontal",
+      zoneId: "zone1",
+      buildingId: "town1",
+      displayName: "TownHouse 2",
+      description: "...",
+      x: 0.2, y: 0.2,
+    },
+    {
+      id: "townhouse3",
+      projectId: "horizontal",
+      zoneId: "zone1",
+      buildingId: "town1",
+      displayName: "TownHouse 3",
+      description: "...",
+      x: 0.3, y: 0.4,
+    },
   ],
 
   unitTypes: {
@@ -212,9 +236,10 @@ export const PROJECT_HORIZONTAL = {
       id: "th1-101",
       projectId: "horizontal",
       zoneId: "zone1",
-      buildingId: "townhouse1",
+      buildingId: "town1",
       buildingType: "townhouse",
       unitTypeId: "townhouse-floor1",
+      floorId: "townhouse1",
       floorNumber: 1,
       displayName: "TH1-101",
       price: 950000,
@@ -223,15 +248,15 @@ export const PROJECT_HORIZONTAL = {
       balconyView: "/panorama/townhouse/balcony.jpg",
       x: 0.6, y: 0.2
     },
-    { id: "th1-102", projectId: "horizontal", zoneId: "zone1", buildingId: "townhouse1", buildingType: "townhouse", unitTypeId: "townhouse-floor1", floorNumber: 1, displayName: "TH1-102", price: 950000, area: 110, bedrooms: 2, bathrooms: 2, balconyView: "/panorama/townhouse/balcony.jpg", x: 0.65, y: 0.2 },
+    { id: "th1-102", projectId: "horizontal", zoneId: "zone1", buildingId: "town1", buildingType: "townhouse", unitTypeId: "townhouse-floor1", floorId: "townhouse1", floorNumber: 1, displayName: "TH1-102", price: 950000, area: 110, bedrooms: 2, bathrooms: 2, balconyView: "/panorama/townhouse/balcony.jpg", x: 0.65, y: 0.2 },
     
     // Townhouse 2
-    { id: "th2-101", projectId: "horizontal", zoneId: "zone1", buildingId: "townhouse2", buildingType: "townhouse", unitTypeId: "townhouse-floor1", floorNumber: 1, displayName: "TH2-101", price: 950000, area: 110, bedrooms: 2, bathrooms: 2, balconyView: "/panorama/townhouse/balcony.jpg", x: 0.75, y: 0.2 },
-    { id: "th2-102", projectId: "horizontal", zoneId: "zone1", buildingId: "townhouse2", buildingType: "townhouse", unitTypeId: "townhouse-floor1", floorNumber: 1, displayName: "TH2-102", price: 950000, area: 110, bedrooms: 2, bathrooms: 2, balconyView: "/panorama/townhouse/balcony.jpg", x: 0.65, y: 0.2 },
+    { id: "th2-101", projectId: "horizontal", zoneId: "zone1", buildingId: "town1", buildingType: "townhouse", unitTypeId: "townhouse-floor1", floorId: "townhouse2", floorNumber: 1, displayName: "TH2-101", price: 950000, area: 110, bedrooms: 2, bathrooms: 2, balconyView: "/panorama/townhouse/balcony.jpg", x: 0.75, y: 0.2 },
+    { id: "th2-102", projectId: "horizontal", zoneId: "zone1", buildingId: "town1", buildingType: "townhouse", unitTypeId: "townhouse-floor1", floorId: "townhouse2", floorNumber: 1, displayName: "TH2-102", price: 950000, area: 110, bedrooms: 2, bathrooms: 2, balconyView: "/panorama/townhouse/balcony.jpg", x: 0.65, y: 0.2 },
 
     // Townhouse 3 
-    { id: "th3-101", projectId: "horizontal", zoneId: "zone1", buildingId: "townhouse3", buildingType: "townhouse", unitTypeId: "townhouse-floor1", floorNumber: 1, displayName: "TH3-101", price: 950000, area: 110, bedrooms: 2, bathrooms: 2, balconyView: "/panorama/townhouse/balcony.jpg", x: 0.9, y: 0.2 },
-    { id: "th3-102", projectId: "horizontal", zoneId: "zone1", buildingId: "townhouse3", buildingType: "townhouse", unitTypeId: "townhouse-floor1", floorNumber: 1, displayName: "TH3-102", price: 950000, area: 110, bedrooms: 2, bathrooms: 2, balconyView: "/panorama/townhouse/balcony.jpg", x: 0.65, y: 0.2 },
+    { id: "th3-101", projectId: "horizontal", zoneId: "zone1", buildingId: "town1", buildingType: "townhouse", unitTypeId: "townhouse-floor1", floorId:"townhouse3" , floorNumber : 1 , displayName : "TH3-101" , price : 950000 , area : 110 , bedrooms : 2 , bathrooms : 2 , balconyView : "/panorama/townhouse/balcony.jpg" , x : 0.9 , y : 0.2 },
+    { id:"th3-102" , projectId:"horizontal" , zoneId:"zone1" , buildingId: "town1" , buildingType:"townhouse" , unitTypeId:"townhouse-floor1" , floorId:"townhouse3" , floorNumber : 1 , displayName:"TH3-102" , price :950000 , area : 110 , bedrooms : 2 , bathrooms : 2 , balconyView:"/panorama/townhouse/balcony.jpg" , x : .65,y:.2 },
 
   ],
 
