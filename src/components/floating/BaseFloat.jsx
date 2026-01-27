@@ -22,7 +22,7 @@ export default function BaseFloating({ mediaRef }) {
             left: videoLeft + videoW * item.x,
             top: h * item.y,
         }));
-        // console.log(newPositions);
+        console.log(newPositions);
         
         setButtonPositions(newPositions);
     }, [currentItems]);
@@ -38,6 +38,7 @@ export default function BaseFloating({ mediaRef }) {
 
     // Observe resize
     useEffect(() => {
+        console.log("mount");
         if (!container) return;
 
         const resizeObserver = new ResizeObserver(updatePositions);
@@ -45,9 +46,15 @@ export default function BaseFloating({ mediaRef }) {
 
         updatePositions();
 
-        return () => resizeObserver.disconnect();
+        return () => {
+            console.log("un mount");
+            
+            resizeObserver.disconnect();}
     }, []); // Empty dependency array ensures this runs once on mount
 
+    // console.log(buttonPositions.length);
+    // console.log(currentItems.length);
+    
     // Don't render until positions are ready
     if (buttonPositions.length !== currentItems.length) return null;
 
@@ -76,6 +83,9 @@ export default function BaseFloating({ mediaRef }) {
 
     return (
         currentItems.map((item) => {
+            // console.log(itemIdToPosition);
+            // console.log(item.id);
+            
             const pos = itemIdToPosition.get(item.id);
             // console.log(pos);
             

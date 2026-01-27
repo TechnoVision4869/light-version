@@ -421,7 +421,7 @@ export default function App() {
                       <AnimatedPath path={currentItem.svgPath} />
                     )}
                   </div>
-
+{/* 
                   {activeTab === TABS.SURROUNDINGS &&
                     viewerProps.floatingOpacity && (
                       <BaseFloat
@@ -458,7 +458,13 @@ export default function App() {
                       <BaseFloat
                         mediaRef={mediaContainerRef}
                       />
-                    )}
+                    )} */}
+                    {
+                    viewerProps.floatingOpacity &&
+                    viewerProps.currentViewIndex === 0 && (
+                      <BaseFloat
+                        mediaRef={mediaContainerRef}
+                      />)}
 
                   {activeLayer === LAYERS.FLOOR &&
                     viewerProps.floatingOpacity && (

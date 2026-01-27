@@ -91,7 +91,10 @@ export default function SidebarContextProvider({ children }) {
         }
 
         const config = LAYER_CONFIG[targetLayer];
+        console.log(targetLayer);
+        
         const videosPath = config.videosPath?.(item);
+        console.log(videosPath);
 
         setHistory((prev) => [
             ...prev,

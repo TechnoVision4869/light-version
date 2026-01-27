@@ -12,6 +12,9 @@ export default function BuildingButton({ building, isDisabled, goToItem }) {
         }
         else setHighlightedButton(building);
     };
+
+    console.log("building");
+    
     return (
         <button
             key={building.id}
