@@ -67,6 +67,13 @@ export default function SidebarContextProvider({ children }) {
         // console.log("item: ", item);
         // console.log("layer: ", layerKey);
 
+        const targetLayer = layerKey || item.__nextLayer;
+
+        if (!targetLayer) {
+            console.warn('No layer specified for navigation', item);
+            return;
+        }
+
         if (history[2]?.layer === LAYERS.SURROUNDING_DETAIL) {
 
             const tempHistory = history.slice(0, -1);
@@ -74,7 +81,7 @@ export default function SidebarContextProvider({ children }) {
             setHistory([
                 ...tempHistory, {
                     tab: activeTab,
-                    layer: layerKey,
+                    layer: targetLayer,
                     item: item,
                     videosPath: null,
                 },
@@ -83,14 +90,14 @@ export default function SidebarContextProvider({ children }) {
             return;
         }
 
-        const config = LAYER_CONFIG[layerKey];
+        const config = LAYER_CONFIG[targetLayer];
         const videosPath = config.videosPath?.(item);
 
         setHistory((prev) => [
             ...prev,
             {
                 tab: activeTab,
-                layer: layerKey,
+                layer: targetLayer,
                 item: item,
                 videosPath: videosPath,
             },
@@ -119,16 +126,11 @@ export default function SidebarContextProvider({ children }) {
     // Top-level tabs
     if (activeLayer === null && activeTab !== TABS.HOME) {
         const items = TAB_CONFIG[activeTab]?.getItems() || [];
-
-        console.log(items.map(item => ({ ...item, __type: activeTab })));
-        
         return items.map(item => ({ ...item, __type: activeTab })); // e.g., __type: 'zones'
     }
 
     // Nested layers
-    if (activeLayer !== null && currentItem) {
-        console.log(LAYER_CONFIG[activeLayer]?.getItems(currentItem) || []);
-        
+    else if (activeLayer !== null && activeLayer !== LAYERS.APARTMENT && currentItem) {
         return LAYER_CONFIG[activeLayer]?.getItems(currentItem) || [];
     }
 

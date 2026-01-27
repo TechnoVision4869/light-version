@@ -1,5 +1,5 @@
-// import { PROJECT_MIX as PROJECT } from "./project-mix";
-import {PROJECT_HORIZONTAL as PROJECT} from "./project-horizontal";
+import { PROJECT_MIX as PROJECT } from "./project-mix";
+// import {PROJECT_HORIZONTAL as PROJECT} from "./project-horizontal";
 
 const projectId = PROJECT.project.id;
 export const DATA = PROJECT;
@@ -60,7 +60,7 @@ export const TAB_CONFIG = {
       idleVideo: `/${projectId}/videos/zones/zones_gen_idle.mp4`,
     }),
 
-    getItems: () => PROJECT.zones,
+    getItems: () => PROJECT.zones.map(z => ({ ...z, __type: 'zone', __nextLayer: LAYERS.ZONE_DETAIL })),
     // Here, getItems returns array of all the zones,
     // used to map the zones to buttons
   },
@@ -77,7 +77,7 @@ export const TAB_CONFIG = {
       idleVideo: `/${projectId}/videos/surroundings/surr_idle.mp4`,
     }),
 
-    getItems: () => PROJECT.surroundings,
+    getItems: () => PROJECT.surroundings.map(s => ({ ...s, __type: 'surrounding', __nextLayer: LAYERS.SURROUNDING_DETAIL })),
   },
   [TABS.AMENITIES]: {
     title: "Amenities",
@@ -90,7 +90,7 @@ export const TAB_CONFIG = {
       idleVideo: `/${projectId}/videos/amenities/amenities_gen_idle.mp4`,
     }),
 
-    getItems: () => PROJECT.amenities,
+    getItems: () => PROJECT.amenities.map(a => ({ ...a, __type: 'amenity', __nextLayer: LAYERS.AMENITY_DETAIL })),
   },
 };
 
@@ -109,7 +109,7 @@ export const LAYER_CONFIG = {
     getData: (zoneId) => PROJECT.zones.find((z) => z.id === zoneId),
     // Here, getData returns the zone object with the given id
     // used to display the zone details
-    getItems: (zone) => PROJECT.buildings.filter((b) => b.zoneId === zone.id).map(b => ({ ...b, __type: 'building' })),
+    getItems: (zone) => PROJECT.buildings.filter((b) => b.zoneId === zone.id).map(b => ({ ...b, __type: 'building', __nextLayer: LAYERS.BUILDING })),
     // Here, getItems returns array of buildings in this zone
     // used to map the buildings to buttons
   },
@@ -138,9 +138,9 @@ export const LAYER_CONFIG = {
       );
       // Tower: has floors → return floors
       // TownHouse: is a type saved arbitrary in floors → return floors
-      if (floors.length > 0) return floors.map(f => ({ ...f, __type: 'floor' }));
+      if (floors.length > 0) return floors.map(f => ({ ...f, __type: 'floor', __nextLayer: LAYERS.FLOOR }));
       // Villa: no floors → return units directly
-      else return PROJECT.units.filter(u => u.buildingId === buildingId).map(u => ({ ...u, __type: 'unit' }));
+      else return PROJECT.units.filter(u => u.buildingId === buildingId).map(u => ({ ...u, __type: 'apartment', __nextLayer: LAYERS.APARTMENT }));
     },
 
     // Function to get video paths for a specific view of this building
@@ -180,7 +180,7 @@ export const LAYER_CONFIG = {
           a.floorId === floorId &&
           a.buildingId === buildingId &&
           a.zoneId === zoneId
-      ).map(u => ({ ...u, __type: 'unit' }));
+      ).map(u => ({ ...u, __type: 'apartment', __nextLayer: LAYERS.APARTMENT }));
     },
   },
   

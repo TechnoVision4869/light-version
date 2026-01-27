@@ -61,7 +61,7 @@ export const PROJECT_HORIZONTAL = {
       buildingId: "town1",
       displayName: "TownHouse 1",
       description: "...",
-      x: 0.1, y: 0.15,
+      x: 0.67, y: 0.5,
     },
     {
       id: "townhouse2",
@@ -70,7 +70,7 @@ export const PROJECT_HORIZONTAL = {
       buildingId: "town1",
       displayName: "TownHouse 2",
       description: "...",
-      x: 0.2, y: 0.2,
+      x: 0.67, y: 0.6,
     },
     {
       id: "townhouse3",
@@ -79,7 +79,7 @@ export const PROJECT_HORIZONTAL = {
       buildingId: "town1",
       displayName: "TownHouse 3",
       description: "...",
-      x: 0.3, y: 0.4,
+      x: 0.67, y: 0.7,
     },
   ],
 

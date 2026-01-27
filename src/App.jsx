@@ -425,7 +425,6 @@ export default function App() {
                   {activeTab === TABS.SURROUNDINGS &&
                     viewerProps.floatingOpacity && (
                       <BaseFloat
-                        items={DATA.surroundings}
                         mediaRef={mediaContainerRef}
                       />
                     )}
@@ -434,7 +433,6 @@ export default function App() {
                     activeLayer === null &&
                     viewerProps.floatingOpacity && (
                       <BaseFloat
-                        items={DATA.amenities}
                         mediaRef={mediaContainerRef}
                       />
                     )}
@@ -443,7 +441,6 @@ export default function App() {
                     activeLayer === null &&
                     viewerProps.floatingOpacity && (
                       <BaseFloat
-                        items={DATA.zones}
                         mediaRef={mediaContainerRef}
                       />
                     )}
@@ -451,7 +448,6 @@ export default function App() {
                   {activeLayer === LAYERS.ZONE_DETAIL &&
                     viewerProps.floatingOpacity && (
                       <BaseFloat
-                        items={LAYER_CONFIG[LAYERS.ZONE_DETAIL].getItems(currentItem)}
                         mediaRef={mediaContainerRef}
                       />
                     )}
@@ -460,7 +456,6 @@ export default function App() {
                     viewerProps.floatingOpacity &&
                     viewerProps.currentViewIndex === 0 && (
                       <BaseFloat
-                        items={LAYER_CONFIG[LAYERS.BUILDING].getItems(currentItem)}
                         mediaRef={mediaContainerRef}
                       />
                     )}
