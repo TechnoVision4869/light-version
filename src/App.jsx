@@ -100,6 +100,7 @@ export default function App() {
   }, [activeTab, goToTab, videoViewer.StartReverse]);
 
   useEffect(() => {
+    setHighlightedButton(null);
     // Show info popup if item has description
     const itemData = LAYER_CONFIG[activeLayer]?.getData(currentItem.id);
 
@@ -269,15 +270,9 @@ export default function App() {
               {viewerProps.currentViewIndex === 0 ? (
                 <button
                   onClick={() => {
-                    if (
-                      (activeTab === TABS.ZONES ||
-                        activeTab === TABS.AMENITIES ||
-                        activeTab === TABS.SURROUNDINGS) &&
-                      activeLayer === null
-                    )
-
+                    if ((activeTab === TABS.ZONES ||activeTab === TABS.AMENITIES ||activeTab === TABS.SURROUNDINGS) &&activeLayer === null)
                       handleSidebarState(false);
-                    setHighlightedButton(null);
+
                     viewerProps.StartReverse(false, () => { });
                   }}
                   disabled={isDisabled || history.length <= 1}
@@ -430,7 +425,6 @@ export default function App() {
                   {activeTab === TABS.SURROUNDINGS &&
                     viewerProps.floatingOpacity && (
                       <BaseFloat
-                        items={DATA.surroundings}
                         mediaRef={mediaContainerRef}
                       />
                     )}
@@ -439,7 +433,6 @@ export default function App() {
                     activeLayer === null &&
                     viewerProps.floatingOpacity && (
                       <BaseFloat
-                        items={DATA.amenities}
                         mediaRef={mediaContainerRef}
                       />
                     )}
@@ -448,7 +441,6 @@ export default function App() {
                     activeLayer === null &&
                     viewerProps.floatingOpacity && (
                       <BaseFloat
-                        items={DATA.zones}
                         mediaRef={mediaContainerRef}
                       />
                     )}
@@ -456,7 +448,6 @@ export default function App() {
                   {activeLayer === LAYERS.ZONE_DETAIL &&
                     viewerProps.floatingOpacity && (
                       <BaseFloat
-                        items={LAYER_CONFIG[LAYERS.ZONE_DETAIL].getItems(currentItem)}
                         mediaRef={mediaContainerRef}
                       />
                     )}
@@ -465,7 +456,6 @@ export default function App() {
                     viewerProps.floatingOpacity &&
                     viewerProps.currentViewIndex === 0 && (
                       <BaseFloat
-                        items={LAYER_CONFIG[LAYERS.BUILDING].getItems(currentItem)}
                         mediaRef={mediaContainerRef}
                       />
                     )}

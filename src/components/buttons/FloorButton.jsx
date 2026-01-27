@@ -1,17 +1,13 @@
-import { LAYERS } from "../../data/layers";
-
 export default function FloorButton({
   floor,
   isDisabled,
   isSelected,
-  goToFloor,
+  goToItem,
 }) {
   return (
     <button
       key={floor.id}
-      onClick={() => {
-        goToFloor(floor, LAYERS.FLOOR);
-      }}
+      onClick={goToItem}
       disabled={isDisabled}
       className={`w-full max-w-full mx-auto p-4 rounded-2xl transition whitespace-nowrap
         ${
@@ -29,10 +25,10 @@ export default function FloorButton({
         </div>
 
         {/* Vertical Divider + Floor Type */}
-        <div className="flex items-center">
+        {<div className="flex items-center">
           <div className="w-0.5 h-5 bg-white mx-3"></div>
           <div className="font-bold text-white">{floor.type}</div>
-        </div>
+        </div>}
       </div>
     </button>
   );

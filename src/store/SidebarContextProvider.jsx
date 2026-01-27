@@ -1,4 +1,4 @@
-import { createContext, useCallback, useState } from "react";
+import { createContext, useCallback, useState, useMemo } from "react";
 
 import { TABS, TAB_CONFIG, LAYER_CONFIG, LAYERS } from "../data/layers";
 
@@ -64,6 +64,15 @@ export default function SidebarContextProvider({ children }) {
     }, []);
 
     const handleCurrentItem = useCallback((item, layerKey) => {
+        // console.log("item: ", item);
+        // console.log("layer: ", layerKey);
+
+        const targetLayer = layerKey || item.__nextLayer;
+
+        if (!targetLayer) {
+            console.warn('No layer specified for navigation', item);
+            return;
+        }
 
         if (history[2]?.layer === LAYERS.SURROUNDING_DETAIL) {
 
@@ -72,7 +81,7 @@ export default function SidebarContextProvider({ children }) {
             setHistory([
                 ...tempHistory, {
                     tab: activeTab,
-                    layer: layerKey,
+                    layer: targetLayer,
                     item: item,
                     videosPath: null,
                 },
@@ -81,21 +90,14 @@ export default function SidebarContextProvider({ children }) {
             return;
         }
 
-        let videosPath = null;
-
-        if (layerKey === LAYERS.BUILDING) {
-            console.log("type: ", item.type);
-        }
-        else {
-            const config = LAYER_CONFIG[layerKey];
-            videosPath = config.videosPath?.(item);
-        }
+        const config = LAYER_CONFIG[targetLayer];
+        const videosPath = config.videosPath?.(item);
 
         setHistory((prev) => [
             ...prev,
             {
                 tab: activeTab,
-                layer: layerKey,
+                layer: targetLayer,
                 item: item,
                 videosPath: videosPath,
             },
@@ -120,6 +122,21 @@ export default function SidebarContextProvider({ children }) {
         setSidebarOpen(state);
     }, []);
 
+    const currentItems = useMemo(() => {
+    // Top-level tabs
+    if (activeLayer === null && activeTab !== TABS.HOME) {
+        const items = TAB_CONFIG[activeTab]?.getItems() || [];
+        return items.map(item => ({ ...item, __type: activeTab })); // e.g., __type: 'zones'
+    }
+
+    // Nested layers
+    else if (activeLayer !== null && activeLayer !== LAYERS.APARTMENT && currentItem) {
+        return LAYER_CONFIG[activeLayer]?.getItems(currentItem) || [];
+    }
+
+    return [];
+    }, [history]);
+
     const ctxValue = {
         history,
         activeTab,
@@ -133,6 +150,7 @@ export default function SidebarContextProvider({ children }) {
         sidebarOpen,
         handleSidebarState,
 
+        currentItems,
         goToItem: handleCurrentItem,
         goToTab,
         goBack: handleGoBack,

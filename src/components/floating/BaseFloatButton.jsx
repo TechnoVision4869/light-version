@@ -1,8 +1,11 @@
 import { LAYERS } from '../../data/layers';
 
 export default function BaseFloatButton({ name, layerType = null, style = {}, isOpaque, onSelect }) {
-    const isFloor = layerType === LAYERS.FLOOR;
+    const isFloor = layerType === LAYERS.BUILDING;
 
+    // console.log(name);
+    // console.log(isOpaque);
+    
     return (
         <button className={`bg-[#418AFF] ${isOpaque ? "" : "opacity-75"} hover:bg-[#357AEE] text-white px-3 py-1 rounded-lg flex items-center gap-2 z-20`}
             style={{
@@ -10,11 +13,7 @@ export default function BaseFloatButton({ name, layerType = null, style = {}, is
                 transform: 'translate(-50%, -50%)',
                 ...style, // apply computed left/top
             }}
-            onClick={() => {
-                console.log("item choosen: ", name);
-                onSelect();
-            }
-            }
+            onClick={onSelect}
         >
 
             <span className='whitespace-nowrap text-sm'>{name}</span>

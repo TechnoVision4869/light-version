@@ -1,14 +1,13 @@
 import { useContext } from "react";
 import { SidebarContext } from "../../store/SidebarContextProvider";
-import { LAYERS } from "../../data/layers";
-export default function BuildingButton({ building, isDisabled, goToBuilding }) {
+export default function BuildingButton({ building, isDisabled, goToItem }) {
     const { highlightedButton, setHighlightedButton } = useContext(SidebarContext);
 
     const isSelected = highlightedButton === building;
 
     const handleClick = () => {
         if (isSelected) {
-            goToBuilding(building, LAYERS.BUILDING);
+            goToItem();
             setHighlightedButton(null);
         }
         else setHighlightedButton(building);

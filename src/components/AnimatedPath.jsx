@@ -34,7 +34,7 @@ export default function AnimatedPath({ path }) {
       viewBox="0 0 1920 1080"
       preserveAspectRatio="xMidYMid slice"
       fill="none"
-      className="w-full h-full absolute inset-0"
+      className="w-full h-full absolute inset-0 z-20"
     >
       <g transform={`translate(${x}, ${y})`}>
         <path

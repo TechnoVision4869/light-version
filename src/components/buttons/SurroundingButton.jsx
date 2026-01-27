@@ -1,12 +1,8 @@
-import { LAYERS } from "../../data/layers";
-
-export default function SurroundingButton({ surrounding, isDisabled, isSelected, goToSurrounding }) {
+export default function SurroundingButton({ surrounding, isDisabled, isSelected, goToItem }) {
     return (
         <button
             key={surrounding.id}
-            onClick={() => {
-                goToSurrounding(surrounding, LAYERS.SURROUNDING_DETAIL);
-            }}
+            onClick={goToItem}
             disabled={isDisabled}
             className={`w-full max-w-full mx-auto p-4 rounded-2xl transition
             ${isDisabled

@@ -4,11 +4,12 @@ import BaseFloatButton from "./BaseFloatButton";
 import AnimFloatButton from "./AnimFloatButton";
 import { TABS, LAYERS } from '../../data/layers';
 
-export default function BaseFloating({ items, mediaRef }) {
+export default function BaseFloating({ mediaRef }) {
     const container = mediaRef.current;
 
-    const { activeTab, activeLayer, currentItem, goToItem, highlightedButton, setHighlightedButton } = useContext(SidebarContext);
-
+    const { activeTab, activeLayer, currentItem, currentItems, goToItem, highlightedButton, setHighlightedButton } = useContext(SidebarContext);
+    // console.log(currentItems);
+    
     const [buttonPositions, setButtonPositions] = useState([]);
 
     const updatePositions = useCallback(() => {
@@ -17,21 +18,23 @@ export default function BaseFloating({ items, mediaRef }) {
         const videoW = h * (16 / 9);
         const videoLeft = (w - videoW) / 2;
 
-        const newPositions = items.map(item => ({
+        const newPositions = currentItems.map(item => ({
             left: videoLeft + videoW * item.x,
             top: h * item.y,
         }));
+        // console.log(newPositions);
+        
         setButtonPositions(newPositions);
-    }, [items]);
+    }, [currentItems]);
 
     // Create a map for O(1) lookup: id → position
     const itemIdToPosition = useMemo(() => {
         const map = new Map();
-        items.forEach((item, index) => {
+        currentItems.forEach((item, index) => {
             map.set(item.id, buttonPositions[index]);
         });
         return map;
-    }, [items, buttonPositions]);
+    }, [currentItems, buttonPositions]);
 
     // Observe resize
     useEffect(() => {
@@ -46,11 +49,11 @@ export default function BaseFloating({ items, mediaRef }) {
     }, []); // Empty dependency array ensures this runs once on mount
 
     // Don't render until positions are ready
-    if (buttonPositions.length !== items.length) return null;
+    if (buttonPositions.length !== currentItems.length) return null;
 
     if (activeTab === TABS.SURROUNDINGS) {
         return (
-            items.map((item, i) => {
+            currentItems.map((item, i) => {
                 const isSelected = currentItem?.id === item.id;
                 return (
                     <AnimFloatButton
@@ -72,13 +75,15 @@ export default function BaseFloating({ items, mediaRef }) {
     }
 
     return (
-        items.map((item) => {
+        currentItems.map((item) => {
             const pos = itemIdToPosition.get(item.id);
+            // console.log(pos);
+            
             if (!pos) return null;
 
-            const isOpaque = (highlightedButton === null || highlightedButton?.id === item.id);
-            const isSelected = highlightedButton?.id === item.id;
-
+            const isOpaque = (highlightedButton === null || highlightedButton === item);
+            const isSelected = highlightedButton === item;            
+            
             return (
                 <BaseFloatButton
                     key={item.id}
@@ -92,27 +97,7 @@ export default function BaseFloating({ items, mediaRef }) {
                     isOpaque={isOpaque}
                     onSelect={() => {
                         if (isSelected) {
-                            switch (activeLayer) {
-                                case null:
-                                    if (activeTab === TABS.ZONES) goToItem(item, LAYERS.ZONE_DETAIL);
-                                    else if (activeTab === TABS.AMENITIES) goToItem(item, LAYERS.AMENITY_DETAIL);
-                                    break;
-                                case LAYERS.ZONE_DETAIL:
-                                    goToItem(item, LAYERS.BUILDING);
-                                    break;
-
-                                case LAYERS.BUILDING:
-                                    if (currentItem.type == "villa") goToItem(item, LAYERS.APARTMENT);
-                                    else goToItem(item, LAYERS.FLOOR);
-                                    break;
-
-                                case LAYERS.FLOOR:
-                                    goToItem(item, LAYERS.APARTMENT);
-                                    break;
-
-                                default:
-                                    break;
-                            }
+                            goToItem(item);
                             setHighlightedButton(null);
                         }
                         else setHighlightedButton(item);

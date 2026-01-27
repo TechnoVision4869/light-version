@@ -1,20 +1,13 @@
 import { useContext, useState, useEffect } from "react";
 import { SidebarContext } from "../store/SidebarContextProvider";
-import { TABS, LAYERS, LAYER_CONFIG, TAB_CONFIG } from "../data/layers";
+import { TABS, LAYERS } from "../data/layers";
 
 import UnitPanel from "../components/UnitPanel";
 import FilterPanel from "../components/FilterPanel";
-
-import ZoneButton from "./buttons/ZoneButton";
-import BuildingButton from "./buttons/BuildingButton";
-import FloorButton from "./buttons/FloorButton";
-import ApartmentButton from "./buttons/ApartmentButton";
-
-import AmenityButton from "./buttons/AmenityButton";
-import SurroundingButton from "./buttons/SurroundingButton";
+import SidebarButtons from "./SideBarButtons";
 
 export default function Sidebar() {
-    const { activeTab, activeLayer, currentItem, sidebarOpen, goToItem } = useContext(SidebarContext);
+    const { activeTab, activeLayer, currentItem, sidebarOpen } = useContext(SidebarContext);
     const [isFilter, setIsFilter] = useState(false); // 'navigate' or 'filter'
 
     useEffect(() => {
@@ -77,93 +70,8 @@ export default function Sidebar() {
                             </div>
                             <div className="h-0.5 bg-white/50 mx-3 mb-4"></div>
 
-                            <div className="max-h-[calc(100vh-205px)] scrollbar-custom overflow-y-auto overflow-x-hidden space-y-3 px-2 py-2">
-                                {/* Render different content based on active tab */}
-                                {activeTab === TABS.ZONES &&
-                                    activeLayer === null &&
-                                    TAB_CONFIG[TABS.ZONES]
-                                        .getItems()
-                                        .map((zone) => {
-                                            return (
-                                                <ZoneButton
-                                                    zone={zone}
-                                                    key={zone.id}
-                                                    goToZone={goToItem}
-                                                />
-                                            )
-                                        })}
-                                {activeTab === TABS.SURROUNDINGS &&
-                                    activeLayer === null &&
-                                    TAB_CONFIG[TABS.SURROUNDINGS]
-                                        .getItems()
-                                        .map((item) => (
-                                            <SurroundingButton
-                                                surrounding={item}
-                                                key={item.id}
-                                                // isDisabled={isDisabled}
-                                                isSelected={currentItem === item}
-                                                goToSurrounding={goToItem}
-                                            />
-                                        ))}
-
-                                {activeTab === TABS.AMENITIES &&
-                                    activeLayer === null &&
-                                    TAB_CONFIG[TABS.AMENITIES]
-                                        .getItems()
-                                        .map((item) => (
-                                            <AmenityButton
-                                                amenity={item}
-                                                key={item.id}
-                                                // isDisabled={isDisabled}
-                                                isSelected={currentItem === item}
-                                                goToAmenity={goToItem}
-                                            />
-                                        ))}
-                                {activeTab === TABS.ZONES &&
-                                    activeLayer === LAYERS.ZONE_DETAIL &&
-                                    LAYER_CONFIG[LAYERS.ZONE_DETAIL]
-                                        .getItems(currentItem)
-                                        .map((building) => (
-                                            <BuildingButton
-                                                building={building}
-                                                key={building.id}
-                                                goToBuilding={goToItem}
-                                            />
-                                        ))}
-                                {/* {activeTab === TABS.ZONES &&
-                                    activeLayer === LAYERS.BUILDING && currentItem.type !== "villa" &&
-                                    LAYER_CONFIG[LAYERS.BUILDING]
-                                        .getItems(currentItem)
-                                        .map((floor) => (
-                                            <FloorButton
-                                                floor={floor}
-                                                key={floor.id}
-                                                goToFloor={goToItem}
-                                            />
-                                        ))} */}
-                                {activeTab === TABS.ZONES &&
-                                    activeLayer === LAYERS.BUILDING && currentItem.type === "villa" &&
-                                    LAYER_CONFIG[LAYERS.BUILDING]
-                                        .getItems(currentItem)
-                                        .map((unit) => (
-                                            <ApartmentButton
-                                                apartment={unit}
-                                                key={unit.id}
-                                                goToApartment={goToItem}
-                                            />
-                                        ))}
-                                {activeTab === TABS.ZONES &&
-                                    activeLayer === LAYERS.FLOOR &&
-                                    LAYER_CONFIG[LAYERS.FLOOR]
-                                        .getItems(currentItem)
-                                        .map((apartment) => (
-                                            <ApartmentButton
-                                                apartment={apartment}
-                                                key={apartment.id}
-                                                goToApartment={goToItem}
-                                            />
-                                        ))}
-                            </div>
+                            {/* Render different content based on active tab and active layer */}
+                           <SidebarButtons />
                         </>
                     )}
                 </div>

@@ -1,8 +1,7 @@
-import { LAYERS } from "../../data/layers";
-export default function AmenityButton({ amenity, isDisabled, isSelected, goToAmenity }) {
+export default function AmenityButton({ amenity, isDisabled, isSelected, goToItem }) {
     return (
         <button
-            onClick={() => { goToAmenity(amenity, LAYERS.AMENITY_DETAIL); }}
+            onClick={goToItem}
             disabled={isDisabled}
             className={`w-full max-w-full mx-auto p-4 rounded-2xl transition
                         ${isDisabled
