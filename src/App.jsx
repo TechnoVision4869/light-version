@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback, useContext } from "react";
 import { StatusBar } from "@capacitor/status-bar";
 import { Capacitor } from '@capacitor/core';
 import { App as CapApp } from "@capacitor/app"
-import { TABS, LAYERS, LAYER_CONFIG, DATA } from "./data/layers";
+import { TABS, LAYERS, LAYER_CONFIG } from "./data/layers";
 // Hooks
 import { useVideoViewer } from "./components/hooks/useVideoViewer";
 
@@ -136,7 +136,7 @@ export default function App() {
   }
 
   useEffect(() => {
-    if (activeLayer !== LAYERS.BUILDING) return;
+    // if (activeLayer !== LAYERS.BUILDING) return;
     if (isDisabled) return;
     // console.log(translateX);
 
@@ -270,7 +270,7 @@ export default function App() {
               {viewerProps.currentViewIndex === 0 ? (
                 <button
                   onClick={() => {
-                    if ((activeTab === TABS.ZONES ||activeTab === TABS.AMENITIES ||activeTab === TABS.SURROUNDINGS) &&activeLayer === null)
+                    if ((activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS) && activeLayer === null)
                       handleSidebarState(false);
 
                     viewerProps.StartReverse(false, () => { });
@@ -421,50 +421,11 @@ export default function App() {
                       <AnimatedPath path={currentItem.svgPath} />
                     )}
                   </div>
-{/* 
-                  {activeTab === TABS.SURROUNDINGS &&
-                    viewerProps.floatingOpacity && (
-                      <BaseFloat
-                        mediaRef={mediaContainerRef}
-                      />
-                    )}
 
-                  {activeTab === TABS.AMENITIES &&
-                    activeLayer === null &&
-                    viewerProps.floatingOpacity && (
-                      <BaseFloat
-                        mediaRef={mediaContainerRef}
-                      />
-                    )}
-
-                  {activeTab === TABS.ZONES &&
-                    activeLayer === null &&
-                    viewerProps.floatingOpacity && (
-                      <BaseFloat
-                        mediaRef={mediaContainerRef}
-                      />
-                    )}
-
-                  {activeLayer === LAYERS.ZONE_DETAIL &&
-                    viewerProps.floatingOpacity && (
-                      <BaseFloat
-                        mediaRef={mediaContainerRef}
-                      />
-                    )}
-
-                  {activeLayer === LAYERS.BUILDING &&
-                    viewerProps.floatingOpacity &&
+                  {viewerProps.floatingOpacity &&
                     viewerProps.currentViewIndex === 0 && (
-                      <BaseFloat
-                        mediaRef={mediaContainerRef}
-                      />
-                    )} */}
-                    {
-                    viewerProps.floatingOpacity &&
-                    viewerProps.currentViewIndex === 0 && (
-                      <BaseFloat
-                        mediaRef={mediaContainerRef}
-                      />)}
+                      <BaseFloat mediaRef={mediaContainerRef} />
+                    )}
 
                   {activeLayer === LAYERS.FLOOR &&
                     viewerProps.floatingOpacity && (
@@ -549,7 +510,7 @@ export default function App() {
             </div>
 
             {/* Views visuals */}
-            {activeLayer === LAYERS.BUILDING && (
+            
               <div className="flex-1 flex items-center justify-center text-white space-x-3 px-4 py-2 text-sm">
                 <div className=" flex space-x-2">
                   <div className=""> Views </div>
@@ -634,7 +595,7 @@ export default function App() {
                   </button>
                 </div>
               </div>
-            )}
+            
             {/* {debugBorder && <div className={`w-3 h-2 bg-white border-4 border-${color}-600`}></div>} */}
             <div className="w-18 h-auto ml-auto">
               <button onClick={() => { console.log(history); }}>

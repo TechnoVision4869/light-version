@@ -31,9 +31,9 @@ export function useVideoViewer() {
       );
       // Use the locally derived activeTab and currentItem
 
-      const buildingConfig = LAYER_CONFIG[LAYERS.BUILDING];
-      if (!buildingConfig) {
-        console.error("LAYER_CONFIG for BUILDING not found.");
+      const currentConfig = LAYER_CONFIG[activeLayer];
+      if (!currentConfig) {
+        console.error("LAYER_CONFIG for active layer not found.");
         return;
       }
       // console.log("current item", currentItem);
@@ -43,7 +43,7 @@ export function useVideoViewer() {
       if (newIndex >= numViews) newIndex = 0;
       if (newIndex < 0) newIndex = numViews - 1;
 
-      const newViewVideos = buildingConfig.getVideosPathForView(
+      const newViewVideos = currentConfig.getVideosPathForView(
         currentItem,
         newIndex,
       );
@@ -59,7 +59,7 @@ export function useVideoViewer() {
           newViewVideos.idleVideo,
         );
       } else {
-        const buildingViewVideos = buildingConfig.getVideosPathForView(
+        const buildingViewVideos = currentConfig.getVideosPathForView(
           currentItem,
           currentViewIndex,
         );

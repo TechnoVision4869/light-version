@@ -22,7 +22,7 @@ export default function BaseFloating({ mediaRef }) {
             left: videoLeft + videoW * item.x,
             top: h * item.y,
         }));
-        console.log(newPositions);
+        // console.log(newPositions);
         
         setButtonPositions(newPositions);
     }, [currentItems]);

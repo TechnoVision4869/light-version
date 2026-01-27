@@ -1,5 +1,5 @@
 // import { PROJECT_MIX as PROJECT } from "./project-mix";
-import {PROJECT_HORIZONTAL as PROJECT} from "./project-horizontal";
+import { PROJECT_HORIZONTAL as PROJECT } from "./project-horizontal";
 
 const projectId = PROJECT.project.id;
 export const DATA = PROJECT;
@@ -116,6 +116,8 @@ export const LAYER_CONFIG = {
 
   [LAYERS.BUILDING]: {
     videosPath: (building) => {
+      if (building.type !== "tower") return null;
+
       const buildingId = building.id;
       const zoneId = building.zoneId;
       return {
@@ -174,7 +176,7 @@ export const LAYER_CONFIG = {
       const floorId = floor.id;
       const buildingId = floor.buildingId;
       const zoneId = floor.zoneId;
-      
+
       return PROJECT.units.filter(
         (a) =>
           a.floorId === floorId &&
@@ -183,16 +185,39 @@ export const LAYER_CONFIG = {
       ).map(u => ({ ...u, __type: 'apartment', __nextLayer: LAYERS.APARTMENT }));
     },
   },
-  
+
   [LAYERS.APARTMENT]: {
     videosPath: (apartment) => {
-      return {
-        forwardVideo: "/cutsection.mp4",
-        reverseVideo: "/cutsection.mp4",
-        idleVideo: "/cutsection.mp4",
-      };
+      if (apartment.buildType === "tower")
+        return {
+          forwardVideo: "/cutsection.mp4",
+          reverseVideo: "/cutsection.mp4",
+          idleVideo: "/cutsection.mp4",
+        };
+      else {
+        const buildingId = apartment.id;
+        const zoneId = apartment.zoneId;
+        return {
+          forwardVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_gen_trans.mp4`,
+          reverseVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_gen_rev.mp4`,
+          idleVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view1/${zoneId}_${buildingId}_view1_idle.mp4`,
+        };
+      }
+
     },
     getData: (apartmentId) => PROJECT.units.find((a) => a.id === apartmentId),
+
+    // Function to get video paths for a specific view of this building
+    getVideosPathForView: (apartment, viewIndex) => {
+      const buildingId = apartment.id;
+      const zoneId = apartment.zoneId;
+      const viewNum = viewIndex + 1; // Convert 0-based index to 1-based view number
+      return {
+        forwardVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_trans.mp4`,
+        reverseVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_rev.mp4`,
+        idleVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_idle.mp4`,
+      };
+    },
 
     getMinMaxRange: (units = PROJECT.units, filterName) => {
       // const units = DATA.units;
