@@ -47,7 +47,6 @@ export const PROJECT_MIX = {
       zoneId: "zone1",
       type: "tower",
       displayName: "Tower 1",
-      totalFloors: 2,
       description: "Tower 1 description...",
       x: 0.45, y: 0.53,
       features: [
@@ -55,16 +54,14 @@ export const PROJECT_MIX = {
           id: "amenity1",
           displayName: "Garage",
           subtitle: "Tower Amenity",
-          description:
-            "2-story garage...",
+          description: "2-story garage...",
           x: 0.17, y: 0.69,
         },
         {
           id: "amenity2",
           displayName: "Roof",
           subtitle: "Tower Amenity",
-          description:
-            "Spacious roof top suitable for family gatherings...",
+          description: "Spacious roof top suitable for family gatherings...",
           x: 0.17, y: 0.69,
         },
       ]
@@ -75,7 +72,6 @@ export const PROJECT_MIX = {
       zoneId: "zone1",
       type: "tower",
       displayName: "Tower 2",
-      totalFloors: 2,
       description: "Tower 2 description...",
       x: 0.65, y: 0.35,
       features: [
@@ -91,8 +87,7 @@ export const PROJECT_MIX = {
           id: "amenity2",
           displayName: "Roof",
           subtitle: "Amenity",
-          description:
-            "Spacious roof top suitable for family gatherings...",
+          description: "Spacious roof top suitable for family gatherings...",
           x: 0.17, y: 0.69,
         },
       ]
@@ -103,7 +98,6 @@ export const PROJECT_MIX = {
       zoneId: "zone2",
       type: "tower",
       displayName: "Tower 5",
-      totalFloors: 2,
       description: "Tower 5 description...",
       x: 0.34, y: 0.13,
       features: [
@@ -119,8 +113,7 @@ export const PROJECT_MIX = {
           id: "amenity2",
           displayName: "Cafe",
           subtitle: "Amenity",
-          description:
-            "Cafe to grab yout morning coffee...",
+          description: "Cafe to grab yout morning coffee...",
           x: 0.17, y: 0.69,
         },
       ]
@@ -491,8 +484,7 @@ export const PROJECT_MIX = {
       iconSrc: AirportIcon,
       thumbnail: "horizontal/thumbnails/surroundings/cairo_airboart.jpg",
       distance: "38 min | 55 km",
-      description:
-        "Cairo International Airport is the principal international airport of Cairo and the largest and busiest airport in Egypt. It serves as the primary hub for Egyptair and Nile Air as well as several other airlines.",
+      description: "Cairo International Airport is the principal international airport of Cairo and the largest and busiest airport in Egypt. It serves as the primary hub for Egyptair and Nile Air as well as several other airlines.",
       x: 0.49, y: 0.28,
       svgPath: CairoAirportSvg,
     },
