@@ -25,6 +25,7 @@ export const PROJECT_HORIZONTAL = {
       highlight: "horizontal/highlight/zones/zone1.png",
       description: "A serene community of luxury villas and modern townhouses nestled in nature.",
       x: 0.12, y: 0.25,
+      nextLayer: "types",
     },
   ],
 
@@ -33,21 +34,21 @@ export const PROJECT_HORIZONTAL = {
       id: "villa1",
       projectId: "horizontal",
       zoneId: "zone1",
-      type: "villa",
       displayName: "4BR Villa",
       highlight: "horizontal/highlight/types/type1.png",
       description: "Luxury 4-bedroom villa with rooftop lounge.",
       x: 0.3, y: 0.45,
+      nextLayer: "units",
     },
     {
       id: "town1",
       projectId: "horizontal",
       zoneId: "zone1",
-      type: "townhouse",
       displayName: "Townhouse",
       highlight: "horizontal/highlight/types/type2.png",
       description: "Modern 3-story townhouse with private balcony.",
       x: 0.67, y: 0.6,
+      nextLayer: "buildings",
     },
   ],
 
@@ -60,6 +61,7 @@ export const PROJECT_HORIZONTAL = {
       displayName: "TownHouse 1",
       description: "...",
       x: 0.67, y: 0.5,
+      nextLayer: "units",
     },
     {
       id: "townhouse2",
@@ -69,6 +71,7 @@ export const PROJECT_HORIZONTAL = {
       displayName: "TownHouse 2",
       description: "...",
       x: 0.67, y: 0.6,
+      nextLayer: "units",
     },
     {
       id: "townhouse3",
@@ -78,6 +81,7 @@ export const PROJECT_HORIZONTAL = {
       displayName: "TownHouse 3",
       description: "...",
       x: 0.67, y: 0.7,
+      nextLayer: "units",
     },
   ],
 
