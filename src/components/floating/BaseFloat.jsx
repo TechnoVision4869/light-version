@@ -38,7 +38,7 @@ export default function BaseFloating({ mediaRef }) {
 
     // Observe resize
     useEffect(() => {
-        console.log("mount");
+        // console.log("mount");
         if (!container) return;
 
         const resizeObserver = new ResizeObserver(updatePositions);
@@ -47,7 +47,7 @@ export default function BaseFloating({ mediaRef }) {
         updatePositions();
 
         return () => {
-            console.log("un mount");
+            // console.log("un mount");
             
             resizeObserver.disconnect();}
     }, []); // Empty dependency array ensures this runs once on mount

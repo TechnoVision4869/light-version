@@ -7,7 +7,9 @@ export default function ZoneButton({ zone, isDisabled, goToItem }) {
     const isSelected = highlightedButton === zone;
 
     const handleClick = () => {
+        
         if (isSelected) {
+            console.log("ZoneButton clicked");
             goToItem();
             setHighlightedButton(null);
         }

@@ -47,7 +47,7 @@ export default function SidebarContextProvider({ children }) {
 
     const goToTab = useCallback((tabKey, isFromHome = true) => {
         const config = TAB_CONFIG[tabKey];
-        // console.log(tabKey);
+        console.log(tabKey);
 
         setHistory(() => [
             ...initHistory,
@@ -67,7 +67,7 @@ export default function SidebarContextProvider({ children }) {
         // console.log("item: ", item);
         // console.log("layer: ", layerKey);
 
-        const targetLayer = layerKey || item.__nextLayer;
+        const targetLayer = layerKey;
 
         if (!targetLayer) {
             console.warn('No layer specified for navigation', item);
@@ -94,7 +94,7 @@ export default function SidebarContextProvider({ children }) {
         console.log(targetLayer);
         
         const videosPath = config.videosPath?.(item);
-        console.log(videosPath);
+        // console.log(videosPath);
 
         setHistory((prev) => [
             ...prev,
@@ -133,7 +133,7 @@ export default function SidebarContextProvider({ children }) {
     }
 
     // Nested layers
-    else if (activeLayer !== null && activeLayer !== LAYERS.APARTMENT && currentItem) {
+    else if (activeLayer !== null && activeLayer !== LAYERS.UNIT && currentItem) {
         return LAYER_CONFIG[activeLayer]?.getItems(currentItem) || [];
     }
 

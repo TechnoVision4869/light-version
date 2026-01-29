@@ -27,7 +27,7 @@ export default function Sidebar() {
                         : "w-0 opacity-0 pointer-events-none"
                 }`}
         >
-            {activeTab === TABS.ZONES && activeLayer === LAYERS.APARTMENT ? (
+            {activeTab === TABS.ZONES && activeLayer === LAYERS.UNIT ? (
                 <UnitPanel />
             ) : (
                 <div className="h-full pr-1">

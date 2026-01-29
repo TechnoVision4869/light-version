@@ -16,9 +16,10 @@ export const TABS = {
 export const LAYERS = {
   // ZONES tab layers
   ZONE_DETAIL: "zone_detail",
+  TYPE: "type",
   BUILDING: "building", // Could be a tower or villa
   FLOOR: "floor",
-  APARTMENT: "apartment",
+  UNIT: "unit",
   INTERIOR: "interior",
 
   // SURROUNDINGS tab layers
@@ -60,7 +61,7 @@ export const TAB_CONFIG = {
       idleVideo: `/${projectId}/videos/zones/zones_gen_idle.mp4`,
     }),
 
-    getItems: () => PROJECT.zones.map(z => ({ ...z, __type: 'zone', __nextLayer: LAYERS.ZONE_DETAIL })),
+    getItems: () => PROJECT.zones,
     // Here, getItems returns array of all the zones,
     // used to map the zones to buttons
   },
@@ -77,7 +78,7 @@ export const TAB_CONFIG = {
       idleVideo: `/${projectId}/videos/surroundings/surr_idle.mp4`,
     }),
 
-    getItems: () => PROJECT.surroundings.map(s => ({ ...s, __type: 'surrounding', __nextLayer: LAYERS.SURROUNDING_DETAIL })),
+    getItems: () => PROJECT.surroundings,
   },
   [TABS.AMENITIES]: {
     title: "Amenities",
@@ -90,14 +91,13 @@ export const TAB_CONFIG = {
       idleVideo: `/${projectId}/videos/amenities/amenities_gen_idle.mp4`,
     }),
 
-    getItems: () => PROJECT.amenities.map(a => ({ ...a, __type: 'amenity', __nextLayer: LAYERS.AMENITY_DETAIL })),
+    getItems: () => PROJECT.amenities,
   },
 };
 
 // Layer configurations (detail views)
 export const LAYER_CONFIG = {
   [LAYERS.ZONE_DETAIL]: {
-    path: (zoneId) => `/${zoneId}_zoom`,
     videosPath: (zone) => {
       const zoneId = zone.id;
       return {
@@ -109,9 +109,49 @@ export const LAYER_CONFIG = {
     getData: (zoneId) => PROJECT.zones.find((z) => z.id === zoneId),
     // Here, getData returns the zone object with the given id
     // used to display the zone details
-    getItems: (zone) => PROJECT.buildings.filter((b) => b.zoneId === zone.id).map(b => ({ ...b, __type: 'building', __nextLayer: LAYERS.BUILDING })),
-    // Here, getItems returns array of buildings in this zone
-    // used to map the buildings to buttons
+    getItems: (zone) => {      
+      if(zone.nextLayer === LAYERS.TYPE) return PROJECT.types.filter((t) => t.zoneId === zone.id);
+      else return PROJECT.buildings.filter((b) => b.zoneId === zone.id);
+    }
+  },
+
+  [LAYERS.TYPE]: {
+    videosPath: (type) => {
+      const typeId = type.id;
+      const zoneId = type.zoneId;
+      return {
+        forwardVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/${zoneId}_${typeId}_gen_trans.mp4`,
+        reverseVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/${zoneId}_${typeId}_gen_rev.mp4`,
+        idleVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/views/view1/${zoneId}_${typeId}_view1_idle.mp4`,
+      };
+    },
+    getData: (typeId) => PROJECT.types.find((t) => t.id === typeId),
+    // Here, getData returns the type object with the given id
+    // used to display the type details
+
+    getItems: (type) => {
+      const typeId = type.id;
+      const zoneId = type.zoneId;
+      const buildings = PROJECT.buildings.filter(
+        (b) => b.typeId === typeId && b.zoneId === zoneId
+      );
+      // type is Townhouse, it still has buildings to view
+      if (buildings.length > 0) return buildings;
+      // Villa: no buildings → return units directly
+      else return PROJECT.units.filter(u => u.typeId === typeId && u.zoneId === zoneId);
+    },
+
+    // Function to get video paths for a specific view of this type
+    getVideosPathForView: (type, viewIndex) => {
+      const typeId = type.id;
+      const zoneId = type.zoneId;
+      const viewNum = viewIndex + 1; // Convert 0-based index to 1-based view number
+      return {
+        forwardVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/views/view${viewNum}/${zoneId}_${typeId}_view${viewNum}_trans.mp4`,
+        reverseVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/views/view${viewNum}/${zoneId}_${typeId}_view${viewNum}_rev.mp4`,
+        idleVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/views/view${viewNum}/${zoneId}_${typeId}_view${viewNum}_idle.mp4`,
+      };
+    },
   },
 
   [LAYERS.BUILDING]: {
@@ -135,14 +175,16 @@ export const LAYER_CONFIG = {
     getItems: (building) => {
       const buildingId = building.id;
       const zoneId = building.zoneId;
-      const floors = PROJECT.floors.filter(
+      const floors = PROJECT.floors?.filter(
         (f) => f.buildingId === buildingId && f.zoneId === zoneId
       );
       // Tower: has floors → return floors
-      // TownHouse: is a type saved arbitrary in floors → return floors
-      if (floors.length > 0) return floors.map(f => ({ ...f, __type: 'floor', __nextLayer: LAYERS.FLOOR }));
+      if(floors) {
+        if (floors.length > 0) return floors;
+      }
       // Villa: no floors → return units directly
-      else return PROJECT.units.filter(u => u.buildingId === buildingId).map(u => ({ ...u, __type: 'apartment', __nextLayer: LAYERS.APARTMENT }));
+      else return PROJECT.units.filter(u => u.buildingId === buildingId);
+      // if returned more than 1 unit, list them, else if 1 unit, go to unit panel with unit ID
     },
 
     // Function to get video paths for a specific view of this building
@@ -182,42 +224,19 @@ export const LAYER_CONFIG = {
           a.floorId === floorId &&
           a.buildingId === buildingId &&
           a.zoneId === zoneId
-      ).map(u => ({ ...u, __type: 'apartment', __nextLayer: LAYERS.APARTMENT }));
+      )
     },
   },
 
-  [LAYERS.APARTMENT]: {
-    videosPath: (apartment) => {
-      if (apartment.buildType === "tower")
-        return {
-          forwardVideo: "/cutsection.mp4",
-          reverseVideo: "/cutsection.mp4",
-          idleVideo: "/cutsection.mp4",
-        };
-      else {
-        const buildingId = apartment.id;
-        const zoneId = apartment.zoneId;
-        return {
-          forwardVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_gen_trans.mp4`,
-          reverseVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_gen_rev.mp4`,
-          idleVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view1/${zoneId}_${buildingId}_view1_idle.mp4`,
-        };
-      }
-
-    },
-    getData: (apartmentId) => PROJECT.units.find((a) => a.id === apartmentId),
-
-    // Function to get video paths for a specific view of this building
-    getVideosPathForView: (apartment, viewIndex) => {
-      const buildingId = apartment.id;
-      const zoneId = apartment.zoneId;
-      const viewNum = viewIndex + 1; // Convert 0-based index to 1-based view number
+  [LAYERS.UNIT]: {
+    videosPath: (unit) => {
       return {
-        forwardVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_trans.mp4`,
-        reverseVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_rev.mp4`,
-        idleVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_idle.mp4`,
+        forwardVideo: "/cutsection.mp4",
+        reverseVideo: "/cutsection.mp4",
+        idleVideo: "/cutsection.mp4",
       };
     },
+    getData: (unitId) => PROJECT.units.find((u) => u.id === unitId),
 
     getMinMaxRange: (units = PROJECT.units, filterName) => {
       // const units = DATA.units;

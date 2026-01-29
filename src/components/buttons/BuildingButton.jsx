@@ -7,14 +7,13 @@ export default function BuildingButton({ building, isDisabled, goToItem }) {
 
     const handleClick = () => {
         if (isSelected) {
+            console.log("building button clicked");
             goToItem();
             setHighlightedButton(null);
         }
         else setHighlightedButton(building);
     };
 
-    console.log("building");
-    
     return (
         <button
             key={building.id}
