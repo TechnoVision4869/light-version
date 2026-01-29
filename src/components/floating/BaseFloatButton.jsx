@@ -3,11 +3,11 @@ import { LAYERS } from '../../data/layers';
 export default function BaseFloatButton({ name, layerType = null, style = {}, isOpaque, onSelect }) {
     const isFloor = layerType === LAYERS.BUILDING;
 
-    // console.log(name);
-    // console.log(isOpaque);
+    let showName = true;
+    if(layerType === LAYERS.TYPE) showName = false;
     
     return (
-        <button className={`bg-[#418AFF] ${isOpaque ? "" : "opacity-75"} hover:bg-[#357AEE] text-white px-3 py-1 rounded-lg flex items-center gap-2 z-20`}
+        <button className={`bg-[#418AFF] ${isOpaque ? "" : "opacity-75"} hover:bg-[#357AEE] text-white px-3 py-1 ${showName ? "rounded-lg" : "rounded-xl"} flex items-center gap-2 z-20`}
             style={{
                 position: 'absolute',
                 transform: 'translate(-50%, -50%)',
@@ -15,9 +15,9 @@ export default function BaseFloatButton({ name, layerType = null, style = {}, is
             }}
             onClick={onSelect}
         >
-
-            <span className='whitespace-nowrap text-sm'>{name}</span>
-            {isFloor ? <span className='triangle-right'></span> : <span className='triangle'></span>}
+            {!showName && <span className='whitespace-nowrap text-sm'>{name.slice(-1)}</span>}
+            {showName && <span className='whitespace-nowrap text-sm'>{name}</span>}
+            {isFloor ? <span className='triangle-right'></span> : showName ? <span className='triangle'></span> : <span className='triangle-small'></span>}
         </button>
     )
 }

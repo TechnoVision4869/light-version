@@ -1,11 +1,24 @@
-export default function TypeButton({ type, isDisabled = false, isSelected, goToItem }) {
+import { useContext } from "react";
+import { SidebarContext } from "../../store/SidebarContextProvider";
+
+export default function TypeButton({ type, isDisabled, goToItem }) {
+    const { highlightedButton, setHighlightedButton } = useContext(SidebarContext);
+    const isSelected = highlightedButton === type;
+
+    const handleClick = () => {
+        
+        if (isSelected) {
+            console.log("type button clicked");
+            goToItem();
+            setHighlightedButton(null);
+        }
+        else setHighlightedButton(type);
+    };
+
     return (
         <button
             key={type.id}
-            onClick={() => {
-            console.log("TypeButton clicked");
-                goToItem();
-            }}
+            onClick={handleClick}
             disabled={isDisabled}
             className={`w-full max-w-full mx-auto p-4 rounded-2xl transition
             ${isDisabled

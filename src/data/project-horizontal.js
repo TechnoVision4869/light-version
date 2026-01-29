@@ -39,7 +39,7 @@ export const PROJECT_HORIZONTAL = {
       thumbnail: "horizontal/thumbnails/zones/zone1.png",
       highlight: "horizontal/highlight/zones/zone1.png",
       description: "A serene community of luxury villas and modern townhouses nestled in nature.",
-      x: 0.12, y: 0.25,
+      x: 0.17, y: 0.23,
       nextLayer: LAYERS.TYPE,
     },
   ],
@@ -77,7 +77,7 @@ export const PROJECT_HORIZONTAL = {
       typeId: "town1",
       displayName: "TownHouse 1",
       description: "...",
-      x: 0.67, y: 0.5,
+      x: 0.42, y: 0.78,
       nextLayer: LAYERS.UNIT,
     },
     {
@@ -87,7 +87,7 @@ export const PROJECT_HORIZONTAL = {
       typeId: "town1",
       displayName: "TownHouse 2",
       description: "...",
-      x: 0.67, y: 0.6,
+      x: 0.46, y: 0.78,
       nextLayer: LAYERS.UNIT,
     },
     {
@@ -97,7 +97,7 @@ export const PROJECT_HORIZONTAL = {
       typeId: "town1",
       displayName: "TownHouse 3",
       description: "...",
-      x: 0.67, y: 0.7,
+      x: 0.5, y: 0.76,
       nextLayer: LAYERS.UNIT,
     },
   ],
@@ -318,7 +318,7 @@ export const PROJECT_HORIZONTAL = {
       area: 320,
       bedrooms: 4, bathrooms: 3,
       balconyView: "/panorama/villa/balcony.jpg",
-      x: 0.28, y: 0.51,
+      x: 0.39, y: 0.135,
     },
     {
       id: "villa2",
@@ -331,7 +331,7 @@ export const PROJECT_HORIZONTAL = {
       area: 320,
       bedrooms: 4, bathrooms: 3,
       balconyView: "/panorama/villa/balcony.jpg",
-      x: 0.23, y: 0.46,
+      x: 0.43, y: 0.135,
     },
     {
       id: "villa3",
@@ -344,7 +344,7 @@ export const PROJECT_HORIZONTAL = {
       area: 320,
       bedrooms: 4, bathrooms: 3,
       balconyView: "/panorama/villa/balcony.jpg",
-      x: 0.21, y: 0.36,
+      x: 0.47, y: 0.135,
     },
     {
       id: "villa4",
@@ -357,7 +357,7 @@ export const PROJECT_HORIZONTAL = {
       area: 320,
       bedrooms: 4, bathrooms: 3,
       balconyView: "/panorama/villa/balcony.jpg",
-      x: 0.22, y: 0.28,
+      x: 0.51, y: 0.135,
     },
 
     // Townhouse 1
@@ -373,7 +373,7 @@ export const PROJECT_HORIZONTAL = {
       area: 425,
       bedrooms: 4, bathrooms: 2,
       balconyView: "/panorama/townhouse/balcony.jpg",
-      x: 0.6, y: 0.2,
+      x: 0.19, y: 0.3,
     },
     {
       id: "th1-unit2",
@@ -387,7 +387,7 @@ export const PROJECT_HORIZONTAL = {
       area: 425,
       bedrooms: 4, bathrooms: 2,
       balconyView: "/panorama/townhouse/balcony.jpg",
-      x: 0.65, y: 0.2,
+      x: 0.54, y: 0.3,
     },
 
     // Townhouse 2
@@ -403,7 +403,7 @@ export const PROJECT_HORIZONTAL = {
       area: 425,
       bedrooms: 4, bathrooms: 2,
       balconyView: "/panorama/townhouse/balcony.jpg",
-      x: 0.75, y: 0.2,
+      x: 0.19, y: 0.3,
     },
     {
       id: "th2-unit2",
@@ -417,7 +417,7 @@ export const PROJECT_HORIZONTAL = {
       area: 425,
       bedrooms: 4, bathrooms: 2,
       balconyView: "/panorama/townhouse/balcony.jpg",
-      x: 0.65, y: 0.2,
+      x: 0.54, y: 0.3,
     },
 
     // Townhouse 3
@@ -433,7 +433,7 @@ export const PROJECT_HORIZONTAL = {
       area: 425,
       bedrooms: 4, bathrooms: 2,
       balconyView: "/panorama/townhouse/balcony.jpg",
-      x: 0.9, y: 0.2,
+      x: 0.19, y: 0.3,
     },
     {
       id: "th3-unit2",
@@ -447,7 +447,7 @@ export const PROJECT_HORIZONTAL = {
       area: 425,
       bedrooms: 4, bathrooms: 2,
       balconyView: "/panorama/townhouse/balcony.jpg",
-      x: 0.65, y: 0.2,
+      x: 0.54, y: 0.3,
     },
   ],
 

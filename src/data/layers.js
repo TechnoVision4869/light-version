@@ -1,5 +1,5 @@
-import { PROJECT_MIX as PROJECT } from "./project-mix";
-// import { PROJECT_HORIZONTAL as PROJECT } from "./project-horizontal";
+// import { PROJECT_MIX as PROJECT } from "./project-mix";
+import { PROJECT_HORIZONTAL as PROJECT } from "./project-horizontal";
 
 const projectId = PROJECT.project.id;
 export const DATA = PROJECT;
@@ -117,7 +117,12 @@ export const LAYER_CONFIG = {
 
   [LAYERS.TYPE]: {
     videosPath: (type) => {
-      return null;
+      const zoneId = type.zoneId;
+      return {
+        forwardVideo: `/${projectId}/videos/zones/${zoneId}/${zoneId}_gen_idle.mp4`,
+        reverseVideo: `/${projectId}/videos/zones/${zoneId}/${zoneId}_gen_idle.mp4`,
+        idleVideo: `/${projectId}/videos/zones/${zoneId}/${zoneId}_gen_idle.mp4`,
+      }
     },
     getData: (typeId) => PROJECT.types.find((t) => t.id === typeId),
     // Here, getData returns the type object with the given id

@@ -476,7 +476,7 @@ export default function App() {
                     )}
 
                   {/* info re-open button */}
-                  {showI && <button className={`absolute -bottom-1 -right-1 flex items-center justify-center
+                  {showI && <button className={`absolute -bottom-1 -right-1 flex items-center justify-center z-25
                   ${activeTab === TABS.SURROUNDINGS ? "bg-[#94846D]/70 backdrop-blur" : 'bg-black/70 backdrop-blur-sm'}
                   w-8 h-8 hover:w-9 hover:h-9 
                   transition-all duration-500 ease-in-out
