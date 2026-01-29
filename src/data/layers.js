@@ -117,13 +117,7 @@ export const LAYER_CONFIG = {
 
   [LAYERS.TYPE]: {
     videosPath: (type) => {
-      const typeId = type.id;
-      const zoneId = type.zoneId;
-      return {
-        forwardVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/${zoneId}_${typeId}_gen_trans.mp4`,
-        reverseVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/${zoneId}_${typeId}_gen_rev.mp4`,
-        idleVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/views/view1/${zoneId}_${typeId}_view1_idle.mp4`,
-      };
+      return null;
     },
     getData: (typeId) => PROJECT.types.find((t) => t.id === typeId),
     // Here, getData returns the type object with the given id
@@ -140,38 +134,33 @@ export const LAYER_CONFIG = {
       // Villa: no buildings → return units directly
       else return PROJECT.units.filter(u => u.typeId === typeId && u.zoneId === zoneId);
     },
-
-    // Function to get video paths for a specific view of this type
-    getVideosPathForView: (type, viewIndex) => {
-      const typeId = type.id;
-      const zoneId = type.zoneId;
-      const viewNum = viewIndex + 1; // Convert 0-based index to 1-based view number
-      return {
-        forwardVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/views/view${viewNum}/${zoneId}_${typeId}_view${viewNum}_trans.mp4`,
-        reverseVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/views/view${viewNum}/${zoneId}_${typeId}_view${viewNum}_rev.mp4`,
-        idleVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/views/view${viewNum}/${zoneId}_${typeId}_view${viewNum}_idle.mp4`,
-      };
-    },
   },
 
   [LAYERS.BUILDING]: {
     videosPath: (building) => {
-      if (building.type !== "tower") return null;
-
       const buildingId = building.id;
       const zoneId = building.zoneId;
-      return {
-        forwardVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_gen_trans.mp4`,
-        reverseVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_gen_rev.mp4`,
-        idleVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view1/${zoneId}_${buildingId}_view1_idle.mp4`,
-      };
+      const typeId = building.typeId || null;
+      if(!typeId) {
+        console.warn(`Building ${buildingId} has no typeId`);
+        return {
+          forwardVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_gen_trans.mp4`,
+          reverseVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/${zoneId}_${buildingId}_gen_rev.mp4`,
+          idleVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view1/${zoneId}_${buildingId}_view1_idle.mp4`,
+        };
+      }
+      else {
+        return {
+          forwardVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/${zoneId}_${typeId}_gen_trans.mp4`,
+          reverseVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/${zoneId}_${typeId}_gen_rev.mp4`,
+          idleVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/views/view1/${zoneId}_${typeId}_view1_idle.mp4`,
+        };
+      }
     },
     getData: (buildingId) => PROJECT.buildings.find((b) => b.id === buildingId),
     // Here, getData returns the building object with the given id
     // used to display the building details
 
-    // here there's a potential bug if building id isn't unique
-    // which is predictable, same for floors and units
     getItems: (building) => {
       const buildingId = building.id;
       const zoneId = building.zoneId;
@@ -189,14 +178,24 @@ export const LAYER_CONFIG = {
 
     // Function to get video paths for a specific view of this building
     getVideosPathForView: (building, viewIndex) => {
+      const viewNum = viewIndex + 1; // Convert 0-based index to 1-based view number
       const buildingId = building.id;
       const zoneId = building.zoneId;
-      const viewNum = viewIndex + 1; // Convert 0-based index to 1-based view number
-      return {
-        forwardVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_trans.mp4`,
-        reverseVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_rev.mp4`,
-        idleVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_idle.mp4`,
-      };
+      const typeId = building.typeId || null;
+      if(!typeId) {
+        console.warn(`Building ${buildingId} has no typeId`);
+        return {
+          forwardVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_trans.mp4`,
+          reverseVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_rev.mp4`,
+          idleVideo: `/${projectId}/videos/zones/${zoneId}/${buildingId}/views/view${viewNum}/${zoneId}_${buildingId}_view${viewNum}_idle.mp4`,
+        };
+      } else {
+        return {
+          forwardVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/views/view${viewNum}/${zoneId}_${typeId}_view${viewNum}_trans.mp4`,
+          reverseVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/views/view${viewNum}/${zoneId}_${typeId}_view${viewNum}_rev.mp4`,
+          idleVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/views/view${viewNum}/${zoneId}_${typeId}_view${viewNum}_idle.mp4`,
+        };
+      }
     },
   },
 
@@ -230,13 +229,38 @@ export const LAYER_CONFIG = {
 
   [LAYERS.UNIT]: {
     videosPath: (unit) => {
-      return {
+      const buildingId = unit.buildingId || null;
+      const zoneId = unit.zoneId;
+      const typeId = unit.typeId || null;
+      if(!buildingId) {
+        // Villa
+        return {
+          forwardVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/${zoneId}_${typeId}_gen_trans.mp4`,
+          reverseVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/${zoneId}_${typeId}_gen_rev.mp4`,
+          idleVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/views/view1/${zoneId}_${typeId}_view1_idle.mp4`,
+        };
+      }
+      else return {
         forwardVideo: "/cutsection.mp4",
         reverseVideo: "/cutsection.mp4",
         idleVideo: "/cutsection.mp4",
       };
     },
     getData: (unitId) => PROJECT.units.find((u) => u.id === unitId),
+
+    getVideosPathForView: (unit, viewIndex) => {
+      const viewNum = viewIndex + 1; // Convert 0-based index to 1-based view number
+      const buildingId = unit.buildingId || null;
+      const zoneId = unit.zoneId;
+      const typeId = unit.typeId || null;
+      if(!buildingId) {
+        return {
+          forwardVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/views/view${viewNum}/${zoneId}_${typeId}_view${viewNum}_trans.mp4`,
+          reverseVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/views/view${viewNum}/${zoneId}_${typeId}_view${viewNum}_rev.mp4`,
+          idleVideo: `/${projectId}/videos/zones/${zoneId}/${typeId}/views/view${viewNum}/${zoneId}_${typeId}_view${viewNum}_idle.mp4`,
+        };
+      } else return null;
+    },
 
     getMinMaxRange: (units = PROJECT.units, filterName) => {
       // const units = DATA.units;

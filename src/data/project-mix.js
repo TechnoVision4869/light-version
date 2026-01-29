@@ -10,6 +10,21 @@ import CairoAirportSvg from '../assets/paths/airport.svg?raw';
 import GymSvg from '../assets/paths/gym.svg?raw';
 import IconicTowerSvg from '../assets/paths/tower.svg?raw';
 
+const LAYERS = {
+  // ZONES tab layers
+  ZONE_DETAIL: "zone_detail",
+  TYPE: "type",
+  BUILDING: "building", // Could be a tower or villa
+  FLOOR: "floor",
+  UNIT: "unit",
+
+  // SURROUNDINGS tab layers
+  SURROUNDING_DETAIL: "surrounding_detail",
+
+  // AMENITIES tab layers
+  AMENITY_DETAIL: "amenity_detail",
+}
+
 export const PROJECT_MIX = {
   project: {
     id: "mix",
@@ -27,7 +42,7 @@ export const PROJECT_MIX = {
       highlight: "mix/highlight/zones/zone1.png",
       description: "Our towers hold different apartments options. They are at the center of the city.",
       x: 0.93, y: 0.53,
-      nextLayer: "buildings",
+      nextLayer: LAYERS.BUILDING,
     },
     {
       id: "zone2",
@@ -38,7 +53,7 @@ export const PROJECT_MIX = {
       highlight: "mix/highlight/zones/zone2.png",
       description: "Our towers hold different apartments options. They are at the center of the city.",
       x: 0.73, y: 0.53,
-      nextLayer: "buildings",
+      nextLayer: LAYERS.BUILDING,
     },
   ],
 
@@ -50,7 +65,7 @@ export const PROJECT_MIX = {
       displayName: "Tower 1",
       description: "Tower 1 description...",
       x: 0.45, y: 0.53,
-      nextLayer: "floors",
+      nextLayer: LAYERS.FLOOR,
       features: [
         {
           id: "amenity1",
@@ -75,7 +90,7 @@ export const PROJECT_MIX = {
       displayName: "Tower 2",
       description: "Tower 2 description...",
       x: 0.65, y: 0.35,
-      nextLayer: "floors",
+      nextLayer: LAYERS.FLOOR,
       features: [
         {
           id: "amenity1",
@@ -101,7 +116,7 @@ export const PROJECT_MIX = {
       displayName: "Tower 5",
       description: "Tower 5 description...",
       x: 0.34, y: 0.13,
-      nextLayer: "floors",
+      nextLayer: LAYERS.FLOOR,
       features: [
         {
           id: "amenity1",
@@ -132,7 +147,7 @@ export const PROJECT_MIX = {
       displayName: "Floor 1",
       description: "First floor description...",
       x: 0.27, y: 0.52,
-      nextLayer: "units",
+      nextLayer: LAYERS.UNIT,
       features: [
         {
           id: "amenity1",
@@ -152,7 +167,7 @@ export const PROJECT_MIX = {
       type: "Residential",
       description: "Second floor description...",
       x: 0.27, y: 0.44,
-      nextLayer: "units",
+      nextLayer: LAYERS.UNIT,
       features: [
         {
           id: "amenity1",
@@ -172,7 +187,7 @@ export const PROJECT_MIX = {
       displayName: "Floor 1",
       description: "First floor description...",
       x: 0.27, y: 0.57,
-      nextLayer: "units",
+      nextLayer: LAYERS.UNIT,
       features: [
         {
           id: "amenity1",
@@ -192,7 +207,7 @@ export const PROJECT_MIX = {
       type: "Residential",
       description: "Second floor description...",
       x: 0.27, y: 0.49,
-      nextLayer: "units",
+      nextLayer: LAYERS.UNIT,
       features: [
         {
           id: "amenity1",
