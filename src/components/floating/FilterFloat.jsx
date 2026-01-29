@@ -2,12 +2,13 @@ import { useState, useEffect, useMemo, useCallback, useContext } from "react";
 import { FilterContext } from "../../store/FilterContextProvider";
 import { SidebarContext } from "../../store/SidebarContextProvider";
 import BaseFloatButton from "./BaseFloatButton";
+import { LAYERS } from "../../data/layers";
 
 export default function BaseFloating({ items, mediaRef }) {
     const container = mediaRef.current;
 
     const { filters } = useContext(FilterContext);
-    const { activeTab, activeLayer, goToItem } = useContext(SidebarContext);
+    const { activeTab, activeLayer, goToItem, highlightedButton, setHighlightedButton } = useContext(SidebarContext);
 
     // Filter items based on current filter state
     const filteredItems = useMemo(() => {
@@ -86,6 +87,10 @@ export default function BaseFloating({ items, mediaRef }) {
         filteredItems.map((item) => {
             const pos = itemIdToPosition.get(item.id);
             if (!pos) return null;
+
+            const isOpaque = (highlightedButton === null || highlightedButton === item);
+            const isSelected = highlightedButton === item;
+
             return (
                 <BaseFloatButton
                     key={item.id}
@@ -96,7 +101,16 @@ export default function BaseFloating({ items, mediaRef }) {
                         left: `${pos.left}px`,
                         top: `${pos.top}px`,
                     }}
-                    onSelect={() => goToItem(item, activeLayer)}
+                    isOpaque={isOpaque}
+                    onSelect={() => {
+                        if (isSelected) {
+                            console.log("Selected item:", item);
+                            
+                            goToItem(item, LAYERS.UNIT);
+                            setHighlightedButton(null);
+                        }
+                        else setHighlightedButton(item);
+                    }}
                 />
             )
         })

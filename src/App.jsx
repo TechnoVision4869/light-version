@@ -422,10 +422,10 @@ export default function App() {
                     )}
                   </div>
 
-                  {/* {viewerProps.floatingOpacity &&
+                  {viewerProps.floatingOpacity &&
                     viewerProps.currentViewIndex === 0 && (
                       <BaseFloat mediaRef={mediaContainerRef} />
-                    )} */}
+                    )}
 
                   {activeLayer === LAYERS.FLOOR &&
                     viewerProps.floatingOpacity && (

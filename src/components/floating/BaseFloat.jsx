@@ -81,6 +81,24 @@ export default function BaseFloating({ mediaRef }) {
         );
     }
 
+    let layerKey = null;
+    if(activeLayer !== null) layerKey = currentItem.nextLayer;
+    else {
+        switch (activeTab) {
+            case TABS.ZONES:
+                layerKey = LAYERS.ZONE_DETAIL;
+                break;
+            case TABS.AMENITIES:
+                layerKey = LAYERS.AMENITY_DETAIL;
+                break;
+            case TABS.SURROUNDINGS:
+                layerKey = LAYERS.SURROUNDING_DETAIL;
+                break;
+            default:
+                break;
+        }
+    }
+
     return (
         currentItems.map((item) => {
             // console.log(itemIdToPosition);
@@ -92,8 +110,8 @@ export default function BaseFloating({ mediaRef }) {
             if (!pos) return null;
 
             const isOpaque = (highlightedButton === null || highlightedButton === item);
-            const isSelected = highlightedButton === item;            
-            
+            const isSelected = highlightedButton === item;
+                        
             return (
                 <BaseFloatButton
                     key={item.id}
@@ -107,7 +125,9 @@ export default function BaseFloating({ mediaRef }) {
                     isOpaque={isOpaque}
                     onSelect={() => {
                         if (isSelected) {
-                            goToItem(item);
+                            console.log("Selected item:", item);
+                            
+                            goToItem(item, layerKey);
                             setHighlightedButton(null);
                         }
                         else setHighlightedButton(item);
