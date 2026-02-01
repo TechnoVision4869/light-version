@@ -70,27 +70,31 @@ export const LoginForm = (props) => {
   };
 
   return (
-    <form noValidate onSubmit={formik.handleSubmit} {...props}>
-      <TextField
-        error={Boolean(formik.touched.email && formik.errors.email)}
-        fullWidth
-        label="Email"
-        margin="normal"
-        name="email"
-        onBlur={formik.handleBlur}
-        onChange={formik.handleChange}
-        type="email"
-        value={formik.values.email}
-        helperText={formik.touched.email && formik.errors.email}
-        InputProps={{
-          style: {
-            fontFamily: "sans-serif",
-          },
-        }}
-      />
+    <Box sx={{ width: "100%", maxWidth: 480, bgcolor: "rgba(255,255,255,0.03)", p: 4, borderRadius: 3 }}>
+      <form noValidate onSubmit={formik.handleSubmit} {...props}>
+        <TextField
+          error={Boolean(formik.touched.email && formik.errors.email)}
+          fullWidth
+          label="Email"
+          margin="normal"
+          name="email"
+          onBlur={formik.handleBlur}
+          onChange={formik.handleChange}
+          type="email"
+          value={formik.values.email}
+          helperText={formik.touched.email && formik.errors.email}
+          sx={{
+            input: { color: "#f9fafb", fontFamily: "sans-serif" },
+            '& .MuiInputLabel-root': { color: 'rgba(249,250,251,0.8)' },
+            '& .MuiOutlinedInput-root': {              borderRadius: 3,              '& fieldset': { borderColor: 'rgba(249,250,251,0.12)' },
+              '&:hover fieldset': { borderColor: 'rgba(249,250,251,0.24)' },
+            },
+            mt: 1,
+          }}
+        />
 
       <FormControl sx={{ width: "100%", marginTop: "10px" }} variant="outlined">
-        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+        <InputLabel htmlFor="outlined-adornment-password" sx={{ color: 'rgba(249,250,251,0.8)' }}>Password</InputLabel>
         <OutlinedInput
           error={Boolean(formik.touched.password && formik.errors.password)}
           fullWidth
@@ -101,7 +105,12 @@ export const LoginForm = (props) => {
           value={formik.values.password}
           type={showPassword ? "text" : "password"}
           sx={{
+            borderRadius: 3,
             fontFamily: "sans-serif",
+            color: '#f9fafb',
+            '& input': { color: '#f9fafb' },
+            '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(249,250,251,0.12)' },
+            '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(249,250,251,0.24)' },
           }}
           endAdornment={
             <InputAdornment position="end">
@@ -110,6 +119,7 @@ export const LoginForm = (props) => {
                 onClick={handleClickShowPassword}
                 onMouseDown={handleMouseDownPassword}
                 edge="end"
+                sx={{ color: '#eff0f1' }}
               >
                 {showPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
@@ -127,19 +137,20 @@ export const LoginForm = (props) => {
         </Box>
       )}
 
-      <Box sx={{ mt: 2 }}>
-        <LoadingButton
-          color="primary"
-          disabled={formik.isSubmitting}
-          fullWidth
-          size="large"
-          type="submit"
-          variant="contained"
-          loading={loading}
-        >
-          Login
-        </LoadingButton>
-      </Box>
-    </form>
+        <Box sx={{ mt: 2 }}>
+          <LoadingButton
+            sx={{ borderRadius: 3, backgroundColor: '#5E6D59', color: '#f9fafb', '&:hover': { backgroundColor: '#465345' } }}
+            disabled={formik.isSubmitting}
+            fullWidth
+            size="large"
+            type="submit"
+            variant="contained"
+            loading={loading}
+          >
+            Login
+          </LoadingButton>
+        </Box>
+      </form>
+    </Box>
   );
 };
