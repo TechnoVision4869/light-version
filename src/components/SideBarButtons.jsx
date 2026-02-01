@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import { SidebarContext } from "../store/SidebarContextProvider";
-import { TABS, LAYERS, TAB_CONFIG, LAYER_CONFIG } from "../data/layers";
+import { TABS, LAYERS, DATA } from "../data/layers";
 
 import ZoneButton from "./buttons/ZoneButton";
 import AmenityButton from "./buttons/AmenityButton";
 import SurroundingButton from "./buttons/SurroundingButton";
 
-import TypeButton from "./buttons/TypeButton";
+// import TypeButton from "./buttons/TypeButton";
 import BuildingButton from "./buttons/BuildingButton";
 import FloorButton from "./buttons/FloorButton";
 import ApartmentButton from "./buttons/ApartmentButton";
@@ -20,19 +20,24 @@ export default function SideBarButtons() {
 
   if (activeLayer === null) {
     if (activeTab === TABS.ZONES) {
-      items = TAB_CONFIG[TABS.ZONES].getItems();
+      // items = TAB_CONFIG[TABS.ZONES].getItems();
+      items = DATA.project.zones.items;
       Component = ZoneButton;
       propName = "zone";
       layerKey = LAYERS.ZONE_DETAIL;
     }
     else if (activeTab === TABS.AMENITIES) {
-      items = TAB_CONFIG[TABS.AMENITIES].getItems();
+      // items = TAB_CONFIG[TABS.AMENITIES].getItems();
+      items = DATA.project.amenities.items;
       Component = AmenityButton;
       propName = "amenity";
       layerKey = LAYERS.AMENITY_DETAIL; 
     }
     else if (activeTab === TABS.SURROUNDINGS) {
-      items = TAB_CONFIG[TABS.SURROUNDINGS].getItems();
+      // items = TAB_CONFIG[TABS.SURROUNDINGS].getItems();
+      items = DATA.project.surroundings.items;
+      console.log(items);
+      
       Component = SurroundingButton;
       propName = "surrounding";
       layerKey = LAYERS.SURROUNDING_DETAIL; 
@@ -40,46 +45,29 @@ export default function SideBarButtons() {
   }
   else {
     if(activeLayer === LAYERS.ZONE_DETAIL) {
-      items = LAYER_CONFIG[LAYERS.ZONE_DETAIL].getItems(currentItem);
-      if(currentItem.nextLayer === LAYERS.TYPE) {
-        Component = TypeButton;
-        propName = "type";
-        layerKey = LAYERS.TYPE;
-      }
-      else if(currentItem.nextLayer === LAYERS.BUILDING) {
-        Component = BuildingButton;
-        propName = "building";
-        layerKey = LAYERS.BUILDING;
-      }
-    }
-    else if(activeLayer === LAYERS.TYPE) {
-      items = LAYER_CONFIG[LAYERS.TYPE].getItems(currentItem);
-      if(currentItem.nextLayer === LAYERS.BUILDING) {
-        Component = BuildingButton;
-        propName = "building";
-        layerKey = LAYERS.BUILDING;
-      }
-      else if(currentItem.nextLayer === LAYERS.UNIT) {
-        Component = ApartmentButton;
-        propName = "apartment";
-        layerKey = LAYERS.UNIT;
-      }
+      items = currentItem.properties;
+      Component = BuildingButton;
+      propName = "building";
+      layerKey = LAYERS.BUILDING;
+      
     }
     else if(activeLayer === LAYERS.BUILDING) {
-      items = LAYER_CONFIG[LAYERS.BUILDING].getItems(currentItem);
-      if(currentItem.nextLayer === LAYERS.FLOOR) {
+      console.log(currentItem.type);
+      if(currentItem.type === "tower") {
+        items = currentItem.floors;
         Component = FloorButton;
         propName = "floor";
         layerKey = LAYERS.FLOOR;
       }
-      else if(currentItem.nextLayer === LAYERS.UNIT) {
+      else {
+        items = currentItem.units;
         Component = ApartmentButton;
         propName = "apartment";
         layerKey = LAYERS.UNIT;
       }
     }
     else if(activeLayer === LAYERS.FLOOR) {
-      items = LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem);
+      items = currentItem.units;
       Component = ApartmentButton;
       propName = "apartment";
       layerKey = LAYERS.UNIT;
@@ -87,7 +75,7 @@ export default function SideBarButtons() {
     else if(activeLayer === LAYERS.UNIT) return;
   }
 
-  if(items.length === 0 || Component === null) return null;
+  if(!items || items?.length === 0 || Component === null) return null;
 
   return (
      <div className="max-h-[calc(100vh-205px)] scrollbar-custom overflow-y-auto overflow-x-hidden space-y-3 px-2 py-2">

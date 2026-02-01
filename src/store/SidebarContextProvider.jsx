@@ -1,6 +1,6 @@
 import { createContext, useCallback, useState, useMemo } from "react";
 
-import { TABS, TAB_CONFIG, LAYER_CONFIG, LAYERS } from "../data/layers";
+import { TABS, LAYERS, DATA } from "../data/layers";
 
 export const SidebarContext = createContext({
     history: [],
@@ -27,7 +27,11 @@ export default function SidebarContextProvider({ children }) {
             tab: TABS.HOME,
             layer: null,
             item: null,
-            videosPath: TAB_CONFIG[TABS.HOME].videosPath,
+            videosPath: {
+                forwardVideo: DATA.project.zoomoutVideo,
+                reverseVideo: null,
+                idleVideo: DATA.project.idleVideo,
+            }
         },
     ];
 
@@ -45,9 +49,16 @@ export default function SidebarContextProvider({ children }) {
         videosPath: currentVideosPaths,
     } = currentEntry;
 
-    const goToTab = useCallback((tabKey, isFromHome = true) => {
-        const config = TAB_CONFIG[tabKey];
-        console.log(tabKey);
+    const goToTab = useCallback((tabKey, selectedItem, isFromHome = true) => {
+        // console.log(selectedItem);
+
+        const calculatedVideosPath = isFromHome
+            ? selectedItem.videos
+            : {
+                forwardVideo: selectedItem.zoomoutVideo,
+                reverseVideo: selectedItem.videos.reverseVideo,
+                idleVideo: selectedItem.videos.idleVideo,
+            };
 
         setHistory(() => [
             ...initHistory,
@@ -55,10 +66,10 @@ export default function SidebarContextProvider({ children }) {
                 tab: tabKey,
                 layer: null,
                 item: {
-                    id: tabKey,
-                    displayName: tabKey,
+                    id: selectedItem.id,
+                    displayName: selectedItem.displayName,
                 },
-                videosPath: config.videosPath(isFromHome),
+                videosPath: calculatedVideosPath,
             },
         ]);
     }, []);
@@ -90,10 +101,10 @@ export default function SidebarContextProvider({ children }) {
             return;
         }
 
-        const config = LAYER_CONFIG[targetLayer];
         console.log(targetLayer);
+        console.log(item);
         
-        const videosPath = config.videosPath?.(item);
+        const videosPath = item.videos;
         // console.log(videosPath);
 
         setHistory((prev) => [
@@ -128,14 +139,14 @@ export default function SidebarContextProvider({ children }) {
     const currentItems = useMemo(() => {
     // Top-level tabs
     if (activeLayer === null && activeTab !== TABS.HOME) {
-        const items = TAB_CONFIG[activeTab]?.getItems() || [];
+        const items = currentItem.items || [];
         return items.map(item => ({ ...item, __type: activeTab })); // e.g., __type: 'zones'
     }
 
     // Nested layers
-    else if (activeLayer !== null && activeLayer !== LAYERS.UNIT && currentItem) {
-        return LAYER_CONFIG[activeLayer]?.getItems(currentItem) || [];
-    }
+    // else if (activeLayer !== null && activeLayer !== LAYERS.UNIT && currentItem) {
+    //     return LAYER_CONFIG[activeLayer]?.getItems(currentItem) || [];
+    // }
 
     return [];
     }, [history]);

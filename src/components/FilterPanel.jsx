@@ -1,7 +1,14 @@
 import { useState, useEffect, useContext } from "react";
 import { FilterContext } from "../store/FilterContextProvider";
 import { SidebarContext } from "../store/SidebarContextProvider";
-import { LAYER_CONFIG, LAYERS, FILTER_ENUM } from "../data/layers";
+
+const FILTER_ENUM = {
+  TYPE: "unitType",
+  AREA: "area",
+  PRICE: "price",
+  BEDROOMS: "bedrooms",
+  BATHROOMS: "bathrooms",
+}
 
 function Slider({ name, unit, min, max, step = 1, value, onValueChange }) {
   const fillColor = "white";
@@ -73,33 +80,57 @@ function Discrete({ name, options, array, onValueChange }) {
   )
 }
 
+// helper functions
+  function getMinMaxRange(units, filterName) {
+    if (units.length === 0) {
+      return { min: 0, max: 0 };
+    }
+
+    let min = units[0][filterName];
+    let max = units[0][filterName];
+
+    for (let i = 1; i < units.length; i++) {
+      const value = units[i][filterName];
+      if (value < min) min = value;
+      if (value > max) max = value;
+    }
+    return {
+      min: min,
+      max: max,
+    }
+  }
+
+function getDiscreteValues (units, filterName) {
+  return [...new Set(units.map(a => a[filterName]))].sort((a, b) => a - b);
+  }
+
 export default function FilterPanel() {
   const { onFilterChange } = useContext(FilterContext);
   const { currentItem } = useContext(SidebarContext);
   // console.log(currentItem);
   
-  const currentApartments = LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem);
+  const currentApartments = currentItem?.units || [];
   // console.log(currentApartments);
 
-  const UNIT_TYPES = LAYER_CONFIG[LAYERS.APARTMENT].getDiscreteValues(currentApartments, FILTER_ENUM.TYPE);
+  const UNIT_TYPES = getDiscreteValues(currentApartments, FILTER_ENUM.TYPE);
 
   // Surface area range (in square meters)
   const AREA_RANGE = {
-    MIN: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(currentApartments, FILTER_ENUM.AREA).min,
-    MAX: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(currentApartments, FILTER_ENUM.AREA).max,
+    MIN: getMinMaxRange(currentApartments, FILTER_ENUM.AREA).min,
+    MAX: getMinMaxRange(currentApartments, FILTER_ENUM.AREA).max,
     UNIT: "m²",
   };
 
   // Budget range (in local currency)
   const BUDGET_RANGE = {
-    MIN: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(currentApartments, FILTER_ENUM.PRICE).min,
-    MAX: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(currentApartments, FILTER_ENUM.PRICE).max,
+    MIN: getMinMaxRange(currentApartments, FILTER_ENUM.PRICE).min,
+    MAX: getMinMaxRange(currentApartments, FILTER_ENUM.PRICE).max,
     UNIT: "L.E",
   };
 
   // Bedroom/Bathroom options
-  const BEDROOM_OPTIONS = LAYER_CONFIG[LAYERS.APARTMENT].getDiscreteValues(currentApartments, FILTER_ENUM.BEDROOMS);
-  const BATHROOM_OPTIONS = LAYER_CONFIG[LAYERS.APARTMENT].getDiscreteValues(currentApartments, FILTER_ENUM.BATHROOMS);
+  const BEDROOM_OPTIONS = getDiscreteValues(currentApartments, FILTER_ENUM.BEDROOMS);
+  const BATHROOM_OPTIONS = getDiscreteValues(currentApartments, FILTER_ENUM.BATHROOMS);
 
   const [unitType, setUnitType] = useState([]);
   const [bedrooms, setBedrooms] = useState([]);

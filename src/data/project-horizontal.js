@@ -8,21 +8,6 @@ import CairoAirportSvg from '../assets/paths/airport.svg?raw';
 import GymSvg from '../assets/paths/gym.svg?raw';
 import IconicTowerSvg from '../assets/paths/tower.svg?raw';
 
-const LAYERS = {
-  // ZONES tab layers
-  ZONE_DETAIL: "zone_detail",
-  TYPE: "type",
-  BUILDING: "building", // Could be a tower or villa
-  FLOOR: "floor",
-  UNIT: "unit",
-
-  // SURROUNDINGS tab layers
-  SURROUNDING_DETAIL: "surrounding_detail",
-
-  // AMENITIES tab layers
-  AMENITY_DETAIL: "amenity_detail",
-}
-
 export const PROJECT_HORIZONTAL = {
   project: {
     id: "horizontal",
@@ -40,36 +25,35 @@ export const PROJECT_HORIZONTAL = {
       highlight: "horizontal/highlight/zones/zone1.png",
       description: "A serene community of luxury villas and modern townhouses nestled in nature.",
       x: 0.17, y: 0.23,
-      nextLayer: LAYERS.TYPE,
     },
   ],
 
-  types: [
+  properties: [
     {
       id: "villa1",
       projectId: "horizontal",
       zoneId: "zone1",
+      type: "villa",
       displayName: "4BR Villa",
       highlight: "horizontal/highlight/types/type1.png",
       description: "Luxury 4-bedroom villa with rooftop lounge.",
       area: 320,
       x: 0.3, y: 0.45,
-      nextLayer: LAYERS.UNIT,
     },
     {
       id: "town1",
       projectId: "horizontal",
       zoneId: "zone1",
+      type: "town",
       displayName: "Townhouse",
       highlight: "horizontal/highlight/types/type2.png",
       description: "Modern 3-story townhouse with private balcony.",
       area: 425,
       x: 0.67, y: 0.6,
-      nextLayer: LAYERS.BUILDING,
     },
   ],
 
-  buildings: [
+  floors: [
     {
       id: "townhouse1",
       projectId: "horizontal",
@@ -78,7 +62,6 @@ export const PROJECT_HORIZONTAL = {
       displayName: "TownHouse 1",
       description: "...",
       x: 0.42, y: 0.78,
-      nextLayer: LAYERS.UNIT,
     },
     {
       id: "townhouse2",
@@ -88,7 +71,6 @@ export const PROJECT_HORIZONTAL = {
       displayName: "TownHouse 2",
       description: "...",
       x: 0.46, y: 0.78,
-      nextLayer: LAYERS.UNIT,
     },
     {
       id: "townhouse3",
@@ -98,7 +80,6 @@ export const PROJECT_HORIZONTAL = {
       displayName: "TownHouse 3",
       description: "...",
       x: 0.5, y: 0.76,
-      nextLayer: LAYERS.UNIT,
     },
   ],
 
@@ -461,7 +442,6 @@ export const PROJECT_HORIZONTAL = {
       description: "Cairo International Airport is the principal international airport of Cairo and the largest and busiest airport in Egypt. It serves as the primary hub for Egyptair and Nile Air as well as several other airlines.",
       x: 0.49, y: 0.28,
       svgPath: CairoAirportSvg,
-      nextLayer: LAYERS.SURROUNDING_DETAIL,
     },
     {
       id: "surrounding2",
@@ -472,7 +452,6 @@ export const PROJECT_HORIZONTAL = {
       description: "A modern fully equipped gym that support strength, cardio and everyday wellness.",
       x: 0.545, y: 0.56,
       svgPath: GymSvg,
-      nextLayer: LAYERS.SURROUNDING_DETAIL,
     },
     {
       id: "surrounding3",
@@ -483,7 +462,6 @@ export const PROJECT_HORIZONTAL = {
       description: "An architectural landmark that defines the city skyline.",
       x: 0.27, y: 0.43,
       svgPath: IconicTowerSvg,
-      nextLayer: LAYERS.SURROUNDING_DETAIL,
     },
   ],
 
@@ -495,7 +473,6 @@ export const PROJECT_HORIZONTAL = {
       thumbnail: `horizontal/thumbnails/amenities/f1.png`,
       description: "Serene, landscaped gardens offering peaceful green spaces for relaxation and leisure.",
       x: 0.59, y: 0.33,
-      nextLayer: LAYERS.AMENITY_DETAIL,
     },
     {
       id: "amenity2",
@@ -504,7 +481,6 @@ export const PROJECT_HORIZONTAL = {
       thumbnail: `horizontal/thumbnails/amenities/f2.png`,
       description: "Expansive natural scenery integrated into the development for a harmonious living environment.",
       x: 0.46, y: 0.29,
-      nextLayer: LAYERS.AMENITY_DETAIL,
     },
     {
       id: "amenity3",
@@ -513,7 +489,6 @@ export const PROJECT_HORIZONTAL = {
       thumbnail: `horizontal/thumbnails/amenities/f3.png`,
       description: "Thoughtfully designed roads with tree-lined avenues and pedestrian-friendly pathways.",
       x: 0.38, y: 0.11,
-      nextLayer: LAYERS.AMENITY_DETAIL,
     },
   ],
 };

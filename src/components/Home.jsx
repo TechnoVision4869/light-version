@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback, useContext } from "react";
 import { StatusBar } from "@capacitor/status-bar";
 import { Capacitor } from '@capacitor/core';
 import { App as CapApp } from "@capacitor/app"
-import { TABS, LAYERS, LAYER_CONFIG } from "../data/layers.js";
+import { TABS, LAYERS, DATA } from "../data/layers.js";
 // Hooks
 import { useVideoViewer } from "./hooks/useVideoViewer.jsx";
 
@@ -77,22 +77,56 @@ export default function Home() {
   const isDisabled = !viewerProps.isMediaLoaded || viewerProps.isPlaying;
 
   const handleActiveTab = useCallback((tab) => {
-    if (tab === activeTab) return;
-
-    if (tab === TABS.HOME) {
-      goHome();
-    } else {
-      const isFromHome = activeTab === TABS.HOME;
-      const isFromAnotherTab =
-        activeTab === TABS.ZONES ||
-        activeTab === TABS.AMENITIES ||
-        activeTab === TABS.SURROUNDINGS;
-      if (isFromAnotherTab && activeLayer === null) {
-        viewerProps.StartReverse(isFromAnotherTab, () => goToTab(tab, true));
-        return;
-      }
-      goToTab(tab, isFromHome, isFromAnotherTab);
+    let selectedItem = null;
+    switch (tab) {
+      case activeTab:
+        break;
+      case TABS.HOME:
+        goHome();
+        break;
+      case TABS.ZONES:
+        selectedItem = DATA.project.zones;
+        checkSwithingBetweenTabs(tab, selectedItem);
+        break;
+      case TABS.AMENITIES:
+        selectedItem = DATA.project.amenities;
+        checkSwithingBetweenTabs(tab, selectedItem);
+        break;
+      case TABS.SURROUNDINGS:
+        selectedItem = DATA.project.surroundings;
+        checkSwithingBetweenTabs(tab, selectedItem);
+        break;
+      default:
+        break;
     }
+
+    function checkSwithingBetweenTabs(tab, item) {
+      const isFromHome = activeTab === TABS.HOME;
+
+       if(!isFromHome && !activeLayer) {
+          viewerProps.StartReverse(true, () => goToTab(tab, item, true));
+          return;
+        }
+        goToTab(tab, item, isFromHome);
+    }
+
+
+    // if (tab === activeTab) return;
+
+    // if (tab === TABS.HOME) {
+    //   goHome();
+    // } else {
+    //   const isFromHome = activeTab === TABS.HOME;
+    //   const isFromAnotherTab =
+    //     activeTab === TABS.ZONES ||
+    //     activeTab === TABS.AMENITIES ||
+    //     activeTab === TABS.SURROUNDINGS;
+    //   if (isFromAnotherTab && activeLayer === null) {
+    //     viewerProps.StartReverse(isFromAnotherTab, () => goToTab(tab, true));
+    //     return;
+    //   }
+    //   goToTab(tab, isFromHome, isFromAnotherTab);
+    // }
 
     setTimeout(() => {
       handleSidebarState(true);
@@ -102,9 +136,9 @@ export default function Home() {
   useEffect(() => {
     setHighlightedButton(null);
     // Show info popup if item has description
-    const itemData = LAYER_CONFIG[activeLayer]?.getData(currentItem.id);
+    if(!currentItem) return
 
-    if (itemData?.description) setShowInfoPopup(true);
+    if (currentItem?.description) setShowInfoPopup(true);
     setShowI(false);
 
   }, [currentItem])
@@ -430,7 +464,7 @@ export default function Home() {
                   {activeLayer === LAYERS.FLOOR &&
                     viewerProps.floatingOpacity && (
                       <FilterFloat
-                        items={LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem)}
+                        items={currentItem.units}
                         mediaRef={mediaContainerRef}
                       />
                     )}
@@ -493,8 +527,6 @@ export default function Home() {
                   {showInfoPopup && currentItem?.id && (
                     <InfoPopup
                       showInfoPopup={showInfoPopup}
-                      layer={activeLayer}
-                      itemId={currentItem.id}
                       onClose={closeInfoPopup}
                     />
                   )}
@@ -510,7 +542,7 @@ export default function Home() {
             </div>
 
             {/* Views visuals */}
-            
+            {currentItem?.viwes &&
               <div className="flex-1 flex items-center justify-center text-white space-x-3 px-4 py-2 text-sm">
                 <div className=" flex space-x-2">
                   <div className=""> Views </div>
@@ -595,7 +627,8 @@ export default function Home() {
                   </button>
                 </div>
               </div>
-            
+            }
+
             {/* {debugBorder && <div className={`w-3 h-2 bg-white border-4 border-${color}-600`}></div>} */}
             <div className="w-18 h-auto ml-auto">
               <button onClick={() => { console.log(history); }}>
