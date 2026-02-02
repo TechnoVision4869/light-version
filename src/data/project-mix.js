@@ -8,20 +8,6 @@ import CairoAirportSvg from '../assets/paths/airport.svg?raw';
 import GymSvg from '../assets/paths/gym.svg?raw';
 import IconicTowerSvg from '../assets/paths/tower.svg?raw';
 
-const LAYERS = {
-  // ZONES tab layers
-  ZONE_DETAIL: "zone_detail",
-  BUILDING: "building", // Could be a tower or villa
-  FLOOR: "floor",
-  UNIT: "unit",
-
-  // SURROUNDINGS tab layers
-  SURROUNDING_DETAIL: "surrounding_detail",
-
-  // AMENITIES tab layers
-  AMENITY_DETAIL: "amenity_detail",
-}
-
 export const PROJECT_MIX = {
   project: {
     id: "mix",

@@ -1,0 +1,408 @@
+{
+  "developerProjects": [
+    {
+      "projectName": "Project A",
+      "intro-video": "INTRO",
+      "idle-video": "HOME-IDLE",
+      "zoomout-video": "GENERAL-HOME-ZOOMOUT",
+      "surroundings": {
+        "zoomout-video": "GENERAL-SURROUNDINGS-ZOOMOUT",
+        "videos": {
+          "forwardVideoId": "GENERAL-SURROUNDINGS-FWD",
+          "reverseVideoId": "GENERAL-SURROUNDINGS-REV",
+          "sideVideoId": "GENERAL-SURROUNDINGS-SIDE"
+        },
+        "items": [
+          {
+            "displayName": "Cairo Airport",
+            "icon": "   airport-icon",
+            "thumbnail": "https://example.com/cairo-airport.jpg",
+            "distance": "10 km",
+            "description": "Cairo International Airport",
+            "x": 0.5,
+            "y": 0.3,
+            "svgPath": "path-to-svg"
+          }
+        ]
+      },
+      "amenities": {
+        "zoomout-video": "GENERAL-AMENITIES-ZOOMOUT",
+        "videos": {
+          "forwardVideoId": "GENERAL-AMENITIES-FWD",
+          "reverseVideoId": "GENERAL-AMENITIES-REV",
+          "sideVideoId": "GENERAL-AMENITIES-SIDE"
+        },
+        "items": [
+          {
+            "displayName": "Mall",
+            "subtitle": "Shopping Center",
+            "thumbnail": "https://example.com/mall.jpg",
+            "description": "Olympic size swimming pool",
+            "x": 0.6,
+            "y": 0.4,
+            "videos": {
+              "forwardVideoId": "AMENITY1-FWD",
+              "reverseVideoId": "AMENITY1-REV",
+              "sideVideoId": "AMENITY1-SIDE"
+            }
+          }
+        ]
+      },
+      "zones": {
+        "zoomout-video": "GENERAL-ZONES-ZOOMOUT",
+        "videos": {
+          "forwardVideoId": "GENERAL-ZONES-FWD",
+          "reverseVideoId": "GENERAL-ZONES-REV",
+          "sideVideoId": "GENERAL-ZONES-SIDE"
+        },
+        "items": [
+          {
+            "zoneName": "Zone 1",
+            "subtitle": "Residential Area",
+            "thumbnail": "https://example.com/zone1.jpg",
+            "highlight": "https://example.com/highlight-zone1.jpg",
+            "description": "A beautiful residential zone",
+            "x": 0.6,
+            "y": 0.4,
+            "videos": {
+              "forwardVideoId": "ZONE1-FWD",
+              "reverseVideoId": "ZONE1-REV",
+              "sideVideoId": "ZONE1-SIDE"
+            },
+            "properties": [
+              {
+                "displayName": "Luxury 1-Story Villa",
+                "type": "Villa",
+                "highlight": "https://example.com/highlight-villa.jpg",
+                "description": "A luxurious villa...",
+                "x": 0.6,
+                "y": 0.4,
+                "videos": {
+                  "forwardVideoId": "VILLA-FWD",
+                  "reverseVideoId": "VILLA-REV",
+                  "sideVideoId": "VILLA-SIDE"
+                },
+                "views": [
+                  {
+                    "name": "Front View",
+                    "videos": {
+                      "forwardVideoId": "VU1-V1-FWD",
+                      "reverseVideoId": "VU1-V1-REV",
+                      "sideVideoId": "VU1-V1-SIDE"
+                    }
+                  },
+                  {
+                    "name": "Right View",
+                    "videos": {
+                      "forwardVideoId": "VU2-V2-FWD",
+                      "reverseVideoId": "VU2-V2-REV",
+                      "sideVideoId": "VU2-V2-SIDE"
+                    }
+                  },
+                  {
+                    "name": "Back View",
+                    "videos": {
+                      "forwardVideoId": "VU2-V3-FWD",
+                      "reverseVideoId": "VU2-V3-REV",
+                      "sideVideoId": "VU2-V3-SIDE"
+                    }
+                  },
+                  {
+                    "name": "Left View",
+                    "videos": {
+                      "forwardVideoId": "VU2-V4-FWD",
+                      "reverseVideoId": "VU2-V4-REV",
+                      "sideVideoId": "VU2-V4-SIDE"
+                    }
+                  }
+                ],
+                "units": [
+                  {
+                    "unitId": "Villa-Unit-1",
+                    "unitVisualsId": "villa-4br",
+                    "balaconyView": "https://example.com/view.jpg",
+                    "videos": {
+                      "forwardVideoId": "VU1-FWD",
+                      "reverseVideoId": "VU1-REV",
+                      "sideVideoId": "VU1-SIDE"
+                    }
+                  }
+                ]
+              },
+              {
+                "displayName": "Modern Tower Apartment",
+                "type": "Tower",
+                "highlight": "https://example.com/highlight-tower.jpg",
+                "description": "A modern tower apartment...",
+                "x": 0.6,
+                "y": 0.4,
+                "videos": {
+                  "forwardVideoId": "TOWER-FWD",
+                  "reverseVideoId": "TOWER-REV",
+                  "sideVideoId": "TOWER-SIDE"
+                },
+                "views": [
+                  {
+                    "name": "Front View",
+                    "videos": {
+                      "forwardVideoId": "T-V1-FWD",
+                      "reverseVideoId": "T-V1-REV",
+                      "sideVideoId": "T-V1-SIDE"
+                    }
+                  },
+                  {
+                    "name": "Right View",
+                    "videos": {
+                      "forwardVideoId": "T-V2-FWD",
+                      "reverseVideoId": "T-V2-REV",
+                      "sideVideoId": "T-V2-SIDE"
+                    }
+                  },
+                  {
+                    "name": "Back View",
+                    "videos": {
+                      "forwardVideoId": "T-V3-FWD",
+                      "reverseVideoId": "T-V3-REV",
+                      "sideVideoId": "T-V3-SIDE"
+                    }
+                  },
+                  {
+                    "name": "Left View",
+                    "videos": {
+                      "forwardVideoId": "T-V4-FWD",
+                      "reverseVideoId": "T-V4-REV",
+                      "sideVideoId": "T-V4-SIDE"
+                    }
+                  }
+                ],
+                "features": {
+                  "videos": {
+                    "forwardVideoId": "GENERAL-AMENITIES-FWD",
+                    "reverseVideoId": "GENERAL-AMENITIES-REV",
+                    "sideVideoId": "GENERAL-AMENITIES-SIDE"
+                  },
+                  "items": [
+                    {
+                      "displayName": "Roof Top",
+                      "subtitle": "Entertainment Area",
+                      "thumbnail": "https://example.com/roof.jpg",
+                      "description": "roof top",
+                      "x": 0.6,
+                      "y": 0.4,
+                      "videos": {
+                        "forwardVideoId": "AMENITY1-FWD",
+                        "reverseVideoId": "AMENITY1-REV",
+                        "sideVideoId": "AMENITY1-SIDE"
+                      }
+                    }
+                  ]
+                },
+                "floors": [
+                  {
+                    "floorNumber": 1,
+                    "features": {
+                      "videos": {
+                        "forwardVideoId": "GENERAL-AMENITIES-FWD",
+                        "reverseVideoId": "GENERAL-AMENITIES-REV",
+                        "sideVideoId": "GENERAL-AMENITIES-SIDE"
+                      },
+                      "items": [
+                        {
+                          "displayName": "Elevators",
+                          "subtitle": "Corridor feature",
+                          "thumbnail": "https://example.com/elevator.jpg",
+                          "description": "Modern spacious elevators",
+                          "x": 0.6,
+                          "y": 0.4,
+                          "videos": {
+                            "forwardVideoId": "AMENITY1-FWD",
+                            "reverseVideoId": "AMENITY1-REV",
+                            "sideVideoId": "AMENITY1-SIDE"
+                          }
+                        }
+                      ]
+                    },
+                    "units": [
+                      {
+                        "unitId": "Tower-F1-Unit-1",
+                        "unitVisualsId": "2B1B-Apt",
+                        "balaconyView": "https://example.com/view.jpg",
+                        "videos": {
+                          "forwardVideoId": "TF1U1-FWD",
+                          "reverseVideoId": "TF1U1-REV",
+                          "sideVideoId": "TF1U1-SIDE"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "displayName": "Modern Townhouse",
+                "type": "Town House",
+                "highlight": "https://example.com/highlight-townhouse.jpg",
+                "description": "A modern townhouse unit...",
+                "x": 0.6,
+                "y": 0.4,
+                "videos": {
+                  "forwardVideoId": "TH-FWD",
+                  "reverseVideoId": "TH-REV",
+                  "sideVideoId": "TH-SIDE"
+                },
+                "views": [
+                  {
+                    "name": "Front View",
+                    "videos": {
+                      "forwardVideoId": "TH-V1-FWD",
+                      "reverseVideoId": "TH-V1-REV",
+                      "sideVideoId": "TH-V1-SIDE"
+                    }
+                  },
+                  {
+                    "name": "Right View",
+                    "videos": {
+                      "forwardVideoId": "TH-V2-FWD",
+                      "reverseVideoId": "TH-V2-REV",
+                      "sideVideoId": "TH-V2-SIDE"
+                    }
+                  },
+                  {
+                    "name": "Back View",
+                    "videos": {
+                      "forwardVideoId": "TH-V3-FWD",
+                      "reverseVideoId": "TH-V3-REV",
+                      "sideVideoId": "TH-V3-SIDE"
+                    }
+                  },
+                  {
+                    "name": "Left View",
+                    "videos": {
+                      "forwardVideoId": "TH-V4-FWD",
+                      "reverseVideoId": "TH-V4-REV",
+                      "sideVideoId": "TH-V4-SIDE"
+                    }
+                  }
+                ],
+                "units": [
+                  {
+                    "unitId": "TH-Unit-1",
+                    "unitVisualsId": "townhouse-2story-4br",
+                    "balaconyView": "https://example.com/view.jpg",
+                    "videos": {
+                      "forwardVideoId": "THU1-FWD",
+                      "reverseVideoId": "THU1-REV",
+                      "sideVideoId": "THU1-SIDE"
+                    }
+                  },
+                  {
+                    "unitId": "TH-Unit-2",
+                    "unitVisualsId": "townhouse-2story-4br",
+                    "balaconyView": "https://example.com/view.jpg",
+                    "videos": {
+                      "forwardVideoId": "THU2-FWD",
+                      "reverseVideoId": "THU2-REV",
+                      "sideVideoId": "THU2-SIDE"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "zoneName": "Zone 2",
+            "videos": {
+              "forwardVideoId": "ZONE2-FWD",
+              "reverseVideoId": "ZONE2-REV",
+              "sideVideoId": "ZONE2-SIDE"
+            },
+            "properties": []
+          }
+        ]
+      },
+
+      "VisualsTypes": [
+        {
+          "id": "2B1B-Apt",
+          "name": "2 Bedroom Apartment",
+          "bedrooms": 2,
+          "bathrooms": 1,
+          "serviceRooms": ["Laundry", "Storage"],
+          "areaSqm": 120,
+          "interior": {
+            "floors": [
+              {
+                "level": "1",
+                "rooms": [
+                  {
+                    "name": "Living Room",
+                    "description": "Spacious living area with natural light",
+                    "image": "https://example.com/living-room.jpg",
+                    "hotspots": [
+                      {
+                        "label": "Kitchen",
+                        "yaw": 45,
+                        "pitch": 0
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Kitchen",
+                    "description": "Modern kitchen with high-end appliances",
+                    "image": "https://example.com/kitchen.jpg",
+                    "hotspots": [
+                      {
+                        "label": "Living Room",
+                        "yaw": -45,
+                        "pitch": 0
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "villa-4br",
+          "name": "4 Bedroom Villa",
+          "bedrooms": 4,
+          "bathrooms": 3,
+          "serviceRooms": ["Garage", "Laundry", "Storage"],
+          "areaSqm": 450,
+          "interior": {
+            "floors": [
+              {
+                "level": "ground",
+                "rooms": [
+                  {
+                    "name": "Living Room",
+                    "description": "Spacious living area with natural light",
+                    "image": "https://example.com/living-room.jpg",
+                    "hotspots": [
+                      {
+                        "label": "Kitchen",
+                        "yaw": 45,
+                        "pitch": 0
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "level": "first",
+                "rooms": [
+                  {
+                    "name": "Master Bedroom",
+                    "description": "Large bedroom with ensuite bathroom",
+                    "image": "https://example.com/master-bedroom.jpg",
+                    "hotspots": []
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

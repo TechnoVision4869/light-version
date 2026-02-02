@@ -61,9 +61,22 @@ export default function SideBarButtons() {
       }
       else {
         items = currentItem.units;
-        Component = ApartmentButton;
-        propName = "apartment";
-        layerKey = LAYERS.UNIT;
+        if(currentItem.type === "villa") {
+          Component = ApartmentButton;
+          propName = "apartment";
+          layerKey = LAYERS.UNIT;
+        } else {
+          if(items.length > 1) {
+            Component = FloorButton;
+            propName = "floor";
+            layerKey = LAYERS.FLOOR;
+          }
+          else {
+            Component = ApartmentButton;
+            propName = "apartment";
+            layerKey = LAYERS.UNIT;
+          }
+        }
       }
     }
     else if(activeLayer === LAYERS.FLOOR) {

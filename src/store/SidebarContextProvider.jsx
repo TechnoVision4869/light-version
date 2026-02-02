@@ -15,6 +15,7 @@ export const SidebarContext = createContext({
     sidebarOpen: false,
     handleSidebarState: () => { },
 
+    currentItems: [],
     goToItem: () => { },
     goToTab: () => { },
     goBack: () => { },
@@ -65,10 +66,7 @@ export default function SidebarContextProvider({ children }) {
             {
                 tab: tabKey,
                 layer: null,
-                item: {
-                    id: selectedItem.id,
-                    displayName: selectedItem.displayName,
-                },
+                item: selectedItem,
                 videosPath: calculatedVideosPath,
             },
         ]);
@@ -101,8 +99,8 @@ export default function SidebarContextProvider({ children }) {
             return;
         }
 
-        console.log(targetLayer);
-        console.log(item);
+        // console.log(targetLayer);
+        // console.log(item);
         
         const videosPath = item.videos;
         // console.log(videosPath);
@@ -140,13 +138,14 @@ export default function SidebarContextProvider({ children }) {
     // Top-level tabs
     if (activeLayer === null && activeTab !== TABS.HOME) {
         const items = currentItem.items || [];
-        return items.map(item => ({ ...item, __type: activeTab })); // e.g., __type: 'zones'
+        return items.map(item => ({ ...item })); // e.g., __type: 'zones'
     }
 
     // Nested layers
-    // else if (activeLayer !== null && activeLayer !== LAYERS.UNIT && currentItem) {
-    //     return LAYER_CONFIG[activeLayer]?.getItems(currentItem) || [];
-    // }
+    else if (activeLayer !== null && activeLayer !== LAYERS.UNIT && currentItem) {
+        const items = currentItem.items || currentItem.properties || currentItem.floors || currentItem.units || [];
+        return items.map(item => ({ ...item }));
+    }
 
     return [];
     }, [history]);
