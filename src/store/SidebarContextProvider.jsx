@@ -73,20 +73,14 @@ export default function SidebarContextProvider({ children }) {
     }, []);
 
     const handleCurrentItem = useCallback((item, layerKey) => {
-        // console.log("item: ", item);
-        // console.log("layer: ", layerKey);
-
         const targetLayer = layerKey;
-
         if (!targetLayer) {
             console.warn('No layer specified for navigation', item);
             return;
         }
 
         if (history[2]?.layer === LAYERS.SURROUNDING_DETAIL) {
-
             const tempHistory = history.slice(0, -1);
-
             setHistory([
                 ...tempHistory, {
                     tab: activeTab,
@@ -95,15 +89,10 @@ export default function SidebarContextProvider({ children }) {
                     videosPath: null,
                 },
             ]);
-
             return;
         }
 
-        // console.log(targetLayer);
-        // console.log(item);
-        
         const videosPath = item.videos;
-        // console.log(videosPath);
 
         setHistory((prev) => [
             ...prev,
@@ -135,19 +124,19 @@ export default function SidebarContextProvider({ children }) {
     }, []);
 
     const currentItems = useMemo(() => {
-    // Top-level tabs
-    if (activeLayer === null && activeTab !== TABS.HOME) {
-        const items = currentItem.items || [];
-        return items.map(item => ({ ...item })); // e.g., __type: 'zones'
-    }
+        // Top-level tabs
+        if (activeLayer === null && activeTab !== TABS.HOME) {
+            const items = currentItem.items || [];
+            return items.map(item => ({ ...item })); // e.g., __type: 'zones'
+        }
 
-    // Nested layers
-    else if (activeLayer !== null && activeLayer !== LAYERS.UNIT && currentItem) {
-        const items = currentItem.items || currentItem.properties || currentItem.floors || currentItem.units || [];
-        return items.map(item => ({ ...item }));
-    }
+        // Nested layers
+        else if (activeLayer !== null && activeLayer !== LAYERS.UNIT && currentItem) {
+            const items = currentItem.items || currentItem.properties || currentItem.floors || currentItem.units || [];
+            return items.map(item => ({ ...item }));
+        }
 
-    return [];
+        return [];
     }, [history]);
 
     const ctxValue = {

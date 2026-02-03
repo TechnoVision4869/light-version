@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { FilterContext } from "../store/FilterContextProvider";
 import { SidebarContext } from "../store/SidebarContextProvider";
 // import helper functions
-import { FILTER_ENUM, getMinMaxRange, getDiscreteValues } from "./helpers/filterHelpers";
+import { FILTER_ENUM, getMinMaxRange, getDiscreteValues } from "./helpers/filterHelper";
 
 function Slider({ name, unit, min, max, step = 1, value, onValueChange }) {
   const fillColor = "white";

@@ -5,7 +5,7 @@ import { DATA } from '../data/layers';
 export default function Gallery({ unit, galleryType }) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const unitType = DATA.unitTypes[unit.unitTypeId];
+    const unitType = DATA.project.unitTypes[unit.unitTypeId];
     const images = unitType?.[galleryType] || [];
 
     const nextSlide = useCallback(() => {

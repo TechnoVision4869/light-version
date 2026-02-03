@@ -19,7 +19,7 @@ export default function Panorama({ unit }) {
   const containerRef = useRef(null);
 
   // Get unit data
-  const unitType = DATA.unitTypes[unit.unitTypeId];
+  const unitType = DATA.project.unitTypes[unit.unitTypeId];
   const floors = unitType.interior.floors;
   const [room, setRoom] = useState(floors[0].rooms[0]);
 

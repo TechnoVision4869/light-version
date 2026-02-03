@@ -7,13 +7,11 @@ import OpenInFullRoundedIcon from '@mui/icons-material/OpenInFullRounded';
 import { FILTER_ENUM, getMinMaxRange } from "../helpers/filterHelper";
 
 export default function BuildingButton({ building, isDisabled, goToItem }) {
+    const { highlightedButton, setHighlightedButton } = useContext(SidebarContext);
+
     let unitsToFilter = [];
     if (building.type === "tower") unitsToFilter = building.floors.flatMap(floor => floor.units);
     else unitsToFilter = building.units;
-
-    console.log(unitsToFilter);
-
-    const { highlightedButton, setHighlightedButton } = useContext(SidebarContext);
 
     const { min: minBedrooms, max: maxBedrooms } = getMinMaxRange(unitsToFilter, FILTER_ENUM.BEDROOMS);
     const { min: minArea, max: maxArea } = getMinMaxRange(unitsToFilter, FILTER_ENUM.AREA);

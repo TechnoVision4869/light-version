@@ -15,9 +15,11 @@ export const PROJECT_HORIZONTAL = {
     developerId: "developer-id",
     introVideo: "/horizontal/videos/intro.mp4",
     idleVideo: "/horizontal/videos/home/home_idle.mp4",
-    zoomoutVideo: "/horizontal/videos/home/home_out.mp4",
+    zoomoutVideo: "/horizontal/videos/home/zones_out.mp4",
 
     surroundings: {
+      id: "surroundings",
+      displayName: "Surroundings",
       zoomoutVideo: "/horizontal/videos/surroundings/surr_out.mp4",
       videos: {
         forwardVideo: "/horizontal/videos/surroundings/surr_gen_trans_from_home.mp4",
@@ -59,6 +61,8 @@ export const PROJECT_HORIZONTAL = {
     },
 
     amenities: {
+      id: "amenities",
+      displayName: "Amenities",
       zoomoutVideo: "/horizontal/videos/amenities/amenities_out.mp4",
       videos: {
         forwardVideo: "/horizontal/videos/amenities/amenities_gen_trans_from_home.mp4",
@@ -70,7 +74,7 @@ export const PROJECT_HORIZONTAL = {
           id: "amenity1",
           displayName: "Lush Gardens",
           subtitle: "Amenity",
-          thumbnail: "horizontal/thumbnails/amenities/f1.png",
+          thumbnail: "horizontal/thumbnails/amenities/amenity1.png",
           description: "Serene, landscaped gardens offering peaceful green spaces for relaxation and leisure.",
           x: 0.59, y: 0.33,
           videos: {
@@ -83,7 +87,7 @@ export const PROJECT_HORIZONTAL = {
           id: "amenity2",
           displayName: "Nature Landscapes",
           subtitle: "Amenity",
-          thumbnail: "horizontal/thumbnails/amenities/f2.png",
+          thumbnail: "horizontal/thumbnails/amenities/amenity2.png",
           description: "Expansive natural scenery integrated into the development for a harmonious living environment.",
           x: 0.46, y: 0.29,
           videos: {
@@ -96,7 +100,7 @@ export const PROJECT_HORIZONTAL = {
           id: "amenity3",
           displayName: "Scenic Roadways",
           subtitle: "Amenity",
-          thumbnail: "horizontal/thumbnails/amenities/f3.png",
+          thumbnail: "horizontal/thumbnails/amenities/amenity3.png",
           description: "Thoughtfully designed roads with tree-lined avenues and pedestrian-friendly pathways.",
           x: 0.38, y: 0.11,
           videos: {
@@ -109,6 +113,8 @@ export const PROJECT_HORIZONTAL = {
     },
 
     zones: {
+      id: "zones",
+      displayName: "Zones",
       zoomoutVideo: "/horizontal/videos/home/home_out.mp4",
       videos: {
           forwardVideo: "/horizontal/videos/zones/zones_gen_trans.mp4",
@@ -132,7 +138,7 @@ export const PROJECT_HORIZONTAL = {
           },
           properties: [
             {
-              id: "villa1",
+              id: "villa",
               projectId: "horizontal",
               zoneId: "zone1",
               type: "villa",
@@ -256,7 +262,7 @@ export const PROJECT_HORIZONTAL = {
               ],
             },
             {
-              id: "town1",
+              id: "town",
               projectId: "horizontal",
               zoneId: "zone1",
               type: "town",
@@ -309,6 +315,7 @@ export const PROJECT_HORIZONTAL = {
                     idleVideo: "/cutsection.mp4",
                   }
                 },
+                // Townhouse 2
                 {
                   id: "th2-unit1",
                   projectId: "horizontal",
@@ -347,6 +354,7 @@ export const PROJECT_HORIZONTAL = {
                     idleVideo: "/cutsection.mp4",
                   }
                 },
+                // Townhouse 3
                 {
                   id: "th3-unit1",
                   projectId: "horizontal",
@@ -425,9 +433,8 @@ export const PROJECT_HORIZONTAL = {
         },
       ],
     },
-  },
 
-  unitTypes: {
+    unitTypes: {
     // Villa type — 3 interior floors
     "villa-luxury-4br": {
       id: "villa-luxury-4br",
@@ -629,210 +636,7 @@ export const PROJECT_HORIZONTAL = {
       },
     },
   },
+  },
 
-  units: [
-    // 4 Villas
-    {
-      id: "villa1",
-      projectId: "horizontal",
-      zoneId: "zone1",
-      typeId: "villa1",
-      unitTypeId: "villa-luxury-4br",
-      displayName: "Villa 1",
-      price: 2200000,
-      area: 320,
-      bedrooms: 4, bathrooms: 3,
-      balconyView: "/panorama/villa/balcony.jpg",
-      x: 0.39, y: 0.135,
-    },
-    {
-      id: "villa2",
-      projectId: "horizontal",
-      zoneId: "zone1",
-      typeId: "villa1",
-      unitTypeId: "villa-luxury-4br",
-      displayName: "Villa 2",
-      price: 2200000,
-      area: 320,
-      bedrooms: 4, bathrooms: 3,
-      balconyView: "/panorama/villa/balcony.jpg",
-      x: 0.43, y: 0.135,
-    },
-    {
-      id: "villa3",
-      projectId: "horizontal",
-      zoneId: "zone1",
-      typeId: "villa1",
-      unitTypeId: "villa-luxury-4br",
-      displayName: "Villa 3",
-      price: 2200000,
-      area: 320,
-      bedrooms: 4, bathrooms: 3,
-      balconyView: "/panorama/villa/balcony.jpg",
-      x: 0.47, y: 0.135,
-    },
-    {
-      id: "villa4",
-      projectId: "horizontal",
-      zoneId: "zone1",
-      typeId: "villa1",
-      unitTypeId: "villa-luxury-4br",
-      displayName: "Villa 4",
-      price: 2200000,
-      area: 320,
-      bedrooms: 4, bathrooms: 3,
-      balconyView: "/panorama/villa/balcony.jpg",
-      x: 0.51, y: 0.135,
-    },
-
-    // Townhouse 1
-    {
-      id: "th1-unit1",
-      projectId: "horizontal",
-      zoneId: "zone1",
-      typeId: "town1",
-      buildingId: "townhouse1",
-      unitTypeId: "townhouse-2story-4br",
-      displayName: "TH1-U1",
-      price: 950000,
-      area: 425,
-      bedrooms: 4, bathrooms: 2,
-      balconyView: "/panorama/townhouse/balcony.jpg",
-      x: 0.19, y: 0.3,
-    },
-    {
-      id: "th1-unit2",
-      projectId: "horizontal",
-      zoneId: "zone1",
-      typeId: "town1",
-      buildingId: "townhouse1",
-      unitTypeId: "townhouse-2story-4br",
-      displayName: "TH1-U2",
-      price: 950000,
-      area: 425,
-      bedrooms: 4, bathrooms: 2,
-      balconyView: "/panorama/townhouse/balcony.jpg",
-      x: 0.54, y: 0.3,
-    },
-
-    // Townhouse 2
-    {
-      id: "th2-unit1",
-      projectId: "horizontal",
-      zoneId: "zone1",
-      typeId: "town1",
-      buildingId: "townhouse2",
-      unitTypeId: "townhouse-2story-4br",
-      displayName: "TH2-U1",
-      price: 950000,
-      area: 425,
-      bedrooms: 4, bathrooms: 2,
-      balconyView: "/panorama/townhouse/balcony.jpg",
-      x: 0.19, y: 0.3,
-    },
-    {
-      id: "th2-unit2",
-      projectId: "horizontal",
-      zoneId: "zone1",
-      typeId: "town1",
-      buildingId: "townhouse2",
-      unitTypeId: "townhouse-2story-4br",
-      displayName: "TH2-U2",
-      price: 950000,
-      area: 425,
-      bedrooms: 4, bathrooms: 2,
-      balconyView: "/panorama/townhouse/balcony.jpg",
-      x: 0.54, y: 0.3,
-    },
-
-    // Townhouse 3
-    {
-      id: "th3-unit1",
-      projectId: "horizontal",
-      zoneId: "zone1",
-      typeId: "town1",
-      buildingId: "townhouse3",
-      unitTypeId: "townhouse-2story-4br",
-      displayName: "TH3-U1",
-      price: 950000,
-      area: 425,
-      bedrooms: 4, bathrooms: 2,
-      balconyView: "/panorama/townhouse/balcony.jpg",
-      x: 0.19, y: 0.3,
-    },
-    {
-      id: "th3-unit2",
-      projectId: "horizontal",
-      zoneId: "zone1",
-      typeId: "town1",
-      buildingId: "townhouse3",
-      unitTypeId: "townhouse-2story-4br",
-      displayName: "TH3-U2",
-      price: 950000,
-      area: 425,
-      bedrooms: 4, bathrooms: 2,
-      balconyView: "/panorama/townhouse/balcony.jpg",
-      x: 0.54, y: 0.3,
-    },
-  ],
-
-  surroundings: [
-    {
-      id: "surrounding1",
-      displayName: "Cairo Airport",
-      iconSrc: AirportIcon,
-      thumbnail: "horizontal/thumbnails/surroundings/cairo_airboart.jpg",
-      distance: "38 min | 55 km",
-      description: "Cairo International Airport is the principal international airport of Cairo and the largest and busiest airport in Egypt. It serves as the primary hub for Egyptair and Nile Air as well as several other airlines.",
-      x: 0.49, y: 0.28,
-      svgPath: CairoAirportSvg,
-    },
-    {
-      id: "surrounding2",
-      displayName: "Gym",
-      iconSrc: MuscleIcon,
-      thumbnail: "horizontal/thumbnails/surroundings/gym.jpg",
-      distance: "3 min | 1 km",
-      description: "A modern fully equipped gym that support strength, cardio and everyday wellness.",
-      x: 0.545, y: 0.56,
-      svgPath: GymSvg,
-    },
-    {
-      id: "surrounding3",
-      displayName: "Iconic Tower",
-      iconSrc: TowerIcon,
-      thumbnail: "horizontal/thumbnails/surroundings/iconic_tower.jpg",
-      distance: "8 min | 5 km",
-      description: "An architectural landmark that defines the city skyline.",
-      x: 0.27, y: 0.43,
-      svgPath: IconicTowerSvg,
-    },
-  ],
-
-  amenities: [
-    {
-      id: "amenity1",
-      displayName: "Lush Gardens",
-      subtitle: "Amenity",
-      thumbnail: `horizontal/thumbnails/amenities/f1.png`,
-      description: "Serene, landscaped gardens offering peaceful green spaces for relaxation and leisure.",
-      x: 0.59, y: 0.33,
-    },
-    {
-      id: "amenity2",
-      displayName: "Nature Landscapes",
-      subtitle: "Amenity",
-      thumbnail: `horizontal/thumbnails/amenities/f2.png`,
-      description: "Expansive natural scenery integrated into the development for a harmonious living environment.",
-      x: 0.46, y: 0.29,
-    },
-    {
-      id: "amenity3",
-      displayName: "Scenic Roadways",
-      subtitle: "Amenity",
-      thumbnail: `horizontal/thumbnails/amenities/f3.png`,
-      description: "Thoughtfully designed roads with tree-lined avenues and pedestrian-friendly pathways.",
-      x: 0.38, y: 0.11,
-    },
-  ],
+  
 };

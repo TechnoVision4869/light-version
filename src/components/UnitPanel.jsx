@@ -16,12 +16,11 @@ export default function UnitPanel() {
     const [isPaymentPlanOpen, setIsPaymentPlanOpen] = useState(false);
 
     //temporary visuals and payment plan
-    const unitType = DATA.unitTypes[currentItem.unitTypeId];    
+    const unitType = DATA.project.unitTypes[currentItem.unitTypeId];
     const serviceRooms = unitType.serviceRooms;
     const gallery = unitType.gallery;
     const cutSections = unitType.cutSections;
     const paymentPlans = unitType.paymentPlans;
-
 
     return (
         <div className="h-full pr-1">
