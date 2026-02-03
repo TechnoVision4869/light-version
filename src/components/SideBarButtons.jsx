@@ -11,7 +11,7 @@ import BuildingButton from "./buttons/BuildingButton";
 import FloorButton from "./buttons/FloorButton";
 import ApartmentButton from "./buttons/ApartmentButton";
 
-export default function SideBarButtons() {
+export default function SidebarButtons() {
   const { activeTab, activeLayer, currentItem, goToItem } = useContext(SidebarContext);
   let items = [];
   let Component = null;

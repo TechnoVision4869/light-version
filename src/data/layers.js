@@ -35,10 +35,10 @@ export const LAYERS = {
 //   BATHROOMS: "bathrooms",
 // }
 
-export const FILTER_TYPE = {
-  RANGE: "range",
-  DISCRETE: "discrete",
-}
+// export const FILTER_TYPE = {
+//   RANGE: "range",
+//   DISCRETE: "discrete",
+// }
 
 // Tab configurations (main views)
 // export const TAB_CONFIG = {
