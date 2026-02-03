@@ -1,14 +1,8 @@
 import { useState, useEffect, useContext } from "react";
 import { FilterContext } from "../store/FilterContextProvider";
 import { SidebarContext } from "../store/SidebarContextProvider";
-
-const FILTER_ENUM = {
-  TYPE: "unitType",
-  AREA: "area",
-  PRICE: "price",
-  BEDROOMS: "bedrooms",
-  BATHROOMS: "bathrooms",
-}
+// import helper functions
+import { FILTER_ENUM, getMinMaxRange, getDiscreteValues } from "./helpers/filterHelpers";
 
 function Slider({ name, unit, min, max, step = 1, value, onValueChange }) {
   const fillColor = "white";
@@ -80,35 +74,11 @@ function Discrete({ name, options, array, onValueChange }) {
   )
 }
 
-// helper functions
-  function getMinMaxRange(units, filterName) {
-    if (units.length === 0) {
-      return { min: 0, max: 0 };
-    }
-
-    let min = units[0][filterName];
-    let max = units[0][filterName];
-
-    for (let i = 1; i < units.length; i++) {
-      const value = units[i][filterName];
-      if (value < min) min = value;
-      if (value > max) max = value;
-    }
-    return {
-      min: min,
-      max: max,
-    }
-  }
-
-function getDiscreteValues (units, filterName) {
-  return [...new Set(units.map(a => a[filterName]))].sort((a, b) => a - b);
-  }
-
 export default function FilterPanel() {
   const { onFilterChange } = useContext(FilterContext);
   const { currentItem } = useContext(SidebarContext);
   // console.log(currentItem);
-  
+
   const currentApartments = currentItem?.units || [];
   // console.log(currentApartments);
 
@@ -148,7 +118,7 @@ export default function FilterPanel() {
     });
   }, [unitType, bedrooms, bathrooms, area, price]);
 
-  if(!currentItem) return null;
+  if (!currentItem) return null;
 
   return (
     <div className="flex flex-col gap-2 max-h-[calc(100vh-205px)] scrollbar-custom overflow-auto pe-2 text-white font-light text-sm">

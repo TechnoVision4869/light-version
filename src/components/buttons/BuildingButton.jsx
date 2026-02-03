@@ -1,10 +1,22 @@
 import { useContext } from "react";
 import { SidebarContext } from "../../store/SidebarContextProvider";
-import BED_ICON from "../../assets/icons/bed.svg";
-import AREA_ICON from "../../assets/icons/area.svg"
+// Icons
+import BedRoundedIcon from '@mui/icons-material/BedRounded';
+import OpenInFullRoundedIcon from '@mui/icons-material/OpenInFullRounded';
+// import helper functions
+import { FILTER_ENUM, getMinMaxRange } from "../helpers/filterHelper";
 
 export default function BuildingButton({ building, isDisabled, goToItem }) {
+    let unitsToFilter = [];
+    if (building.type === "tower") unitsToFilter = building.floors.flatMap(floor => floor.units);
+    else unitsToFilter = building.units;
+
+    console.log(unitsToFilter);
+
     const { highlightedButton, setHighlightedButton } = useContext(SidebarContext);
+
+    const { min: minBedrooms, max: maxBedrooms } = getMinMaxRange(unitsToFilter, FILTER_ENUM.BEDROOMS);
+    const { min: minArea, max: maxArea } = getMinMaxRange(unitsToFilter, FILTER_ENUM.AREA);
 
     const isSelected = highlightedButton === building;
 
@@ -32,14 +44,17 @@ export default function BuildingButton({ building, isDisabled, goToItem }) {
                 <div className="text-md font-bold leading-tight whitespace-nowrap">
                     {building.displayName}
                 </div>
-                {/* <div className="text-xs text-white/60 leading-tight pt-1">
-                    4 BR | 120 - 180 m²
-                </div> */}
-                <div className="text-xs items-center flex space-x-1 text-white/60 leading-tight pt-1">
-                    <img className="w-6" src={BED_ICON}></img>
-                    <div> 4 BR </div>
-                    <img className="ms-3 w-4" src={AREA_ICON}></img>
-                    <div> 120 - 180 m² </div>
+                <div className="text-sm items-left flex flex-col space-x-0 space-y-2 text-white/60 leading-tight pt-1
+                                        md:items-center md:flex-row md:space-x-3 md:space-y-0">
+                    <div className="flex items-center space-x-1">
+                        <BedRoundedIcon />
+                        {minBedrooms === maxBedrooms ? <div>{minBedrooms}</div> : <div>{minBedrooms} - {maxBedrooms}</div>} <span>BR</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                        <OpenInFullRoundedIcon />
+                        {minArea === maxArea ? <div>{minArea}</div> : <div>{minArea} - {maxArea}</div>} <span>m²</span>
+                    </div>
+
                 </div>
             </div>
         </button>

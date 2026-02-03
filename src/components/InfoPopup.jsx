@@ -13,7 +13,7 @@ export default function InfoPopup({ showInfoPopup, onClose }) {
 
     if (activeLayer === LAYERS.SURROUNDING_DETAIL) {
         return (
-            <div className="absolute bottom-3 md:bottom-6 left-1/2 -translate-x-1/2 w-full max-w-[calc(100%-50px)] lg:max-w-[760px] px-3 lg:px-0 z-40 pointer-events-auto">
+            <div className="absolute bottom-3 md:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 w-full max-w-[calc(100%-50px)] lg:max-w-[760px] px-3 lg:px-0 z-40 pointer-events-auto">
                 <div className="bg-[#94846D] text-white rounded-2xl shadow-2xl p-3 md:p-4 relative overflow-hidden">
                     {/* Close */}
                     <button
@@ -52,7 +52,7 @@ export default function InfoPopup({ showInfoPopup, onClose }) {
                             </div>
 
 
-                            <p className="text-sm md:text-base text-white/80 mt-1">
+                            <p className="text-sm md:text-md lg:text-base text-white/90 mt-1">
                                 {currentItem.description}
                             </p>
                         </div>
@@ -63,7 +63,7 @@ export default function InfoPopup({ showInfoPopup, onClose }) {
     }
 
     return (
-        <div className="absolute bottom-3 md:bottom-6 left-1/2 -translate-x-1/2 w-full max-w-[calc(100%-50px)] lg:max-w-[760px] px-3 lg:px-0 z-40 pointer-events-auto">
+        <div className="absolute bottom-3 md:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 w-full max-w-[calc(100%-50px)] lg:max-w-[760px] px-3 lg:px-0 z-40 pointer-events-auto">
             <div className="bg-black/70 backdrop-blur-sm text-white p-4 rounded-2xl shadow-2xl  p-3 md:p-4 relative overflow-hidden">
                 {/* Close */}
                 <button
@@ -82,8 +82,8 @@ export default function InfoPopup({ showInfoPopup, onClose }) {
 
                 <div>
                     <div>
-                        <div className="font-bold text-sm md:text-base">{currentItem.displayName}</div>
-                        <p className="text-sm md:text-base text-white/80 mt-1">{currentItem.description}</p>
+                        <div className="font-bold text-sm md:text-md lg:text-base">{currentItem.displayName}</div>
+                        <p className="text-sm md:text-md lg:text-base text-white/90 mt-1">{currentItem.description}</p>
                     </div>
 
                 </div>
