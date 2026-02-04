@@ -6,26 +6,30 @@ import Pin from "./Pin";
 import "@egjs/react-view360/css/view360.min.css";
 
 export default function Panorama({ unit }) {
-  const ZOOM_MIN = 0.8; // = FOV 105 (max zoom-out)
-  const ZOOM_MAX = 1.5; // = FOV 60 (max zoom-in)
-  const ZOOM_NORMAL = 0.85; // = FOV 90
 
-  const ZOOM_IN_TIME = 500;
-  const ZOOM_OUT_TIME = 1000;
-  const FADE_DURATION = 750;
+  const ZOOM_OUT = 0.6; // zoomed out view (match FOV 118.07°)
+  const ZOOM_NORMAL = 1; // default zoom (match FOV ≈ 96.03°)
+  const ZOOM_IN = 1.667; // zoomed in view (match FOV 73.99°)
+
+  const ZOOM_DURATION = 750;
+
+  const easing = {
+    easeIn: (x) => x * x * x,
+    easeOut: (x) => 1 - Math.pow(1 - x, 3),
+    easeInOut: (x) => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2,
+};
 
   const viewerRef = useRef(null);
   const [hotspotPositions, setHotspotPositions] = useState({});
   const containerRef = useRef(null);
+  const [isTransitioning, setIsTransitioning] = useState(false); // blur overlay state
+  const transitionTimeoutRef = useRef(null);
 
   // Get unit data
   const unitType = DATA.project.unitTypes[unit.unitTypeId];
   const floors = unitType.interior.floors;
   const [room, setRoom] = useState(floors[0].rooms[0]);
-
   const [currentImage, setCurrentImage] = useState(room.image);
-  const [nextImage, setNextImage] = useState(null);
-  const [isFading, setIsFading] = useState(false);
 
   const hotspots = room.hotspots;
   const hotspotsRef = useRef();
@@ -38,45 +42,41 @@ export default function Panorama({ unit }) {
 
   // Calculate hotspot screen position (v4-compatible)
   const getHotspotScreenPosition = useCallback((viewer, yaw, pitch) => {
-    const oyaw = viewer.camera.yaw;
-    const opitch = viewer.camera.pitch;
+  const oyaw = viewer.camera.yaw;
+  const opitch = viewer.camera.pitch;
 
-    const rect = containerRef.current?.getBoundingClientRect();
-    if (!rect || rect.width === 0 || rect.height === 0) return null;
+  const rect = containerRef.current?.getBoundingClientRect();
+  if (!rect || rect.width === 0 || rect.height === 0) return null;
 
-    const { width, height } = rect;
-    const aspectRatio = height / width;
+  const { width, height } = rect;
 
-    // v4 returns HORIZONTAL FOV
-    const hfov = viewer.camera.fov; // in degrees
+  // Use HFOV directly from viewer (no conversions)
+  const hfov = viewer.camera.fov; // HORIZONTAL FOV in degrees
+  const toRadian = (deg) => (deg * Math.PI) / 180;
 
-    // Convert HFOV → VFOV (vertical field of view)
-    const hfovRad = (hfov * Math.PI) / 180;
-    const vfovRad = 2 * Math.atan(Math.tan(hfovRad / 2) * aspectRatio);
-    const vfov = (vfovRad * 180) / Math.PI; // in degrees
+  // Normalize yaw delta
+  let deltaYaw = yaw - oyaw;
+  if (deltaYaw < -180) deltaYaw += 360;
+  if (deltaYaw > 180) deltaYaw -= 360;
+  if (Math.abs(deltaYaw) > 90) return null; // behind camera
 
-    // Normalize yaw delta
-    let deltaYaw = yaw - oyaw;
-    if (deltaYaw < -180) deltaYaw += 360;
-    if (deltaYaw > 180) deltaYaw -= 360;
-    if (Math.abs(deltaYaw) > 90) return null; // hide behind camera
+  // Calculate screen position using HFOV directly
+  const hfovRad = toRadian(hfov);
+  const rx = Math.tan(hfovRad / 2);
+  
+  // For vertical, account for aspect ratio
+  const aspectRatio = width / height;
+  const ry = Math.tan(hfovRad / 2) / aspectRatio;
 
-    const toRadian = (deg) => (deg * Math.PI) / 180;
+  const pointX = Math.tan(toRadian(-deltaYaw)) / rx;
+  const pointY = Math.tan(toRadian(opitch - pitch)) / ry; // swapped for correct direction
+  
+  // Clamp to screen bounds with small margin
+  const x = Math.max(0, Math.min(width, width / 2 + (pointX * width) / 2));
+  const y = Math.max(0, Math.min(height, height / 2 + (pointY * height) / 2));
 
-    // Compute horizontal FOV for screen projection (used only for rx)
-    const hFovForProjection = Math.atan((width / height) * Math.tan(toRadian(vfov) / 2)) * (180 / Math.PI) * 2;
-
-    const rx = Math.tan(toRadian(hFovForProjection) / 2);
-    const ry = Math.tan(toRadian(vfov) / 2);
-
-    const pointX = Math.tan(toRadian(-deltaYaw)) / rx;
-    const pointY = Math.tan(toRadian(-pitch + opitch)) / ry;
-
-    const x = width / 2 + (pointX * width) / 2;
-    const y = height / 2 + (pointY * height) / 2;
-
-    return { x, y };
-  }, []);
+  return { x, y };
+}, []);
 
   // Update hotspot positions
   const updateHotspots = useCallback(() => {
@@ -92,40 +92,9 @@ export default function Panorama({ unit }) {
 
   // Projection (memoized)
   const projection = useMemo(() => new EquirectProjection({ src: currentImage }), [currentImage]);
-  const nextProjection = useMemo(() => {
-    return nextImage ? new EquirectProjection({ src: nextImage }) : null;
-  }, [nextImage]);
-
-  // Handle initial load
-  const handleReady = useCallback(() => {
-    // Initial view
-    // console.log("ready");
-
-    viewerRef.current.camera.animateTo({
-      // yaw: 0,
-      // pitch: 0,
-      zoom: ZOOM_NORMAL,
-      duration: ZOOM_OUT_TIME,
-    });
-    updateHotspots();
-  }, [updateHotspots]);
 
   // Handle view changes (pan/zoom)
   const handleViewChange = useCallback(() => {
-    updateHotspots();
-  }, [updateHotspots]);
-
-  // Handle new image load (v4's "imageLoaded" equivalent)
-  const handleLoad = useCallback(() => {
-    // console.log("load");
-
-    // Animate to default view AFTER image loads
-    viewerRef.current.camera.animateTo({
-      // yaw: 0,
-      // pitch: 0,
-      zoom: ZOOM_NORMAL,
-      duration: 10,
-    });
     updateHotspots();
   }, [updateHotspots]);
 
@@ -134,84 +103,80 @@ export default function Panorama({ unit }) {
     return floors.flatMap(floor => floor.rooms).find(room => room.displayName === roomLabel);
   }, [floors]);
 
-  const switchRoomWithFade = useCallback((newRoom) => {
-    if (isFading) return; // prevent rapid clicks
-
-    // 1. PREPARE next image (render next viewer WHILE current is still visible)
-    setNextImage(newRoom.image);
-
-    // 2. AFTER next viewer is rendered, START fade
-    requestAnimationFrame(() => {
-      setIsFading(true);
-    });
-
-    // 3. CLEANUP after fade completes
-    setTimeout(() => {
-      setCurrentImage(newRoom.image);
-      setNextImage(null);
-      setIsFading(false);
-      setRoom(newRoom);
-    }, FADE_DURATION); // must match CSS duration
-  }, [isFading]);
-
   // Handle hotspot click: zoom in → switch room
   const handleHotspotClick = useCallback((room) => {
     if (!viewerRef.current) return;
+    console.log("click");
+    
+    // Start blur overlay
+    setTimeout(() => {
+      setIsTransitioning(true);
+    }, 750);
+    if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
 
-    // Zoom in current room
+    // 1. Zoom in old image with ease-in
     viewerRef.current.camera.animateTo({
       yaw: room.yaw,
-      // pitch: room.pitch,
-      zoom: ZOOM_MAX,
-      duration: ZOOM_IN_TIME,
+      pitch: -5,
+      zoom: ZOOM_IN,
+      duration: ZOOM_DURATION,
+      easing: easing.easeIn,
     });
 
-    // Switch room AFTER zoom completes
+    // 2. Switch room AFTER first zoom in completes
     setTimeout(() => {
       const targetRoom = findRoomById(room.label);
-      // console.log(targetRoom.image);
-
       if (targetRoom) {
-        switchRoomWithFade(targetRoom);
+        setCurrentImage(targetRoom.image);
+        setRoom(targetRoom);
+        // onLoad will be called automatically when image finishes loading
+        // and will handle step 3 (zoom out animation with ease-out)
       }
-
-    }, ZOOM_IN_TIME - ZOOM_IN_TIME / 2);
+    }, ZOOM_DURATION);
   }, [findRoomById]);
+
+   // Handle new image load (v4's "imageLoaded" equivalent)
+  const handleLoad = useCallback(() => {
+    if (!viewerRef.current) return;
+    console.log("load");
+
+    // Set to zoom out position instantly (no animation)
+    viewerRef.current.camera.lookAt({
+      zoom: ZOOM_OUT,
+    });
+
+    // Animate back to normal with ease-out
+    viewerRef.current.camera.animateTo({
+      zoom: ZOOM_NORMAL,
+      duration: ZOOM_DURATION,
+      easing: easing.easeOut,
+    });
+
+    // Remove blur overlay after transition completes
+    transitionTimeoutRef.current = setTimeout(() => {
+      setIsTransitioning(false);
+    }, 500);
+
+    updateHotspots();
+  }, [updateHotspots]);
 
   return (
     <div className="relative w-screen h-screen" ref={containerRef}>
-      {/* Next viewer */}
-      {isFading && (
-        <View360
-          className="view360-fullscreen opacity-100 border-6 border-green-600"
-          projection={nextProjection}
-        // zoomRange={{ min: ZOOM_MIN, max: ZOOM_MAX }}
-        // draggable={false}
-        // pinchZoom={false}
-        // keyboard={false}
-        // wheel={false}
-        />
-      )}
-
       {/* Current viewer */}
       <View360
         ref={viewerRef}
         className="view360-fullscreen"
-        style={{
-          opacity: isFading ? 0 : 1,
-          transition: isFading
-            ? `opacity ${FADE_DURATION}ms ease-in`
-            : 'none', // ← no transition when fading in (not needed here)
-        }}
         projection={projection}
-        onReady={handleReady}
         onLoad={handleLoad}
         onViewChange={handleViewChange}
-        zoomRange={{ min: ZOOM_MIN, max: ZOOM_MAX }}
+        zoomRange={{ min: ZOOM_OUT, max: ZOOM_IN }}
       />
 
+       {/* Blur overlay during transition (hides load gap) */}
+      {isTransitioning && <div className="motion-blur-overlay absolute inset-0 pointer-events-none" />}
+
       {/* Hotspots */}
-      {!isFading && (hotspots.map((spot) => {
+      {hotspots.map((spot) => {
         const pos = hotspotPositions[spot.id];
         if (!pos) return null;
         return (
@@ -228,7 +193,7 @@ export default function Panorama({ unit }) {
             }}
           />
         );
-      }))}
+      })}
     </div>
   );
 }

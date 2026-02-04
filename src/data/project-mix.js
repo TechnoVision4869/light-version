@@ -512,30 +512,37 @@ export const PROJECT_MIX = {
               {
                 id: "room1",
                 displayName: "Livingroom",
-                image: "/mix/panorama/livingroom.png",
+                image: "/mix/panorama/unit-type-a/rec_f.jpg",
                 description: "A spacious livingroom...",
                 hotspots: [
                   {
-                    id: 'spot1',
-                    yaw: 25, pitch: -5,
-                    type: 'scene',
-                    label: "Bedroom"
-                  },
-                  {
-                    id: 'spot2',
-                    yaw: 25, pitch: 5,
-                    type: 'scene',
-                    label: "Master Bedroom"
-                  },
-                  {
                     id: 'spot3',
-                    yaw: 0, pitch: 0,
+                    yaw: -35, pitch: 0,
                     type: 'scene',
                     label: "Dinning and Kitchen"
-                  }
+                  },
+                  
                 ]
               },
-              { id: "room2", displayName: "Dinning and Kitchen", image: "/mix/panorama/dinning_kitchen.png", hotspots: [{ id: 'spot1', yaw: -65, pitch: -25, type: 'scene', label: "Livingroom" }, { id: 'spot2', yaw: 83, pitch: 0, type: 'scene', label: "Bedroom" }, { id: 'spot3', yaw: 83, pitch: -10, type: 'scene', label: "Master Bedroom" }] },
+              {
+                id: "room2",
+                displayName: "Dinning and Kitchen",
+                image: "/mix/panorama/unit-type-a/dining_f.jpg",
+                hotspots: [
+                  {
+                    id: 'spot1',
+                    yaw: 145, pitch: 0,
+                    type: 'scene',
+                    label: "Livingroom"
+                  },
+                  {
+                    id: 'spot4',
+                    yaw: 160, pitch: 5,
+                    type: 'scene',
+                    label: "Livingroom"
+                  },
+                  ]
+                },
               { id: "room3", displayName: "Bedroom", image: "/mix/panorama/bedroom.png", hotspots: [{ id: 'spot1', yaw: -105, pitch: -10, type: 'scene', label: "Livingroom" }] },
               { id: "room4", displayName: "Master Bedroom", image: "/mix/panorama/master_bedroom.png", hotspots: [{ id: 'spot1', yaw: -115, pitch: -5, type: 'scene', label: "Livingroom" }, { id: 'spot2', yaw: -115, pitch: -15, type: 'scene', label: "Bathroom" }] },
               { id: "room5", displayName: "Bathroom", image: "/mix/panorama/bathroom.png", hotspots: [{ id: 'spot1', yaw: -3, pitch: 0, type: 'scene', label: "Master Bedroom" }] }

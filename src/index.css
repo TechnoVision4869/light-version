@@ -135,3 +135,36 @@ body {
   backdrop-filter: blur(14px);
   z-index: 30;
 }
+
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.motion-blur-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: motionBlur 1500ms ease-in-out;
+}
+
+@keyframes motionBlur {
+  0% {
+    backdrop-filter: blur(0px);
+    opacity: 0;
+  }
+  20% {
+    backdrop-filter: blur(12px);
+    opacity: 1;
+  }
+  80% {
+    backdrop-filter: blur(12px);
+    opacity: 1;
+  }
+  100% {
+    backdrop-filter: blur(0px);
+    opacity: 0;
+  }
+}

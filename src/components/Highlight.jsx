@@ -8,7 +8,7 @@ export default function Highlight() {
         return (
             <img
                 src={HIGHLIGHT_IMG}
-                className="w-full h-full object-cover object-center rounded-2xl  absolute inset-0 z-20 transition"
+                className="w-full h-full object-cover object-center rounded-2xl absolute inset-0 z-20 transition"
                 alt="Highlight">
             </img>
         )
