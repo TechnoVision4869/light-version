@@ -228,7 +228,7 @@ export const PROJECT_HORIZONTAL = {
                   price: 2200000,
                   area: 320,
                   bedrooms: 4, bathrooms: 3,
-                  balconyView: "/horizontal/panorama/villa/balcony.jpg",
+                  balconyView: null,
                   x: 0.47, y: 0.135,
                   videos: {
                     forwardVideo: "/horizontal/videos/zones/zone1/villa1/zone1_villa1_gen_trans.mp4",

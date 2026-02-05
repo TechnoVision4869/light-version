@@ -4,6 +4,7 @@ import View360, { EquirectProjection } from "@egjs/react-view360";
 import { DATA } from "../data/layers";
 import Pin from "./Pin";
 import "@egjs/react-view360/css/view360.min.css";
+import InteriorNav from "./InteriorNav";
 
 export default function Panorama({ unit }) {
 
@@ -173,6 +174,8 @@ export default function Panorama({ unit }) {
         onViewChange={handleViewChange}
         zoomRange={{ min: ZOOM_OUT, max: ZOOM_IN }}
       />
+
+      <InteriorNav levels={levels} />
 
       {/* Blur overlay during transition (hides load gap) */}
       {isTransitioning && <div className="motion-blur-overlay absolute inset-0 pointer-events-none" />}
