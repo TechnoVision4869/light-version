@@ -110,24 +110,6 @@ export default function Home() {
         goToTab(tab, item, isFromHome);
     }
 
-
-    // if (tab === activeTab) return;
-
-    // if (tab === TABS.HOME) {
-    //   goHome();
-    // } else {
-    //   const isFromHome = activeTab === TABS.HOME;
-    //   const isFromAnotherTab =
-    //     activeTab === TABS.ZONES ||
-    //     activeTab === TABS.AMENITIES ||
-    //     activeTab === TABS.SURROUNDINGS;
-    //   if (isFromAnotherTab && activeLayer === null) {
-    //     viewerProps.StartReverse(isFromAnotherTab, () => goToTab(tab, true));
-    //     return;
-    //   }
-    //   goToTab(tab, isFromHome, isFromAnotherTab);
-    // }
-
     setTimeout(() => {
       handleSidebarState(true);
     }, 750);

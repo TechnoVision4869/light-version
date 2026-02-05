@@ -506,13 +506,14 @@ export const PROJECT_MIX = {
         floorPlans: [{ id: "floor1", src: "/mix/images/fp1.png" }],
         paymentPlans: [{ downPayment: 4999999, monthly: 499999, years: 8 }, { downPayment: 2999999, monthly: 299999, years: 20 }],
         interior: {
-          floors: [{
+          levels: [{
             id: "floor1",
             rooms: [
               {
                 id: "room1",
                 displayName: "Livingroom",
-                image: "/mix/panorama/unit-type-a/rec_f.jpg",
+                furnitureImg: "/mix/panorama/unit-type-a/rec_f.jpg",
+                unfurnitureImg: "/mix/panorama/unit-type-a/rec_unf.jpg",
                 description: "A spacious livingroom...",
                 hotspots: [
                   {
@@ -527,7 +528,8 @@ export const PROJECT_MIX = {
               {
                 id: "room2",
                 displayName: "Dinning and Kitchen",
-                image: "/mix/panorama/unit-type-a/dining_f.jpg",
+                furnitureImg: "/mix/panorama/unit-type-a/dining_f.jpg",
+                unfurnitureImg: "/mix/panorama/unit-type-a/dining_unf.jpg",
                 hotspots: [
                   {
                     id: 'spot1',
@@ -543,9 +545,9 @@ export const PROJECT_MIX = {
                   },
                   ]
                 },
-              { id: "room3", displayName: "Bedroom", image: "/mix/panorama/bedroom.png", hotspots: [{ id: 'spot1', yaw: -105, pitch: -10, type: 'scene', label: "Livingroom" }] },
-              { id: "room4", displayName: "Master Bedroom", image: "/mix/panorama/master_bedroom.png", hotspots: [{ id: 'spot1', yaw: -115, pitch: -5, type: 'scene', label: "Livingroom" }, { id: 'spot2', yaw: -115, pitch: -15, type: 'scene', label: "Bathroom" }] },
-              { id: "room5", displayName: "Bathroom", image: "/mix/panorama/bathroom.png", hotspots: [{ id: 'spot1', yaw: -3, pitch: 0, type: 'scene', label: "Master Bedroom" }] }
+              { id: "room3", displayName: "Bedroom", furnitureImg: "/mix/panorama/bedroom.png", unfurnitureImg: "/mix/panorama/bedroom_unf.png", hotspots: [{ id: 'spot1', yaw: -105, pitch: -10, type: 'scene', label: "Livingroom" }] },
+              { id: "room4", displayName: "Master Bedroom", furnitureImg: "/mix/panorama/master_bedroom.png", unfurnitureImg: "/mix/panorama/master_bedroom_unf.png", hotspots: [{ id: 'spot1', yaw: -115, pitch: -5, type: 'scene', label: "Livingroom" }, { id: 'spot2', yaw: -115, pitch: -15, type: 'scene', label: "Bathroom" }] },
+              { id: "room5", displayName: "Bathroom", furnitureImg: "/mix/panorama/bathroom.png", unfurnitureImg:"/mix/panorama/bathroom_unf.png", hotspots: [{ id: 'spot1', yaw: -3, pitch: 0, type: 'scene', label: "Master Bedroom" }] }
             ]
           }]
         }
@@ -562,14 +564,14 @@ export const PROJECT_MIX = {
         floorPlans: [{ id: "floor1", src: "/mix/images/fp1.png" }],
         paymentPlans: [{ downPayment: 4999999, monthly: 499999, years: 8 }, { downPayment: 2999999, monthly: 299999, years: 20 }],
         interior: {
-          floors: [{
+          levels: [{
             id: "floor1",
             rooms: [
-              { id: "room1", displayName: "Livingroom", image: "/mix/panorama/livingroom.png", hotspots: [{ id: 'spot1', yaw: 25, pitch: -5, type: 'scene', label: "Bedroom" }, { id: 'spot2', yaw: 25, pitch: 5, type: 'scene', label: "Master Bedroom" }, { id: 'spot3', yaw: 0, pitch: 0, type: 'scene', label: "Dinning and Kitchen" }] },
-              { id: "room2", displayName: "Dinning and Kitchen", image: "/mix/panorama/dinning_kitchen.png", hotspots: [{ id: 'spot1', yaw: -65, pitch: -25, type: 'scene', label: "Livingroom" }, { id: 'spot2', yaw: 83, pitch: 0, type: 'scene', label: "Bedroom" }, { id: 'spot3', yaw: 83, pitch: -10, type: 'scene', label: "Master Bedroom" }] },
-              { id: "room3", displayName: "Bedroom", image: "/mix/panorama/bedroom.png", hotspots: [{ id: 'spot1', yaw: -105, pitch: -10, type: 'scene', label: "Livingroom" }] },
-              { id: "room4", displayName: "Master Bedroom", image: "/mix/panorama/master_bedroom.png", hotspots: [{ id: 'spot1', yaw: -115, pitch: -5, type: 'scene', label: "Livingroom" }, { id: 'spot2', yaw: -115, pitch: -15, type: 'scene', label: "Bathroom" }] },
-              { id: "room5", displayName: "Bathroom", image: "/mix/panorama/bathroom.png", hotspots: [{ id: 'spot1', yaw: -3, pitch: 0, type: 'scene', label: "Master Bedroom" }] }
+              { id: "room1", displayName: "Livingroom", furnitureImg: "/mix/panorama/livingroom.png", unfurnitureImg: "/mix/panorama/livingroom_unf.png", hotspots: [{ id: 'spot1', yaw: 25, pitch: -5, type: 'scene', label: "Bedroom" }, { id: 'spot2', yaw: 25, pitch: 5, type: 'scene', label: "Master Bedroom" }, { id: 'spot3', yaw: 0, pitch: 0, type: 'scene', label: "Dinning and Kitchen" }] },
+              { id: "room2", displayName: "Dinning and Kitchen", furnitureImg: "/mix/panorama/dinning_kitchen.png", unfurnitureImg: "/mix/panorama/dinning_kitchen_unf.png", hotspots: [{ id: 'spot1', yaw: -65, pitch: -25, type: 'scene', label: "Livingroom" }, { id: 'spot2', yaw: 83, pitch: 0, type: 'scene', label: "Bedroom" }, { id: 'spot3', yaw: 83, pitch: -10, type: 'scene', label: "Master Bedroom" }] },
+              { id: "room3", displayName: "Bedroom", furnitureImg: "/mix/panorama/bedroom.png", unfurnitureImg:"/mix/panorama/bedroom_unf.png", hotspots: [{ id: 'spot1', yaw: -105, pitch: -10, type: 'scene', label: "Livingroom" }] },
+              { id: "room4", displayName: "Master Bedroom", furnitureImg: "/mix/panorama/master_bedroom.png", unfurnitureImg:"/mix/panorama/master_bedroom_unf.png", hotspots: [{ id: 'spot1', yaw: -115, pitch: -5, type: 'scene', label: "Livingroom" }, { id: 'spot2', yaw: -115, pitch:-15, type:'scene', label:"Bathroom"}] },
+              { id:"room5", displayName:"Bathroom", furnitureImg:"/mix/panorama/bathroom.png", unfurnitureImg:"/mix/panorama/bathroom_unf.png", hotspots:[{id:'spot1', yaw:-3, pitch:-20, type:'scene', label:"Master Bedroom"}]}
             ]
           }]
         }
@@ -586,13 +588,14 @@ export const PROJECT_MIX = {
         floorPlans: [{ id: "floor1", src: "/mix/images/fp1.png" }],
         paymentPlans: [{ downPayment: 4999999, monthly: 499999, years: 8 }, { downPayment: 2999999, monthly: 299999, years: 20 }],
         interior: {
-          floors: [{
+          levels: [{
             id: "floor1",
             rooms: [
               {
                 id: "room1",
                 displayName: "Entrance 1", // must match the hotspot label
-                image: "/mix/panorama/entrance01.png",
+                furnitureImg: "/mix/panorama/entrance01.png",
+                unfurnitureImg: "/mix/panorama/entrance01_unf.png",
                 hotspots: [
                   {
                     id: 'spot1',
@@ -606,7 +609,8 @@ export const PROJECT_MIX = {
               {
                 id: "room2",
                 displayName: "Entrance 2",
-                image: "/mix/panorama/entrance02.png",
+                furnitureImg: "/mix/panorama/entrance02.png",
+                unfurnitureImg: "/mix/panorama/entrance02_unf.png",
                 hotspots: [
                   {
                     id: 'spot1',
@@ -634,7 +638,8 @@ export const PROJECT_MIX = {
               {
                 id: "room3",
                 displayName: "Entrance 3-1",
-                image: "/mix/panorama/entrance03.1.png",
+                furnitureImg: "/mix/panorama/entrance03.1.png",
+                unfurnitureImg: "/mix/panorama/entrance03.1_unf.png",
                 hotspots: [
                   {
                     id: 'spot1',
@@ -655,7 +660,8 @@ export const PROJECT_MIX = {
               {
                 id: "room4",
                 displayName: "Entrance 3-2",
-                image: "/mix/panorama/entrance03.2.png",
+                furnitureImg: "/mix/panorama/entrance03.2.png",
+                unfurnitureImg: "/mix/panorama/entrance03.2_unf.png",
                 hotspots: [
                   {
                     id: 'spot1',
@@ -676,7 +682,8 @@ export const PROJECT_MIX = {
               {
                 id: "room5",
                 displayName: "Entrance 4",
-                image: "/mix/panorama/entrance04.png",
+                furnitureImg: "/mix/panorama/entrance04.png",
+                unfurnitureImg: "/mix/panorama/entrance04_unf.png",
                 hotspots: [
                   {
                     id: 'spot1',

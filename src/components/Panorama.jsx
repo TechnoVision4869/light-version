@@ -7,9 +7,9 @@ import "@egjs/react-view360/css/view360.min.css";
 
 export default function Panorama({ unit }) {
 
-  const ZOOM_OUT = 0.6; // zoomed out view (match FOV 118.07°)
-  const ZOOM_NORMAL = 1; // default zoom (match FOV ≈ 96.03°)
-  const ZOOM_IN = 1.667; // zoomed in view (match FOV 73.99°)
+  const ZOOM_OUT = 0.6; // zoomed out view (match FOV ≈ 118.07°)
+  const ZOOM_NORMAL = 1; // default zoom (match FOV = 90°)
+  const ZOOM_IN = 1.667; // zoomed in view (match FOV ≈ 61.93°)
 
   const ZOOM_DURATION = 750;
 
@@ -26,19 +26,19 @@ export default function Panorama({ unit }) {
   const transitionTimeoutRef = useRef(null);
 
   // Get unit data
-  const unitType = DATA.project.unitTypes[unit.unitTypeId];
-  const floors = unitType.interior.floors;
-  const [room, setRoom] = useState(floors[0].rooms[0]);
-  const [currentImage, setCurrentImage] = useState(room.image);
+  const unitType = DATA.project.unitTypes[unit.unitTypeId];  
+  const levels = unitType.interior.levels;
+  const [room, setRoom] = useState(levels[0].rooms[0]);  
+  const [currentImage, setCurrentImage] = useState(room.furnitureImg);
 
   const hotspots = room.hotspots;
   const hotspotsRef = useRef();
   hotspotsRef.current = hotspots; // Sync on every render
 
   useEffect(() => {
-    const allImages = floors.flatMap(f => f.rooms.map(r => r.image));
+    const allImages = levels.flatMap(l => l.rooms.map(r => r.furnitureImg));
     allImages.forEach(src => new Image().src = src);
-  }, [floors]);
+  }, [levels]);
 
   // Calculate hotspot screen position (v4-compatible)
   const getHotspotScreenPosition = useCallback((viewer, yaw, pitch) => {
@@ -100,8 +100,8 @@ export default function Panorama({ unit }) {
 
   // Find room by name
   const findRoomById = useCallback((roomLabel) => {
-    return floors.flatMap(floor => floor.rooms).find(room => room.displayName === roomLabel);
-  }, [floors]);
+    return levels.flatMap(floor => floor.rooms).find(room => room.displayName === roomLabel);
+  }, [levels]);
 
   // Handle hotspot click: zoom in → switch room
   const handleHotspotClick = useCallback((room) => {
@@ -126,8 +126,10 @@ export default function Panorama({ unit }) {
     // 2. Switch room AFTER first zoom in completes
     setTimeout(() => {
       const targetRoom = findRoomById(room.label);
+      console.log(targetRoom);
+      
       if (targetRoom) {
-        setCurrentImage(targetRoom.image);
+        setCurrentImage(targetRoom.furnitureImg);
         setRoom(targetRoom);
         // onLoad will be called automatically when image finishes loading
         // and will handle step 3 (zoom out animation with ease-out)
@@ -172,7 +174,7 @@ export default function Panorama({ unit }) {
         zoomRange={{ min: ZOOM_OUT, max: ZOOM_IN }}
       />
 
-       {/* Blur overlay during transition (hides load gap) */}
+      {/* Blur overlay during transition (hides load gap) */}
       {isTransitioning && <div className="motion-blur-overlay absolute inset-0 pointer-events-none" />}
 
       {/* Hotspots */}

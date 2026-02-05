@@ -163,7 +163,7 @@ export const PROJECT_HORIZONTAL = {
                   price: 2200000,
                   area: 320,
                   bedrooms: 4, bathrooms: 3,
-                  balconyView: "/panorama/villa/balcony.jpg",
+                  balconyView: "/horizontal/panorama/villa/balcony.jpg",
                   x: 0.39, y: 0.135,
                   videos: {
                     forwardVideo: "/cutsection.mp4",
@@ -181,7 +181,7 @@ export const PROJECT_HORIZONTAL = {
                   price: 2200000,
                   area: 320,
                   bedrooms: 4, bathrooms: 3,
-                  balconyView: "/panorama/villa/balcony.jpg",
+                  balconyView: "/horizontal/panorama/villa/balcony.jpg",
                   x: 0.43, y: 0.135,
                   videos: {
                     forwardVideo: "/cutsection.mp4",
@@ -199,7 +199,7 @@ export const PROJECT_HORIZONTAL = {
                   price: 2200000,
                   area: 320,
                   bedrooms: 4, bathrooms: 3,
-                  balconyView: "/panorama/villa/balcony.jpg",
+                  balconyView: "/horizontal/panorama/villa/balcony.jpg",
                   x: 0.47, y: 0.135,
                   videos: {
                     forwardVideo: "/cutsection.mp4",
@@ -217,7 +217,7 @@ export const PROJECT_HORIZONTAL = {
                   price: 2200000,
                   area: 320,
                   bedrooms: 4, bathrooms: 3,
-                  balconyView: "/panorama/villa/balcony.jpg",
+                  balconyView: "/horizontal/panorama/villa/balcony.jpg",
                   x: 0.51, y: 0.135,
                   videos: {
                     forwardVideo: "/cutsection.mp4",
@@ -288,7 +288,7 @@ export const PROJECT_HORIZONTAL = {
                   price: 950000,
                   area: 425,
                   bedrooms: 4, bathrooms: 2,
-                  balconyView: "/panorama/townhouse/balcony.jpg",
+                  balconyView: "/horizontal/panorama/townhouse/balcony.jpg",
                   x: 0.19, y: 0.3,
                   videos: {
                     forwardVideo: "/cutsection.mp4",
@@ -307,7 +307,7 @@ export const PROJECT_HORIZONTAL = {
                   price: 950000,
                   area: 425,
                   bedrooms: 4, bathrooms: 2,
-                  balconyView: "/panorama/townhouse/balcony.jpg",
+                  balconyView: "/horizontal/panorama/townhouse/balcony.jpg",
                   x: 0.54, y: 0.3,
                   videos: {
                     forwardVideo: "/cutsection.mp4",
@@ -327,7 +327,7 @@ export const PROJECT_HORIZONTAL = {
                   price: 950000,
                   area: 425,
                   bedrooms: 4, bathrooms: 2,
-                  balconyView: "/panorama/townhouse/balcony.jpg",
+                  balconyView: "/horizontal/panorama/townhouse/balcony.jpg",
                   x: 0.19, y: 0.3,
                   videos: {
                     forwardVideo: "/cutsection.mp4",
@@ -346,7 +346,7 @@ export const PROJECT_HORIZONTAL = {
                   price: 950000,
                   area: 425,
                   bedrooms: 4, bathrooms: 2,
-                  balconyView: "/panorama/townhouse/balcony.jpg",
+                  balconyView: "/horizontal/panorama/townhouse/balcony.jpg",
                   x: 0.54, y: 0.3,
                   videos: {
                     forwardVideo: "/cutsection.mp4",
@@ -366,7 +366,7 @@ export const PROJECT_HORIZONTAL = {
                   price: 950000,
                   area: 425,
                   bedrooms: 4, bathrooms: 2,
-                  balconyView: "/panorama/townhouse/balcony.jpg",
+                  balconyView: "/horizontal/panorama/townhouse/balcony.jpg",
                   x: 0.19, y: 0.3,
                   videos: {
                     forwardVideo: "/cutsection.mp4",
@@ -385,7 +385,7 @@ export const PROJECT_HORIZONTAL = {
                   price: 950000,
                   area: 425,
                   bedrooms: 4, bathrooms: 2,
-                  balconyView: "/panorama/townhouse/balcony.jpg",
+                  balconyView: "/horizontal/panorama/townhouse/balcony.jpg",
                   x: 0.54, y: 0.3,
                   videos: {
                     forwardVideo: "/cutsection.mp4",
@@ -453,40 +453,34 @@ export const PROJECT_HORIZONTAL = {
         { downPayment: 5000000, monthly: 500000, years: 20 },
       ],
       interior: {
-        floors: [
+        levels: [
           {
             id: "ground",
+            name: "Ground",
             rooms: [
               {
                 id: "gr-living",
                 displayName: "Living Room",
-                image: "/panorama/villa/gr-living.jpg",
+                furnitureImg: "/horizontal/panorama/villa-luxury-4br/ground/rec_f.jpg",
+                unfurnitureImg: "/horizontal/panorama/villa-luxury-4br/ground/rec_unf.jpg",
                 hotspots: [
                   {
                     id: "hp1",
-                    yaw: 30,
-                    pitch: 0,
+                    yaw: -35, pitch: 0,
                     type: "scene",
-                    label: "Kitchen",
-                  },
-                  {
-                    id: "hp2",
-                    yaw: 180,
-                    pitch: -5,
-                    type: "scene",
-                    label: "Garden",
+                    label: "Dining",
                   },
                 ],
               },
               {
-                id: "gr-kitchen",
-                displayName: "Kitchen",
-                image: "/panorama/villa/gr-kitchen.jpg",
+                id: "gr-dining",
+                displayName: "Dining",
+                furnitureImg: "/horizontal/panorama/villa-luxury-4br/ground/dining_f.jpg",
+                unfurnitureImg: "/horizontal/panorama/villa-luxury-4br/ground/dining_unf.jpg",
                 hotspots: [
                   {
                     id: "hp1",
-                    yaw: -90,
-                    pitch: 0,
+                    yaw: 145, pitch: 0,
                     type: "scene",
                     label: "Living Room",
                   },
@@ -496,11 +490,13 @@ export const PROJECT_HORIZONTAL = {
           },
           {
             id: "first",
+            name: "First",
             rooms: [
               {
                 id: "f1-master",
                 displayName: "Master Bedroom",
-                image: "/panorama/villa/f1-master.jpg",
+                furnitureImg: "/horizontal/panorama/villa-luxury-4br/first/master_f.png",
+                unfurnitureImg: null,
                 hotspots: [
                   {
                     id: "hp1",
@@ -512,20 +508,46 @@ export const PROJECT_HORIZONTAL = {
                 ],
               },
               {
-                id: "f1-bed2",
-                displayName: "Bedroom 2",
-                image: "/panorama/villa/f1-bed2.jpg",
-                hotspots: [],
+                id: "f1-bathroom",
+                displayName: "Bathroom",
+                furnitureImg: "/horizontal/panorama/villa-luxury-4br/first/bathroom_f.png",
+                unfurnitureImg: null,
+                hotspots: [
+                  {
+                    id: "hp1",
+                    yaw: 180,
+                    pitch: 0,
+                    type: "scene",
+                    label: "Master Bedroom",
+                  }
+                ],
               },
             ],
           },
           {
             id: "roof",
+            name: "Roof",
             rooms: [
               {
-                id: "roof-lounge",
-                displayName: "Rooftop Lounge",
-                image: "/panorama/villa/roof-lounge.jpg",
+                id: "roof-living",
+                displayName: "Rooftop Living",
+                furnitureImg: "/horizontal/panorama/villa-luxury-4br/roof/living.png",
+                unfurnitureImg: null,
+                hotspots: [
+                  {
+                    id: "hp1",
+                    yaw: 90,
+                    pitch: 10,
+                    type: "scene",
+                    label: "Garden View",
+                  },
+                ],
+              },
+              {
+                id: "roof-dining",
+                displayName: "Rooftop Dining",
+                furnitureImg: "/horizontal/panorama/villa-luxury-4br/roof/dining_kitchen.png",
+                unfurnitureImg: null,
                 hotspots: [
                   {
                     id: "hp1",
@@ -554,14 +576,15 @@ export const PROJECT_HORIZONTAL = {
       floorPlans: [{ id: "fp1", src: "/images/townhouse-fp.png" }],
       paymentPlans: [{ downPayment: 3000000, monthly: 300000, years: 10 }],
       interior: {
-        floors: [
+        levels: [
           {
             id: "ground",
             rooms: [
               {
                 id: "th-living",
                 displayName: "Living Area",
-                image: "/panorama/townhouse/living.jpg",
+                furnitureImg: "/panorama/townhouse/living.jpg",
+                unfurnitureImg: "/panorama/townhouse/living-nofurniture.jpg",
                 hotspots: [
                   {
                     id: "hp1",
@@ -582,7 +605,8 @@ export const PROJECT_HORIZONTAL = {
               {
                 id: "th-kitchen",
                 displayName: "Kitchen",
-                image: "/panorama/townhouse/kitchen.jpg",
+                furnitureImg: "/panorama/townhouse/kitchen.jpg",
+                unfurnitureImg: "/panorama/townhouse/kitchen-nofurniture.jpg",
                 hotspots: [
                   {
                     id: "hp1",
@@ -601,7 +625,8 @@ export const PROJECT_HORIZONTAL = {
               {
                 id: "th-master",
                 displayName: "Master Bedroom",
-                image: "/panorama/townhouse/master.jpg",
+                furnitureImg: "/panorama/townhouse/master.jpg",
+                unfurnitureImg: "/panorama/townhouse/master-nofurniture.jpg",
                 hotspots: [
                   {
                     id: "hp1",
@@ -615,19 +640,22 @@ export const PROJECT_HORIZONTAL = {
               {
                 id: "th-bed1",
                 displayName: "Bedroom 1",
-                image: "/panorama/townhouse/bed1.jpg",
+                furnitureImg: "/panorama/townhouse/bed1.jpg",
+                unfurnitureImg: "/panorama/townhouse/bed1-nofurniture.jpg",
                 hotspots: [],
               },
               {
                 id: "th-bed2",
                 displayName: "Bedroom 2",
-                image: "/panorama/townhouse/bed2.jpg",
+                furnitureImg: "/panorama/townhouse/bed2.jpg",
+                unfurnitureImg: "/panorama/townhouse/bed2-nofurniture.jpg",
                 hotspots: [],
               },
               {
                 id: "th-bed3",
                 displayName: "Bedroom 3",
-                image: "/panorama/townhouse/bed3.jpg",
+                furnitureImg: "/panorama/townhouse/bed3.jpg",
+                unfurnitureImg: "/panorama/townhouse/bed3-nofurniture.jpg",
                 hotspots: [],
               },
             ],
