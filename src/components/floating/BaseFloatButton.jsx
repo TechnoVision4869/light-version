@@ -1,10 +1,7 @@
 import { LAYERS } from '../../data/layers';
 
-export default function BaseFloatButton({ name, layerType = null, style = {}, isOpaque, onSelect }) {
+export default function BaseFloatButton({ name, layerType = null, style = {}, isOpaque, onSelect, showName = true }) {
     const isFloor = layerType === LAYERS.BUILDING;
-
-    let showName = true;
-    if(layerType === LAYERS.TYPE) showName = false;
     
     return (
         <button className={`bg-[#418AFF] ${isOpaque ? "" : "opacity-75"} hover:bg-[#357AEE] text-white px-3 py-1 ${showName ? "rounded-lg" : "rounded-xl"} flex items-center gap-2 z-20`}

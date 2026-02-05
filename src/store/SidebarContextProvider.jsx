@@ -1,6 +1,7 @@
 import { createContext, useCallback, useState, useMemo } from "react";
 
 import { TABS, LAYERS, DATA } from "../data/layers";
+import { set } from "lodash";
 
 export const SidebarContext = createContext({
     history: [],
@@ -16,6 +17,7 @@ export const SidebarContext = createContext({
     handleSidebarState: () => { },
 
     currentItems: [],
+    setCurrentItems: () => { },
     goToItem: () => { },
     goToTab: () => { },
     goBack: () => { },
@@ -123,21 +125,7 @@ export default function SidebarContextProvider({ children }) {
         setSidebarOpen(state);
     }, []);
 
-    const currentItems = useMemo(() => {
-        // Top-level tabs
-        if (activeLayer === null && activeTab !== TABS.HOME) {
-            const items = currentItem.items || [];
-            return items.map(item => ({ ...item })); // e.g., __type: 'zones'
-        }
-
-        // Nested layers
-        else if (activeLayer !== null && activeLayer !== LAYERS.UNIT && currentItem) {
-            const items = currentItem.items || currentItem.properties || currentItem.floors || currentItem.units || [];
-            return items.map(item => ({ ...item }));
-        }
-
-        return [];
-    }, [history]);
+    const [currentItems, setCurrentItems] = useState([]);
 
     const ctxValue = {
         history,
@@ -153,6 +141,7 @@ export default function SidebarContextProvider({ children }) {
         handleSidebarState,
 
         currentItems,
+        setCurrentItems,
         goToItem: handleCurrentItem,
         goToTab,
         goBack: handleGoBack,

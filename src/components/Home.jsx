@@ -152,7 +152,8 @@ export default function Home() {
   }
 
   useEffect(() => {
-    // if (activeLayer !== LAYERS.BUILDING) return;
+    if (!currentItem?.views) return;
+    
     if (isDisabled) return;
     // console.log(translateX);
 
@@ -524,7 +525,7 @@ export default function Home() {
             </div>
 
             {/* Views visuals */}
-            {currentItem?.viwes &&
+            {currentItem?.views &&
               <div className="flex-1 flex items-center justify-center text-white space-x-3 px-4 py-2 text-sm">
                 <div className=" flex space-x-2">
                   <div className=""> Views </div>

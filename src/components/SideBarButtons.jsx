@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { SidebarContext } from "../store/SidebarContextProvider";
 import { TABS, LAYERS, DATA } from "../data/layers";
 
@@ -12,7 +12,7 @@ import FloorButton from "./buttons/FloorButton";
 import ApartmentButton from "./buttons/ApartmentButton";
 
 export default function SidebarButtons() {
-  const { activeTab, activeLayer, currentItem, goToItem } = useContext(SidebarContext);
+  const { activeTab, activeLayer, currentItem, setCurrentItems, goToItem } = useContext(SidebarContext);
   let items = [];
   let Component = null;
   let propName = "";
@@ -31,71 +31,79 @@ export default function SidebarButtons() {
       items = DATA.project.amenities.items;
       Component = AmenityButton;
       propName = "amenity";
-      layerKey = LAYERS.AMENITY_DETAIL; 
+      layerKey = LAYERS.AMENITY_DETAIL;
     }
     else if (activeTab === TABS.SURROUNDINGS) {
       // items = TAB_CONFIG[TABS.SURROUNDINGS].getItems();
       items = DATA.project.surroundings.items;
       console.log(items);
-      
+
       Component = SurroundingButton;
       propName = "surrounding";
-      layerKey = LAYERS.SURROUNDING_DETAIL; 
+      layerKey = LAYERS.SURROUNDING_DETAIL;
     }
   }
-  else {
-    if(activeLayer === LAYERS.ZONE_DETAIL) {
-      items = currentItem.properties;
-      Component = BuildingButton;
-      propName = "building";
-      layerKey = LAYERS.BUILDING;
-      
-    }
-    else if(activeLayer === LAYERS.BUILDING) {
-      console.log(currentItem.type);
-      if(currentItem.type === "tower") {
-        items = currentItem.floors;
-        Component = FloorButton;
-        propName = "floor";
-        layerKey = LAYERS.FLOOR;
-      }
-      else {
-        items = currentItem.units;
-        if(currentItem.type === "villa") {
-          Component = ApartmentButton;
-          propName = "apartment";
-          layerKey = LAYERS.UNIT;
-        } else {
-          if(items.length > 1) {
-            Component = FloorButton;
-            propName = "floor";
-            layerKey = LAYERS.FLOOR;
-          }
-          else {
+  else
+    {
+      if (activeLayer === LAYERS.ZONE_DETAIL) {
+        items = currentItem.properties;
+        console.log(items);
+        if (items.length === 1) {
+          if (items[0].type === "villa") {
+            items = items[0].units;
             Component = ApartmentButton;
             propName = "apartment";
             layerKey = LAYERS.UNIT;
           }
+          else if (items[0].type === "town") {
+            items = items[0].units;
+            Component = BuildingButton;
+            propName = "building";
+            layerKey = LAYERS.BUILDING;
+          }
+        }
+        else {
+          Component = BuildingButton;
+          propName = "building";
+          layerKey = LAYERS.BUILDING;
         }
       }
-    }
-    else if(activeLayer === LAYERS.FLOOR) {
-      items = currentItem.units;
-      Component = ApartmentButton;
-      propName = "apartment";
-      layerKey = LAYERS.UNIT;
-    }
-    else if(activeLayer === LAYERS.UNIT) return;
+      else if (activeLayer === LAYERS.BUILDING) {
+        console.log(currentItem.type);
+        if (currentItem.type === "tower") {
+          items = currentItem.floors;
+          Component = FloorButton;
+          propName = "floor";
+          layerKey = LAYERS.FLOOR;
+        }
+        else {
+          items = currentItem.units;
+          Component = ApartmentButton;
+          propName = "apartment";
+          layerKey = LAYERS.UNIT;
+        }
+      }
+      else if (activeLayer === LAYERS.FLOOR) {
+        items = currentItem.units;
+        Component = ApartmentButton;
+        propName = "apartment";
+        layerKey = LAYERS.UNIT;
+      }
+      else if (activeLayer === LAYERS.UNIT) return;
   }
 
-  if(!items || items?.length === 0 || Component === null) return null;
+  useEffect(() => {
+    setCurrentItems(items);
+  }, [activeTab, activeLayer]);
+
+  if (!items || items?.length === 0 || Component === null) return null;
 
   return (
-     <div className="max-h-[calc(100vh-205px)] scrollbar-custom overflow-y-auto overflow-x-hidden space-y-3 px-2 py-2">
+    <div className="max-h-[calc(100vh-205px)] scrollbar-custom overflow-y-auto overflow-x-hidden space-y-3 px-2 py-2">
       {items.map((item) => (
         <Component
           key={item.id}
-           {...{ [propName]: item }}
+          {...{ [propName]: item }}
           goToItem={() => goToItem(item, layerKey)}
         />
       ))}

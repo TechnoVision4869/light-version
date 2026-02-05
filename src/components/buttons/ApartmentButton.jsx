@@ -1,10 +1,24 @@
-export default function ApartmentButton({ apartment, isDisabled = false, isSelected, goToItem }) {
+import { useContext } from "react";
+import { SidebarContext } from "../../store/SidebarContextProvider";
+
+export default function ApartmentButton({ apartment, isDisabled = false, goToItem }) {
+    const { highlightedButton, setHighlightedButton } = useContext(SidebarContext);
+    
+    const isSelected = highlightedButton === apartment;
+
+    const handleClick = () => {
+        
+        if (isSelected) {
+            console.log("ApartmentButton clicked");
+            goToItem();
+            setHighlightedButton(null);
+        }
+        else setHighlightedButton(apartment);
+    };
+    
     return (
         <button
-            key={apartment.id}
-            onClick={() => {
-                goToItem();
-            }}
+            onClick={handleClick}
             disabled={isDisabled}
             className={`w-full max-w-full mx-auto p-4 rounded-2xl transition
             ${isDisabled

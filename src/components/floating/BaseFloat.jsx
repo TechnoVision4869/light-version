@@ -133,6 +133,7 @@ export default function BaseFloating({ mediaRef }) {
                     name={item.displayName}
                     tabType={activeTab}
                     layerType={activeLayer}
+                    showName={true}
                     style={{
                         left: `${pos.left}px`,
                         top: `${pos.top}px`,
