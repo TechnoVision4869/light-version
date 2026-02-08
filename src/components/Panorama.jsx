@@ -25,6 +25,7 @@ export default function Panorama({ unit }) {
   const containerRef = useRef(null);
   const [isTransitioning, setIsTransitioning] = useState(false); // blur overlay state
   const transitionTimeoutRef = useRef(null);
+  const [isFurnished, setIsFurnished] = useState(true);
 
   // Get unit data
   const unitType = DATA.project.unitTypes[unit.unitTypeId];  
@@ -40,6 +41,16 @@ export default function Panorama({ unit }) {
     const allImages = levels.flatMap(l => l.rooms.map(r => r.furnitureImg));
     allImages.forEach(src => new Image().src = src);
   }, [levels]);
+
+  // Update image when furniture toggle changes
+  useEffect(() => {
+    setIsTransitioning(true);
+    const newImage = isFurnished ? room.furnitureImg : room.unfurnitureImg;
+    setCurrentImage(newImage);
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 500);
+  }, [isFurnished, room]);
 
   // Calculate hotspot screen position (v4-compatible)
   const getHotspotScreenPosition = useCallback((viewer, yaw, pitch) => {
@@ -104,6 +115,30 @@ export default function Panorama({ unit }) {
     return levels.flatMap(floor => floor.rooms).find(room => room.displayName === roomLabel);
   }, [levels]);
 
+  // Find floor by room
+  const findFloorByRoom = useCallback((targetRoom) => {
+    return levels.find(floor => floor.rooms.includes(targetRoom));
+  }, [levels]);
+
+  // Handle dropdown change (floor or room) - no zoom, just blur
+  const handleDropdownChange = useCallback((roomLabel) => {
+    const targetRoom = findRoomById(roomLabel);
+    if (!targetRoom) return;
+
+    // Start blur overlay
+    setIsTransitioning(true);
+    
+    // Set new room and image
+    setRoom(targetRoom);
+    const newImage = isFurnished ? targetRoom.furnitureImg : targetRoom.unfurnitureImg;
+    setCurrentImage(newImage);
+
+    // Remove blur overlay after transition
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 500);
+  }, [findRoomById, isFurnished]);
+
   // Handle hotspot click: zoom in → switch room
   const handleHotspotClick = useCallback((room) => {
     if (!viewerRef.current) return;
@@ -130,13 +165,14 @@ export default function Panorama({ unit }) {
       console.log(targetRoom);
       
       if (targetRoom) {
-        setCurrentImage(targetRoom.furnitureImg);
+        const newImage = isFurnished ? targetRoom.furnitureImg : targetRoom.unfurnitureImg;
+        setCurrentImage(newImage);
         setRoom(targetRoom);
         // onLoad will be called automatically when image finishes loading
         // and will handle step 3 (zoom out animation with ease-out)
       }
     }, ZOOM_DURATION);
-  }, [findRoomById]);
+  }, [findRoomById, isFurnished]);
 
    // Handle new image load (v4's "imageLoaded" equivalent)
   const handleLoad = useCallback(() => {
@@ -175,7 +211,14 @@ export default function Panorama({ unit }) {
         zoomRange={{ min: ZOOM_OUT, max: ZOOM_IN }}
       />
 
-      <InteriorNav levels={levels} />
+      <InteriorNav 
+        levels={levels} 
+        isFurnished={isFurnished}
+        currentRoom={room.displayName}
+        currentFloor={findFloorByRoom(room)?.name}
+        onFurnitureToggle={() => setIsFurnished(!isFurnished)}
+        onRoomChange={handleDropdownChange}
+      />
 
       {/* Blur overlay during transition (hides load gap) */}
       {isTransitioning && <div className="motion-blur-overlay absolute inset-0 pointer-events-none" />}

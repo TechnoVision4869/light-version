@@ -1,7 +1,6 @@
-import { createContext, useCallback, useState, useMemo } from "react";
+import { createContext, useCallback, useState } from "react";
 
 import { TABS, LAYERS, DATA } from "../data/layers";
-import { set } from "lodash";
 
 export const SidebarContext = createContext({
     history: [],

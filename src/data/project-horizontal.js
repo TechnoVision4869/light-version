@@ -8,6 +8,77 @@ import CairoAirportSvg from '../assets/paths/airport.svg?raw';
 import GymSvg from '../assets/paths/gym.svg?raw';
 import IconicTowerSvg from '../assets/paths/tower.svg?raw';
 
+// villas views
+const villa_views = [
+  {
+    name: "Front View",
+    videos: {
+      forwardVideo: "horizontal/videos/zones/zone1/villa1/views/view1/zone1_villa1_view1_trans.mp4",
+      reverseVideo: "horizontal/videos/zones/zone1/villa1/views/view1/zone1_villa1_view1_rev.mp4",
+      idleVideo: "horizontal/videos/zones/zone1/villa1/views/view1/zone1_villa1_view1_idle.mp4",
+    }
+  },
+  {
+    name: "Right View",
+    videos: {
+      forwardVideo: "horizontal/videos/zones/zone1/villa1/views/view2/zone1_villa1_view2_trans.mp4",
+      reverseVideo: "horizontal/videos/zones/zone1/villa1/views/view2/zone1_villa1_view2_rev.mp4",
+      idleVideo: "horizontal/videos/zones/zone1/villa1/views/view2/zone1_villa1_view2_idle.mp4",
+    }
+  },
+  {
+    name: "Back View",
+    videos: {
+      forwardVideo: "horizontal/videos/zones/zone1/villa1/views/view3/zone1_villa1_view3_trans.mp4",
+      reverseVideo: "horizontal/videos/zones/zone1/villa1/views/view3/zone1_villa1_view3_rev.mp4",
+      idleVideo: "horizontal/videos/zones/zone1/villa1/views/view3/zone1_villa1_view3_idle.mp4",
+    }
+  },
+  {
+    name: "Left View",
+    videos: {
+      forwardVideo: "horizontal/videos/zones/zone1/villa1/views/view4/zone1_villa1_view4_trans.mp4",
+      reverseVideo: "horizontal/videos/zones/zone1/villa1/views/view4/zone1_villa1_view4_rev.mp4",
+      idleVideo: "horizontal/videos/zones/zone1/villa1/views/view4/zone1_villa1_view4_idle.mp4",
+    }
+  },
+];
+
+const th_views = [
+  {
+    name: "Front View",
+    videos: {
+      forwardVideo: "horizontal/videos/zones/zone1/town1/views/view1/zone1_town1_view1_trans.mp4",
+      reverseVideo: "horizontal/videos/zones/zone1/town1/views/view1/zone1_town1_view1_rev.mp4",
+      idleVideo: "horizontal/videos/zones/zone1/town1/views/view1/zone1_town1_view1_idle.mp4",
+    }
+  },
+  {
+    name: "Right View",
+    videos: {
+      forwardVideo: "horizontal/videos/zones/zone1/town1/views/view2/zone1_town1_view2_trans.mp4",
+      reverseVideo: "horizontal/videos/zones/zone1/town1/views/view2/zone1_town1_view2_rev.mp4",
+      idleVideo: "horizontal/videos/zones/zone1/town1/views/view2/zone1_town1_view2_idle.mp4",
+    }
+  },
+  {
+    name: "Back View",
+    videos: {
+      forwardVideo: "horizontal/videos/zones/zone1/town1/views/view3/zone1_town1_view3_trans.mp4",
+      reverseVideo: "horizontal/videos/zones/zone1/town1/views/view3/zone1_town1_view3_rev.mp4",
+      idleVideo: "horizontal/videos/zones/zone1/town1/views/view3/zone1_town1_view3_idle.mp4",
+    }
+  },
+  {
+    name: "Left View",
+    videos: {
+      forwardVideo: "horizontal/videos/zones/zone1/town1/views/view4/zone1_town1_view4_trans.mp4",
+      reverseVideo: "horizontal/videos/zones/zone1/town1/views/view4/zone1_town1_view4_rev.mp4",
+      idleVideo: "horizontal/videos/zones/zone1/town1/views/view4/zone1_town1_view4_idle.mp4",
+    }
+  },
+];
+
 export const PROJECT_HORIZONTAL = {
   project: {
     id: "horizontal",
@@ -165,40 +236,7 @@ export const PROJECT_HORIZONTAL = {
                     reverseVideo: "/horizontal/videos/zones/zone1/villa1/zone1_villa1_gen_rev.mp4",
                     idleVideo: "horizontal/videos/zones/zone1/villa1/views/view1/zone1_villa1_view1_idle.mp4",
                   },
-                  views: [
-                    {
-                      name: "Front View",
-                      videos: {
-                        forwardVideo: "horizontal/videos/zones/zone1/villa1/views/view1/zone1_villa1_view1_trans.mp4",
-                        reverseVideo: "horizontal/videos/zones/zone1/villa1/views/view1/zone1_villa1_view1_rev.mp4",
-                        idleVideo: "horizontal/videos/zones/zone1/villa1/views/view1/zone1_villa1_view1_idle.mp4",
-                      }
-                    },
-                    {
-                      name: "Right View",
-                      videos: {
-                        forwardVideo: "horizontal/videos/zones/zone1/villa1/views/view2/zone1_villa1_view2_trans.mp4",
-                        reverseVideo: "horizontal/videos/zones/zone1/villa1/views/view2/zone1_villa1_view2_rev.mp4",
-                        idleVideo: "horizontal/videos/zones/zone1/villa1/views/view2/zone1_villa1_view2_idle.mp4",
-                      }
-                    },
-                    {
-                      name: "Back View",
-                      videos: {
-                        forwardVideo: "horizontal/videos/zones/zone1/villa1/views/view3/zone1_villa1_view3_trans.mp4",
-                        reverseVideo: "horizontal/videos/zones/zone1/villa1/views/view3/zone1_villa1_view3_rev.mp4",
-                        idleVideo: "horizontal/videos/zones/zone1/villa1/views/view3/zone1_villa1_view3_idle.mp4",
-                      }
-                    },
-                    {
-                      name: "Left View",
-                      videos: {
-                        forwardVideo: "horizontal/videos/zones/zone1/villa1/views/view4/zone1_villa1_view4_trans.mp4",
-                        reverseVideo: "horizontal/videos/zones/zone1/villa1/views/view4/zone1_villa1_view4_rev.mp4",
-                        idleVideo: "horizontal/videos/zones/zone1/villa1/views/view4/zone1_villa1_view4_idle.mp4",
-                      }
-                    },
-                  ],
+                  views: villa_views,
                 },
                 {
                   id: "villa2",
@@ -217,6 +255,7 @@ export const PROJECT_HORIZONTAL = {
                     reverseVideo: "/horizontal/videos/zones/zone1/villa1/zone1_villa1_gen_rev.mp4",
                     idleVideo: "horizontal/videos/zones/zone1/villa1/views/view1/zone1_villa1_view1_idle.mp4",
                   },
+                  views: villa_views,
                 },
                 {
                   id: "villa3",
@@ -235,6 +274,7 @@ export const PROJECT_HORIZONTAL = {
                     reverseVideo: "/horizontal/videos/zones/zone1/villa1/zone1_villa1_gen_rev.mp4",
                     idleVideo: "horizontal/videos/zones/zone1/villa1/views/view1/zone1_villa1_view1_idle.mp4",
                   },
+                  views: villa_views,
                 },
                 {
                   id: "villa4",
@@ -253,6 +293,7 @@ export const PROJECT_HORIZONTAL = {
                     reverseVideo: "/horizontal/videos/zones/zone1/villa1/zone1_villa1_gen_rev.mp4",
                     idleVideo: "horizontal/videos/zones/zone1/villa1/views/view1/zone1_villa1_view1_idle.mp4",
                   },
+                  views: villa_views,
                 },
               ],
             },
@@ -293,40 +334,7 @@ export const PROJECT_HORIZONTAL = {
                     reverseVideo: "/horizontal/videos/zones/zone1/town1/zone1_town1_gen_rev.mp4",
                     idleVideo: "horizontal/videos/zones/zone1/town1/views/view1/zone1_town1_view1_idle.mp4",
                   },
-                  views: [
-                    {
-                      name: "Front View",
-                      videos: {
-                        forwardVideo: "horizontal/videos/zones/zone1/town1/views/view1/zone1_town1_view1_trans.mp4",
-                        reverseVideo: "horizontal/videos/zones/zone1/town1/views/view1/zone1_town1_view1_rev.mp4",
-                        idleVideo: "horizontal/videos/zones/zone1/town1/views/view1/zone1_town1_view1_idle.mp4",
-                      }
-                    },
-                    {
-                      name: "Right View",
-                      videos: {
-                        forwardVideo: "horizontal/videos/zones/zone1/town1/views/view2/zone1_town1_view2_trans.mp4",
-                        reverseVideo: "horizontal/videos/zones/zone1/town1/views/view2/zone1_town1_view2_rev.mp4",
-                        idleVideo: "horizontal/videos/zones/zone1/town1/views/view2/zone1_town1_view2_idle.mp4",
-                      }
-                    },
-                    {
-                      name: "Back View",
-                      videos: {
-                        forwardVideo: "horizontal/videos/zones/zone1/town1/views/view3/zone1_town1_view3_trans.mp4",
-                        reverseVideo: "horizontal/videos/zones/zone1/town1/views/view3/zone1_town1_view3_rev.mp4",
-                        idleVideo: "horizontal/videos/zones/zone1/town1/views/view3/zone1_town1_view3_idle.mp4",
-                      }
-                    },
-                    {
-                      name: "Left View",
-                      videos: {
-                        forwardVideo: "horizontal/videos/zones/zone1/town1/views/view4/zone1_town1_view4_trans.mp4",
-                        reverseVideo: "horizontal/videos/zones/zone1/town1/views/view4/zone1_town1_view4_rev.mp4",
-                        idleVideo: "horizontal/videos/zones/zone1/town1/views/view4/zone1_town1_view4_idle.mp4",
-                      }
-                    },
-                  ],
+                  views: th_views,
                   units: [
                     {
                       id: "th1-unit1",
@@ -370,40 +378,7 @@ export const PROJECT_HORIZONTAL = {
                     reverseVideo: "/horizontal/videos/zones/zone1/town1/zone1_town1_gen_rev.mp4",
                     idleVideo: "horizontal/videos/zones/zone1/town1/views/view1/zone1_town1_view1_idle.mp4",
                   },
-                  views: [
-                    {
-                      name: "Front View",
-                      videos: {
-                        forwardVideo: "horizontal/videos/zones/zone1/town1/views/view1/zone1_town1_view1_trans.mp4",
-                        reverseVideo: "horizontal/videos/zones/zone1/town1/views/view1/zone1_town1_view1_rev.mp4",
-                        idleVideo: "horizontal/videos/zones/zone1/town1/views/view1/zone1_town1_view1_idle.mp4",
-                      }
-                    },
-                    {
-                      name: "Right View",
-                      videos: {
-                        forwardVideo: "horizontal/videos/zones/zone1/town1/views/view2/zone1_town1_view2_trans.mp4",
-                        reverseVideo: "horizontal/videos/zones/zone1/town1/views/view2/zone1_town1_view2_rev.mp4",
-                        idleVideo: "horizontal/videos/zones/zone1/town1/views/view2/zone1_town1_view2_idle.mp4",
-                      }
-                    },
-                    {
-                      name: "Back View",
-                      videos: {
-                        forwardVideo: "horizontal/videos/zones/zone1/town1/views/view3/zone1_town1_view3_trans.mp4",
-                        reverseVideo: "horizontal/videos/zones/zone1/town1/views/view3/zone1_town1_view3_rev.mp4",
-                        idleVideo: "horizontal/videos/zones/zone1/town1/views/view3/zone1_town1_view3_idle.mp4",
-                      }
-                    },
-                    {
-                      name: "Left View",
-                      videos: {
-                        forwardVideo: "horizontal/videos/zones/zone1/town1/views/view4/zone1_town1_view4_trans.mp4",
-                        reverseVideo: "horizontal/videos/zones/zone1/town1/views/view4/zone1_town1_view4_rev.mp4",
-                        idleVideo: "horizontal/videos/zones/zone1/town1/views/view4/zone1_town1_view4_idle.mp4",
-                      }
-                    },
-                  ],
+                  views: th_views,
                   units: [
                     {
                       id: "th2-unit1",
@@ -447,40 +422,7 @@ export const PROJECT_HORIZONTAL = {
                     reverseVideo: "/horizontal/videos/zones/zone1/town1/zone1_town1_gen_rev.mp4",
                     idleVideo: "horizontal/videos/zones/zone1/town1/views/view1/zone1_town1_view1_idle.mp4",
                   },
-                  views: [
-                    {
-                      name: "Front View",
-                      videos: {
-                        forwardVideo: "horizontal/videos/zones/zone1/town1/views/view1/zone1_town1_view1_trans.mp4",
-                        reverseVideo: "horizontal/videos/zones/zone1/town1/views/view1/zone1_town1_view1_rev.mp4",
-                        idleVideo: "horizontal/videos/zones/zone1/town1/views/view1/zone1_town1_view1_idle.mp4",
-                      }
-                    },
-                    {
-                      name: "Right View",
-                      videos: {
-                        forwardVideo: "horizontal/videos/zones/zone1/town1/views/view2/zone1_town1_view2_trans.mp4",
-                        reverseVideo: "horizontal/videos/zones/zone1/town1/views/view2/zone1_town1_view2_rev.mp4",
-                        idleVideo: "horizontal/videos/zones/zone1/town1/views/view2/zone1_town1_view2_idle.mp4",
-                      }
-                    },
-                    {
-                      name: "Back View",
-                      videos: {
-                        forwardVideo: "horizontal/videos/zones/zone1/town1/views/view3/zone1_town1_view3_trans.mp4",
-                        reverseVideo: "horizontal/videos/zones/zone1/town1/views/view3/zone1_town1_view3_rev.mp4",
-                        idleVideo: "horizontal/videos/zones/zone1/town1/views/view3/zone1_town1_view3_idle.mp4",
-                      }
-                    },
-                    {
-                      name: "Left View",
-                      videos: {
-                        forwardVideo: "horizontal/videos/zones/zone1/town1/views/view4/zone1_town1_view4_trans.mp4",
-                        reverseVideo: "horizontal/videos/zones/zone1/town1/views/view4/zone1_town1_view4_rev.mp4",
-                        idleVideo: "horizontal/videos/zones/zone1/town1/views/view4/zone1_town1_view4_idle.mp4",
-                      }
-                    },
-                  ],
+                  views: th_views,
                   units: [
                     {
                       id: "th3-unit1",
@@ -557,6 +499,7 @@ export const PROJECT_HORIZONTAL = {
                       type: "scene",
                       label: "Dining",
                     },
+
                   ],
                 },
                 {
@@ -618,7 +561,7 @@ export const PROJECT_HORIZONTAL = {
                 {
                   id: "roof-living",
                   displayName: "Rooftop Living",
-                  furnitureImg: "/horizontal/panorama/villa-luxury-4br/roof/living.png",
+                  furnitureImg: "/horizontal/panorama/villa-luxury-4br/roof/livingroom.png",
                   unfurnitureImg: null,
                   hotspots: [
                     {
@@ -626,7 +569,7 @@ export const PROJECT_HORIZONTAL = {
                       yaw: 90,
                       pitch: 10,
                       type: "scene",
-                      label: "Garden View",
+                      label: "Rooftop Dining",
                     },
                   ],
                 },
@@ -641,7 +584,7 @@ export const PROJECT_HORIZONTAL = {
                       yaw: 90,
                       pitch: 10,
                       type: "scene",
-                      label: "Garden View",
+                      label: "Rooftop Living",
                     },
                   ],
                 },
