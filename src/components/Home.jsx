@@ -557,7 +557,7 @@ export default function Home() {
                     </svg>
                   </button>
 
-                  {Array.from({ length: 4 }).map((_, index) => (
+                  {Array.from({ length: currentItem?.views?.length || 0 }).map((_, index) => (
                     <span key={index}>
                       <svg
                         width="21"

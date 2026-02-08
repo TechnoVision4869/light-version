@@ -20,7 +20,7 @@ export function useVideoViewer() {
   const isInitPlayedRef = useRef(true); // Flag to indicate if we have played the initial video (Home idle)
 
   const [currentViewIndex, setCurrentViewIndex] = useState(0);
-  const numViews = 4;
+  const numViews = currentItem?.views?.length || 0;
 
   // Function to handle view changes (uses activeTab and currentItem derived above)
   const changeView = useCallback(

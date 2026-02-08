@@ -1,5 +1,6 @@
 // import { PROJECT_MIX as PROJECT } from "./project-mix";
-import { PROJECT_HORIZONTAL as PROJECT } from "./project-horizontal";
+// import { PROJECT_HORIZONTAL as PROJECT } from "./project-horizontal";
+import { PROJECT_KOG as PROJECT } from "./project-kog";
 
 export const DATA = PROJECT;
 

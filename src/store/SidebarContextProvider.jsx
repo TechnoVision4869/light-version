@@ -17,6 +17,10 @@ export const SidebarContext = createContext({
 
     currentItems: [],
     setCurrentItems: () => { },
+
+    type: "",
+    setType: () => { },
+
     goToItem: () => { },
     goToTab: () => { },
     goBack: () => { },
@@ -125,6 +129,7 @@ export default function SidebarContextProvider({ children }) {
     }, []);
 
     const [currentItems, setCurrentItems] = useState([]);
+    const [type, setType] = useState("");
 
     const ctxValue = {
         history,
@@ -141,6 +146,10 @@ export default function SidebarContextProvider({ children }) {
 
         currentItems,
         setCurrentItems,
+
+        type,
+        setType,
+
         goToItem: handleCurrentItem,
         goToTab,
         goBack: handleGoBack,

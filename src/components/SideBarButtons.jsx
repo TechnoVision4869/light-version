@@ -12,8 +12,9 @@ import FloorButton from "./buttons/FloorButton";
 import ApartmentButton from "./buttons/ApartmentButton";
 
 export default function SidebarButtons() {
-  const { activeTab, activeLayer, currentItem, setCurrentItems, goToItem } = useContext(SidebarContext);
+  const { activeTab, activeLayer, currentItem, setCurrentItems, setType, goToItem } = useContext(SidebarContext);
   let items = [];
+  let type = "";
   let Component = null;
   let propName = "";
   let layerKey = null;
@@ -47,9 +48,10 @@ export default function SidebarButtons() {
     {
       if (activeLayer === LAYERS.ZONE_DETAIL) {
         items = currentItem.properties;
-        console.log(items);
+        // console.log(items);
         if (items.length === 1) {
           if (items[0].type === "villa") {
+            type = "villa";
             items = items[0].units;
             Component = ApartmentButton;
             propName = "apartment";
@@ -69,7 +71,7 @@ export default function SidebarButtons() {
         }
       }
       else if (activeLayer === LAYERS.BUILDING) {
-        console.log(currentItem.type);
+        // console.log(currentItem.type);
         if (currentItem.type === "tower") {
           items = currentItem.floors;
           Component = FloorButton;
@@ -94,6 +96,7 @@ export default function SidebarButtons() {
 
   useEffect(() => {
     setCurrentItems(items);
+    setType(type);
   }, [activeTab, activeLayer]);
 
   if (!items || items?.length === 0 || Component === null) return null;

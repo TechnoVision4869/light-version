@@ -7,10 +7,11 @@ import { TABS, LAYERS } from '../../data/layers';
 export default function BaseFloating({ mediaRef }) {
     const container = mediaRef.current;
 
-    const { activeTab, activeLayer, currentItem, currentItems, goToItem, highlightedButton, setHighlightedButton } = useContext(SidebarContext);
+    const { activeTab, activeLayer, currentItem, currentItems, type, goToItem, highlightedButton, setHighlightedButton } = useContext(SidebarContext);
     // console.log(currentItems);
-    
+
     const [buttonPositions, setButtonPositions] = useState([]);
+    const triangleOffsetPx = -24; // Approximate triangle tip distance below button center
 
     const updatePositions = useCallback(() => {
         const w = container.clientWidth;
@@ -20,10 +21,9 @@ export default function BaseFloating({ mediaRef }) {
 
         const newPositions = currentItems.map(item => ({
             left: videoLeft + videoW * item.x,
-            top: h * item.y,
+            top: h * item.y + triangleOffsetPx,
         }));
-        // console.log(newPositions);
-        
+
         setButtonPositions(newPositions);
     }, [currentItems]);
 
@@ -48,15 +48,16 @@ export default function BaseFloating({ mediaRef }) {
 
         return () => {
             // console.log("un mount");
-            resizeObserver.disconnect();}
+            resizeObserver.disconnect();
+        }
     }, []); // Empty dependency array ensures this runs once on mount
 
     // console.log(buttonPositions.length);
     // console.log(currentItems.length);
-    
+
     // Don't render until positions are ready
     if (buttonPositions.length !== currentItems.length) return null;
-    if(activeLayer === LAYERS.UNIT) return;
+    if (activeLayer === LAYERS.UNIT) return;
 
     if (activeTab === TABS.SURROUNDINGS) {
         return (
@@ -82,18 +83,18 @@ export default function BaseFloating({ mediaRef }) {
     }
 
     let layerKey = null;
-    if(activeLayer !== null) {
+    if (activeLayer !== null) {
         switch (activeLayer) {
             case LAYERS.ZONE_DETAIL:
                 layerKey = LAYERS.BUILDING;
                 break;
             case LAYERS.BUILDING:
-                if(currentItem.type === "tower") layerKey = LAYERS.FLOOR; 
+                if (currentItem.type === "tower") layerKey = LAYERS.FLOOR;
                 else layerKey = LAYERS.UNIT;
                 break;
             case LAYERS.FLOOR:
                 layerKey = LAYERS.UNIT;
-                break;   
+                break;
             case LAYERS.UNIT:
                 break;
             default:
@@ -119,22 +120,22 @@ export default function BaseFloating({ mediaRef }) {
         currentItems.map((item) => {
             // console.log(itemIdToPosition);
             // console.log(item.id);
-            
+
             const pos = itemIdToPosition.get(item.id);
             // console.log(pos);
-            
+
             if (!pos) return null;
 
             const isOpaque = (highlightedButton === null || highlightedButton === item);
             const isSelected = highlightedButton === item;
-                        
+
             return (
                 <BaseFloatButton
                     key={item.id}
                     name={item.displayName}
                     tabType={activeTab}
                     layerType={activeLayer}
-                    showName={true}
+                    showName={type !== "villa"}
                     style={{
                         left: `${pos.left}px`,
                         top: `${pos.top}px`,
@@ -143,7 +144,7 @@ export default function BaseFloating({ mediaRef }) {
                     onSelect={() => {
                         if (isSelected) {
                             // console.log("Selected item:", item);
-                            
+
                             goToItem(item, layerKey);
                             setHighlightedButton(null);
                         }

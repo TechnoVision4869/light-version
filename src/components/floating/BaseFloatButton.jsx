@@ -12,7 +12,7 @@ export default function BaseFloatButton({ name, layerType = null, style = {}, is
             }}
             onClick={onSelect}
         >
-            {!showName && <span className='whitespace-nowrap text-sm'>{name.slice(-1)}</span>}
+            {!showName && <span className='whitespace-nowrap text-sm'>{name.split(" ")[1]}</span>}
             {showName && <span className='whitespace-nowrap text-sm'>{name}</span>}
             {isFloor ? <span className='triangle-right'></span> : showName ? <span className='triangle'></span> : <span className='triangle-small'></span>}
         </button>

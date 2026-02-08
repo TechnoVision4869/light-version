@@ -46,11 +46,11 @@ export default function BuildingButton({ building, isDisabled, goToItem }) {
                 <div className="text-sm items-left flex flex-col space-x-0 space-y-2 text-white/60 leading-tight pt-1
                                         md:items-center md:flex-row md:space-x-3 md:space-y-0">
                     <div className="flex items-center space-x-1">
-                        <img src={BED_ICON} className="w-4 h-4" />
+                        <img src={BED_ICON} className="w-5 h-auto" />
                         {minBedrooms === maxBedrooms ? <div>{minBedrooms}</div> : <div>{minBedrooms} - {maxBedrooms}</div>} <span>BR</span>
                     </div>
                     <div className="flex items-center space-x-1">
-                        <img src={AREA_ICON} className="w-4 h-4" />
+                        <img src={AREA_ICON} className="w-4 h-auto" />
                         {minArea === maxArea ? <div>{minArea}</div> : <div>{minArea} - {maxArea}</div>} <span>m²</span>
                     </div>
 
