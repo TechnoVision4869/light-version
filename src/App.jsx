@@ -7,12 +7,13 @@ import LoginPage from "./components/auth/login-page";
 
 export default function App() {
   return (
-    <Routes>
-      {/* <Route path="/" element={<LoginPage />} /> */}
-      {/* <Route path="/dashboard" element={<AuthGuard><DashboardPage /></AuthGuard>} /> */}
-      {/* <Route path="/settings" element={<AuthGuard><SettingsPage /></AuthGuard>} /> */}
-      {/* <Route path="/home" element={<AuthGuard><Home /></AuthGuard>} /> */}
-      <Route path="/" element={<Home />} />
-    </Routes>
+    // <Routes>
+    //   {/* <Route path="/" element={<LoginPage />} /> */}
+    //   {/* <Route path="/dashboard" element={<AuthGuard><DashboardPage /></AuthGuard>} /> */}
+    //   {/* <Route path="/settings" element={<AuthGuard><SettingsPage /></AuthGuard>} /> */}
+    //   {/* <Route path="/home" element={<AuthGuard><Home /></AuthGuard>} /> */}
+    //   <Route path="/" element={<Home />} />
+    // </Routes>
+    <Home />
   );
 }
