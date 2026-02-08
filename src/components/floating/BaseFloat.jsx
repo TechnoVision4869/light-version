@@ -48,7 +48,6 @@ export default function BaseFloating({ mediaRef }) {
 
         return () => {
             // console.log("un mount");
-            
             resizeObserver.disconnect();}
     }, []); // Empty dependency array ensures this runs once on mount
 
@@ -82,8 +81,24 @@ export default function BaseFloating({ mediaRef }) {
     }
 
     let layerKey = null;
-    if(activeLayer !== null) layerKey = currentItem.nextLayer;
-    else {
+    if(activeLayer !== null) {
+        switch (activeLayer) {
+            case LAYERS.ZONE_DETAIL:
+                layerKey = LAYERS.BUILDING;
+                break;
+            case LAYERS.BUILDING:
+                if(currentItem.type === "tower") layerKey = LAYERS.FLOOR; 
+                else layerKey = LAYERS.UNIT;
+                break;
+            case LAYERS.FLOOR:
+                layerKey = LAYERS.UNIT;
+                break;   
+            case LAYERS.UNIT:
+                break;
+            default:
+                break;
+        }
+    } else {
         switch (activeTab) {
             case TABS.ZONES:
                 layerKey = LAYERS.ZONE_DETAIL;
@@ -118,6 +133,7 @@ export default function BaseFloating({ mediaRef }) {
                     name={item.displayName}
                     tabType={activeTab}
                     layerType={activeLayer}
+                    showName={true}
                     style={{
                         left: `${pos.left}px`,
                         top: `${pos.top}px`,
@@ -125,7 +141,7 @@ export default function BaseFloating({ mediaRef }) {
                     isOpaque={isOpaque}
                     onSelect={() => {
                         if (isSelected) {
-                            console.log("Selected item:", item);
+                            // console.log("Selected item:", item);
                             
                             goToItem(item, layerKey);
                             setHighlightedButton(null);

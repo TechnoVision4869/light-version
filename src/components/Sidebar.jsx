@@ -5,7 +5,6 @@ import { TABS, LAYERS } from "../data/layers";
 import UnitPanel from "../components/UnitPanel";
 import FilterPanel from "../components/FilterPanel";
 import SidebarButtons from "./SideBarButtons";
-
 export default function Sidebar() {
     const { activeTab, activeLayer, currentItem, sidebarOpen } = useContext(SidebarContext);
     const [isFilter, setIsFilter] = useState(false); // 'navigate' or 'filter'

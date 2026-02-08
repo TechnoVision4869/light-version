@@ -9,19 +9,20 @@ import DOOR_ICON from "../assets/icons/door.svg"
 
 export default function UnitPanel() {
     const { currentItem } = useContext(SidebarContext);
-    const { handleInterior, handleBalconyView, handleGalleryType } = useContext(MainContext);   
+    const { handleInterior, handleBalconyView, handleGalleryType } = useContext(MainContext);
 
     const [isVisualsOpen, setIsVisualsOpen] = useState(true);
     const [isCutSectionsOpen, setIsCutSectionsOpen] = useState(false);
     const [isPaymentPlanOpen, setIsPaymentPlanOpen] = useState(false);
 
     //temporary visuals and payment plan
-    const unitType = DATA.unitTypes[currentItem.unitTypeId];    
+    const unitType = DATA.project.unitTypes[currentItem.unitTypeId];
     const serviceRooms = unitType.serviceRooms;
     const gallery = unitType.gallery;
     const cutSections = unitType.cutSections;
     const paymentPlans = unitType.paymentPlans;
 
+    const balconyView = currentItem.balconyView;
 
     return (
         <div className="h-full pr-1">
@@ -79,13 +80,17 @@ export default function UnitPanel() {
                     </div>
                 </div>
 
-                <hr className="h-divider" />
+                {balconyView &&
+                    <>
+                        <hr className="h-divider" />
 
-                <button className="w-full border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition"
-                    onClick={handleBalconyView}
-                >
-                    View From Balcony
-                </button>
+                        <button className="w-full border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition"
+                            onClick={handleBalconyView}
+                        >
+                            View From Balcony
+                        </button>
+                    </>
+                }
 
                 <hr className="h-divider" />
 

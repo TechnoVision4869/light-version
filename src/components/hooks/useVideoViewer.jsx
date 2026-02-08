@@ -1,5 +1,5 @@
 import { useContext, useState, useRef, useEffect, useCallback } from "react";
-import { TABS, LAYERS, LAYER_CONFIG } from "../../data/layers";
+import { TABS, LAYERS } from "../../data/layers";
 
 import { SidebarContext } from "../../store/SidebarContextProvider";
 
@@ -30,12 +30,6 @@ export function useVideoViewer() {
         direction,
       );
       // Use the locally derived activeTab and currentItem
-
-      const currentConfig = LAYER_CONFIG[activeLayer];
-      if (!currentConfig) {
-        console.error("LAYER_CONFIG for active layer not found.");
-        return;
-      }
       // console.log("current item", currentItem);
 
       let newIndex = currentViewIndex + (direction === "next" ? 1 : -1);
@@ -43,10 +37,7 @@ export function useVideoViewer() {
       if (newIndex >= numViews) newIndex = 0;
       if (newIndex < 0) newIndex = numViews - 1;
 
-      const newViewVideos = currentConfig.getVideosPathForView(
-        currentItem,
-        newIndex,
-      );
+      const newViewVideos = currentItem.views[newIndex]?.videos;
       if (!newViewVideos) {
         console.error("Could not get video paths for view index:", newIndex);
         return;
@@ -59,10 +50,7 @@ export function useVideoViewer() {
           newViewVideos.idleVideo,
         );
       } else {
-        const buildingViewVideos = currentConfig.getVideosPathForView(
-          currentItem,
-          currentViewIndex,
-        );
+        const buildingViewVideos = currentItem.views[currentViewIndex]?.videos;
         if (!buildingViewVideos?.reverseVideo) {
           console.error(
             "Could not get reverse video path for current view index:",

@@ -1,19 +1,29 @@
-export default function FloorButton({
-  floor,
-  isDisabled,
-  isSelected,
-  goToItem,
-}) {
+import { useContext } from "react";
+import { SidebarContext } from "../../store/SidebarContextProvider";
+
+export default function FloorButton({ floor, isDisabled, goToItem, }) {
+  const { highlightedButton, setHighlightedButton } = useContext(SidebarContext);
+  const isSelected = highlightedButton === floor;
+
+  const handleClick = () => {
+        
+        if (isSelected) {
+            console.log("FloorButton clicked");
+            goToItem();
+            setHighlightedButton(null);
+        }
+        else setHighlightedButton(floor);
+    };
+  
   return (
     <button
       key={floor.id}
-      onClick={goToItem}
+      onClick={handleClick}
       disabled={isDisabled}
       className={`w-full max-w-full mx-auto p-4 rounded-2xl transition whitespace-nowrap
-        ${
-          isDisabled
-            ? "opacity-50 cursor-not-allowed"
-            : isSelected
+        ${isDisabled
+          ? "opacity-50 cursor-not-allowed"
+          : isSelected
             ? "bg-white/10"
             : "bg-black/10 hover:bg-white/7"
         }`}

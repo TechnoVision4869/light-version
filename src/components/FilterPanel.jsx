@@ -1,7 +1,8 @@
 import { useState, useEffect, useContext } from "react";
 import { FilterContext } from "../store/FilterContextProvider";
 import { SidebarContext } from "../store/SidebarContextProvider";
-import { LAYER_CONFIG, LAYERS, FILTER_ENUM } from "../data/layers";
+// import helper functions
+import { FILTER_ENUM, getMinMaxRange, getDiscreteValues } from "./helpers/filterHelper";
 
 function Slider({ name, unit, min, max, step = 1, value, onValueChange }) {
   const fillColor = "white";
@@ -77,29 +78,29 @@ export default function FilterPanel() {
   const { onFilterChange } = useContext(FilterContext);
   const { currentItem } = useContext(SidebarContext);
   // console.log(currentItem);
-  
-  const currentApartments = LAYER_CONFIG[LAYERS.FLOOR].getItems(currentItem);
+
+  const currentApartments = currentItem?.units || [];
   // console.log(currentApartments);
 
-  const UNIT_TYPES = LAYER_CONFIG[LAYERS.APARTMENT].getDiscreteValues(currentApartments, FILTER_ENUM.TYPE);
+  const UNIT_TYPES = getDiscreteValues(currentApartments, FILTER_ENUM.TYPE);
 
   // Surface area range (in square meters)
   const AREA_RANGE = {
-    MIN: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(currentApartments, FILTER_ENUM.AREA).min,
-    MAX: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(currentApartments, FILTER_ENUM.AREA).max,
+    MIN: getMinMaxRange(currentApartments, FILTER_ENUM.AREA).min,
+    MAX: getMinMaxRange(currentApartments, FILTER_ENUM.AREA).max,
     UNIT: "m²",
   };
 
   // Budget range (in local currency)
   const BUDGET_RANGE = {
-    MIN: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(currentApartments, FILTER_ENUM.PRICE).min,
-    MAX: LAYER_CONFIG[LAYERS.APARTMENT].getMinMaxRange(currentApartments, FILTER_ENUM.PRICE).max,
+    MIN: getMinMaxRange(currentApartments, FILTER_ENUM.PRICE).min,
+    MAX: getMinMaxRange(currentApartments, FILTER_ENUM.PRICE).max,
     UNIT: "L.E",
   };
 
   // Bedroom/Bathroom options
-  const BEDROOM_OPTIONS = LAYER_CONFIG[LAYERS.APARTMENT].getDiscreteValues(currentApartments, FILTER_ENUM.BEDROOMS);
-  const BATHROOM_OPTIONS = LAYER_CONFIG[LAYERS.APARTMENT].getDiscreteValues(currentApartments, FILTER_ENUM.BATHROOMS);
+  const BEDROOM_OPTIONS = getDiscreteValues(currentApartments, FILTER_ENUM.BEDROOMS);
+  const BATHROOM_OPTIONS = getDiscreteValues(currentApartments, FILTER_ENUM.BATHROOMS);
 
   const [unitType, setUnitType] = useState([]);
   const [bedrooms, setBedrooms] = useState([]);
@@ -117,7 +118,7 @@ export default function FilterPanel() {
     });
   }, [unitType, bedrooms, bathrooms, area, price]);
 
-  if(!currentItem) return null;
+  if (!currentItem) return null;
 
   return (
     <div className="flex flex-col gap-2 max-h-[calc(100vh-205px)] scrollbar-custom overflow-auto pe-2 text-white font-light text-sm">

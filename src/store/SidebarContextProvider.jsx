@@ -1,6 +1,6 @@
-import { createContext, useCallback, useState, useMemo } from "react";
+import { createContext, useCallback, useState } from "react";
 
-import { TABS, TAB_CONFIG, LAYER_CONFIG, LAYERS } from "../data/layers";
+import { TABS, LAYERS, DATA } from "../data/layers";
 
 export const SidebarContext = createContext({
     history: [],
@@ -15,6 +15,8 @@ export const SidebarContext = createContext({
     sidebarOpen: false,
     handleSidebarState: () => { },
 
+    currentItems: [],
+    setCurrentItems: () => { },
     goToItem: () => { },
     goToTab: () => { },
     goBack: () => { },
@@ -27,7 +29,11 @@ export default function SidebarContextProvider({ children }) {
             tab: TABS.HOME,
             layer: null,
             item: null,
-            videosPath: TAB_CONFIG[TABS.HOME].videosPath,
+            videosPath: {
+                forwardVideo: DATA.project.zoomoutVideo,
+                reverseVideo: null,
+                idleVideo: DATA.project.idleVideo,
+            }
         },
     ];
 
@@ -45,39 +51,37 @@ export default function SidebarContextProvider({ children }) {
         videosPath: currentVideosPaths,
     } = currentEntry;
 
-    const goToTab = useCallback((tabKey, isFromHome = true) => {
-        const config = TAB_CONFIG[tabKey];
-        console.log(tabKey);
+    const goToTab = useCallback((tabKey, selectedItem, isFromHome = true) => {
+        // console.log(selectedItem);
+
+        const calculatedVideosPath = isFromHome
+            ? selectedItem.videos
+            : {
+                forwardVideo: selectedItem.zoomoutVideo,
+                reverseVideo: selectedItem.videos.reverseVideo,
+                idleVideo: selectedItem.videos.idleVideo,
+            };
 
         setHistory(() => [
             ...initHistory,
             {
                 tab: tabKey,
                 layer: null,
-                item: {
-                    id: tabKey,
-                    displayName: tabKey,
-                },
-                videosPath: config.videosPath(isFromHome),
+                item: selectedItem,
+                videosPath: calculatedVideosPath,
             },
         ]);
     }, []);
 
     const handleCurrentItem = useCallback((item, layerKey) => {
-        // console.log("item: ", item);
-        // console.log("layer: ", layerKey);
-
         const targetLayer = layerKey;
-
         if (!targetLayer) {
             console.warn('No layer specified for navigation', item);
             return;
         }
 
         if (history[2]?.layer === LAYERS.SURROUNDING_DETAIL) {
-
             const tempHistory = history.slice(0, -1);
-
             setHistory([
                 ...tempHistory, {
                     tab: activeTab,
@@ -86,15 +90,10 @@ export default function SidebarContextProvider({ children }) {
                     videosPath: null,
                 },
             ]);
-
             return;
         }
 
-        const config = LAYER_CONFIG[targetLayer];
-        console.log(targetLayer);
-        
-        const videosPath = config.videosPath?.(item);
-        // console.log(videosPath);
+        const videosPath = item.videos;
 
         setHistory((prev) => [
             ...prev,
@@ -125,20 +124,7 @@ export default function SidebarContextProvider({ children }) {
         setSidebarOpen(state);
     }, []);
 
-    const currentItems = useMemo(() => {
-    // Top-level tabs
-    if (activeLayer === null && activeTab !== TABS.HOME) {
-        const items = TAB_CONFIG[activeTab]?.getItems() || [];
-        return items.map(item => ({ ...item, __type: activeTab })); // e.g., __type: 'zones'
-    }
-
-    // Nested layers
-    else if (activeLayer !== null && activeLayer !== LAYERS.UNIT && currentItem) {
-        return LAYER_CONFIG[activeLayer]?.getItems(currentItem) || [];
-    }
-
-    return [];
-    }, [history]);
+    const [currentItems, setCurrentItems] = useState([]);
 
     const ctxValue = {
         history,
@@ -154,6 +140,7 @@ export default function SidebarContextProvider({ children }) {
         handleSidebarState,
 
         currentItems,
+        setCurrentItems,
         goToItem: handleCurrentItem,
         goToTab,
         goBack: handleGoBack,
