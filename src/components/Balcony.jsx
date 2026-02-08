@@ -3,9 +3,9 @@ import View360, { EquirectProjection } from "@egjs/react-view360";
 import "@egjs/react-view360/css/view360.min.css";
 
 export default function Balcony({ apartment }) {
-    const ZOOM_OUT = 0.6; // zoomed out view (match FOV ≈ 118.07°)
+    const ZOOM_OUT = 1; // zoomed out view (match FOV ≈ 118.07°)
     const ZOOM_NORMAL = 1; // default zoom (match FOV = 90°)
-    const ZOOM_IN = 1.667; // zoomed in view (match FOV ≈ 61.93°)
+    const ZOOM_IN = 1.33; // zoomed in view (match FOV ≈ 61.93°)
 
     const ZOOM_OUT_TIME = 600;
 
@@ -32,7 +32,7 @@ export default function Balcony({ apartment }) {
                 onReady={handleReady}
                 initialZoom={ZOOM_OUT}
                 zoomRange={{ min: ZOOM_OUT, max: ZOOM_IN }}
-                pitchRange={{ min: -40, max: 40 }}
+                pitchRange={{ min: 0, max: 25 }}
             />
         </div>
     );

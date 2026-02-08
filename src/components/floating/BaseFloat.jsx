@@ -56,6 +56,7 @@ export default function BaseFloating({ mediaRef }) {
     
     // Don't render until positions are ready
     if (buttonPositions.length !== currentItems.length) return null;
+    if(activeLayer === LAYERS.UNIT) return;
 
     if (activeTab === TABS.SURROUNDINGS) {
         return (

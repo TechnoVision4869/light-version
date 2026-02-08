@@ -107,6 +107,8 @@ export default function Panorama({ unit }) {
 
   // Handle view changes (pan/zoom)
   const handleViewChange = useCallback(() => {
+    console.log(viewerRef.current.camera.zoom);
+    
     updateHotspots();
   }, [updateHotspots]);
 
@@ -208,7 +210,7 @@ export default function Panorama({ unit }) {
         projection={projection}
         onLoad={handleLoad}
         onViewChange={handleViewChange}
-        zoomRange={{ min: ZOOM_OUT, max: ZOOM_IN }}
+        zoomRange={{ min: 0.8, max: ZOOM_IN }}
       />
 
       {/* <InteriorNav 
