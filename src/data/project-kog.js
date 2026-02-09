@@ -1,4 +1,10 @@
-// villas views
+// villas videos & views
+// IRIS
+const iris_videos = {
+    forwardVideo: "/kog/videos/zones/zone1/iris/zone1_iris_gen_trans.mp4",
+    reverseVideo: "/kog/videos/zones/zone1/iris/zone1_iris_gen_rev.mp4",
+    idleVideo: "kog/videos/zones/zone1/iris/views/view1/zone1_iris_view1_idle.mp4",
+};
 const iris_views = [
     {
         name: "view 1",
@@ -41,7 +47,14 @@ const iris_views = [
         }
     },
 ];
+
 // Townhouse views
+// SAGE FAMILY
+const sage_family_videos = {
+    forwardVideo: "/kog/videos/zones/zone1/sagefamily/zone1_sagefamily_gen_trans.mp4",
+    reverseVideo: "/kog/videos/zones/zone1/sagefamily/zone1_sagefamily_gen_rev.mp4",
+    idleVideo: "kog/videos/zones/zone1/sagefamily/views/view1/zone1_sagefamily_view1_idle.mp4",
+};
 const sage_family_views = [
     {
         name: "view 1",
@@ -84,7 +97,34 @@ const sage_family_views = [
         }
     },
 ];
-
+const sage_family_units = [
+    {
+        forwardVideo: "kog/videos/zones/zone1/sagefamily/1/zone1_sagefamily_1_gen_trans.mp4",
+        reverseVideo: "kog/videos/zones/zone1/sagefamily/1/zone1_sagefamily_1_gen_rev.mp4",
+        idleVideo: "kog/videos/zones/zone1/sagefamily/1/zone1_sagefamily_1_gen_idle.mp4",
+    },
+    {
+        forwardVideo: "kog/videos/zones/zone1/sagefamily/2/zone1_sagefamily_2_gen_trans.mp4",
+        reverseVideo: "kog/videos/zones/zone1/sagefamily/2/zone1_sagefamily_2_gen_rev.mp4",
+        idleVideo: "kog/videos/zones/zone1/sagefamily/2/zone1_sagefamily_2_gen_idle.mp4",
+    },
+    {
+        forwardVideo: "kog/videos/zones/zone1/sagefamily/3/zone1_sagefamily_3_gen_trans.mp4",
+        reverseVideo: "kog/videos/zones/zone1/sagefamily/3/zone1_sagefamily_3_gen_rev.mp4",
+        idleVideo: "kog/videos/zones/zone1/sagefamily/3/zone1_sagefamily_3_gen_idle.mp4",
+    },
+];
+// MEADOWS
+const meadows_1_videos = {
+    forwardVideo: "/kog/videos/zones/zone4/meadows/zone4_meadows_gen_trans.mp4",
+    reverseVideo: "/kog/videos/zones/zone4/meadows/zone4_meadows_gen_rev.mp4",
+    idleVideo: "kog/videos/zones/zone4/meadows/views/view1/zone4_meadows_view1_idle.mp4",
+};
+const meadows_2_videos = {
+    forwardVideo: "/kog/videos/zones/zone5/meadows/zone5_meadows_gen_trans.mp4",
+    reverseVideo: "/kog/videos/zones/zone5/meadows/zone5_meadows_gen_rev.mp4",
+    idleVideo: "kog/videos/zones/zone4/meadows/views/view1/zone4_meadows_view1_idle.mp4",
+};
 const meadows_views = [
     {
         name: "view 1",
@@ -127,12 +167,57 @@ const meadows_views = [
         }
     },
 ];
+const meadows_units = [
+    {
+        forwardVideo: "kog/videos/zones/zone4/meadows/1/zone4_meadows_1_gen_trans.mp4",
+        reverseVideo: "kog/videos/zones/zone4/meadows/1/zone4_meadows_1_gen_rev.mp4",
+        idleVideo: "kog/videos/zones/zone4/meadows/1/zone4_meadows_1_gen_idle.mp4"
+    },
+    {
+        forwardVideo: "kog/videos/zones/zone4/meadows/2/zone4_meadows_2_gen_trans.mp4",
+        reverseVideo: "kog/videos/zones/zone4/meadows/2/zone4_meadows_2_gen_rev.mp4",
+        idleVideo: "kog/videos/zones/zone4/meadows/2/zone4_meadows_2_gen_idle.mp4"
+    }
+];
 
-const iris_videos = {
-    forwardVideo: "/kog/videos/zones/zone1/iris/zone1_iris_gen_trans.mp4",
-    reverseVideo: "/kog/videos/zones/zone1/iris/zone1_iris_gen_rev.mp4",
-    idleVideo: "kog/videos/zones/zone1/iris/views/view1/zone1_iris_view1_idle.mp4",
+const oak168_videos = {
+    forwardVideo: "/kog/videos/zones/zone6/oak168/zone6_oak168_gen_trans.mp4",
+    reverseVideo: "/kog/videos/zones/zone6/oak168/zone6_oak168_gen_rev.mp4",
+    idleVideo: "kog/videos/zones/zone6/oak168/views/view1/zone6_oak168_view1_idle.mp4",
 };
+const oak168_views = [];
+const oak168_units = [
+    {
+        forwardVideo: "kog/videos/zones/zone6/oak168/1/zone6_oak168_1_gen_trans.mp4",
+        reverseVideo: "kog/videos/zones/zone6/oak168/1/zone6_oak168_1_gen_rev.mp4",
+        idleVideo: "kog/videos/zones/zone6/oak168/1/zone6_oak168_1_gen_idle.mp4",
+    },
+    {
+        forwardVideo: "kog/videos/zones/zone6/oak168/2/zone6_oak168_2_gen_trans.mp4",
+        reverseVideo: "kog/videos/zones/zone6/oak168/2/zone6_oak168_2_gen_rev.mp4",
+        idleVideo: "kog/videos/zones/zone6/oak168/2/zone6_oak168_2_gen_idle.mp4",
+    },
+    {
+        forwardVideo: "kog/videos/zones/zone6/oak168/3/zone6_oak168_3_gen_trans.mp4",
+        reverseVideo: "kog/videos/zones/zone6/oak168/3/zone6_oak168_3_gen_rev.mp4",
+        idleVideo: "kog/videos/zones/zone6/oak168/3/zone6_oak168_3_gen_idle.mp4",
+    },
+    {
+        forwardVideo: "kog/videos/zones/zone6/oak168/4/zone6_oak168_4_gen_trans.mp4",
+        reverseVideo: "kog/videos/zones/zone6/oak168/4/zone6_oak168_4_gen_rev.mp4",
+        idleVideo: "kog/videos/zones/zone6/oak168/4/zone6_oak168_4_gen_idle.mp4",
+    },
+    {
+        forwardVideo: "kog/videos/zones/zone6/oak168/5/zone6_oak168_5_gen_trans.mp4",
+        reverseVideo: "kog/videos/zones/zone6/oak168/5/zone6_oak168_5_gen_rev.mp4",
+        idleVideo: "kog/videos/zones/zone6/oak168/5/zone6_oak168_5_gen_idle.mp4",
+    },
+    {
+        forwardVideo: "kog/videos/zones/zone6/oak168/6/zone6_oak168_6_gen_trans.mp4",
+        reverseVideo: "kog/videos/zones/zone6/oak168/6/zone6_oak168_6_gen_rev.mp4",
+        idleVideo: "kog/videos/zones/zone6/oak168/6/zone6_oak168_6_gen_idle.mp4",
+    },
+];
 
 export const PROJECT_KOG = {
     project: {
@@ -198,11 +283,11 @@ export const PROJECT_KOG = {
             items: [
                 {
                     id: "amenity1",
-                    displayName: "Clubhouse with Lounge, Restaurant & Kids Area.",
-                    subtitle: "Amenity",
-                    thumbnail: "kog/thumbnails/amenities/amenity1.png",
+                    displayName: "Clubhouse",
+                    subtitle: "Lounge, Restaurant & Kids Area",
+                    thumbnail: "kog/thumbnails/amenities/amenity1.jpg",
                     description: "A luxurious clubhouse with a lounge, restaurant, and dedicated kids' area.",
-                    x: 0.59, y: 0.33,
+                    x: 0.44, y: 0.53,
                     videos: {
                         forwardVideo: "/kog/videos/amenities/amenity1/amenity1_trans.mp4",
                         reverseVideo: "/kog/videos/amenities/amenity1/amenity1_rev.mp4",
@@ -211,11 +296,11 @@ export const PROJECT_KOG = {
                 },
                 {
                     id: "amenity2",
-                    displayName: "Jogging and Cycling tracks.",
-                    subtitle: "Amenity",
-                    thumbnail: "kog/thumbnails/amenities/amenity2.png",
+                    displayName: "Tracks",
+                    subtitle: "Jogging and Cycling tracks",
+                    thumbnail: "kog/thumbnails/amenities/amenity2.jpg",
                     description: "Scenic jogging and cycling tracks that wind through lush landscapes, providing a refreshing outdoor experience.",
-                    x: 0.46, y: 0.29,
+                    x: 0.24, y: 0.52,
                     videos: {
                         forwardVideo: "/kog/videos/amenities/amenity2/amenity2_trans.mp4",
                         reverseVideo: "/kog/videos/amenities/amenity2/amenity2_rev.mp4",
@@ -223,12 +308,25 @@ export const PROJECT_KOG = {
                     },
                 },
                 {
-                    id: "amenity4",
-                    displayName: "Scenic Roadways",
+                    id: "amenity3",
+                    displayName: "3",
                     subtitle: "Amenity",
-                    thumbnail: "kog/thumbnails/amenities/amenity4.png",
-                    description: "Thoughtfully designed roads with tree-lined avenues and pedestrian-friendly pathways.",
-                    x: 0.38, y: 0.11,
+                    thumbnail: "kog/thumbnails/amenities/amenity3.jpg",
+                    description: "..",
+                    x: 0.56, y: 0.5,
+                    videos: {
+                        forwardVideo: "/kog/videos/amenities/amenity3/amenity3_trans.mp4",
+                        reverseVideo: "/kog/videos/amenities/amenity3/amenity3_rev.mp4",
+                        idleVideo: "/kog/videos/amenities/amenity3/amenity3_idle.mp4",
+                    },
+                },
+                {
+                    id: "amenity4",
+                    displayName: "4",
+                    subtitle: "Amenity",
+                    thumbnail: "kog/thumbnails/amenities/amenity4.jpg",
+                    description: "..",
+                    x: 0.47, y: 0.51,
                     videos: {
                         forwardVideo: "/kog/videos/amenities/amenity4/amenity4_trans.mp4",
                         reverseVideo: "/kog/videos/amenities/amenity4/amenity4_rev.mp4",
@@ -237,11 +335,11 @@ export const PROJECT_KOG = {
                 },
                 {
                     id: "amenity5",
-                    displayName: "Scenic Roadways",
+                    displayName: "5",
                     subtitle: "Amenity",
-                    thumbnail: "kog/thumbnails/amenities/amenity5.png",
-                    description: "Thoughtfully designed roads with tree-lined avenues and pedestrian-friendly pathways.",
-                    x: 0.38, y: 0.11,
+                    thumbnail: "kog/thumbnails/amenities/amenity5.jpg",
+                    description: "..",
+                    x: 0.43, y: 0.53,
                     videos: {
                         forwardVideo: "/kog/videos/amenities/amenity5/amenity5_trans.mp4",
                         reverseVideo: "/kog/videos/amenities/amenity5/amenity5_rev.mp4",
@@ -250,11 +348,11 @@ export const PROJECT_KOG = {
                 },
                 {
                     id: "amenity6",
-                    displayName: "Scenic Roadways",
+                    displayName: "6",
                     subtitle: "Amenity",
-                    thumbnail: "kog/thumbnails/amenities/amenity6.png",
-                    description: "Thoughtfully designed roads with tree-lined avenues and pedestrian-friendly pathways.",
-                    x: 0.38, y: 0.11,
+                    thumbnail: "kog/thumbnails/amenities/amenity6.jpg",
+                    description: "..",
+                    x: 0.43, y: 0.43,
                     videos: {
                         forwardVideo: "/kog/videos/amenities/amenity6/amenity6_trans.mp4",
                         reverseVideo: "/kog/videos/amenities/amenity6/amenity6_rev.mp4",
@@ -264,10 +362,10 @@ export const PROJECT_KOG = {
                 {
                     id: "amenity7",
                     displayName: "Sports Area",
-                    subtitle: "Amenity",
-                    thumbnail: "kog/thumbnails/amenities/amenity7.png",
+                    subtitle: "Padel Court, Football Court, and Squash Court",
+                    thumbnail: "kog/thumbnails/amenities/amenity7.jpg",
                     description: "A dedicated sports area featuring a padel court, football court, and squash court.",
-                    x: 0.38, y: 0.11,
+                    x: 0.95, y: 0.57,
                     videos: {
                         forwardVideo: "/kog/videos/amenities/amenity7/amenity7_trans.mp4",
                         reverseVideo: "/kog/videos/amenities/amenity7/amenity7_rev.mp4",
@@ -280,7 +378,7 @@ export const PROJECT_KOG = {
         zones: {
             id: "zones",
             displayName: "Zones",
-            zoomoutVideo: "/kog/videos/home/zones_out.mp4",
+            zoomoutVideo: "/kog/videos/zones/zones_out.mp4",
             videos: {
                 forwardVideo: "/kog/videos/zones/zones_gen_trans_from_home.mp4",
                 reverseVideo: "/kog/videos/zones/zones_gen_rev_to_home.mp4",
@@ -310,11 +408,7 @@ export const PROJECT_KOG = {
                                     id: "SageFamily-1",
                                     displayName: "Sage Family 1",
                                     x: 0.29, y: 0.47,
-                                    videos: {
-                                        forwardVideo: "/kog/videos/zones/zone1/sagefamily/zone1_sagefamily_1_gen_trans.mp4",
-                                        reverseVideo: "/kog/videos/zones/zone1/sagefamily/zone1_sagefamily_1_gen_rev.mp4",
-                                        idleVideo: "kog/videos/zones/zone1/sagefamily/views/view1/zone1_sagefamily_1_view1_idle.mp4",
-                                    },
+                                    videos: sage_family_videos,
                                     views: sage_family_views,
                                     units: [
                                         {
@@ -326,11 +420,7 @@ export const PROJECT_KOG = {
                                             bedrooms: 4, bathrooms: 2,
                                             balconyView: "/kog/panorama/IrisGroup2.jpg",
                                             x: 0.19, y: 0.3,
-                                            videos: {
-                                                forwardVideo: "kog/videos/zones/zone1/sagefamily/1/zone1_sagefamily_1_gen_trans.mp4",
-                                                reverseVideo: "kog/videos/zones/zone1/sagefamily/1/zone1_sagefamily_1_gen_rev.mp4",
-                                                idleVideo: "kog/videos/zones/zone1/sagefamily/1/zone1_sagefamily_1_gen_idle.mp4",
-                                            }
+                                            videos: sage_family_units[0],
                                         },
                                         {
                                             id: "SageFamily-1-unit2",
@@ -341,11 +431,7 @@ export const PROJECT_KOG = {
                                             bedrooms: 4, bathrooms: 2,
                                             balconyView: "/kog/panorama/Oak178.jpg",
                                             x: 0.54, y: 0.3,
-                                            videos: {
-                                                forwardVideo: "kog/videos/zones/zone1/sagefamily/2/zone1_sagefamily_2_gen_trans.mp4",
-                                                reverseVideo: "kog/videos/zones/zone1/sagefamily/2/zone1_sagefamily_2_gen_rev.mp4",
-                                                idleVideo: "kog/videos/zones/zone1/sagefamily/2/zone1_sagefamily_2_gen_idle.mp4",
-                                            }
+                                            videos: sage_family_units[1],
                                         },
                                         {
                                             id: "SageFamily-1-unit3",
@@ -356,11 +442,7 @@ export const PROJECT_KOG = {
                                             bedrooms: 4, bathrooms: 2,
                                             balconyView: "/kog/panorama/Oak178.jpg",
                                             x: 0.54, y: 0.3,
-                                            videos: {
-                                                forwardVideo: "kog/videos/zones/zone1/sagefamily/3/zone1_sagefamily_3_gen_trans.mp4",
-                                                reverseVideo: "kog/videos/zones/zone1/sagefamily/3/zone1_sagefamily_3_gen_rev.mp4",
-                                                idleVideo: "kog/videos/zones/zone1/sagefamily/3/zone1_sagefamily_3_gen_idle.mp4",
-                                            }
+                                            videos: sage_family_units[2],
                                         },
                                     ],
                                 },
@@ -369,11 +451,7 @@ export const PROJECT_KOG = {
                                     id: "SageFamily-2",
                                     displayName: "Sage Family 2",
                                     x: 0.66, y: 0.47,
-                                    videos: {
-                                        forwardVideo: "/kog/videos/zones/zone1/sagefamily/zone1_sagefamily_1_gen_trans.mp4",
-                                        reverseVideo: "/kog/videos/zones/zone1/sagefamily/zone1_sagefamily_1_gen_rev.mp4",
-                                        idleVideo: "kog/videos/zones/zone1/sagefamily/views/view1/zone1_sagefamily_1_view1_idle.mp4",
-                                    },
+                                    videos: sage_family_videos,
                                     views: sage_family_views,
                                     units: [
                                         {
@@ -385,11 +463,7 @@ export const PROJECT_KOG = {
                                             bedrooms: 4, bathrooms: 2,
                                             balconyView: "/kog/panorama/townhouse/balcony.jpg",
                                             x: 0.19, y: 0.3,
-                                            videos: {
-                                                forwardVideo: "kog/videos/zones/zone1/sagefamily/1/zone1_sagefamily_1_gen_trans.mp4",
-                                                reverseVideo: "kog/videos/zones/zone1/sagefamily/1/zone1_sagefamily_1_gen_rev.mp4",
-                                                idleVideo: "kog/videos/zones/zone1/sagefamily/1/zone1_sagefamily_1_gen_idle.mp4",
-                                            }
+                                            videos: sage_family_videos[0],
                                         },
                                         {
                                             id: "SageFamily-2-unit2",
@@ -400,11 +474,7 @@ export const PROJECT_KOG = {
                                             bedrooms: 4, bathrooms: 2,
                                             balconyView: "/kog/panorama/townhouse/balcony.jpg",
                                             x: 0.54, y: 0.3,
-                                            videos: {
-                                                forwardVideo: "kog/videos/zones/zone1/sagefamily/2/zone1_sagefamily_2_gen_trans.mp4",
-                                                reverseVideo: "kog/videos/zones/zone1/sagefamily/2/zone1_sagefamily_2_gen_rev.mp4",
-                                                idleVideo: "kog/videos/zones/zone1/sagefamily/2/zone1_sagefamily_2_gen_idle.mp4",
-                                            }
+                                            videos: sage_family_units[1],
                                         },
                                         {
                                             id: "SageFamily-2-unit3",
@@ -414,12 +484,8 @@ export const PROJECT_KOG = {
                                             area: 425,
                                             bedrooms: 4, bathrooms: 2,
                                             balconyView: "/kog/panorama/townhouse/balcony.jpg",
-                                            x: 0.54, y: 0.3,
-                                            videos: {
-                                                forwardVideo: "kog/videos/zones/zone1/sagefamily/3/zone1_sagefamily_3_gen_trans.mp4",
-                                                reverseVideo: "kog/videos/zones/zone1/sagefamily/3/zone1_sagefamily_3_gen_rev.mp4",
-                                                idleVideo: "kog/videos/zones/zone1/sagefamily/3/zone1_sagefamily_3_gen_idle.mp4",
-                                            }
+                                            x: 0.64, y: 0.3,
+                                            videos: sage_family_units[2],
                                         },
                                     ],
                                 },
@@ -830,7 +896,7 @@ export const PROJECT_KOG = {
                     thumbnail: "kog/thumbnails/zones/zone4.png",
                     highlight: "kog/highlight/zones/zone4.png",
                     description: "A charming community of townhouses in a verdant setting.",
-                    x: 0.5, y: 0.5,
+                    x: 0.66, y: 0.43,
                     videos: {
                         forwardVideo: "/kog/videos/zones/zone4/zone4_gen_trans.mp4",
                         reverseVideo: "/kog/videos/zones/zone4/zone4_gen_rev.mp4",
@@ -845,12 +911,8 @@ export const PROJECT_KOG = {
                                 {
                                     id: "Meadows-3",
                                     displayName: "Meadows 3",
-                                    x: 0.29, y: 0.47,
-                                    videos: {
-                                        forwardVideo: "/kog/videos/zones/zone4/meadows/zone4_meadows_1_gen_trans.mp4",
-                                        reverseVideo: "/kog/videos/zones/zone4/meadows/zone4_meadows_1_gen_rev.mp4",
-                                        idleVideo: "kog/videos/zones/zone4/meadows/views/view1/zone4_meadows_1_view1_idle.mp4",
-                                    },
+                                    x: 0.847, y: 0.504,
+                                    videos: meadows_1_videos,
                                     views: meadows_views,
                                     units: [
                                         {
@@ -861,12 +923,8 @@ export const PROJECT_KOG = {
                                             area: 425,
                                             bedrooms: 4, bathrooms: 2,
                                             balconyView: "/kog/panorama/townhouse/balcony.jpg",
-                                            x: 0.138, y: 0.504,
-                                            videos: {
-                                                forwardVideo: "kog/videos/zones/zone1/meadows/1/zone1_meadows_1_gen_trans.mp4",
-                                                reverseVideo: "kog/videos/zones/zone1/meadows/1/zone1_meadows_1_gen_rev.mp4",
-                                                idleVideo: "kog/videos/zones/zone1/meadows/1/zone1_meadows_1_gen_idle.mp4"
-                                            },
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
                                         },
                                         {
                                             id: "Meadows-3-u2",
@@ -876,18 +934,1391 @@ export const PROJECT_KOG = {
                                             area: 425,
                                             bedrooms: 4, bathrooms: 2,
                                             balconyView: "/kog/panorama/townhouse/balcony.jpg",
-                                            x: 0.138, y: 0.504,
-                                            videos: {
-                                                forwardVideo: "kog/videos/zones/zone1/meadows/2/zone1_meadows_2_gen_trans.mp4",
-                                                reverseVideo: "kog/videos/zones/zone1/meadows/2/zone1_meadows_2_gen_rev.mp4",
-                                                idleVideo: "kog/videos/zones/zone1/meadows/2/zone1_meadows_2_gen_idle.mp4"
-                                            },
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
                                         },
 
                                     ]
                                 },
+                                {
+                                    id: "Meadows-4",
+                                    displayName: "Meadows 4",
+                                    x: 0.787, y: 0.504,
+                                    videos: meadows_1_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-4-u1",
+                                            displayName: "Meadows 4 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-4-u2",
+                                            displayName: "Meadows 4 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-5",
+                                    displayName: "Meadows 5",
+                                    x: 0.728, y: 0.504,
+                                    videos: meadows_1_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-5-u1",
+                                            displayName: "Meadows 5 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-5-u2",
+                                            displayName: "Meadows 5 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-6",
+                                    displayName: "Meadows 6",
+                                    x: 0.675, y: 0.504,
+                                    videos: meadows_1_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-6-u1",
+                                            displayName: "Meadows 6 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-6-u2",
+                                            displayName: "Meadows 6 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-7",
+                                    displayName: "Meadows 7",
+                                    x: 0.619, y: 0.504,
+                                    videos: meadows_1_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-7-u1",
+                                            displayName: "Meadows 7 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-7-u2",
+                                            displayName: "Meadows 7 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-8",
+                                    displayName: "Meadows 8",
+                                    x: 0.564, y: 0.504,
+                                    videos: meadows_1_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-8-u1",
+                                            displayName: "Meadows 8 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-8-u2",
+                                            displayName: "Meadows 8 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-9",
+                                    displayName: "Meadows 9",
+                                    x: 0.508, y: 0.504,
+                                    videos: meadows_1_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-9-u1",
+                                            displayName: "Meadows 9 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-9-u2",
+                                            displayName: "Meadows 9 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-10",
+                                    displayName: "Meadows 10",
+                                    x: 0.451, y: 0.504,
+                                    videos: meadows_1_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-10-u1",
+                                            displayName: "Meadows 10 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-10-u2",
+                                            displayName: "Meadows 10 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-11",
+                                    displayName: "Meadows 11",
+                                    x: 0.396, y: 0.504,
+                                    videos: meadows_1_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-11-u1",
+                                            displayName: "Meadows 11 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-11-u2",
+                                            displayName: "Meadows 11 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-12",
+                                    displayName: "Meadows 12",
+                                    x: 0.339, y: 0.504,
+                                    videos: meadows_1_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-12-u1",
+                                            displayName: "Meadows 12 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-12-u2",
+                                            displayName: "Meadows 11 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-13",
+                                    displayName: "Meadows 13",
+                                    x: 0.282, y: 0.504,
+                                    videos: meadows_1_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-13-u1",
+                                            displayName: "Meadows 13 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-13-u2",
+                                            displayName: "Meadows 13 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-14",
+                                    displayName: "Meadows 14",
+                                    x: 0.23, y: 0.504,
+                                    videos: meadows_1_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-14-u1",
+                                            displayName: "Meadows 14 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-14-u2",
+                                            displayName: "Meadows 14 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-15",
+                                    displayName: "Meadows 15",
+                                    x: 0.179, y: 0.504,
+                                    videos: meadows_1_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-15-u1",
+                                            displayName: "Meadows 15 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-15-u2",
+                                            displayName: "Meadows 15 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-16",
+                                    displayName: "Meadows 16",
+                                    x: 0.138, y: 0.504,
+                                    videos: meadows_1_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-16-u1",
+                                            displayName: "Meadows 16 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                    ]
+                                },
                             ]
                         }
+                    ],
+                },
+                {
+                    id: "zone5",
+                    displayName: "Meadows 2",
+                    subtitle: "Residential Zone",
+                    thumbnail: "kog/thumbnails/zones/zone5.png",
+                    highlight: "kog/highlight/zones/zone5.png",
+                    description: "A charming community of townhouses in a verdant setting.",
+                    x: 0.66, y: 0.43,
+                    videos: {
+                        forwardVideo: "/kog/videos/zones/zone5/zone5_gen_trans.mp4",
+                        reverseVideo: "/kog/videos/zones/zone5/zone5_gen_rev.mp4",
+                        idleVideo: "/kog/videos/zones/zone5/zone5_gen_idle.mp4",
+                    },
+                    properties: [
+                        {
+                            id: "meadows1",
+                            type: "town",
+                            units: [
+                                // Meadows 1
+                                {
+                                    id: "Meadows-17",
+                                    displayName: "Meadows 17",
+                                    x: 0.73, y: 0.467,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-17-u1",
+                                            displayName: "Meadows 17 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-18",
+                                    displayName: "Meadows 18",
+                                    x: 0.681, y: 0.467,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-18-u1",
+                                            displayName: "Meadows 18 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-18-u2",
+                                            displayName: "Meadows 18 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-19",
+                                    displayName: "Meadows 19",
+                                    x: 0.625, y: 0.465,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-19-u1",
+                                            displayName: "Meadows 19 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-19-u2",
+                                            displayName: "Meadows 19 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-20",
+                                    displayName: "Meadows 20",
+                                    x: 0.568, y: 0.465,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-20-u1",
+                                            displayName: "Meadows 20 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-20-u2",
+                                            displayName: "Meadows 20 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-21",
+                                    displayName: "Meadows 21",
+                                    x: 0.514, y: 0.461,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-21-u1",
+                                            displayName: "Meadows 21 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-21-u2",
+                                            displayName: "Meadows 21 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-22",
+                                    displayName: "Meadows 22",
+                                    x: 0.455, y: 0.461,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-22-u1",
+                                            displayName: "Meadows 22 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-22-u2",
+                                            displayName: "Meadows 22 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-23",
+                                    displayName: "Meadows 23",
+                                    x: 0.399, y: 0.456,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-23-u1",
+                                            displayName: "Meadows 23 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-23-u2",
+                                            displayName: "Meadows 23 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-24",
+                                    displayName: "Meadows 24",
+                                    x: 0.341, y: 0.456,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-24-u1",
+                                            displayName: "Meadows 24 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-24-u2",
+                                            displayName: "Meadows 24 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-25",
+                                    displayName: "Meadows 25",
+                                    x: 0.284, y: 0.451,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-25-u1",
+                                            displayName: "Meadows 25 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-25-u2",
+                                            displayName: "Meadows 25 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-26",
+                                    displayName: "Meadows 26",
+                                    x: 0.226, y: 0.451,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-26-u1",
+                                            displayName: "Meadows 26 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-12-u2",
+                                            displayName: "Meadows 11 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-27",
+                                    displayName: "Meadows 27",
+                                    x: 0.168, y: 0.451,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-27-u1",
+                                            displayName: "Meadows 27 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-27-u2",
+                                            displayName: "Meadows 27 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-28",
+                                    displayName: "Meadows 28",
+                                    x: 0.152, y: 0.593,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-28-u1",
+                                            displayName: "Meadows 28 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-28-u2",
+                                            displayName: "Meadows 28 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-29",
+                                    displayName: "Meadows 29",
+                                    x: 0.152, y: 0.739,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-29-u1",
+                                            displayName: "Meadows 29 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-29-u2",
+                                            displayName: "Meadows 29 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-30",
+                                    displayName: "Meadows 30",
+                                    x: 0.211, y: 0.739,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-30-u1",
+                                            displayName: "Meadows 30 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-30-u2",
+                                            displayName: "Meadows 30 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-31",
+                                    displayName: "Meadows 31",
+                                    x: 0.268, y: 0.739,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-31-u1",
+                                            displayName: "Meadows 31 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-31-u2",
+                                            displayName: "Meadows 31 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-32",
+                                    displayName: "Meadows 32",
+                                    x: 0.325, y: 0.739,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-32-u1",
+                                            displayName: "Meadows 32 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-32-u2",
+                                            displayName: "Meadows 32 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-33",
+                                    displayName: "Meadows 33",
+                                    x: 0.385, y: 0.739,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-33-u1",
+                                            displayName: "Meadows 33 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-33-u2",
+                                            displayName: "Meadows 33 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-34",
+                                    displayName: "Meadows 34",
+                                    x: 0.442, y: 0.739,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-34-u1",
+                                            displayName: "Meadows 34 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-34-u2",
+                                            displayName: "Meadows 34 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-35",
+                                    displayName: "Meadows 35",
+                                    x: 0.5, y: 0.739,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-35-u1",
+                                            displayName: "Meadows 35 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-35-u2",
+                                            displayName: "Meadows 35 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-36",
+                                    displayName: "Meadows 36",
+                                    x: 0.561, y: 0.739,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-36-u1",
+                                            displayName: "Meadows 36 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-36-u2",
+                                            displayName: "Meadows 36 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-37",
+                                    displayName: "Meadows 37",
+                                    x: 0.615, y: 0.739,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-37-u1",
+                                            displayName: "Meadows 37 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-37-u2",
+                                            displayName: "Meadows 37 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-38",
+                                    displayName: "Meadows 38",
+                                    x: 0.678, y: 0.739,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-38-u1",
+                                            displayName: "Meadows 38 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-38-u2",
+                                            displayName: "Meadows 38 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-39",
+                                    displayName: "Meadows 39",
+                                    x: 0.736, y: 0.739,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-39-u1",
+                                            displayName: "Meadows 39 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-39-u2",
+                                            displayName: "Meadows 39 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-40",
+                                    displayName: "Meadows 40",
+                                    x: 0.792, y: 0.739,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-40-u1",
+                                            displayName: "Meadows 40 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-40-u2",
+                                            displayName: "Meadows 40 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+                                    ]
+                                },
+                                {
+                                    id: "Meadows-41",
+                                    displayName: "Meadows 41",
+                                    x: 0.85, y: 0.739,
+                                    videos: meadows_2_videos,
+                                    views: meadows_views,
+                                    units: [
+                                        {
+                                            id: "Meadows-41-u1",
+                                            displayName: "Meadows 41 U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.27, y: 0.33,
+                                            videos: meadows_units[0],
+                                        },
+                                        {
+                                            id: "Meadows-41-u2",
+                                            displayName: "Meadows 41 U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.75, y: 0.39,
+                                            videos: meadows_units[1],
+                                        },
+                                    ]
+                                },
+                            ]
+                        }
+                    ],
+                },
+                {
+                    id: "zone6",
+                    displayName: "Oak 168",
+                    subtitle: "Residential Zone",
+                    thumbnail: "kog/thumbnails/zones/zone6.png",
+                    highlight: "kog/highlight/zones/zone6.png",
+                    description: "A tranquil enclave of elegant contemporary townhouses surrounded by lush greenery.",
+                    x: 0.785, y: 0.37,
+                    videos: {
+                        forwardVideo: "/kog/videos/zones/zone6/zone6_gen_trans.mp4",
+                        reverseVideo: "/kog/videos/zones/zone6/zone6_gen_rev.mp4",
+                        idleVideo: "/kog/videos/zones/zone6/zone6_gen_idle.mp4",
+                    },
+                    properties: [
+                        {
+                            id: "town",
+                            type: "town",
+                            units: [
+                                // Oak168 10
+                                {
+                                    id: "oak168-10",
+                                    displayName: "Oak168 10",
+                                    x: 0.775, y: 0.45,
+                                    videos: oak168_videos,
+                                    views: oak168_views,
+                                    units: [
+                                        {
+                                            id: "oak168-u1",
+                                            displayName: "U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/IrisGroup2.jpg",
+                                            x: 0.19, y: 0.7,
+                                            videos: oak168_units[0],
+                                        },
+                                        {
+                                            id: "oak168-u2",
+                                            displayName: "U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/Oak178.jpg",
+                                            x: 0.54, y: 0.3,
+                                            videos: oak168_units[1],
+                                        },
+                                        {
+                                            id: "oak168-u3",
+                                            displayName: "U3",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/Oak178.jpg",
+                                            x: 0.54, y: 0.3,
+                                            videos: oak168_units[2],
+                                        },
+                                        {
+                                            id: "oak168-u4",
+                                            displayName: "U4",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/Oak178.jpg",
+                                            x: 0.54, y: 0.3,
+                                            videos: oak168_units[3],
+                                        },
+                                        {
+                                            id: "oak168-u5",
+                                            displayName: "U5",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/Oak178.jpg",
+                                            x: 0.54, y: 0.3,
+                                            videos: oak168_units[4],
+                                        },
+                                        {
+                                            id: "oak168-u6",
+                                            displayName: "U6",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/Oak178.jpg",
+                                            x: 0.17, y: 0.6,
+                                            videos: oak168_units[5],
+                                        },
+                                    ],
+                                },
+                                // Oak168 11
+                                {
+                                    id: "oak168-11",
+                                    displayName: "Oak168 11",
+                                    x: 0.597, y: 0.45,
+                                    videos: oak168_videos,
+                                    views: oak168_views,
+                                    units: [
+                                        {
+                                            id: "oak168-11-u1",
+                                            displayName: "U1",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.19, y: 0.3,
+                                            videos: oak168_units[0],
+                                        },
+                                        {
+                                            id: "oak168-11-u2",
+                                            displayName: "U2",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.54, y: 0.3,
+                                            videos: oak168_units[1],
+                                        },
+                                        {
+                                            id: "oak168-11-u3",
+                                            displayName: "U3",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/townhouse/balcony.jpg",
+                                            x: 0.64, y: 0.3,
+                                            videos: oak168_units[2],
+                                        },
+                                        {
+                                            id: "oak168-11-u4",
+                                            displayName: "U4",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/Oak178.jpg",
+                                            x: 0.54, y: 0.3,
+                                            videos: oak168_units[3],
+                                        },
+                                        {
+                                            id: "oak168-11-u5",
+                                            displayName: "U5",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/Oak178.jpg",
+                                            x: 0.54, y: 0.3,
+                                            videos: oak168_units[4],
+                                        },
+                                        {
+                                            id: "oak168-11-u6",
+                                            displayName: "U6",
+                                            unitTypeId: "townhouse-2story-4br",
+                                            price: 950000,
+                                            area: 425,
+                                            bedrooms: 4, bathrooms: 2,
+                                            balconyView: "/kog/panorama/Oak178.jpg",
+                                            x: 0.54, y: 0.3,
+                                            videos: oak168_units[5],
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
                     ],
                 },
             ],

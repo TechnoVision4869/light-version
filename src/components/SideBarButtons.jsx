@@ -44,54 +44,54 @@ export default function SidebarButtons() {
       layerKey = LAYERS.SURROUNDING_DETAIL;
     }
   }
-  else
-    {
-      if (activeLayer === LAYERS.ZONE_DETAIL) {
-        items = currentItem.properties;
-        // console.log(items);
-        if (items.length === 1) {
-          if (items[0].type === "villa") {
-            type = "villa";
-            items = items[0].units;
-            Component = ApartmentButton;
-            propName = "apartment";
-            layerKey = LAYERS.UNIT;
-          }
-          else if (items[0].type === "town") {
-            items = items[0].units;
-            Component = BuildingButton;
-            propName = "building";
-            layerKey = LAYERS.BUILDING;
-          }
+  else {
+    if (activeLayer === LAYERS.ZONE_DETAIL) {
+      items = currentItem.properties;
+      // console.log(items);
+      if (items.length === 1) {
+        if (items[0].type === "villa") {
+          items = items[0].units;
+          if (items.length > 8) type = "small";
+          Component = ApartmentButton;
+          propName = "apartment";
+          layerKey = LAYERS.UNIT;
         }
-        else {
+        else if (items[0].type === "town") {
+          items = items[0].units;
+          if (items.length > 8) type = "small";
           Component = BuildingButton;
           propName = "building";
           layerKey = LAYERS.BUILDING;
         }
       }
-      else if (activeLayer === LAYERS.BUILDING) {
-        // console.log(currentItem.type);
-        if (currentItem.type === "tower") {
-          items = currentItem.floors;
-          Component = FloorButton;
-          propName = "floor";
-          layerKey = LAYERS.FLOOR;
-        }
-        else {
-          items = currentItem.units;
-          Component = ApartmentButton;
-          propName = "apartment";
-          layerKey = LAYERS.UNIT;
-        }
+      else {
+        Component = BuildingButton;
+        propName = "building";
+        layerKey = LAYERS.BUILDING;
       }
-      else if (activeLayer === LAYERS.FLOOR) {
+    }
+    else if (activeLayer === LAYERS.BUILDING) {
+      // console.log(currentItem.type);
+      if (currentItem.type === "tower") {
+        items = currentItem.floors;
+        Component = FloorButton;
+        propName = "floor";
+        layerKey = LAYERS.FLOOR;
+      }
+      else {
         items = currentItem.units;
         Component = ApartmentButton;
         propName = "apartment";
         layerKey = LAYERS.UNIT;
       }
-      else if (activeLayer === LAYERS.UNIT) return;
+    }
+    else if (activeLayer === LAYERS.FLOOR) {
+      items = currentItem.units;
+      Component = ApartmentButton;
+      propName = "apartment";
+      layerKey = LAYERS.UNIT;
+    }
+    else if (activeLayer === LAYERS.UNIT) return;
   }
 
   useEffect(() => {

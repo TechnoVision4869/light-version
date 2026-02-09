@@ -103,11 +103,12 @@ export default function Home() {
     function checkSwithingBetweenTabs(tab, item) {
       const isFromHome = activeTab === TABS.HOME;
 
-       if(!isFromHome && !activeLayer) {
-          viewerProps.StartReverse(true, () => goToTab(tab, item, true));
-          return;
-        }
-        goToTab(tab, item, isFromHome);
+      // uncomment to play reverse then forward when switching between non-home tabs
+      //  if(!isFromHome && !activeLayer) {
+      //     viewerProps.StartReverse(true, () => goToTab(tab, item, true));
+      //     return;
+      //   }
+      goToTab(tab, item, isFromHome);
     }
 
     setTimeout(() => {
@@ -118,7 +119,7 @@ export default function Home() {
   useEffect(() => {
     setHighlightedButton(null);
     // Show info popup if item has description
-    if(!currentItem) return
+    if (!currentItem) return
 
     if (currentItem?.description) setShowInfoPopup(true);
     setShowI(false);
@@ -153,7 +154,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!currentItem?.views) return;
-    
+
     if (isDisabled) return;
     // console.log(translateX);
 
@@ -317,7 +318,7 @@ export default function Home() {
               ) : (
                 <button
                   onClick={() => {
-                    if (viewerProps.currentViewIndex === 3) {
+                    if (viewerProps.currentViewIndex >= 3) {
                       viewerProps.changeView("next");
                       return;
                     }
@@ -411,7 +412,7 @@ export default function Home() {
                 >
                   {/* video element */}
                   <div className="absolute inset-0">
-                    <Highlight />
+                    {!viewerProps.isPlaying && <Highlight />}
                     {/* First Video (e.g., transition, or initial idle) */}
                     <video
                       ref={viewerProps.firstMediaRef}
