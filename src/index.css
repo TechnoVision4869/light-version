@@ -43,7 +43,7 @@ body {
   transform: rotate(-45deg);
 }
 
-.triangle-small {
+.triangle-small-down {
   /* display: block; */
   height: 15px;
   width: 15px;
@@ -56,6 +56,20 @@ body {
   clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
   -webkit-clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
   transform: rotate(-45deg);
+}
+.triangle-small-up {
+  /* display: block; */
+  height: 15px;
+  width: 15px;
+  background: inherit;
+  /* border: 1px solid inherit; */
+  border-radius: 20%;
+  position: absolute;
+  left: calc(50% - 7px);
+  top: -18%;
+  clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
+  -webkit-clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
+  transform: rotate(135deg);
 }
 
 .triangle-right {

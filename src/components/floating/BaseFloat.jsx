@@ -117,7 +117,7 @@ export default function BaseFloating({ mediaRef }) {
     }
 
     return (
-        currentItems.map((item) => {
+        currentItems.map((item, index) => {
             // console.log(itemIdToPosition);
             // console.log(item.id);
 
@@ -129,13 +129,64 @@ export default function BaseFloating({ mediaRef }) {
             const isOpaque = (highlightedButton === null || highlightedButton === item);
             const isSelected = highlightedButton === item;
 
+            if (type !== "small") {
+                return (
+                    <BaseFloatButton
+                        key={item.id}
+                        name={item.displayName}
+                        tabType={activeTab}
+                        layerType={activeLayer}
+                        style={{
+                            left: `${pos.left}px`,
+                            top: `${pos.top}px`,
+                        }}
+                        isOpaque={isOpaque}
+                        onSelect={() => {
+                            if (isSelected) {
+                                // console.log("Selected item:", item);
+
+                                goToItem(item, layerKey);
+                                setHighlightedButton(null);
+                            }
+                            else setHighlightedButton(item);
+                        }}
+                    />
+                )
+            }
+            if (index % 2 === 0)
+                return (
+                    <BaseFloatButton
+                        key={item.id}
+                        name={item.displayName}
+                        tabType={activeTab}
+                        layerType={activeLayer}
+                        showName={false}
+                        triClass="triangle-small-up"
+                        style={{
+                            left: `${pos.left}px`,
+                            top: `${pos.top}px`,
+                        }}
+                        isOpaque={isOpaque}
+                        onSelect={() => {
+                            if (isSelected) {
+                                // console.log("Selected item:", item);
+
+                                goToItem(item, layerKey);
+                                setHighlightedButton(null);
+                            }
+                            else setHighlightedButton(item);
+                        }}
+                    />
+                )
+                
             return (
                 <BaseFloatButton
                     key={item.id}
                     name={item.displayName}
                     tabType={activeTab}
                     layerType={activeLayer}
-                    showName={type !== "small"}
+                    showName={false}
+                    triClass="triangle-small-down"
                     style={{
                         left: `${pos.left}px`,
                         top: `${pos.top}px`,

@@ -58,7 +58,7 @@ export default function SidebarButtons() {
         }
         else if (items[0].type === "town") {
           items = items[0].units;
-          if (items.length > 8) type = "small";
+          if (items.length > 9) type = "small";
           Component = BuildingButton;
           propName = "building";
           layerKey = LAYERS.BUILDING;
