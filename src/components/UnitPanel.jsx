@@ -87,7 +87,7 @@ export default function UnitPanel() {
                         <button className="w-full border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition"
                             onClick={handleBalconyView}
                         >
-                            Drone View
+                            Location View
                         </button>
                     </>
                 }
