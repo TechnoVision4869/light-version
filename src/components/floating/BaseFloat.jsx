@@ -14,6 +14,7 @@ export default function BaseFloating({ mediaRef }) {
     const triangleOffsetPx = -24; // Approximate triangle tip distance below button center
 
     const updatePositions = useCallback(() => {
+        if (!currentItems || !container) return;
         const w = container.clientWidth;
         const h = container.clientHeight;
         const videoW = h * (16 / 9);
@@ -25,10 +26,11 @@ export default function BaseFloating({ mediaRef }) {
         }));
 
         setButtonPositions(newPositions);
-    }, [currentItems]);
+    }, [currentItems, container]);
 
     // Create a map for O(1) lookup: id → position
     const itemIdToPosition = useMemo(() => {
+        if (!currentItems) return new Map();
         const map = new Map();
         currentItems.forEach((item, index) => {
             map.set(item.id, buttonPositions[index]);
@@ -52,11 +54,17 @@ export default function BaseFloating({ mediaRef }) {
         }
     }, []); // Empty dependency array ensures this runs once on mount
 
+    useEffect(() => {
+        if (activeLayer === LAYERS.UNIT) {
+            setButtonPositions([]);
+        }
+    }, [activeLayer]);
+
     // console.log(buttonPositions.length);
     // console.log(currentItems.length);
 
     // Don't render until positions are ready
-    if (buttonPositions.length !== currentItems.length) return null;
+    if (!currentItems || buttonPositions.length !== currentItems.length) return null;
     if (activeLayer === LAYERS.UNIT) return;
 
     if (activeTab === TABS.SURROUNDINGS) {
@@ -86,7 +94,8 @@ export default function BaseFloating({ mediaRef }) {
     if (activeLayer !== null) {
         switch (activeLayer) {
             case LAYERS.ZONE_DETAIL:
-                layerKey = LAYERS.BUILDING;
+                if(currentItem.properties[0].type === "villa") layerKey = LAYERS.UNIT;
+                else layerKey = LAYERS.BUILDING;
                 break;
             case LAYERS.BUILDING:
                 if (currentItem.type === "tower") layerKey = LAYERS.FLOOR;
@@ -120,7 +129,6 @@ export default function BaseFloating({ mediaRef }) {
         currentItems.map((item, index) => {
             // console.log(itemIdToPosition);
             // console.log(item.id);
-
             const pos = itemIdToPosition.get(item.id);
             // console.log(pos);
 
@@ -153,32 +161,32 @@ export default function BaseFloating({ mediaRef }) {
                     />
                 )
             }
-            if (index % 2 === 0)
-                return (
-                    <BaseFloatButton
-                        key={item.id}
-                        name={item.displayName}
-                        tabType={activeTab}
-                        layerType={activeLayer}
-                        showName={false}
-                        triClass="triangle-small-up"
-                        style={{
-                            left: `${pos.left}px`,
-                            top: `${pos.top}px`,
-                        }}
-                        isOpaque={isOpaque}
-                        onSelect={() => {
-                            if (isSelected) {
-                                // console.log("Selected item:", item);
+            // if (index % 2 === 0)
+            //     return (
+            //         <BaseFloatButton
+            //             key={item.id}
+            //             name={item.displayName}
+            //             tabType={activeTab}
+            //             layerType={activeLayer}
+            //             showName={false}
+            //             triClass="triangle-small-up"
+            //             style={{
+            //                 left: `${pos.left}px`,
+            //                 top: `${pos.top}px`,
+            //             }}
+            //             isOpaque={isOpaque}
+            //             onSelect={() => {
+            //                 if (isSelected) {
+            //                     // console.log("Selected item:", item);
 
-                                goToItem(item, layerKey);
-                                setHighlightedButton(null);
-                            }
-                            else setHighlightedButton(item);
-                        }}
-                    />
-                )
-                
+            //                     goToItem(item, layerKey);
+            //                     setHighlightedButton(null);
+            //                 }
+            //                 else setHighlightedButton(item);
+            //             }}
+            //         />
+            //     )
+
             return (
                 <BaseFloatButton
                     key={item.id}

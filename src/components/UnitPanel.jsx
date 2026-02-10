@@ -16,7 +16,7 @@ export default function UnitPanel() {
     const [isPaymentPlanOpen, setIsPaymentPlanOpen] = useState(false);
 
     //temporary visuals and payment plan
-    const unitType = DATA.project.unitTypes[currentItem.unitTypeId];
+    const unitType = DATA.project.unitTypes[currentItem.unitTypeId];    
     const serviceRooms = unitType.serviceRooms;
     const gallery = unitType.gallery;
     const cutSections = unitType.cutSections;
@@ -53,7 +53,7 @@ export default function UnitPanel() {
                         <small className="text-sm">+ service Rooms</small>
                         <hr className="flex-grow border-b border-white opacity-50" />
                     </div>
-                    <div className="grid grid-cols-2 gap-2">
+                    {serviceRooms && <div className="grid grid-cols-2 gap-2">
                         {serviceRooms.map((room, i) => (
                             <div key={i} className="flex items-center gap-1 text-xs text-[#E4E3E3]">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white/70">
@@ -62,7 +62,7 @@ export default function UnitPanel() {
                                 {room}
                             </div>
                         ))}
-                    </div>
+                    </div>}
 
                     <div className="flex flex-col gap-2 mt-4">
                         <div className="flex gap-2">

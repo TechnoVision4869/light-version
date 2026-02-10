@@ -25,10 +25,10 @@ export function useVideoViewer() {
   // Function to handle view changes (uses activeTab and currentItem derived above)
   const changeView = useCallback(
     (direction) => {
-      console.log(
-        "useVideoViewer: changeView called with direction:",
-        direction,
-      );
+      // console.log(
+      //   "useVideoViewer: changeView called with direction:",
+      //   direction,
+      // );
       // Use the locally derived activeTab and currentItem
       // console.log("current item", currentItem);
 

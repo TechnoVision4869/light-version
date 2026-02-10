@@ -107,8 +107,6 @@ export default function Panorama({ unit }) {
 
   // Handle view changes (pan/zoom)
   const handleViewChange = useCallback(() => {
-    console.log(viewerRef.current.camera.zoom);
-    
     updateHotspots();
   }, [updateHotspots]);
 
@@ -202,7 +200,7 @@ export default function Panorama({ unit }) {
   }, [updateHotspots]);
 
   return (
-    <div className="relative w-screen h-screen" ref={containerRef}>
+    <div className="relative w-screen h-screen" ref={containerRef} style={{ touchAction: "none" }}>
       {/* Current viewer */}
       <View360
         ref={viewerRef}

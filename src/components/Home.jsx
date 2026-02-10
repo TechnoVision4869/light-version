@@ -145,11 +145,16 @@ export default function Home() {
   };
 
   const handleTouchStart = (e) => {
-    setStartX(e.changedTouches[0].clientX)
+    if (currentItem?.views) {
+      setStartX(e.changedTouches[0].clientX);
+    }
   };
 
   const handleTouchEnd = (e) => {
-    setTranslateX(startX - e.changedTouches[0].clientX);
+    if (currentItem?.views) {
+      // e.preventDefault();
+      setTranslateX(startX - e.changedTouches[0].clientX);
+    }
   }
 
   useEffect(() => {
@@ -403,7 +408,8 @@ export default function Home() {
               {/* Main content area */}
               <main className="flex-1 relative">
                 <div
-                  className="w-full h-full bg-white/9 rounded-2xl overflow-hidden shadow-inner"
+                  className="w-full h-full bg-white/9 rounded-2xl overflow-hidden shadow-inner select-none"
+                  style={{ touchAction: "none" }}
                   ref={mediaContainerRef}
                   onMouseDown={handleMouseDown}
                   onMouseUp={handleMouseUp}

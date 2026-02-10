@@ -5,7 +5,7 @@ export default function BaseFloatButton({ name, layerType = null, style = {}, is
 
     return (
         <button className={`bg-[#418AFF] ${isOpaque ? "" : "opacity-75"}
-         hover:bg-[#357AEE] text-sm text-white px-[10px] py-1 ${triClass ? "rounded-lg" : "rounded-xl"} flex items-center gap-2 z-20`}
+         hover:bg-[#357AEE] text-sm text-white px-[8px] py-1 ${triClass ? "rounded-lg" : "rounded-xl"} flex items-center gap-2 z-20`}
             style={{
                 position: 'absolute',
                 transform: 'translate(-50%, -50%)',
