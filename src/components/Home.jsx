@@ -30,6 +30,7 @@ import { MainContext } from "../store/MainContextProvider";
 // logo
 import TECHNO_LOGO from "../assets/techno.png";
 import Highlight from "./Highlight.jsx";
+import Test from "./Test.jsx";
 // const color = "green";
 
 export default function Home() {
@@ -418,6 +419,7 @@ export default function Home() {
                 >
                   {/* video element */}
                   <div className="absolute inset-0">
+                    <Test />
                     {!viewerProps.isPlaying && <Highlight />}
                     {/* First Video (e.g., transition, or initial idle) */}
                     <video

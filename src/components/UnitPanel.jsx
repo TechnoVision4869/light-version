@@ -6,6 +6,7 @@ import { MainContext } from '../store/MainContextProvider';
 
 import AREA_ICON from "../assets/icons/area.svg"
 import DOOR_ICON from "../assets/icons/door.svg"
+import TOILET_ICON from "../assets/icons/bathroom.png"
 
 export default function UnitPanel() {
     const { currentItem } = useContext(SidebarContext);
@@ -47,6 +48,12 @@ export default function UnitPanel() {
                             <img src={DOOR_ICON} alt="Area icon" className="w-6 h-6 p-[1px]" />
                         </div>
                         <span>Rooms : {currentItem.bedrooms}</span>
+                    </div>
+                    <div className="flex items-left gap-1 mb-2">
+                        <div className="w-6 h-6 flex items-center justify-center">
+                            <img src={TOILET_ICON} alt="Area icon" className="w-6 h-6 p-[1px]" />
+                        </div>
+                        <span>Toilets : {currentItem.bathrooms}</span>
                     </div>
                     {serviceRooms && <>
                         <div className="flex items-center gap-2 mb-4">
