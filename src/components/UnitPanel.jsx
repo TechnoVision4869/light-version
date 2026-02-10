@@ -16,12 +16,12 @@ export default function UnitPanel() {
     const [isPaymentPlanOpen, setIsPaymentPlanOpen] = useState(false);
 
     //temporary visuals and payment plan
-    const unitType = DATA.project.unitTypes[currentItem.unitTypeId];    
+    const unitType = DATA.project.unitTypes[currentItem.unitTypeId];
     const serviceRooms = unitType.serviceRooms;
     const gallery = unitType.gallery;
     const cutSections = unitType.cutSections;
     const paymentPlans = unitType.paymentPlans;
-
+    const floorPlans = unitType.floorPlans;
     const balconyView = currentItem.balconyView;
 
     return (
@@ -48,21 +48,23 @@ export default function UnitPanel() {
                         </div>
                         <span>Rooms : {currentItem.bedrooms}</span>
                     </div>
+                    {serviceRooms && <>
+                        <div className="flex items-center gap-2 mb-4">
+                            <small className="text-sm">+ service Rooms</small>
+                            <hr className="flex-grow border-b border-white opacity-50" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                            {serviceRooms.map((room, i) => (
+                                <div key={i} className="flex items-center gap-1 text-xs text-[#E4E3E3]">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white/70">
+                                        <path d="M12 12C12 10.8954 11.1046 10 10 10C8.89543 10 8 10.8954 8 12C8 13.1046 8.89543 14 10 14C11.1046 14 12 13.1046 12 12Z" stroke="currentColor" strokeWidth="2" />
+                                    </svg>
+                                    {room}
+                                </div>
+                            ))}
+                        </div>
+                    </>}
 
-                    <div className="flex items-center gap-2 mb-4">
-                        <small className="text-sm">+ service Rooms</small>
-                        <hr className="flex-grow border-b border-white opacity-50" />
-                    </div>
-                    {serviceRooms && <div className="grid grid-cols-2 gap-2">
-                        {serviceRooms.map((room, i) => (
-                            <div key={i} className="flex items-center gap-1 text-xs text-[#E4E3E3]">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white/70">
-                                    <path d="M12 12C12 10.8954 11.1046 10 10 10C8.89543 10 8 10.8954 8 12C8 13.1046 8.89543 14 10 14C11.1046 14 12 13.1046 12 12Z" stroke="currentColor" strokeWidth="2" />
-                                </svg>
-                                {room}
-                            </div>
-                        ))}
-                    </div>}
 
                     <div className="flex flex-col gap-2 mt-4">
                         <div className="flex gap-2">
@@ -71,11 +73,11 @@ export default function UnitPanel() {
                             >
                                 Interior
                             </button>
-                            <button className="flex-1 border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition whitespace-nowrap"
+                            {floorPlans && <button className="flex-1 border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition whitespace-nowrap"
                                 onClick={() => handleGalleryType("floorPlans")}
                             >
                                 Floor Plan
-                            </button>
+                            </button>}
                         </div>
                     </div>
                 </div>
@@ -167,7 +169,7 @@ export default function UnitPanel() {
                 <hr className="h-divider" />
 
                 {/* Payment Plan */}
-                <div>
+                {paymentPlans && <div>
                     <button
                         onClick={() => setIsPaymentPlanOpen(!isPaymentPlanOpen)}
                         className="flex justify-between w-full"
@@ -206,7 +208,7 @@ export default function UnitPanel() {
                         )
 
                     )}
-                </div>
+                </div>}
             </div>
         </div>
     );

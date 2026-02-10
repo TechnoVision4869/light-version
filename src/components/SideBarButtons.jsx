@@ -37,7 +37,7 @@ export default function SidebarButtons() {
     else if (activeTab === TABS.SURROUNDINGS) {
       // items = TAB_CONFIG[TABS.SURROUNDINGS].getItems();
       items = DATA.project.surroundings.items;
-      console.log(items);
+      // console.log(items);
 
       Component = SurroundingButton;
       propName = "surrounding";

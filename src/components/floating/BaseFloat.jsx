@@ -28,6 +28,8 @@ export default function BaseFloating({ mediaRef }) {
         setButtonPositions(newPositions);
     }, [currentItems, container]);
 
+    
+
     // Create a map for O(1) lookup: id → position
     const itemIdToPosition = useMemo(() => {
         if (!currentItems) return new Map();
@@ -68,6 +70,8 @@ export default function BaseFloating({ mediaRef }) {
     if (activeLayer === LAYERS.UNIT) return;
 
     if (activeTab === TABS.SURROUNDINGS) {
+        console.log(currentItems);
+        
         return (
             currentItems.map((item, i) => {
                 const isSelected = currentItem?.id === item.id;

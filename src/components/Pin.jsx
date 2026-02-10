@@ -19,13 +19,12 @@ export default function Pin({ type, label, onClick, style }) {
           <div className="absolute w-0.5 h-2 bg-white top-3.5 left-3.5 transform rotate-[-45deg]"></div>
         </div>
       ) : (
-        ICON_PIN ? (
-          <div className="opacity-90 hover:opacity-100 transition-opacity">
-            <img src={MAP_PIN} className="w-12 h-auto" />
-            {/* <ChairRoundedIcon className="absolute bottom-[40%] right-[25%] w-4 h-4"/> */}
+        !ICON_PIN ? (
+          <div className="opacity-0 hover:opacity-100 transition-opacity">
+            <img src={MAP_PIN} className="w-36 opacity-70 h-auto" />
           </div>
         ) : (
-          <div className="text-white font-bold text-center whitespace-pre-line px-2 py-1 bg-black/50 rounded">
+          <div className="text-white opacity-100 w-46 h-46 text-2xl font-bold text-center whitespace-pre-line px-2 py-1 bg-black/50 rounded">
             {label}
           </div>
         )

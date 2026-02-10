@@ -86,10 +86,10 @@ export default function InteriorNav({levels, isFurnished = true, currentFloor, c
     }, [currentRoom]);
 
     return (
-        <div className="absolute bottom-3 md:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 w-full max-w-[calc(100%-50px)] lg:max-w-[760px] px-3 lg:px-0 z-40 pointer-events-auto">
-            <div className=" flex justify-around items-center bg-[#535353C9] text-white rounded-2xl shadow-2xl p-3 md:p-4 relative overflow-hidden">
-                <Dropdown label="Floor :" options={levelsOptions} value={selectedFloor} onChange={handleFloorChange} />
-                <Dropdown label="Room :" options={roomsOptions} value={selectedRoom} onChange={handleRoomChange} />
+        <div className="absolute bottom-3 md:bottom-6 lg:bottom-8 right-3 lg:right-6 z-40 pointer-events-auto">
+            <div className="flex items-center bg-[#53535344] text-white rounded-2xl shadow-2xl p-3 md:p-4 relative overflow-hidden">
+                {/* <Dropdown label="Floor :" options={levelsOptions} value={selectedFloor} onChange={handleFloorChange} /> */}
+                {/* <Dropdown label="Room :" options={roomsOptions} value={selectedRoom} onChange={handleRoomChange} /> */}
                 <div>
                     <button 
                         className={`w-10 h-10 rounded-2xl ${isFurnished ? 'p-1' : 'p-2'} bg-black flex items-center justify-center hover:bg-white/7 transition`}
