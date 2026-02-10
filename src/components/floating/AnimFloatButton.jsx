@@ -7,7 +7,7 @@ export default function AnimFloatButton({
 }) {
 
     return (
-        <button className={`animbtn text-white px-3 py-1 rounded-lg flex items-center gap-2 z-30 transition
+        <button className={`anim-btn text-white px-3 py-1 rounded-lg flex items-center gap-2 z-30 transition
             ${isSelected
                 ? 'bg-[#40321E] hover:bg-[#6B5635]'
                 : 'bg-[#94846D]/75 hover:bg-[#94846D]/85 text-white'}`}

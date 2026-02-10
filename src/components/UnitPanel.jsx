@@ -13,7 +13,7 @@ export default function UnitPanel() {
     const { handleInterior, handleBalconyView, handleGalleryType } = useContext(MainContext);
 
     const [isVisualsOpen, setIsVisualsOpen] = useState(true);
-    const [isCutSectionsOpen, setIsCutSectionsOpen] = useState(false);
+    const [isCutSectionsOpen, setIsCutSectionsOpen] = useState(true);
     const [isPaymentPlanOpen, setIsPaymentPlanOpen] = useState(false);
 
     //temporary visuals and payment plan
