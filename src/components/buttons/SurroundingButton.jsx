@@ -2,7 +2,7 @@ export default function SurroundingButton({ surrounding, isDisabled, isSelected,
     return (
         <button
             key={surrounding.id}
-            onClick={goToItem}
+            // onClick={goToItem}
             disabled={isDisabled}
             className={`w-full max-w-full mx-auto p-4 rounded-2xl transition
             ${isDisabled

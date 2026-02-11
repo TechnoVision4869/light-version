@@ -8,9 +8,9 @@ import InteriorNav from "./InteriorNav";
 
 export default function Panorama({ unit }) {
 
-  const ZOOM_OUT = 0.6; // zoomed out view (match FOV ≈ 118.07°)
+  const ZOOM_OUT = 0.8; // zoomed out view (match FOV ≈ 118.07°)
   const ZOOM_NORMAL = 1; // default zoom (match FOV = 90°)
-  const ZOOM_IN = 1.667; // zoomed in view (match FOV ≈ 61.93°)
+  const ZOOM_IN = 1.333; // zoomed in view (match FOV ≈ 61.93°)
 
   const ZOOM_DURATION = 750;
 
@@ -142,7 +142,7 @@ export default function Panorama({ unit }) {
   // Handle hotspot click: zoom in → switch room
   const handleHotspotClick = useCallback((room) => {
     if (!viewerRef.current) return;
-    console.log("click");
+    // console.log("click");
     
     // Start blur overlay
     setTimeout(() => {
@@ -162,7 +162,7 @@ export default function Panorama({ unit }) {
     // 2. Switch room AFTER first zoom in completes
     setTimeout(() => {
       const targetRoom = findRoomById(room.label);
-      console.log(targetRoom);
+      // console.log(targetRoom);
       
       if (targetRoom) {
         const newImage = isFurnished ? targetRoom.furnitureImg : targetRoom.unfurnitureImg;
@@ -177,7 +177,7 @@ export default function Panorama({ unit }) {
    // Handle new image load (v4's "imageLoaded" equivalent)
   const handleLoad = useCallback(() => {
     if (!viewerRef.current) return;
-    console.log("load");
+    // console.log("load");
 
     // Set to zoom out position instantly (no animation)
     viewerRef.current.camera.lookAt({

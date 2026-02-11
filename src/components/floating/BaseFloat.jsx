@@ -10,14 +10,6 @@ export default function BaseFloating({ mediaRef }) {
     const { activeTab, activeLayer, currentItem, currentItems, type, goToItem, highlightedButton, setHighlightedButton } = useContext(SidebarContext);
     const [buttonPositions, setButtonPositions] = useState([]);
 
-    // console.log('=== BaseFloating Debug ===');
-    // console.log('activeTab:', activeTab);
-    // console.log('activeLayer:', activeLayer);
-    // console.log('currentItems:', currentItems);
-    // console.log('currentItems length:', currentItems?.length);
-    // console.log('buttonPositions length:', buttonPositions.length);
-    // console.log('container:', container);
-
     const triangleOffsetPx = -24; // Approximate triangle tip distance below button center
 
     const updatePositions = useCallback(() => {
@@ -111,20 +103,6 @@ export default function BaseFloating({ mediaRef }) {
     }
 
     if (activeTab === TABS.SURROUNDINGS) {
-        // console.log("🔍 SURROUNDINGS DEBUG");
-        // console.log("Container dims:", { w: container.clientWidth, h: container.clientHeight });
-        // console.log("Video calc:", {
-        //     videoW: container.clientHeight * (16 / 9),
-        //     videoLeft: (container.clientWidth - (container.clientHeight * 16 / 9)) / 2
-        // });
-
-        // currentItems.forEach((item, i) => {
-        //     console.log(`Item ${item.id} | x:${item.x} y:${item.y} → POS:`, {
-        //         left: (container.clientWidth - (container.clientHeight * 16 / 9)) / 2 + (container.clientHeight * 16 / 9) * (item.x || 0),
-        //         top: container.clientHeight * (item.y || 0) + triangleOffsetPx
-        //     });
-        // });
-
         return (
             currentItems.map((item, i) => {
                 const pos = itemIdToPosition.get(item.id);
@@ -132,6 +110,8 @@ export default function BaseFloating({ mediaRef }) {
 
                 if (!pos) return null;
                 const isSelected = currentItem?.id === item.id;
+                console.log(isSelected);
+                
                 return (
                     <AnimFloatButton
                         key={item.id}

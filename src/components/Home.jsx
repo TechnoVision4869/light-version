@@ -19,7 +19,7 @@ import BaseFloat from "./floating/BaseFloat";
 import Panorama from "./Panorama";
 import Balcony from "./Balcony";
 import Gallery from "./Gallery";
-import AnimatedPath from "./AnimatedPath";
+// import AnimatedPath from "./AnimatedPath";
 
 // Context
 import FilterContextProvider from "../store/FilterContextProvider";
@@ -443,9 +443,9 @@ export default function Home() {
                       loop
                     />
 
-                    {activeLayer === LAYERS.SURROUNDING_DETAIL && (
+                    {/* {activeLayer === LAYERS.SURROUNDING_DETAIL && (
                       <AnimatedPath path={currentItem.svgPath} />
-                    )}
+                    )} */}
                   </div>
 
                   {viewerProps.floatingOpacity &&
