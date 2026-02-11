@@ -16,7 +16,7 @@ export default function AnimFloatButton({
                 transform: 'translate(-50%, -50%)',
                 ...style, // apply computed left/top
             }}
-            // onClick={onSelect}
+            onClick={onSelect}
             disabled={isSelected}
         >
             {icon && (

@@ -988,25 +988,25 @@ const camilia_views = [
     {
         name: "view 3",
         videos: {
-            forwardVideo: "kog/videos/zones/zone11/camilia/views/view3/zone11/camilia_view3_trans.mp4",
-            reverseVideo: "kog/videos/zones/zone11/camilia/views/view3/zone11/camilia_view3_rev.mp4",
-            idleVideo: "kog/videos/zones/zone11/camilia/views/view3/zone11/camilia_view3_idle.mp4",
+            forwardVideo: "kog/videos/zones/zone11/camilia/views/view3/zone11_camilia_view3_trans.mp4",
+            reverseVideo: "kog/videos/zones/zone11/camilia/views/view3/zone11_camilia_view3_rev.mp4",
+            idleVideo: "kog/videos/zones/zone11/camilia/views/view3/zone11_camilia_view3_idle.mp4",
         }
     },
     {
         name: "view 4",
         videos: {
-            forwardVideo: "kog/videos/zones/zone11/camilia/views/view4/zone11/camilia_view4_trans.mp4",
-            reverseVideo: "kog/videos/zones/zone11/camilia/views/view4/zone11/camilia_view4_rev.mp4",
-            idleVideo: "kog/videos/zones/zone11/camilia/views/view4/zone11/camilia_view4_idle.mp4",
+            forwardVideo: "kog/videos/zones/zone11/camilia/views/view4/zone11_camilia_view4_trans.mp4",
+            reverseVideo: "kog/videos/zones/zone11/camilia/views/view4/zone11_camilia_view4_rev.mp4",
+            idleVideo: "kog/videos/zones/zone11/camilia/views/view4/zone11_camilia_view4_idle.mp4",
         }
     },
     {
         name: "view 5",
         videos: {
-            forwardVideo: "kog/videos/zones/zone1/camilia/views/view5/zone11/camilia_view5_trans.mp4",
-            reverseVideo: "kog/videos/zones/zone1/camilia/views/view5/zone11/camilia_view5_rev.mp4",
-            idleVideo: "kog/videos/zones/zone1/camilia/views/view5/zone11/camilia_view5_idle.mp4",
+            forwardVideo: "kog/videos/zones/zone11/camilia/views/view5/zone11_camilia_view5_trans.mp4",
+            reverseVideo: "kog/videos/zones/zone11/camilia/views/view5/zone11_camilia_view5_rev.mp4",
+            idleVideo: "kog/videos/zones/zone11/camilia/views/view5/zone11_camilia_view5_idle.mp4",
         }
     },
 ];
@@ -1064,8 +1064,8 @@ export const PROJECT_KOG = {
                 },
                 {
                     id: "surrounding4",
-                    displayName: "Sphinx Int. Airport",
-                    iconSrc: VILLA_ICON,
+                    displayName: "Sphinx International Airport",
+                    iconSrc: AIRPORT_ICON,
                     thumbnail: null,
                     distance: "38 min | 55 km",
                     description: null,
@@ -3713,7 +3713,6 @@ export const PROJECT_KOG = {
                                     area: 385,
                                     bedrooms: 5, bathrooms: 7,
                                     balconyView: camilia_1_location,
-                                    x: 0.516, y: 0.481,
                                     x: 0.423, y: 0.481,
                                     videos: camilia_1_videos,
                                     views: camilia_views,
@@ -4149,6 +4148,7 @@ export const PROJECT_KOG = {
                 bedrooms: 6, bathrooms: 7,
                 serviceRooms: null,
                 area: 293,
+                roofarea: 113,
                 gallery: [
                     { id: "v1", src: "/kog/images/iris/CAM03-Iris Villa Street View NO PPL.jpg" },
                     { id: "v2", src: "/kog/images/iris/CAM04-Iris Villa garden View No People.jpg" },
@@ -4753,6 +4753,7 @@ export const PROJECT_KOG = {
                 bedrooms: 5, bathrooms: 7,
                 serviceRooms: null,
                 area: 385,
+                roofarea: 139,
                 gallery: [
                     { id: "v1", src: "/kog/images/camilia/CAM01-PROTOTYPE FOREST FRONT VIEW NO PPL.jpg" },
                     { id: "v2", src: "/kog/images/camilia/CAM02-PROTOTYPE FOREST BACK VIEW NO PPL.jpg" },
@@ -4983,6 +4984,7 @@ export const PROJECT_KOG = {
                 id: "oak168",
                 bedrooms: 3, bathrooms: 4,
                 area: 168,
+                roofarea: 55,
                 serviceRooms: null,
                 gallery: [
                     { id: "t1", src: "/kog/images/oak168/01-FRONT TOWN 6S.jpg" },

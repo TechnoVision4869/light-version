@@ -31,11 +31,17 @@ export default function UnitPanel() {
                 {/* name and area */}
                 <div>
                     <h1 className="text-xl font-bold mb-2">{currentItem.displayName}</h1>
+                    <div className="flex items-center gap-1 mb-2">
+                        <div className="w-6 h-6 items-center justify-center">
+                            <img src={AREA_ICON} alt="Area icon" className="w-6 h-6 p-[1px]" />
+                        </div>
+                        <span>Area : {unitType.area} m²</span>
+                    </div>
                     <div className="flex items-center gap-1">
                         <div className="w-6 h-6 items-center justify-center">
                             <img src={AREA_ICON} alt="Area icon" className="w-6 h-6 p-[1px]" />
                         </div>
-                        <span>Area : {currentItem.area} m²</span>
+                        <span>Roof Area : {unitType.roofarea} m²</span>
                     </div>
                 </div>
 

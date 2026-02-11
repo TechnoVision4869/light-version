@@ -19,6 +19,11 @@ export default function SidebarButtons() {
   let propName = "";
   let layerKey = null;
 
+  useEffect(() => {
+    setCurrentItems(items);
+    setType(type);
+  }, [activeTab, activeLayer]);
+
   if (activeLayer === null) {
     if (activeTab === TABS.ZONES) {
       // items = TAB_CONFIG[TABS.ZONES].getItems();
@@ -91,13 +96,15 @@ export default function SidebarButtons() {
       propName = "apartment";
       layerKey = LAYERS.UNIT;
     }
+    else if (activeLayer === LAYERS.SURROUNDING_DETAIL) {
+      // Keep showing surroundings items when viewing detail
+      items = DATA.project.surroundings.items;
+      Component = SurroundingButton;
+      propName = "surrounding";
+      layerKey = LAYERS.SURROUNDING_DETAIL;
+    }
     else if (activeLayer === LAYERS.UNIT) return;
   }
-
-  useEffect(() => {
-    setCurrentItems(items);
-    setType(type);
-  }, [activeTab, activeLayer]);
 
   if (!items || items?.length === 0 || Component === null) return null;
 
