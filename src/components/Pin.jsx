@@ -20,7 +20,7 @@ export default function Pin({ type, label, onClick, style }) {
         </div>
       ) : (
         !ICON_PIN ? (
-          <div className="opacity-0 hover:opacity-100 transition-opacity">
+          <div className="opacity-0 hover:opacity-0 transition-opacity">
             <img src={MAP_PIN} className="w-36 opacity-70 h-auto" />
           </div>
         ) : (
