@@ -24,10 +24,10 @@ export default function AnimFloatButton({
                     ${isSelected
                         ? 'bg-[#40321E]'
                         : 'bg-transparent'}`}>
-                    <span className={`whitespace-nowrap transition-all duration-200
+                    <span className={`whitespace-nowrap font-medium transition-all duration-200
                         ${isSelected
-                            ? 'text-white text-sm font-medium'
-                            : 'text-black text-xs font-bold'}`}>{name}</span>
+                            ? 'text-white text-sm'
+                            : 'text-black text-xs'}`}>{name}</span>
                 </div>
             )}
 
@@ -50,10 +50,10 @@ export default function AnimFloatButton({
                     ${isSelected
                         ? 'bg-[#40321E]'
                         : 'bg-transparent'}`}>
-                    <span className={`whitespace-nowrap transition-all duration-200
+                    <span className={`whitespace-nowrap font-medium transition-all duration-200
                         ${isSelected
-                            ? 'text-white text-sm font-medium'
-                            : 'text-black text-xs font-bold'}`}>{name}</span>
+                            ? 'text-white text-sm'
+                            : 'text-black text-xs'}`}>{name}</span>
                 </div>
             )}
         </button>
