@@ -43,6 +43,21 @@ body {
   transform: rotate(-45deg);
 }
 
+.icon-triangle {
+  /* display: block; */
+  height: 18px;
+  width: 18px;
+  background: inherit;
+  /* border: 1px solid inherit; */
+  border-radius: 20%;
+  position: absolute;
+  /* left: calc(50% - 10px); */
+  bottom: -14%;
+  clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
+  -webkit-clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
+  transform: rotate(-45deg);
+}
+
 .triangle-small {
   /* display: block; */
   height: 15px;

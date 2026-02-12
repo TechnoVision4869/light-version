@@ -104,13 +104,13 @@ export default function BaseFloating({ mediaRef }) {
 
     if (activeTab === TABS.SURROUNDINGS) {
         return (
-            currentItems.map((item, i) => {
+            currentItems.map((item) => {
                 const pos = itemIdToPosition.get(item.id);
-                console.log(item.id, pos);
+                // console.log(item.id, pos);
 
                 if (!pos) return null;
                 const isSelected = currentItem?.id === item.id;
-                console.log(isSelected);
+                // console.log(isSelected);
                 
                 return (
                     <AnimFloatButton
@@ -125,15 +125,15 @@ export default function BaseFloating({ mediaRef }) {
                             goToItem(item, LAYERS.SURROUNDING_DETAIL);
                         }}
                         isSelected={isSelected}
+                        nameDirection={item.nameDirection || "right"}
                     />
                 );
             })
         );
     }
 
-
     return (
-        currentItems.map((item, index) => {
+        currentItems.map((item) => {
             // console.log(itemIdToPosition);
             // console.log(item.id);
             const pos = itemIdToPosition.get(item.id);
