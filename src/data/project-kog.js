@@ -3826,8 +3826,8 @@ export const PROJECT_KOG = {
                                 {
                                     id: "g-entrance",
                                     displayName: "g Entrance",
-                                    furnitureImg: "/kog/panorama/family_midd/f/ground/entrance_midd.jpg",
-                                    unfurnitureImg: "/kog/panorama/family_midd/unf/ground/entrance_midd.jpg",
+                                    furnitureImg: "/kog/panorama/family_midd/f/ground/entrance.jpg",
+                                    unfurnitureImg: "/kog/panorama/family_midd/unf/ground/entrance.jpg",
                                     hotspots: [
                                         { id: "hp2", yaw: 162.69, pitch: -11.91, type: "scene", label: "g Living02" },
                                         { id: "hp3", yaw: 67.19, pitch: -20.96, type: "scene", label: "g Kitchen" },
