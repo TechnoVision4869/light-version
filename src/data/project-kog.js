@@ -393,7 +393,7 @@ const oak170_4u_units = [
         area: 170,
         bedrooms: 4, bathrooms: 2,
         balconyView: oak170_4u_location,
-        x: 0.795, y: 0.72,
+        x: 0.25, y: 0.55,
         videos: oak170_4u_units_videos[0],
     },
     {
@@ -404,7 +404,7 @@ const oak170_4u_units = [
         area: 170,
         bedrooms: 4, bathrooms: 2,
         balconyView: oak170_4u_location,
-        x: 0.71, y: 0.72,
+        x: 0.35, y: 0.55,
         videos: oak170_4u_units_videos[1],
     },
     {
@@ -415,7 +415,7 @@ const oak170_4u_units = [
         area: 170,
         bedrooms: 4, bathrooms: 2,
         balconyView: oak170_4u_location,
-        x: 0.565, y: 0.72,
+        x: 0.565, y: 0.55,
         videos: oak170_4u_units_videos[2],
     },
     {
@@ -426,7 +426,7 @@ const oak170_4u_units = [
         area: 170,
         bedrooms: 4, bathrooms: 2,
         balconyView: oak170_4u_location,
-        x: 0.475, y: 0.72,
+        x: 0.71, y: 0.55,
         videos: oak170_4u_units_videos[3],
     },
 ];
@@ -4596,8 +4596,8 @@ export const PROJECT_KOG = {
                                 {
                                     id: "g-entrance",
                                     displayName: "g Entrance",
-                                    furnitureImg: "/kog/panorama/Meadows/f/ground/entrance.jpg",
-                                    unfurnitureImg: "/kog/panorama/Meadows/unf/ground/entrance.jpg",
+                                    furnitureImg: "/kog/panorama/Meadows/f/ground/entrance.jpeg",
+                                    unfurnitureImg: "/kog/panorama/Meadows/unf/ground/unf_entrance.jpeg",
                                     hotspots: [
                                         { id: "hp1", yaw: 94.17, pitch: -13.89, type: "scene", label: "g Living" },
                                         { id: "hp2", yaw: 50.8, pitch: -36.87, type: "scene", label: "g Toilet" },
