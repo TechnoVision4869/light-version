@@ -160,7 +160,7 @@ export default function Panorama({ unit }) {
     // 1. Zoom in old image with ease-in
     viewerRef.current.camera.animateTo({
       yaw: room.yaw,
-      pitch: -5,
+      // pitch: -5,
       zoom: ZOOM_IN,
       duration: ZOOM_DURATION,
       easing: easing.easeIn,
