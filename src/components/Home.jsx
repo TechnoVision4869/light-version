@@ -52,6 +52,7 @@ export default function Home() {
     activeTab,
     activeLayer,
     currentItem,
+    currentViews,
     setHighlightedButton,
     sidebarOpen,
     handleSidebarState,
@@ -146,20 +147,20 @@ export default function Home() {
   };
 
   const handleTouchStart = (e) => {
-    if (currentItem?.views) {
+    if (currentViews?.length) {
       setStartX(e.changedTouches[0].clientX);
     }
   };
 
   const handleTouchEnd = (e) => {
-    if (currentItem?.views) {
+    if (currentViews?.length) {
       // e.preventDefault();
       setTranslateX(startX - e.changedTouches[0].clientX);
     }
   }
 
   useEffect(() => {
-    if (!currentItem?.views) return;
+    if (!currentViews?.length) return;
 
     if (isDisabled) return;
     // console.log(translateX);
@@ -534,7 +535,7 @@ export default function Home() {
             </div>
 
             {/* Views visuals */}
-            {currentItem?.views &&
+            {currentViews?.length ?
               <div className="flex-1 flex items-center justify-center text-white space-x-3 px-4 py-2 text-sm">
                 <div className=" flex space-x-2">
                   <div className=""> Views </div>
@@ -566,7 +567,7 @@ export default function Home() {
                     </svg>
                   </button>
 
-                  {Array.from({ length: currentItem?.views?.length || 0 }).map((_, index) => (
+                  {Array.from({ length: currentViews?.length || 0 }).map((_, index) => (
                     <span key={index}>
                       <svg
                         width="21"
@@ -619,7 +620,7 @@ export default function Home() {
                   </button>
                 </div>
               </div>
-            }
+            : null}
 
             {/* {debugBorder && <div className={`w-3 h-2 bg-white border-4 border-${color}-600`}></div>} */}
             <div className="w-18 h-auto ml-auto">

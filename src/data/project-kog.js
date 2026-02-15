@@ -1343,14 +1343,14 @@ export const PROJECT_KOG = {
                         {
                             id: "town",
                             type: "town",
-                            units: [
+                            videos: sage_family_videos,
+                            views: sage_family_views,
+                            blocks: [
                                 // SageFamily 1
                                 {
                                     id: "SageFamily-1",
                                     displayName: "Sage Family 1",
                                     x: 0.29, y: 0.47,
-                                    videos: sage_family_videos,
-                                    views: sage_family_views,
                                     units: sage_family_units,
                                 },
                                 // SageFamily 2
@@ -1358,8 +1358,6 @@ export const PROJECT_KOG = {
                                     id: "SageFamily-2",
                                     displayName: "Sage Family 2",
                                     x: 0.66, y: 0.47,
-                                    videos: sage_family_videos,
-                                    views: sage_family_views,
                                     units: sage_family_units,
                                 },
                             ],
@@ -1384,6 +1382,8 @@ export const PROJECT_KOG = {
                         {
                             id: "iris-1",
                             type: "villa",
+                            videos: iris_1_videos,
+                            views: iris_views,
                             units: [
                                 {
                                     id: "IRIS-1",
@@ -1394,8 +1394,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.14, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-1A",
@@ -1406,8 +1404,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.174, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-2",
@@ -1418,8 +1414,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.211, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-2A",
@@ -1430,8 +1424,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.245, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-3",
@@ -1442,8 +1434,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.282, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-4",
@@ -1454,8 +1444,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.319, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-5",
@@ -1466,8 +1454,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.355, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-6",
@@ -1478,8 +1464,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.389, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-7",
@@ -1490,8 +1474,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.422, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-8",
@@ -1502,8 +1484,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.458, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-9",
@@ -1514,8 +1494,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.494, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-10",
@@ -1526,8 +1504,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.536, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-11",
@@ -1538,8 +1514,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.573, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-12",
@@ -1550,8 +1524,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.607, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-13",
@@ -1562,8 +1534,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.643, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-14",
@@ -1574,8 +1544,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.678, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-15",
@@ -1586,8 +1554,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.712, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-16",
@@ -1598,8 +1564,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.75, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-17",
@@ -1610,8 +1574,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.784, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-18",
@@ -1622,8 +1584,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.819, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-19",
@@ -1634,8 +1594,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_1_location,
                                     x: 0.854, y: 0.554,
-                                    videos: iris_1_videos,
-                                    views: iris_views,
                                 },
                             ],
                         },
@@ -1661,6 +1619,8 @@ export const PROJECT_KOG = {
                             type: "villa",
                             highlight: "kog/highlight/types/type1.png",
                             description: "Luxury 4-bedroom villa with rooftop lounge.",
+                            videos: iris_2_videos,
+                            views: iris_views,
                             units: [
                                 {
                                     id: "IRIS-20",
@@ -1671,8 +1631,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_2_location,
                                     x: 0.775, y: 0.632,
-                                    videos: iris_2_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-21",
@@ -1683,8 +1641,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_2_location,
                                     x: 0.775, y: 0.475,
-                                    videos: iris_2_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-22",
@@ -1695,8 +1651,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_2_location,
                                     x: 0.636, y: 0.192,
-                                    videos: iris_2_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-23",
@@ -1707,8 +1661,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_2_location,
                                     x: 0.55, y: 0.192,
-                                    videos: iris_2_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-24",
@@ -1719,8 +1671,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_2_location,
                                     x: 0.454, y: 0.192,
-                                    videos: iris_2_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-25",
@@ -1731,8 +1681,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_2_location,
                                     x: 0.368, y: 0.192,
-                                    videos: iris_2_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-26",
@@ -1743,8 +1691,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_2_location,
                                     x: 0.226, y: 0.454,
-                                    videos: iris_2_videos,
-                                    views: iris_views,
                                 },
                                 {
                                     id: "IRIS-27",
@@ -1755,8 +1701,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 6, bathrooms: 7,
                                     balconyView: iris_2_location,
                                     x: 0.226, y: 0.612,
-                                    videos: iris_2_videos,
-                                    views: iris_views,
                                 },
                             ],
                         },
@@ -1780,14 +1724,14 @@ export const PROJECT_KOG = {
                         {
                             id: "meadows1",
                             type: "town",
-                            units: [
+                            videos: meadows_1_videos,
+                            views: meadows_views,
+                            blocks: [
                                 // Meadows 1
                                 {
                                     id: "Meadows-3",
                                     displayName: "Meadows 3",
                                     x: 0.847, y: 0.504,
-                                    videos: meadows_1_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-3-u1",
@@ -1818,8 +1762,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-4",
                                     displayName: "Meadows 4",
                                     x: 0.787, y: 0.504,
-                                    videos: meadows_1_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-4-u1",
@@ -1850,8 +1792,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-5",
                                     displayName: "Meadows 5",
                                     x: 0.728, y: 0.504,
-                                    videos: meadows_1_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-5-u1",
@@ -1882,8 +1822,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-6",
                                     displayName: "Meadows 6",
                                     x: 0.675, y: 0.504,
-                                    videos: meadows_1_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-6-u1",
@@ -1914,8 +1852,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-7",
                                     displayName: "Meadows 7",
                                     x: 0.619, y: 0.504,
-                                    videos: meadows_1_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-7-u1",
@@ -1946,8 +1882,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-8",
                                     displayName: "Meadows 8",
                                     x: 0.564, y: 0.504,
-                                    videos: meadows_1_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-8-u1",
@@ -1978,8 +1912,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-9",
                                     displayName: "Meadows 9",
                                     x: 0.508, y: 0.504,
-                                    videos: meadows_1_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-9-u1",
@@ -2010,8 +1942,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-10",
                                     displayName: "Meadows 10",
                                     x: 0.451, y: 0.504,
-                                    videos: meadows_1_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-10-u1",
@@ -2042,8 +1972,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-11",
                                     displayName: "Meadows 11",
                                     x: 0.396, y: 0.504,
-                                    videos: meadows_1_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-11-u1",
@@ -2074,8 +2002,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-12",
                                     displayName: "Meadows 12",
                                     x: 0.339, y: 0.504,
-                                    videos: meadows_1_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-12-u1",
@@ -2106,8 +2032,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-13",
                                     displayName: "Meadows 13",
                                     x: 0.282, y: 0.504,
-                                    videos: meadows_1_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-13-u1",
@@ -2138,8 +2062,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-14",
                                     displayName: "Meadows 14",
                                     x: 0.23, y: 0.504,
-                                    videos: meadows_1_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-14-u1",
@@ -2170,8 +2092,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-15",
                                     displayName: "Meadows 15",
                                     x: 0.179, y: 0.504,
-                                    videos: meadows_1_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-15-u1",
@@ -2202,8 +2122,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-16",
                                     displayName: "Meadows 16",
                                     x: 0.138, y: 0.504,
-                                    videos: meadows_1_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-16-u1",
@@ -2240,14 +2158,14 @@ export const PROJECT_KOG = {
                         {
                             id: "meadows1",
                             type: "town",
-                            units: [
+                            videos: meadows_2_videos,
+                            views: meadows_views,
+                            blocks: [
                                 // Meadows 2
                                 {
                                     id: "Meadows-17",
                                     displayName: "Meadows 17",
                                     x: 0.73, y: 0.467,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-17-u1",
@@ -2266,8 +2184,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-18",
                                     displayName: "Meadows 18",
                                     x: 0.681, y: 0.467,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-18-u1",
@@ -2298,8 +2214,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-19",
                                     displayName: "Meadows 19",
                                     x: 0.625, y: 0.465,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-19-u1",
@@ -2330,8 +2244,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-20",
                                     displayName: "Meadows 20",
                                     x: 0.568, y: 0.465,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-20-u1",
@@ -2362,8 +2274,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-21",
                                     displayName: "Meadows 21",
                                     x: 0.514, y: 0.461,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-21-u1",
@@ -2394,8 +2304,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-22",
                                     displayName: "Meadows 22",
                                     x: 0.455, y: 0.461,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-22-u1",
@@ -2426,8 +2334,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-23",
                                     displayName: "Meadows 23",
                                     x: 0.399, y: 0.456,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-23-u1",
@@ -2458,8 +2364,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-24",
                                     displayName: "Meadows 24",
                                     x: 0.341, y: 0.456,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-24-u1",
@@ -2490,8 +2394,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-25",
                                     displayName: "Meadows 25",
                                     x: 0.284, y: 0.451,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-25-u1",
@@ -2522,8 +2424,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-26",
                                     displayName: "Meadows 26",
                                     x: 0.226, y: 0.451,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-26-u1",
@@ -2554,8 +2454,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-27",
                                     displayName: "Meadows 27",
                                     x: 0.168, y: 0.451,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-27-u1",
@@ -2586,8 +2484,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-28",
                                     displayName: "Meadows 28",
                                     x: 0.152, y: 0.593,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-28-u1",
@@ -2618,8 +2514,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-29",
                                     displayName: "Meadows 29",
                                     x: 0.152, y: 0.739,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-29-u1",
@@ -2650,8 +2544,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-30",
                                     displayName: "Meadows 30",
                                     x: 0.211, y: 0.739,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-30-u1",
@@ -2681,8 +2573,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-31",
                                     displayName: "Meadows 31",
                                     x: 0.268, y: 0.739,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-31-u1",
@@ -2712,8 +2602,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-32",
                                     displayName: "Meadows 32",
                                     x: 0.325, y: 0.739,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-32-u1",
@@ -2743,8 +2631,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-33",
                                     displayName: "Meadows 33",
                                     x: 0.385, y: 0.739,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-33-u1",
@@ -2774,8 +2660,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-34",
                                     displayName: "Meadows 34",
                                     x: 0.442, y: 0.739,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-34-u1",
@@ -2805,8 +2689,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-35",
                                     displayName: "Meadows 35",
                                     x: 0.5, y: 0.739,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-35-u1",
@@ -2836,8 +2718,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-36",
                                     displayName: "Meadows 36",
                                     x: 0.561, y: 0.739,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-36-u1",
@@ -2867,8 +2747,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-37",
                                     displayName: "Meadows 37",
                                     x: 0.615, y: 0.739,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-37-u1",
@@ -2898,8 +2776,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-38",
                                     displayName: "Meadows 38",
                                     x: 0.678, y: 0.739,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-38-u1",
@@ -2929,8 +2805,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-39",
                                     displayName: "Meadows 39",
                                     x: 0.736, y: 0.739,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-39-u1",
@@ -2960,8 +2834,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-40",
                                     displayName: "Meadows 40",
                                     x: 0.792, y: 0.739,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-40-u1",
@@ -2991,8 +2863,6 @@ export const PROJECT_KOG = {
                                     id: "Meadows-41",
                                     displayName: "Meadows 41",
                                     x: 0.85, y: 0.739,
-                                    videos: meadows_2_videos,
-                                    views: meadows_views,
                                     units: [
                                         {
                                             id: "Meadows-41-u1",
@@ -3040,14 +2910,14 @@ export const PROJECT_KOG = {
                         {
                             id: "town",
                             type: "town",
-                            units: [
+                            videos: oak168_videos,
+                            views: oak168_views,
+                            blocks: [
                                 // Oak168 10
                                 {
                                     id: "oak168-10",
                                     displayName: "Oak168 10",
                                     x: 0.775, y: 0.45,
-                                    videos: oak168_videos,
-                                    views: oak168_views,
                                     units: [
                                         {
                                             id: "oak168-10-u1",
@@ -3122,8 +2992,6 @@ export const PROJECT_KOG = {
                                     id: "oak168-11",
                                     displayName: "Oak168 11",
                                     x: 0.597, y: 0.45,
-                                    videos: oak168_videos,
-                                    views: oak168_views,
                                     units: [
                                         {
                                             id: "oak168-11-u1",
@@ -3198,8 +3066,6 @@ export const PROJECT_KOG = {
                                     id: "oak168-12",
                                     displayName: "Oak168 12",
                                     x: 0.414, y: 0.45,
-                                    videos: oak168_videos,
-                                    views: oak168_views,
                                     units: [
                                         {
                                             id: "oak168-12-u1",
@@ -3274,8 +3140,6 @@ export const PROJECT_KOG = {
                                     id: "oak168-13",
                                     displayName: "Oak168 13",
                                     x: 0.231, y: 0.45,
-                                    videos: oak168_videos,
-                                    views: oak168_views,
                                     units: [
                                         {
                                             id: "oak168-13-u1",
@@ -3367,14 +3231,14 @@ export const PROJECT_KOG = {
                         {
                             id: "town",
                             type: "town",
-                            units: [
+                            videos: oak170_z8_6u_videos,
+                            views: oak170_6u_views,
+                            blocks: [
                                 // Oak170 13
                                 {
                                     id: "oak170-13",
                                     displayName: "Oak170 13",
                                     x: 0.768, y: 0.43,
-                                    videos: oak170_z8_6u_videos,
-                                    views: oak170_6u_views,
                                     units: oak170_z8_6u_units,
                                 },
                                 // Oak170 14
@@ -3382,8 +3246,6 @@ export const PROJECT_KOG = {
                                     id: "oak170-14",
                                     displayName: "Oak170 14",
                                     x: 0.579, y: 0.43,
-                                    videos: oak170_z8_6u_videos,
-                                    views: oak170_6u_views,
                                     units: oak170_z8_6u_units,
                                 },
                                 // Oak170 15
@@ -3391,8 +3253,6 @@ export const PROJECT_KOG = {
                                     id: "oak170-15",
                                     displayName: "Oak170 15",
                                     x: 0.388, y: 0.43,
-                                    videos: oak170_z8_6u_videos,
-                                    views: oak170_6u_views,
                                     units: oak170_z8_6u_units,
                                 },
                                 // Oak170 16
@@ -3400,8 +3260,6 @@ export const PROJECT_KOG = {
                                     id: "oak170-16",
                                     displayName: "Oak170 16",
                                     x: 0.211, y: 0.43,
-                                    videos: oak170_z8_6u_videos,
-                                    views: oak170_6u_views,
                                     units: oak170_z8_6u_units,
                                 },
                             ],
@@ -3426,14 +3284,14 @@ export const PROJECT_KOG = {
                         {
                             id: "town",
                             type: "town",
-                            units: [
+                            videos: oak170_4u_videos,
+                            views: oak170_4u_views,
+                            blocks: [
                                 // Oak170 17
                                 {
                                     id: "oak170-17",
                                     displayName: "Oak170 17",
                                     x: 0.83, y: 0.479,
-                                    videos: oak170_4u_videos,
-                                    views: oak170_4u_views,
                                     units: oak170_4u_units,
                                 },
                                 // Oak170 18
@@ -3441,8 +3299,6 @@ export const PROJECT_KOG = {
                                     id: "oak170-18",
                                     displayName: "Oak170 18",
                                     x: 0.756, y: 0.346,
-                                    videos: oak170_z7_6u_videos,
-                                    views: oak170_6u_views,
                                     units: oak170_z7_6u_units,
                                 },
                                 // Oak170 19
@@ -3450,8 +3306,6 @@ export const PROJECT_KOG = {
                                     id: "oak170-19",
                                     displayName: "Oak170 19",
                                     x: 0.68, y: 0.479,
-                                    videos: oak170_4u_videos,
-                                    views: oak170_4u_views,
                                     units: oak170_4u_units,
                                 },
                                 // Oak17 21
@@ -3459,8 +3313,6 @@ export const PROJECT_KOG = {
                                     id: "oak170-20",
                                     displayName: "Oak170 20",
                                     x: 0.571, y: 0.479,
-                                    videos: oak170_4u_videos,
-                                    views: oak170_4u_views,
                                     units: oak170_4u_units,
                                 },
                                 // Oak170 21
@@ -3468,8 +3320,6 @@ export const PROJECT_KOG = {
                                     id: "oak170-21",
                                     displayName: "Oak170 21",
                                     x: 0.497, y: 0.333,
-                                    videos: oak170_z7_6u_videos,
-                                    views: oak170_6u_views,
                                     units: oak170_z7_6u_units,
                                 },
                                 // Oak170 22
@@ -3477,8 +3327,6 @@ export const PROJECT_KOG = {
                                     id: "oak170-22",
                                     displayName: "Oak170 22",
                                     x: 0.42, y: 0.479,
-                                    videos: oak170_4u_videos,
-                                    views: oak170_4u_views,
                                     units: oak170_4u_units,
                                 },
                                 // Oak170 23
@@ -3486,8 +3334,6 @@ export const PROJECT_KOG = {
                                     id: "oak170-23",
                                     displayName: "Oak170 23",
                                     x: 0.308, y: 0.479,
-                                    videos: oak170_4u_videos,
-                                    views: oak170_4u_views,
                                     units: oak170_4u_units,
                                 },
                                 // Oak170 24
@@ -3495,8 +3341,6 @@ export const PROJECT_KOG = {
                                     id: "oak170-24",
                                     displayName: "Oak170 24",
                                     x: 0.269, y: 0.331,
-                                    videos: oak170_z7_6u_videos,
-                                    views: oak170_6u_views,
                                     units: oak170_z7_6u_units,
                                 },
                                 // Oak170 25
@@ -3504,8 +3348,6 @@ export const PROJECT_KOG = {
                                     id: "oak170-25",
                                     displayName: "Oak170 25",
                                     x: 0.153, y: 0.479,
-                                    videos: oak170_4u_videos,
-                                    views: oak170_4u_views,
                                     units: oak170_4u_units,
                                 },
                             ],
@@ -3530,14 +3372,14 @@ export const PROJECT_KOG = {
                         {
                             id: "town",
                             type: "town",
-                            units: [
+                            videos: oak178_z9_videos,
+                            views: oak178_z9_views,
+                            blocks: [
                                 // Oak170 5
                                 {
                                     id: "oak178-5",
                                     displayName: "Oak178 5",
                                     x: 0.21, y: 0.557,
-                                    videos: oak178_z9_videos,
-                                    views: oak178_z9_views,
                                     units: oak178_z9_units,
                                 },
                                 // Oak178 6
@@ -3545,8 +3387,6 @@ export const PROJECT_KOG = {
                                     id: "oak178-6",
                                     displayName: "Oak178 6",
                                     x: 0.399, y: 0.557,
-                                    videos: oak178_z9_videos,
-                                    views: oak178_z9_views,
                                     units: oak178_z9_units,
                                 },
                                 // Oak178 7
@@ -3554,8 +3394,6 @@ export const PROJECT_KOG = {
                                     id: "oak178-7",
                                     displayName: "Oak178 7",
                                     x: 0.586, y: 0.557,
-                                    videos: oak178_z9_videos,
-                                    views: oak178_z9_views,
                                     units: oak178_z9_units,
                                 },
                                 // Oak178 8
@@ -3563,8 +3401,6 @@ export const PROJECT_KOG = {
                                     id: "oak178-8",
                                     displayName: "Oak178 8",
                                     x: 0.775, y: 0.557,
-                                    videos: oak178_z9_videos,
-                                    views: oak178_z9_views,
                                     units: oak178_z9_units,
                                 },
                             ],
@@ -3589,14 +3425,14 @@ export const PROJECT_KOG = {
                         {
                             id: "town",
                             type: "town",
-                            units: [
-                                // Oak170 4
+                            videos: oak178_z10_videos,
+                            views: oak178_z10_views,
+                            blocks: [
+                                // Oak178 4
                                 {
                                     id: "Oak178-4",
                                     displayName: "Oak178 4",
                                     x: 0.846, y: 0.553,
-                                    videos: oak178_z10_videos,
-                                    views: oak178_z10_views,
                                     units: oak178_z10_units,
                                 },
                                 // Oak178 3
@@ -3604,8 +3440,6 @@ export const PROJECT_KOG = {
                                     id: "Oak178-3",
                                     displayName: "Oak178 3",
                                     x: 0.788, y: 0.553,
-                                    videos: oak178_z10_videos,
-                                    views: oak178_z10_views,
                                     units: oak178_z10_units,
                                 },
                                 // Oak178 2
@@ -3613,8 +3447,6 @@ export const PROJECT_KOG = {
                                     id: "Oak178-2",
                                     displayName: "Oak178 2",
                                     x: 0.73, y: 0.553,
-                                    videos: oak178_z10_videos,
-                                    views: oak178_z10_views,
                                     units: oak178_z10_units,
                                 },
                                 // Oak178 1A
@@ -3622,8 +3454,6 @@ export const PROJECT_KOG = {
                                     id: "Oak178-1A",
                                     displayName: "Oak178 1A",
                                     x: 0.672, y: 0.553,
-                                    videos: oak178_z10_videos,
-                                    views: oak178_z10_views,
                                     units: oak178_z10_units,
                                 },
                                 // Oak178 1
@@ -3631,8 +3461,6 @@ export const PROJECT_KOG = {
                                     id: "Oak178-1",
                                     displayName: "Oak178 1",
                                     x: 0.614, y: 0.553,
-                                    videos: oak178_z10_videos,
-                                    views: oak178_z10_views,
                                     units: oak178_z10_units,
                                 },
                                 // Oak178 32
@@ -3640,8 +3468,6 @@ export const PROJECT_KOG = {
                                     id: "Oak178-32",
                                     displayName: "Oak178 32",
                                     x: 0.507, y: 0.565,
-                                    videos: oak178_z10_videos,
-                                    views: oak178_z10_views,
                                     units: oak178_z10_units,
                                 },
                                 // Oak178 31
@@ -3649,8 +3475,6 @@ export const PROJECT_KOG = {
                                     id: "Oak178-31",
                                     displayName: "Oak178 31",
                                     x: 0.448, y: 0.565,
-                                    videos: oak178_z10_videos,
-                                    views: oak178_z10_views,
                                     units: oak178_z10_units,
                                 },
                                 // Oak178 30
@@ -3658,8 +3482,6 @@ export const PROJECT_KOG = {
                                     id: "Oak178-30",
                                     displayName: "Oak178 30",
                                     x: 0.391, y: 0.565,
-                                    videos: oak178_z10_videos,
-                                    views: oak178_z10_views,
                                     units: oak178_z10_units,
                                 },
                                 // Oak178 29
@@ -3667,8 +3489,6 @@ export const PROJECT_KOG = {
                                     id: "Oak178-29",
                                     displayName: "Oak178 29",
                                     x: 0.331, y: 0.565,
-                                    videos: oak178_z10_videos,
-                                    views: oak178_z10_views,
                                     units: oak178_z10_units,
                                 },
                                 // Oak178 28
@@ -3676,8 +3496,6 @@ export const PROJECT_KOG = {
                                     id: "Oak178-28",
                                     displayName: "Oak178 28",
                                     x: 0.273, y: 0.565,
-                                    videos: oak178_z10_videos,
-                                    views: oak178_z10_views,
                                     units: oak178_z10_units,
                                 },
                                 // Oak178 27
@@ -3685,8 +3503,6 @@ export const PROJECT_KOG = {
                                     id: "Oak178-27",
                                     displayName: "Oak178 27",
                                     x: 0.216, y: 0.565,
-                                    videos: oak178_z10_videos,
-                                    views: oak178_z10_views,
                                     units: oak178_z10_units,
                                 },
                                 // Oak178 26
@@ -3694,8 +3510,6 @@ export const PROJECT_KOG = {
                                     id: "Oak178-26",
                                     displayName: "Oak178 26",
                                     x: 0.156, y: 0.565,
-                                    videos: oak178_z10_videos,
-                                    views: oak178_z10_views,
                                     units: oak178_z10_units,
                                 },
                             ],
@@ -3720,6 +3534,8 @@ export const PROJECT_KOG = {
                         {
                             id: "camilia-z11",
                             type: "villa",
+                            videos: camilia_1_videos,
+                            views: camilia_views,
                             units: [
                                 {
                                     id: "CAMILIA-1A",
@@ -3730,8 +3546,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 5, bathrooms: 7,
                                     balconyView: camilia_1_location,
                                     x: 0.423, y: 0.481,
-                                    videos: camilia_1_videos,
-                                    views: camilia_views,
                                 },
                                 {
                                     id: "CAMILIA-1B",
@@ -3742,8 +3556,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 5, bathrooms: 7,
                                     balconyView: camilia_1_location,
                                     x: 0.516, y: 0.481,
-                                    videos: camilia_1_videos,
-                                    views: camilia_views,
                                 },
                             ],
                         },
@@ -3767,6 +3579,8 @@ export const PROJECT_KOG = {
                         {
                             id: "camilia-z12",
                             type: "villa",
+                            videos: camilia_2_videos,
+                            views: camilia_views,
                             units: [
                                 {
                                     id: "CAMILIA-2",
@@ -3777,8 +3591,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 5, bathrooms: 7,
                                     balconyView: camilia_2_location,
                                     x: 0.765, y: 0.245,
-                                    videos: camilia_2_videos,
-                                    views: camilia_views,
                                 },
                                 {
                                     id: "CAMILIA-3",
@@ -3789,8 +3601,6 @@ export const PROJECT_KOG = {
                                     bedrooms: 5, bathrooms: 7,
                                     balconyView: camilia_2_location,
                                     x: 0.26, y: 0.245,
-                                    videos: camilia_2_videos,
-                                    views: camilia_views,
                                 },
                             ],
                         },

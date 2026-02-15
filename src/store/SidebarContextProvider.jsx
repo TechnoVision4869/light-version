@@ -8,6 +8,7 @@ export const SidebarContext = createContext({
     activeLayer: "",
     currentItem: {},
     currentVideosPath: {},
+    currentViews: null,
 
     highlightedButton: null,
     setHighlightedButton: () => { },
@@ -37,7 +38,8 @@ export default function SidebarContextProvider({ children }) {
                 forwardVideo: DATA.project.zoomoutVideo,
                 reverseVideo: null,
                 idleVideo: DATA.project.idleVideo,
-            }
+            },
+            views: null,
         },
     ];
 
@@ -53,7 +55,19 @@ export default function SidebarContextProvider({ children }) {
         layer: activeLayer,
         item: currentItem,
         videosPath: currentVideosPaths,
+        views: currentViews,
     } = currentEntry;
+
+    const findPropertyForItem = useCallback((zone, targetItem) => {
+        if (!zone?.properties?.length) return null;
+        if (zone.properties.length === 1) return zone.properties[0];
+
+        return zone.properties.find((property) => {
+            if (property.blocks?.some((block) => block.id === targetItem?.id)) return true;
+            if (property.units?.some((unit) => unit.id === targetItem?.id)) return true;
+            return false;
+        }) || null;
+    }, []);
 
     const goToTab = useCallback((tabKey, selectedItem, isFromHome = true) => {
         // console.log(selectedItem);
@@ -66,6 +80,8 @@ export default function SidebarContextProvider({ children }) {
                 idleVideo: selectedItem.videos.idleVideo,
             };
 
+        const calculatedViews = selectedItem.views || null;
+
         setHistory(() => [
             ...initHistory,
             {
@@ -73,6 +89,7 @@ export default function SidebarContextProvider({ children }) {
                 layer: null,
                 item: selectedItem,
                 videosPath: calculatedVideosPath,
+                views: calculatedViews,
             },
         ]);
     }, []);
@@ -92,12 +109,43 @@ export default function SidebarContextProvider({ children }) {
                     layer: targetLayer,
                     item: item,
                     videosPath: null,
+                    views: null,
                 },
             ]);
             return;
         }
 
-        const videosPath = item.videos;
+        // Determine videosPath and views with careful fallbacks.
+        // Use `undefined` to detect missing values and `null` to represent explicit absence.
+        let videosPath = item?.videos; // undefined if not present
+        let views = item?.views; // undefined if not present
+
+        // Try to determine the parent property depending on where we are coming from.
+        let property = null;
+        if (activeLayer === LAYERS.BUILDING) {
+            property = currentItem; // we're currently on a property/building
+        } else if (activeLayer === LAYERS.ZONE_DETAIL) {
+            property = findPropertyForItem(currentItem, item);
+        }
+
+        if (videosPath === undefined) videosPath = property?.videos; // still undefined if not present on property
+
+        // Views availability rules:
+        // - If navigating into a UNIT layer: views should be available only for `villa` properties.
+        // - For other layers (e.g., BUILDING) try to use property's views when not present on the item.
+        if (targetLayer === LAYERS.UNIT) {
+            if (property?.type === "villa") {
+                if (views === undefined) views = property?.views; // allow views for villa units
+            } else {
+                views = null; // explicitly no views for town/tower units
+            }
+        } else {
+            if (views === undefined) views = property?.views; // use property's views for building/floor layers
+        }
+
+        // Final fallbacks to the previously-current values if still undefined
+        if (videosPath === undefined) videosPath = currentVideosPaths ?? null;
+        if (views === undefined) views = currentViews ?? null;
 
         setHistory((prev) => [
             ...prev,
@@ -106,9 +154,10 @@ export default function SidebarContextProvider({ children }) {
                 layer: targetLayer,
                 item: item,
                 videosPath: videosPath,
+                views: views,
             },
         ]);
-    }, [history]);
+    }, [history, currentVideosPaths, currentViews, activeLayer, activeTab, currentItem, findPropertyForItem]);
 
     // Go back one step
     const handleGoBack = useCallback(() => {
@@ -137,6 +186,7 @@ export default function SidebarContextProvider({ children }) {
         activeLayer,
         currentItem,
         currentVideosPaths,
+        currentViews,
 
         highlightedButton,
         setHighlightedButton,
