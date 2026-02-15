@@ -203,46 +203,37 @@ export default function Panorama({ unit }) {
     }
   }, [DRAG_THRESHOLD]);
 
-  const handleClickCapture = useCallback((event) => {
-    const state = pointerStateRef.current;
-    if (state.moved) {
-      resetPointerState();
-      return;
-    }
-
+  const checkHotspotHit = useCallback((clientX, clientY) => {
     const rect = containerRef.current?.getBoundingClientRect();
-    if (!rect) {
-      resetPointerState();
-      return;
-    }
+    if (!rect) return null;
 
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
     const hitRadiusSq = HOTSPOT_HIT_RADIUS * HOTSPOT_HIT_RADIUS;
 
-    let hitSpot = null;
     for (const spot of hotspotsRef.current) {
       const pos = hotspotPositions[spot.id];
       if (!pos) continue;
       const dx = pos.x - x;
       const dy = pos.y - y;
       if (dx * dx + dy * dy <= hitRadiusSq) {
-        hitSpot = spot;
-        break;
+        return spot;
+      }
+    }
+    return null;
+  }, [hotspotPositions, HOTSPOT_HIT_RADIUS]);
+
+  const handlePointerUpCapture = useCallback((event) => {
+    const state = pointerStateRef.current;
+    
+    // If no movement detected, check for hotspot hit
+    if (state && !state.moved && state.id === event.pointerId) {
+      const hitSpot = checkHotspotHit(event.clientX, event.clientY);
+      if (hitSpot) {
+        handleHotspotClick(hitSpot);
       }
     }
 
-    if (hitSpot) {
-      handleHotspotClick(hitSpot);
-    }
-    if (pointerResetTimeoutRef.current) {
-      clearTimeout(pointerResetTimeoutRef.current);
-      pointerResetTimeoutRef.current = null;
-    }
-    resetPointerState();
-  }, [handleHotspotClick, hotspotPositions, resetPointerState, HOTSPOT_HIT_RADIUS]);
-
-  const handlePointerUpCapture = useCallback(() => {
     if (pointerResetTimeoutRef.current) {
       clearTimeout(pointerResetTimeoutRef.current);
     }
@@ -250,7 +241,29 @@ export default function Panorama({ unit }) {
       resetPointerState();
       pointerResetTimeoutRef.current = null;
     }, 0);
-  }, [resetPointerState]);
+  }, [resetPointerState, checkHotspotHit, handleHotspotClick]);
+
+  const handleClickCapture = useCallback((event) => {
+    const state = pointerStateRef.current;
+    if (state.moved) {
+      resetPointerState();
+      return;
+    }
+
+    // For mouse clicks (touch already handled in pointerup)
+    if (event.pointerType === 'mouse' || !event.pointerType) {
+      const hitSpot = checkHotspotHit(event.clientX, event.clientY);
+      if (hitSpot) {
+        handleHotspotClick(hitSpot);
+      }
+    }
+    
+    if (pointerResetTimeoutRef.current) {
+      clearTimeout(pointerResetTimeoutRef.current);
+      pointerResetTimeoutRef.current = null;
+    }
+    resetPointerState();
+  }, [handleHotspotClick, resetPointerState, checkHotspotHit]);
 
   const handlePointerCancelCapture = useCallback(() => {
     if (pointerResetTimeoutRef.current) {
