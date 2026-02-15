@@ -20,7 +20,7 @@ export default function Panorama({ unit }) {
     easeIn: (x) => x * x * x,
     easeOut: (x) => 1 - Math.pow(1 - x, 3),
     easeInOut: (x) => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2,
-};
+  };
 
   const viewerRef = useRef(null);
   const [hotspotPositions, setHotspotPositions] = useState({});
@@ -30,11 +30,12 @@ export default function Panorama({ unit }) {
   const [isFurnished, setIsFurnished] = useState(true);
   const pointerStateRef = useRef({ id: null, x: 0, y: 0, moved: false });
   const pointerResetTimeoutRef = useRef(null);
+  const zoomOnLoadRef = useRef(true);
 
   // Get unit data
-  const unitType = DATA.project.unitTypes[unit.unitTypeId];  
+  const unitType = DATA.project.unitTypes[unit.unitTypeId];
   const levels = unitType.interior.levels;
-  const [room, setRoom] = useState(levels[0].rooms[0]);  
+  const [room, setRoom] = useState(levels[0].rooms[0]);
   const [currentImage, setCurrentImage] = useState(room.furnitureImg);
 
   const hotspots = room.hotspots;
@@ -50,7 +51,9 @@ export default function Panorama({ unit }) {
   useEffect(() => {
     setIsTransitioning(true);
     const newImage = isFurnished ? room.furnitureImg : room.unfurnitureImg;
-    setCurrentImage(newImage);
+    setTimeout(() => {
+      setCurrentImage(newImage);
+    }, 100);
     setTimeout(() => {
       setIsTransitioning(false);
     }, 500);
@@ -58,41 +61,41 @@ export default function Panorama({ unit }) {
 
   // Calculate hotspot screen position (v4-compatible)
   const getHotspotScreenPosition = useCallback((viewer, yaw, pitch) => {
-  const oyaw = viewer.camera.yaw;
-  const opitch = viewer.camera.pitch;
+    const oyaw = viewer.camera.yaw;
+    const opitch = viewer.camera.pitch;
 
-  const rect = containerRef.current?.getBoundingClientRect();
-  if (!rect || rect.width === 0 || rect.height === 0) return null;
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect || rect.width === 0 || rect.height === 0) return null;
 
-  const { width, height } = rect;
+    const { width, height } = rect;
 
-  // Use HFOV directly from viewer (no conversions)
-  const hfov = viewer.camera.fov; // HORIZONTAL FOV in degrees
-  const toRadian = (deg) => (deg * Math.PI) / 180;
+    // Use HFOV directly from viewer (no conversions)
+    const hfov = viewer.camera.fov; // HORIZONTAL FOV in degrees
+    const toRadian = (deg) => (deg * Math.PI) / 180;
 
-  // Normalize yaw delta
-  let deltaYaw = yaw - oyaw;
-  if (deltaYaw < -180) deltaYaw += 360;
-  if (deltaYaw > 180) deltaYaw -= 360;
-  if (Math.abs(deltaYaw) > 90) return null; // behind camera
+    // Normalize yaw delta
+    let deltaYaw = yaw - oyaw;
+    if (deltaYaw < -180) deltaYaw += 360;
+    if (deltaYaw > 180) deltaYaw -= 360;
+    if (Math.abs(deltaYaw) > 90) return null; // behind camera
 
-  // Calculate screen position using HFOV directly
-  const hfovRad = toRadian(hfov);
-  const rx = Math.tan(hfovRad / 2);
-  
-  // For vertical, account for aspect ratio
-  const aspectRatio = width / height;
-  const ry = Math.tan(hfovRad / 2) / aspectRatio;
+    // Calculate screen position using HFOV directly
+    const hfovRad = toRadian(hfov);
+    const rx = Math.tan(hfovRad / 2);
 
-  const pointX = Math.tan(toRadian(-deltaYaw)) / rx;
-  const pointY = Math.tan(toRadian(opitch - pitch)) / ry; // swapped for correct direction
-  
-  // Clamp to screen bounds with small margin
-  const x = Math.max(0, Math.min(width, width / 2 + (pointX * width) / 2));
-  const y = Math.max(0, Math.min(height, height / 2 + (pointY * height) / 2));
+    // For vertical, account for aspect ratio
+    const aspectRatio = width / height;
+    const ry = Math.tan(hfovRad / 2) / aspectRatio;
 
-  return { x, y };
-}, []);
+    const pointX = Math.tan(toRadian(-deltaYaw)) / rx;
+    const pointY = Math.tan(toRadian(opitch - pitch)) / ry; // swapped for correct direction
+
+    // Clamp to screen bounds with small margin
+    const x = Math.max(0, Math.min(width, width / 2 + (pointX * width) / 2));
+    const y = Math.max(0, Math.min(height, height / 2 + (pointY * height) / 2));
+
+    return { x, y };
+  }, []);
 
   // Update hotspot positions
   const updateHotspots = useCallback(() => {
@@ -131,7 +134,7 @@ export default function Panorama({ unit }) {
 
     // Start blur overlay
     setIsTransitioning(true);
-    
+
     // Set new room and image
     setRoom(targetRoom);
     const newImage = isFurnished ? targetRoom.furnitureImg : targetRoom.unfurnitureImg;
@@ -147,11 +150,11 @@ export default function Panorama({ unit }) {
   const handleHotspotClick = useCallback((room) => {
     if (!viewerRef.current) return;
     // console.log("click");
-    
+
     // Start blur overlay
     setTimeout(() => {
       setIsTransitioning(true);
-    }, 750);
+    }, 250);
     if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
 
     // 1. Zoom in old image with ease-in
@@ -167,7 +170,7 @@ export default function Panorama({ unit }) {
     setTimeout(() => {
       const targetRoom = findRoomById(room.label);
       // console.log(targetRoom);
-      
+
       if (targetRoom) {
         const newImage = isFurnished ? targetRoom.furnitureImg : targetRoom.unfurnitureImg;
         setCurrentImage(newImage);
@@ -225,7 +228,7 @@ export default function Panorama({ unit }) {
 
   const handlePointerUpCapture = useCallback((event) => {
     const state = pointerStateRef.current;
-    
+
     // If no movement detected, check for hotspot hit
     if (state && !state.moved && state.id === event.pointerId) {
       const hitSpot = checkHotspotHit(event.clientX, event.clientY);
@@ -257,7 +260,7 @@ export default function Panorama({ unit }) {
         handleHotspotClick(hitSpot);
       }
     }
-    
+
     if (pointerResetTimeoutRef.current) {
       clearTimeout(pointerResetTimeoutRef.current);
       pointerResetTimeoutRef.current = null;
@@ -273,7 +276,7 @@ export default function Panorama({ unit }) {
     resetPointerState();
   }, [resetPointerState]);
 
-   // Handle new image load (v4's "imageLoaded" equivalent)
+  // Handle new image load (v4's "imageLoaded" equivalent)
   const handleLoad = useCallback(() => {
     if (!viewerRef.current) return;
     // console.log("load");
@@ -283,12 +286,15 @@ export default function Panorama({ unit }) {
       zoom: ZOOM_OUT,
     });
 
-    // Animate back to normal with ease-out
-    viewerRef.current.camera.animateTo({
-      zoom: ZOOM_NORMAL,
-      duration: ZOOM_DURATION,
-      easing: easing.easeOut,
-    });
+    if (zoomOnLoadRef.current) {
+      // Animate back to normal with ease-out
+      viewerRef.current.camera.animateTo({
+        zoom: ZOOM_NORMAL,
+        duration: ZOOM_DURATION,
+        easing: easing.easeOut,
+      });
+    }
+    else zoomOnLoadRef.current = true;
 
     // Remove blur overlay after transition completes
     transitionTimeoutRef.current = setTimeout(() => {
@@ -320,12 +326,15 @@ export default function Panorama({ unit }) {
         initialYaw={190}
       />
 
-      <InteriorNav 
-        levels={levels} 
+      <InteriorNav
+        levels={levels}
         isFurnished={isFurnished}
         currentRoom={room.displayName}
         currentFloor={findFloorByRoom(room)?.name}
-        onFurnitureToggle={() => setIsFurnished(!isFurnished)}
+        onFurnitureToggle={() => {
+          zoomOnLoadRef.current = false; // no zoom on furniture toggle, just blur
+          setIsFurnished(!isFurnished);
+        }}
         onRoomChange={handleDropdownChange}
       />
 

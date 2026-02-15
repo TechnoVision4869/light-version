@@ -18,7 +18,7 @@ export default function Pin({ type, label, style }) {
             <img src={MAP_PIN} className="w-36 opacity-70 h-auto" />
           </div>
         ) : (
-          <div className="text-white opacity-100 w-46 h-46 text-2xl font-bold text-center whitespace-pre-line px-2 py-1 bg-black/50 rounded">
+          <div className="text-white opacity-0 w-46 h-46 text-2xl font-bold text-center whitespace-pre-line px-2 py-1 bg-black/50 rounded">
             {label}
           </div>
         )
