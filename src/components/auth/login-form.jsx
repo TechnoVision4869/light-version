@@ -1,19 +1,7 @@
 import { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import {
-  Box,
-  FormHelperText,
-  TextField,
-  InputAdornment,
-  IconButton,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
-} from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import LoadingButton from "@mui/lab/LoadingButton";
+import { Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuth } from "../../components/hooks/use-auth";
 
@@ -70,87 +58,152 @@ export const LoginForm = (props) => {
   };
 
   return (
-    <Box sx={{ width: "100%", maxWidth: 480, bgcolor: "rgba(255,255,255,0.03)", p: 4, borderRadius: 3 }}>
+    <div
+      style={{
+        width: "100%",
+        maxWidth: 480,
+        backgroundColor: "rgba(255,255,255,0.03)",
+        padding: 32,
+        borderRadius: 12,
+      }}
+    >
       <form noValidate onSubmit={formik.handleSubmit} {...props}>
-        <TextField
-          error={Boolean(formik.touched.email && formik.errors.email)}
-          fullWidth
-          label="Email"
-          margin="normal"
-          name="email"
-          onBlur={formik.handleBlur}
-          onChange={formik.handleChange}
-          type="email"
-          value={formik.values.email}
-          helperText={formik.touched.email && formik.errors.email}
-          sx={{
-            input: { color: "#f9fafb", fontFamily: "sans-serif" },
-            '& .MuiInputLabel-root': { color: 'rgba(249,250,251,0.8)' },
-            '& .MuiOutlinedInput-root': {              borderRadius: 3,              '& fieldset': { borderColor: 'rgba(249,250,251,0.12)' },
-              '&:hover fieldset': { borderColor: 'rgba(249,250,251,0.24)' },
-            },
-            mt: 1,
-          }}
-        />
-
-      <FormControl sx={{ width: "100%", marginTop: "10px" }} variant="outlined">
-        <InputLabel htmlFor="outlined-adornment-password" sx={{ color: 'rgba(249,250,251,0.8)' }}>Password</InputLabel>
-        <OutlinedInput
-          error={Boolean(formik.touched.password && formik.errors.password)}
-          fullWidth
-          label="Password"
-          name="password"
-          onBlur={formik.handleBlur}
-          onChange={formik.handleChange}
-          value={formik.values.password}
-          type={showPassword ? "text" : "password"}
-          sx={{
-            borderRadius: 3,
-            fontFamily: "sans-serif",
-            color: '#f9fafb',
-            '& input': { color: '#f9fafb' },
-            '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(249,250,251,0.12)' },
-            '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(249,250,251,0.24)' },
-          }}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-                onMouseDown={handleMouseDownPassword}
-                edge="end"
-                sx={{ color: '#eff0f1' }}
-              >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          }
-        />
-        {formik.touched.password && formik.errors.password && (
-          <FormHelperText error>{formik.errors.password}</FormHelperText>
-        )}
-      </FormControl>
-
-      {formik.errors.submit && (
-        <Box sx={{ mt: 3 }}>
-          <FormHelperText error>{formik.errors.submit}</FormHelperText>
-        </Box>
-      )}
-
-        <Box sx={{ mt: 2 }}>
-          <LoadingButton
-            sx={{ borderRadius: 3, backgroundColor: '#5E6D59', color: '#f9fafb', '&:hover': { backgroundColor: '#465345' } }}
-            disabled={formik.isSubmitting}
-            fullWidth
-            size="large"
-            type="submit"
-            variant="contained"
-            loading={loading}
+        <div style={{ marginTop: 8 }}>
+          <label
+            htmlFor="login-email"
+            style={{
+              display: "block",
+              color: "rgba(249,250,251,0.8)",
+              marginBottom: 6,
+              fontFamily: "sans-serif",
+            }}
           >
-            Login
-          </LoadingButton>
-        </Box>
+            Email
+          </label>
+          <input
+            id="login-email"
+            name="email"
+            type="email"
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            value={formik.values.email}
+            aria-invalid={Boolean(formik.touched.email && formik.errors.email)}
+            aria-describedby={
+              formik.touched.email && formik.errors.email ? "login-email-error" : undefined
+            }
+            style={{
+              width: "100%",
+              padding: "12px 14px",
+              borderRadius: 12,
+              border: "1px solid rgba(249,250,251,0.12)",
+              backgroundColor: "transparent",
+              color: "#f9fafb",
+              fontFamily: "sans-serif",
+              outline: "none",
+            }}
+          />
+          {formik.touched.email && formik.errors.email && (
+            <div
+              id="login-email-error"
+              style={{ color: "#f87171", marginTop: 6, fontSize: 12 }}
+            >
+              {formik.errors.email}
+            </div>
+          )}
+        </div>
+
+        <div style={{ marginTop: 12 }}>
+          <label
+            htmlFor="login-password"
+            style={{
+              display: "block",
+              color: "rgba(249,250,251,0.8)",
+              marginBottom: 6,
+              fontFamily: "sans-serif",
+            }}
+          >
+            Password
+          </label>
+          <div style={{ position: "relative" }}>
+            <input
+              id="login-password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.password}
+              aria-invalid={Boolean(formik.touched.password && formik.errors.password)}
+              aria-describedby={
+                formik.touched.password && formik.errors.password
+                  ? "login-password-error"
+                  : undefined
+              }
+              style={{
+                width: "100%",
+                padding: "12px 44px 12px 14px",
+                borderRadius: 12,
+                border: "1px solid rgba(249,250,251,0.12)",
+                backgroundColor: "transparent",
+                color: "#f9fafb",
+                fontFamily: "sans-serif",
+                outline: "none",
+              }}
+            />
+            <button
+              type="button"
+              aria-label="toggle password visibility"
+              onClick={handleClickShowPassword}
+              onMouseDown={handleMouseDownPassword}
+              style={{
+                position: "absolute",
+                right: 10,
+                top: "50%",
+                transform: "translateY(-50%)",
+                border: "none",
+                background: "transparent",
+                color: "#eff0f1",
+                padding: 4,
+                cursor: "pointer",
+              }}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+          {formik.touched.password && formik.errors.password && (
+            <div
+              id="login-password-error"
+              style={{ color: "#f87171", marginTop: 6, fontSize: 12 }}
+            >
+              {formik.errors.password}
+            </div>
+          )}
+        </div>
+
+        {formik.errors.submit && (
+          <div style={{ marginTop: 12, color: "#f87171", fontSize: 12 }}>
+            {formik.errors.submit}
+          </div>
+        )}
+
+        <div style={{ marginTop: 16 }}>
+          <button
+            type="submit"
+            disabled={formik.isSubmitting}
+            style={{
+              width: "100%",
+              borderRadius: 12,
+              backgroundColor: loading ? "#465345" : "#5E6D59",
+              color: "#f9fafb",
+              border: "none",
+              padding: "12px 16px",
+              fontSize: 16,
+              cursor: loading ? "not-allowed" : "pointer",
+            }}
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </div>
       </form>
-    </Box>
+    </div>
   );
 };
