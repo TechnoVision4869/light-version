@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
+import path from 'path';
 // import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
@@ -13,6 +14,12 @@ export default defineConfig({
     tailwindcss(),
     // visualizer(),
   ],
+
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
 
   // Critical for Huawei SE 11 (older WebView)
   build: {
