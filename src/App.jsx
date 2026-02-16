@@ -1,4 +1,6 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
+import { ScreenOrientation } from '@capacitor/screen-orientation';
+import { Capacitor } from '@capacitor/core';
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { SidebarContext } from "./store/SidebarContextProvider";
 import Home from "./components/Home";
@@ -12,6 +14,19 @@ export default function App() {
   const { currentProject, setCurrentProject } = useContext(SidebarContext);
   const [showSplash, setShowSplash] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const lockOrientation = async () => {
+      try {
+        if (Capacitor.getPlatform() !== 'web') {
+          await ScreenOrientation.lock({ orientation: 'landscape' });
+        }
+      } catch (error) {
+        console.warn("Failed to lock screen orientation", error);
+      }
+    };
+    lockOrientation();
+  }, []);
 
   const handleProjectSelect = (project) => {
     setCurrentProject(project);

@@ -7,7 +7,7 @@ import { TABS, LAYERS } from "../data/layers.js";
 import { useVideoViewer } from "./hooks/useVideoViewer.jsx";
 
 // Components
-import LandscapePrompt from "./LandscapePrompt.jsx";
+// import LandscapePrompt from "./LandscapePrompt.jsx";
 import InfoPopup from "./InfoPopup.jsx";
 
 import HomeButton from "./buttons/HomeButton";
@@ -285,7 +285,7 @@ export default function Home() {
         </div>
       )}
       <div className="w-full h-screen bg-[#2f2f2f] py-2 px-3 xl:p-4 overflow-hidden">
-        <LandscapePrompt />
+        {/* <LandscapePrompt /> */}
         <div className="w-full h-full flex flex-col">
           {/* Top Tabs */}
           <div className="flex items-center justify-between mb-2 xl:mb-4 px-4">
