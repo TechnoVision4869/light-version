@@ -1,4 +1,5 @@
 import { useState, useContext } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { SidebarContext } from "./store/SidebarContextProvider";
 import Home from "./components/Home";
 import ProjectSelector from "./components/ProjectSelector";
@@ -10,10 +11,12 @@ export default function App() {
   const { isAuthenticated } = useAuth();
   const { currentProject, setCurrentProject } = useContext(SidebarContext);
   const [showSplash, setShowSplash] = useState(false);
+  const navigate = useNavigate();
 
   const handleProjectSelect = (project) => {
     setCurrentProject(project);
     setShowSplash(true);
+    navigate("/home");
   };
 
   const getIntroVideoUrl = () => {
@@ -21,9 +24,9 @@ export default function App() {
     return currentProject?.introVideo || `/kog/videos/home/intro1.mp4`;
   };
 
-  if (!isAuthenticated) {
-    return <LoginPage />;
-  }
+  // if (!isAuthenticated) {
+  //   return <LoginPage />;
+  // }
 
   return (
     <Routes>
@@ -38,7 +41,6 @@ export default function App() {
           )
         }
       />
-      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

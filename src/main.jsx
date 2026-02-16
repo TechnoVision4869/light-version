@@ -11,16 +11,13 @@ import App from "./App.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      {/* <AuthProvider> */}
+      <AuthProvider>
         <MainContextProvider>
           <SidebarContextProvider>
-            {/* <AuthConsumer> */}
-              {/* {(auth) => auth.isInitialized && <App /> } */}
-              <App />
-            {/* </AuthConsumer> */}
+             <App />
           </SidebarContextProvider>
         </MainContextProvider>
-      {/* </AuthProvider> */}
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>,
 );
