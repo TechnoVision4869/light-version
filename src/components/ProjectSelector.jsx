@@ -14,14 +14,14 @@ export default function ProjectSelector({ onProjectSelect }) {
                 backgroundAttachment: 'fixed'
             }}
         >
-            <div className="absolute top-12 left-1/2 -translate-x-1/2 z-20">
-                <img src={DATA.developerLogo} alt="Developer Logo" className="w-22 h-auto" />
+            <div className="absolute top-8 xl:top-12 left-1/2 -translate-x-1/2 z-20">
+                <img src={DATA.developerLogo} alt="Developer Logo" className="w-17 xl:w-22 h-auto" />
             </div>
             <div className="absolute bottom-6 right-6 z-20">
-                <img src={TECHNO_LOGO} alt="Techno Vision Logo" className="w-24 h-auto" />
+                <img src={TECHNO_LOGO} alt="Techno Vision Logo" className="w-19 xl:w-24 h-auto" />
             </div>
-            <div className="max-w-5xl w-full relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div className="max-w-4xl xl:max-w-5xl w-full relative z-10">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 xl:gap-10">
                     {projects.map((project) => {
                         const disabled = !project.introVideo;
 
@@ -31,7 +31,7 @@ export default function ProjectSelector({ onProjectSelect }) {
                                     <img
                                         src={project.thumbnail}
                                         alt={project.name}
-                                        className="rounded-2xl w-full h-48 object-cover"
+                                        className="rounded-2xl w-full h-auto object-cover"
                                     />
                                 </div>
 

@@ -1,8 +1,8 @@
 import TBK_LOGO from '../assets/images/tbk-logo.png';
 import TBK_BACKGROUND from '../assets/images/background.jpg';
-import KS_THUMBNAIL from '../assets/images/ks-thumbnail.jpg';
-import KOG_THUMBNAIL from '../assets/images/kog-thumbnail.jpg';
-import B_THUMBNAIL from '../assets/images/b-thumbnail.jpg';
+import KS_THUMBNAIL from '../assets/images/ks-thumbnail.png';
+import KOG_THUMBNAIL from '../assets/images/kog-thumbnail.png';
+import B_THUMBNAIL from '../assets/images/b-thumbnail.png';
 
 import VILLA_ICON from '../assets/icons/villa.svg';
 import AIRPORT_ICON from '../assets/icons/airport.svg';
