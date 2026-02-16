@@ -1,24 +1,27 @@
-import { useState, useMemo, useRef, useEffect, useCallback } from "react";
+import { useState, useMemo, useRef, useEffect, useCallback, useContext } from "react";
+import { SidebarContext } from '../store/SidebarContextProvider';
 import View360, { EquirectProjection } from "@egjs/react-view360";
 
-import { DATA } from "../data/layers";
 import Pin from "./Pin";
 import "@egjs/react-view360/css/view360.min.css";
 import InteriorNav from "./InteriorNav";
 
 export default function Panorama({ unit }) {
+  const { currentProject } = useContext(SidebarContext);
 
-  const ZOOM_OUT = 0.6; // zoomed out view (match FOV ≈ 118.07°)
+  const ZOOM_OUT = 0.8; // zoomed out view (match FOV ≈ 118.07°)
   const ZOOM_NORMAL = 1; // default zoom (match FOV = 90°)
-  const ZOOM_IN = 1.667; // zoomed in view (match FOV ≈ 61.93°)
+  const ZOOM_IN = 1.333; // zoomed in view (match FOV ≈ 61.93°)
 
   const ZOOM_DURATION = 750;
+  const HOTSPOT_HIT_RADIUS = 28;
+  const DRAG_THRESHOLD = 6;
 
   const easing = {
     easeIn: (x) => x * x * x,
     easeOut: (x) => 1 - Math.pow(1 - x, 3),
     easeInOut: (x) => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2,
-};
+  };
 
   const viewerRef = useRef(null);
   const [hotspotPositions, setHotspotPositions] = useState({});
@@ -26,11 +29,14 @@ export default function Panorama({ unit }) {
   const [isTransitioning, setIsTransitioning] = useState(false); // blur overlay state
   const transitionTimeoutRef = useRef(null);
   const [isFurnished, setIsFurnished] = useState(true);
+  const pointerStateRef = useRef({ id: null, x: 0, y: 0, moved: false });
+  const pointerResetTimeoutRef = useRef(null);
+  const zoomOnLoadRef = useRef(true);
 
   // Get unit data
-  const unitType = DATA.project.unitTypes[unit.unitTypeId];  
+  const unitType = currentProject.unitTypes[unit.unitTypeId];
   const levels = unitType.interior.levels;
-  const [room, setRoom] = useState(levels[0].rooms[0]);  
+  const [room, setRoom] = useState(levels[0].rooms[0]);
   const [currentImage, setCurrentImage] = useState(room.furnitureImg);
 
   const hotspots = room.hotspots;
@@ -46,7 +52,9 @@ export default function Panorama({ unit }) {
   useEffect(() => {
     setIsTransitioning(true);
     const newImage = isFurnished ? room.furnitureImg : room.unfurnitureImg;
-    setCurrentImage(newImage);
+    setTimeout(() => {
+      setCurrentImage(newImage);
+    }, 100);
     setTimeout(() => {
       setIsTransitioning(false);
     }, 500);
@@ -54,41 +62,41 @@ export default function Panorama({ unit }) {
 
   // Calculate hotspot screen position (v4-compatible)
   const getHotspotScreenPosition = useCallback((viewer, yaw, pitch) => {
-  const oyaw = viewer.camera.yaw;
-  const opitch = viewer.camera.pitch;
+    const oyaw = viewer.camera.yaw;
+    const opitch = viewer.camera.pitch;
 
-  const rect = containerRef.current?.getBoundingClientRect();
-  if (!rect || rect.width === 0 || rect.height === 0) return null;
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect || rect.width === 0 || rect.height === 0) return null;
 
-  const { width, height } = rect;
+    const { width, height } = rect;
 
-  // Use HFOV directly from viewer (no conversions)
-  const hfov = viewer.camera.fov; // HORIZONTAL FOV in degrees
-  const toRadian = (deg) => (deg * Math.PI) / 180;
+    // Use HFOV directly from viewer (no conversions)
+    const hfov = viewer.camera.fov; // HORIZONTAL FOV in degrees
+    const toRadian = (deg) => (deg * Math.PI) / 180;
 
-  // Normalize yaw delta
-  let deltaYaw = yaw - oyaw;
-  if (deltaYaw < -180) deltaYaw += 360;
-  if (deltaYaw > 180) deltaYaw -= 360;
-  if (Math.abs(deltaYaw) > 90) return null; // behind camera
+    // Normalize yaw delta
+    let deltaYaw = yaw - oyaw;
+    if (deltaYaw < -180) deltaYaw += 360;
+    if (deltaYaw > 180) deltaYaw -= 360;
+    if (Math.abs(deltaYaw) > 90) return null; // behind camera
 
-  // Calculate screen position using HFOV directly
-  const hfovRad = toRadian(hfov);
-  const rx = Math.tan(hfovRad / 2);
-  
-  // For vertical, account for aspect ratio
-  const aspectRatio = width / height;
-  const ry = Math.tan(hfovRad / 2) / aspectRatio;
+    // Calculate screen position using HFOV directly
+    const hfovRad = toRadian(hfov);
+    const rx = Math.tan(hfovRad / 2);
 
-  const pointX = Math.tan(toRadian(-deltaYaw)) / rx;
-  const pointY = Math.tan(toRadian(opitch - pitch)) / ry; // swapped for correct direction
-  
-  // Clamp to screen bounds with small margin
-  const x = Math.max(0, Math.min(width, width / 2 + (pointX * width) / 2));
-  const y = Math.max(0, Math.min(height, height / 2 + (pointY * height) / 2));
+    // For vertical, account for aspect ratio
+    const aspectRatio = width / height;
+    const ry = Math.tan(hfovRad / 2) / aspectRatio;
 
-  return { x, y };
-}, []);
+    const pointX = Math.tan(toRadian(-deltaYaw)) / rx;
+    const pointY = Math.tan(toRadian(opitch - pitch)) / ry; // swapped for correct direction
+
+    // Clamp to screen bounds with small margin
+    const x = Math.max(0, Math.min(width, width / 2 + (pointX * width) / 2));
+    const y = Math.max(0, Math.min(height, height / 2 + (pointY * height) / 2));
+
+    return { x, y };
+  }, []);
 
   // Update hotspot positions
   const updateHotspots = useCallback(() => {
@@ -127,7 +135,7 @@ export default function Panorama({ unit }) {
 
     // Start blur overlay
     setIsTransitioning(true);
-    
+
     // Set new room and image
     setRoom(targetRoom);
     const newImage = isFurnished ? targetRoom.furnitureImg : targetRoom.unfurnitureImg;
@@ -142,18 +150,18 @@ export default function Panorama({ unit }) {
   // Handle hotspot click: zoom in → switch room
   const handleHotspotClick = useCallback((room) => {
     if (!viewerRef.current) return;
-    console.log("click");
-    
+    // console.log("click");
+
     // Start blur overlay
     setTimeout(() => {
       setIsTransitioning(true);
-    }, 750);
+    }, 250);
     if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
 
     // 1. Zoom in old image with ease-in
     viewerRef.current.camera.animateTo({
       yaw: room.yaw,
-      pitch: -5,
+      // pitch: -5,
       zoom: ZOOM_IN,
       duration: ZOOM_DURATION,
       easing: easing.easeIn,
@@ -162,8 +170,8 @@ export default function Panorama({ unit }) {
     // 2. Switch room AFTER first zoom in completes
     setTimeout(() => {
       const targetRoom = findRoomById(room.label);
-      console.log(targetRoom);
-      
+      // console.log(targetRoom);
+
       if (targetRoom) {
         const newImage = isFurnished ? targetRoom.furnitureImg : targetRoom.unfurnitureImg;
         setCurrentImage(newImage);
@@ -174,22 +182,120 @@ export default function Panorama({ unit }) {
     }, ZOOM_DURATION);
   }, [findRoomById, isFurnished]);
 
-   // Handle new image load (v4's "imageLoaded" equivalent)
+  const resetPointerState = useCallback(() => {
+    pointerStateRef.current = { id: null, x: 0, y: 0, moved: false };
+  }, []);
+
+  const handlePointerDownCapture = useCallback((event) => {
+    if (event.button !== undefined && event.button !== 0) return;
+    pointerStateRef.current = {
+      id: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+      moved: false,
+    };
+  }, []);
+
+  const handlePointerMoveCapture = useCallback((event) => {
+    const state = pointerStateRef.current;
+    if (!state || state.id !== event.pointerId) return;
+
+    const dx = event.clientX - state.x;
+    const dy = event.clientY - state.y;
+    if (!state.moved && dx * dx + dy * dy > DRAG_THRESHOLD * DRAG_THRESHOLD) {
+      state.moved = true;
+    }
+  }, [DRAG_THRESHOLD]);
+
+  const checkHotspotHit = useCallback((clientX, clientY) => {
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return null;
+
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    const hitRadiusSq = HOTSPOT_HIT_RADIUS * HOTSPOT_HIT_RADIUS;
+
+    for (const spot of hotspotsRef.current) {
+      const pos = hotspotPositions[spot.id];
+      if (!pos) continue;
+      const dx = pos.x - x;
+      const dy = pos.y - y;
+      if (dx * dx + dy * dy <= hitRadiusSq) {
+        return spot;
+      }
+    }
+    return null;
+  }, [hotspotPositions, HOTSPOT_HIT_RADIUS]);
+
+  const handlePointerUpCapture = useCallback((event) => {
+    const state = pointerStateRef.current;
+
+    // If no movement detected, check for hotspot hit
+    if (state && !state.moved && state.id === event.pointerId) {
+      const hitSpot = checkHotspotHit(event.clientX, event.clientY);
+      if (hitSpot) {
+        handleHotspotClick(hitSpot);
+      }
+    }
+
+    if (pointerResetTimeoutRef.current) {
+      clearTimeout(pointerResetTimeoutRef.current);
+    }
+    pointerResetTimeoutRef.current = setTimeout(() => {
+      resetPointerState();
+      pointerResetTimeoutRef.current = null;
+    }, 0);
+  }, [resetPointerState, checkHotspotHit, handleHotspotClick]);
+
+  const handleClickCapture = useCallback((event) => {
+    const state = pointerStateRef.current;
+    if (state.moved) {
+      resetPointerState();
+      return;
+    }
+
+    // For mouse clicks (touch already handled in pointerup)
+    if (event.pointerType === 'mouse' || !event.pointerType) {
+      const hitSpot = checkHotspotHit(event.clientX, event.clientY);
+      if (hitSpot) {
+        handleHotspotClick(hitSpot);
+      }
+    }
+
+    if (pointerResetTimeoutRef.current) {
+      clearTimeout(pointerResetTimeoutRef.current);
+      pointerResetTimeoutRef.current = null;
+    }
+    resetPointerState();
+  }, [handleHotspotClick, resetPointerState, checkHotspotHit]);
+
+  const handlePointerCancelCapture = useCallback(() => {
+    if (pointerResetTimeoutRef.current) {
+      clearTimeout(pointerResetTimeoutRef.current);
+      pointerResetTimeoutRef.current = null;
+    }
+    resetPointerState();
+  }, [resetPointerState]);
+
+  // Handle new image load (v4's "imageLoaded" equivalent)
   const handleLoad = useCallback(() => {
     if (!viewerRef.current) return;
-    console.log("load");
+    // console.log("load");
 
     // Set to zoom out position instantly (no animation)
     viewerRef.current.camera.lookAt({
       zoom: ZOOM_OUT,
     });
 
-    // Animate back to normal with ease-out
-    viewerRef.current.camera.animateTo({
-      zoom: ZOOM_NORMAL,
-      duration: ZOOM_DURATION,
-      easing: easing.easeOut,
-    });
+    if (zoomOnLoadRef.current) {
+      // Animate back to normal with ease-out
+      viewerRef.current.camera.animateTo({
+        zoom: ZOOM_NORMAL,
+        duration: ZOOM_DURATION,
+        easing: easing.easeOut,
+      });
+    }
+    else zoomOnLoadRef.current = true;
 
     // Remove blur overlay after transition completes
     transitionTimeoutRef.current = setTimeout(() => {
@@ -200,7 +306,16 @@ export default function Panorama({ unit }) {
   }, [updateHotspots]);
 
   return (
-    <div className="relative w-screen h-screen" ref={containerRef}>
+    <div
+      className="relative w-screen h-screen"
+      ref={containerRef}
+      style={{ touchAction: "none" }}
+      onPointerDownCapture={handlePointerDownCapture}
+      onPointerMoveCapture={handlePointerMoveCapture}
+      onPointerUpCapture={handlePointerUpCapture}
+      onPointerCancelCapture={handlePointerCancelCapture}
+      onClickCapture={handleClickCapture}
+    >
       {/* Current viewer */}
       <View360
         ref={viewerRef}
@@ -208,15 +323,19 @@ export default function Panorama({ unit }) {
         projection={projection}
         onLoad={handleLoad}
         onViewChange={handleViewChange}
-        zoomRange={{ min: ZOOM_OUT, max: ZOOM_IN }}
+        zoomRange={{ min: 0.8, max: ZOOM_IN }}
+        initialYaw={190}
       />
 
-      <InteriorNav 
-        levels={levels} 
+      <InteriorNav
+        levels={levels}
         isFurnished={isFurnished}
         currentRoom={room.displayName}
         currentFloor={findFloorByRoom(room)?.name}
-        onFurnitureToggle={() => setIsFurnished(!isFurnished)}
+        onFurnitureToggle={() => {
+          zoomOnLoadRef.current = false; // no zoom on furniture toggle, just blur
+          setIsFurnished(!isFurnished);
+        }}
         onRoomChange={handleDropdownChange}
       />
 
@@ -232,11 +351,10 @@ export default function Panorama({ unit }) {
             key={spot.id}
             type={spot.type}
             label={spot.label}
-            onClick={() => handleHotspotClick(spot)}
             style={{
               left: `${pos.x}px`,
               top: `${pos.y}px`,
-              transform: "translate(-50%, -50%)",
+              transform: "translate(0%, -50%)",
               zIndex: 40,
             }}
           />

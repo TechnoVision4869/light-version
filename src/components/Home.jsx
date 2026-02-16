@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback, useContext } from "react";
 import { StatusBar } from "@capacitor/status-bar";
 import { Capacitor } from '@capacitor/core';
 import { App as CapApp } from "@capacitor/app"
-import { TABS, LAYERS, DATA } from "../data/layers.js";
+import { TABS, LAYERS } from "../data/layers.js";
 // Hooks
 import { useVideoViewer } from "./hooks/useVideoViewer.jsx";
 
@@ -19,7 +19,7 @@ import BaseFloat from "./floating/BaseFloat";
 import Panorama from "./Panorama";
 import Balcony from "./Balcony";
 import Gallery from "./Gallery";
-import AnimatedPath from "./AnimatedPath";
+// import AnimatedPath from "./AnimatedPath";
 
 // Context
 import FilterContextProvider from "../store/FilterContextProvider";
@@ -30,13 +30,11 @@ import { MainContext } from "../store/MainContextProvider";
 // logo
 import TECHNO_LOGO from "../assets/techno.png";
 import Highlight from "./Highlight.jsx";
+import Test from "./Test.jsx";
 // const color = "green";
 
 export default function Home() {
   // console.log("App renders");
-
-  //Debug
-  // const [debugBorder, setDebugBorder] = useState(true);
 
   //states
   const [showInfoPopup, setShowInfoPopup] = useState(false);
@@ -47,10 +45,12 @@ export default function Home() {
 
   // Context
   const {
+    currentProject,
     history,
     activeTab,
     activeLayer,
     currentItem,
+    currentViews,
     setHighlightedButton,
     sidebarOpen,
     handleSidebarState,
@@ -85,15 +85,15 @@ export default function Home() {
         goHome();
         break;
       case TABS.ZONES:
-        selectedItem = DATA.project.zones;
+        selectedItem = currentProject.zones;
         checkSwithingBetweenTabs(tab, selectedItem);
         break;
       case TABS.AMENITIES:
-        selectedItem = DATA.project.amenities;
+        selectedItem = currentProject.amenities;
         checkSwithingBetweenTabs(tab, selectedItem);
         break;
       case TABS.SURROUNDINGS:
-        selectedItem = DATA.project.surroundings;
+        selectedItem = currentProject.surroundings;
         checkSwithingBetweenTabs(tab, selectedItem);
         break;
       default:
@@ -103,11 +103,12 @@ export default function Home() {
     function checkSwithingBetweenTabs(tab, item) {
       const isFromHome = activeTab === TABS.HOME;
 
-       if(!isFromHome && !activeLayer) {
-          viewerProps.StartReverse(true, () => goToTab(tab, item, true));
-          return;
-        }
-        goToTab(tab, item, isFromHome);
+      // uncomment to play reverse then forward when switching between non-home tabs
+      //  if(!isFromHome && !activeLayer) {
+      //     viewerProps.StartReverse(true, () => goToTab(tab, item, true));
+      //     return;
+      //   }
+      goToTab(tab, item, isFromHome);
     }
 
     setTimeout(() => {
@@ -118,7 +119,7 @@ export default function Home() {
   useEffect(() => {
     setHighlightedButton(null);
     // Show info popup if item has description
-    if(!currentItem) return
+    if (!currentItem) return
 
     if (currentItem?.description) setShowInfoPopup(true);
     setShowI(false);
@@ -144,16 +145,21 @@ export default function Home() {
   };
 
   const handleTouchStart = (e) => {
-    setStartX(e.changedTouches[0].clientX)
+    if (currentViews?.length) {
+      setStartX(e.changedTouches[0].clientX);
+    }
   };
 
   const handleTouchEnd = (e) => {
-    setTranslateX(startX - e.changedTouches[0].clientX);
+    if (currentViews?.length) {
+      // e.preventDefault();
+      setTranslateX(startX - e.changedTouches[0].clientX);
+    }
   }
 
   useEffect(() => {
-    if (!currentItem?.views) return;
-    
+    if (!currentViews?.length) return;
+
     if (isDisabled) return;
     // console.log(translateX);
 
@@ -317,7 +323,7 @@ export default function Home() {
               ) : (
                 <button
                   onClick={() => {
-                    if (viewerProps.currentViewIndex === 3) {
+                    if (viewerProps.currentViewIndex >= 3) {
                       viewerProps.changeView("next");
                       return;
                     }
@@ -402,7 +408,8 @@ export default function Home() {
               {/* Main content area */}
               <main className="flex-1 relative">
                 <div
-                  className="w-full h-full bg-white/9 rounded-2xl overflow-hidden shadow-inner"
+                  className="w-full h-full bg-white/9 rounded-2xl overflow-hidden shadow-inner select-none"
+                  style={{ touchAction: "none" }}
                   ref={mediaContainerRef}
                   onMouseDown={handleMouseDown}
                   onMouseUp={handleMouseUp}
@@ -411,7 +418,8 @@ export default function Home() {
                 >
                   {/* video element */}
                   <div className="absolute inset-0">
-                    <Highlight />
+                    {/* <Test /> */}
+                    {!viewerProps.isPlaying && <Highlight />}
                     {/* First Video (e.g., transition, or initial idle) */}
                     <video
                       ref={viewerProps.firstMediaRef}
@@ -434,9 +442,9 @@ export default function Home() {
                       loop
                     />
 
-                    {activeLayer === LAYERS.SURROUNDING_DETAIL && (
+                    {/* {activeLayer === LAYERS.SURROUNDING_DETAIL && (
                       <AnimatedPath path={currentItem.svgPath} />
-                    )}
+                    )} */}
                   </div>
 
                   {viewerProps.floatingOpacity &&
@@ -525,7 +533,7 @@ export default function Home() {
             </div>
 
             {/* Views visuals */}
-            {currentItem?.views &&
+            {currentViews?.length ?
               <div className="flex-1 flex items-center justify-center text-white space-x-3 px-4 py-2 text-sm">
                 <div className=" flex space-x-2">
                   <div className=""> Views </div>
@@ -557,7 +565,7 @@ export default function Home() {
                     </svg>
                   </button>
 
-                  {Array.from({ length: 4 }).map((_, index) => (
+                  {Array.from({ length: currentViews?.length || 0 }).map((_, index) => (
                     <span key={index}>
                       <svg
                         width="21"
@@ -610,9 +618,8 @@ export default function Home() {
                   </button>
                 </div>
               </div>
-            }
+            : null}
 
-            {/* {debugBorder && <div className={`w-3 h-2 bg-white border-4 border-${color}-600`}></div>} */}
             <div className="w-18 h-auto ml-auto">
               <button onClick={() => { console.log(history); }}>
                 <img src={TECHNO_LOGO} alt="Techno Vision Logo" />

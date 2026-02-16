@@ -4,28 +4,58 @@ export default function AnimFloatButton({
     style = {},
     onSelect,
     isSelected = false,
+    nameDirection = "right",
 }) {
 
     return (
-        <button className={`text-white px-3 py-1 rounded-lg flex items-center gap-2 z-20 transition
-            ${isSelected
-                ? 'bg-[#40321E] hover:bg-[#6B5635]'
-                : 'bg-[#94846D]/75 hover:bg-[#94846D]/85 text-white'}`}
+        <button className={`flex items-center gap-0 transition-all duration-200
+            ${isSelected ? 'z-40' : 'z-30'}`}
             style={{
                 position: 'absolute',
-                transform: 'translate(-50%, -50%)',
-                ...style, // apply computed left/top
+                transform: nameDirection === "right" ? 'translate(-13%, -50%)' : 'translate(-87%, -50%)',
+                ...style,
             }}
             onClick={onSelect}
             disabled={isSelected}
         >
-            {icon && (
-                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
-                    <img src={icon} className="w-4 h-4 p-[1px]" />
+            {/* Name Part (Left) - Only if nameDirection is "left" */}
+            {nameDirection === "left" && (
+                <div className={`px-[8px] py-[7px] rounded-l-full flex items-center transition-all duration-200
+                    ${isSelected
+                        ? 'bg-[#40321E]'
+                        : 'bg-transparent'}`}>
+                    <span className={`whitespace-nowrap font-medium transition-all duration-200
+                        ${isSelected
+                            ? 'text-white text-sm'
+                            : 'text-black text-xs'}`}>{name}</span>
                 </div>
             )}
-            <span className='whitespace-nowrap text-sm'>{name}</span>
-            <span className='triangle'></span>
+
+            {/* Icon Part - Brown Background */}
+            <div className={`px-[6px] py-[5px] flex items-center justify-center flex-shrink-0 transition-all duration-200
+                ${isSelected
+                    ? `bg-[#40321E] ${nameDirection === "left" ? 'rounded-r-full' : 'rounded-l-full'}`
+                    : `bg-[#94846D]/75 hover:bg-[#94846D]/85 rounded-full`}`}>
+                {icon && (
+                    <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                        <img src={icon} className="w-4 h-4 p-[1px]" />
+                    </div>
+                )}
+                <span className='icon-triangle'></span>
+            </div>
+
+            {/* Name Part (Right) - Only if nameDirection is "right" */}
+            {nameDirection === "right" && (
+                <div className={`px-[8px] py-[7px] rounded-r-full flex items-center gap-1 transition-all duration-200
+                    ${isSelected
+                        ? 'bg-[#40321E]'
+                        : 'bg-transparent'}`}>
+                    <span className={`whitespace-nowrap font-medium transition-all duration-200
+                        ${isSelected
+                            ? 'text-white text-sm'
+                            : 'text-black text-xs'}`}>{name}</span>
+                </div>
+            )}
         </button>
     )
 }

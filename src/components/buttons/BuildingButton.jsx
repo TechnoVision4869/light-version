@@ -1,8 +1,9 @@
 import { useContext } from "react";
 import { SidebarContext } from "../../store/SidebarContextProvider";
 // Icons
-import BedRoundedIcon from '@mui/icons-material/BedRounded';
-import OpenInFullRoundedIcon from '@mui/icons-material/OpenInFullRounded';
+import AREA_ICON from "../../assets/icons/area.svg"
+import BED_ICON from "../../assets/icons/bed.png"
+
 // import helper functions
 import { FILTER_ENUM, getMinMaxRange } from "../helpers/filterHelper";
 
@@ -45,11 +46,11 @@ export default function BuildingButton({ building, isDisabled, goToItem }) {
                 <div className="text-sm items-left flex flex-col space-x-0 space-y-2 text-white/60 leading-tight pt-1
                                         md:items-center md:flex-row md:space-x-3 md:space-y-0">
                     <div className="flex items-center space-x-1">
-                        <BedRoundedIcon />
+                        <img src={BED_ICON} className="w-5 h-auto" />
                         {minBedrooms === maxBedrooms ? <div>{minBedrooms}</div> : <div>{minBedrooms} - {maxBedrooms}</div>} <span>BR</span>
                     </div>
                     <div className="flex items-center space-x-1">
-                        <OpenInFullRoundedIcon />
+                        <img src={AREA_ICON} className="w-4 h-auto" />
                         {minArea === maxArea ? <div>{minArea}</div> : <div>{minArea} - {maxArea}</div>} <span>m²</span>
                     </div>
 

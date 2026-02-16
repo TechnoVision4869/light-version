@@ -1,18 +1,11 @@
 import MAP_PIN from "../assets/images/map-pin.png";
 import ICON_PIN from "../assets/images/icon-pin-transparent.png";
-import ChairRoundedIcon from '@mui/icons-material/ChairRounded';
 
-export default function Pin({ type, label, onClick, style }) {
+export default function Pin({ type, label, style }) {
   return (
     <div
-      className={`absolute cursor-pointer z-20 ${type === 'search' ? 'search-hotspot' : ''}`}
+      className={`absolute pointer-events-none select-none z-20 ${type === 'search' ? 'search-hotspot' : ''}`}
       style={style}
-      // onMouseEnter={onMouseEnter}
-      // onTouchStart={onTouchStart}
-      onClick={(e) => {
-        e.stopPropagation();
-        onClick?.();
-      }}
     >
       {type === 'search' ? (
         <div className="w-6 h-6 relative">
@@ -20,13 +13,12 @@ export default function Pin({ type, label, onClick, style }) {
           <div className="absolute w-0.5 h-2 bg-white top-3.5 left-3.5 transform rotate-[-45deg]"></div>
         </div>
       ) : (
-        ICON_PIN ? (
-          <div className="opacity-90 hover:opacity-100 transition-opacity">
-            <img src={MAP_PIN} className="w-12 h-auto" />
-            {/* <ChairRoundedIcon className="absolute bottom-[40%] right-[25%] w-4 h-4"/> */}
+        !ICON_PIN ? (
+          <div className="opacity-0 hover:opacity-0 transition-opacity">
+            <img src={MAP_PIN} className="w-36 opacity-70 h-auto" />
           </div>
         ) : (
-          <div className="text-white font-bold text-center whitespace-pre-line px-2 py-1 bg-black/50 rounded">
+          <div className="text-white opacity-0 w-46 h-46 text-2xl font-bold text-center whitespace-pre-line px-2 py-1 bg-black/50 rounded">
             {label}
           </div>
         )

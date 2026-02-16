@@ -3,11 +3,15 @@ import { createContext, useCallback, useState } from "react";
 import { TABS, LAYERS, DATA } from "../data/layers";
 
 export const SidebarContext = createContext({
+    currentProject: null,
+    setCurrentProject: () => { },
+
     history: [],
     activeTab: "",
     activeLayer: "",
     currentItem: {},
     currentVideosPath: {},
+    currentViews: null,
 
     highlightedButton: null,
     setHighlightedButton: () => { },
@@ -17,6 +21,10 @@ export const SidebarContext = createContext({
 
     currentItems: [],
     setCurrentItems: () => { },
+
+    type: "",
+    setType: () => { },
+
     goToItem: () => { },
     goToTab: () => { },
     goBack: () => { },
@@ -24,32 +32,53 @@ export const SidebarContext = createContext({
 });
 
 export default function SidebarContextProvider({ children }) {
-    const initHistory = [
+    const [currentProject, setCurrentProject] = useState(null);
+
+    const getInitHistory = useCallback((project) => ([
         {
             tab: TABS.HOME,
             layer: null,
             item: null,
             videosPath: {
-                forwardVideo: DATA.project.zoomoutVideo,
+                forwardVideo: project?.zoomoutVideo ?? null,
                 reverseVideo: null,
-                idleVideo: DATA.project.idleVideo,
-            }
+                idleVideo: project?.idleVideo ?? null,
+            },
+            views: null,
         },
-    ];
+    ]), []);
 
-    const [history, setHistory] = useState(initHistory);
+    const [history, setHistory] = useState(getInitHistory(currentProject));
     const [sidebarOpen, setSidebarOpen] = useState(false); // set true when sidebar is open
 
     const [highlightedButton, setHighlightedButton] = useState(null);
 
+    // Reset history when project changes
+    const handleSetCurrentProject = useCallback((project) => {
+        setCurrentProject(project);
+        setHistory(getInitHistory(project));
+    }, [getInitHistory]);
+
     // Get current state from history
-    const currentEntry = history[history.length - 1];
+    const currentEntry = history[history.length - 1] ?? getInitHistory(currentProject)[0];
     const {
         tab: activeTab,
         layer: activeLayer,
         item: currentItem,
         videosPath: currentVideosPaths,
+        views: currentViews,
     } = currentEntry;
+
+    const findPropertyForItem = useCallback((zone, targetItem) => {
+        if (!zone?.properties?.length) return null;
+        if (zone.properties.length === 1) return zone.properties[0];
+
+        return zone.properties.find((property) => {
+            if (property.blocks?.some((block) => block.id === targetItem?.id)) return true;
+            if (property.units?.some((unit) => unit.id === targetItem?.id)) return true;
+            return false;
+        }) || null;
+    }, []);
 
     const goToTab = useCallback((tabKey, selectedItem, isFromHome = true) => {
         // console.log(selectedItem);
@@ -62,16 +91,19 @@ export default function SidebarContextProvider({ children }) {
                 idleVideo: selectedItem.videos.idleVideo,
             };
 
+        const calculatedViews = selectedItem.views || null;
+
         setHistory(() => [
-            ...initHistory,
+            ...getInitHistory(currentProject),
             {
                 tab: tabKey,
                 layer: null,
                 item: selectedItem,
                 videosPath: calculatedVideosPath,
+                views: calculatedViews,
             },
         ]);
-    }, []);
+    }, [currentProject, getInitHistory]);
 
     const handleCurrentItem = useCallback((item, layerKey) => {
         const targetLayer = layerKey;
@@ -88,12 +120,43 @@ export default function SidebarContextProvider({ children }) {
                     layer: targetLayer,
                     item: item,
                     videosPath: null,
+                    views: null,
                 },
             ]);
             return;
         }
 
-        const videosPath = item.videos;
+        // Determine videosPath and views with careful fallbacks.
+        // Use `undefined` to detect missing values and `null` to represent explicit absence.
+        let videosPath = item?.videos; // undefined if not present
+        let views = item?.views; // undefined if not present
+
+        // Try to determine the parent property depending on where we are coming from.
+        let property = null;
+        if (activeLayer === LAYERS.BUILDING) {
+            property = currentItem; // we're currently on a property/building
+        } else if (activeLayer === LAYERS.ZONE_DETAIL) {
+            property = findPropertyForItem(currentItem, item);
+        }
+
+        if (videosPath === undefined) videosPath = property?.videos; // still undefined if not present on property
+
+        // Views availability rules:
+        // - If navigating into a UNIT layer: views should be available only for `villa` properties.
+        // - For other layers (e.g., BUILDING) try to use property's views when not present on the item.
+        if (targetLayer === LAYERS.UNIT) {
+            if (property?.type === "villa") {
+                if (views === undefined) views = property?.views; // allow views for villa units
+            } else {
+                views = null; // explicitly no views for town/tower units
+            }
+        } else {
+            if (views === undefined) views = property?.views; // use property's views for building/floor layers
+        }
+
+        // Final fallbacks to the previously-current values if still undefined
+        if (videosPath === undefined) videosPath = currentVideosPaths ?? null;
+        if (views === undefined) views = currentViews ?? null;
 
         setHistory((prev) => [
             ...prev,
@@ -102,9 +165,10 @@ export default function SidebarContextProvider({ children }) {
                 layer: targetLayer,
                 item: item,
                 videosPath: videosPath,
+                views: views,
             },
         ]);
-    }, [history]);
+    }, [history, currentVideosPaths, currentViews, activeLayer, activeTab, currentItem, findPropertyForItem]);
 
     // Go back one step
     const handleGoBack = useCallback(() => {
@@ -116,8 +180,8 @@ export default function SidebarContextProvider({ children }) {
 
     // Go to home (reset everything)
     const handleGoHome = useCallback(() => {
-        setHistory(initHistory);
-    }, []);
+        setHistory(getInitHistory(currentProject));
+    }, [currentProject, getInitHistory]);
 
     const handleSidebarState = useCallback((state) => {
         // console.log(state);
@@ -125,13 +189,18 @@ export default function SidebarContextProvider({ children }) {
     }, []);
 
     const [currentItems, setCurrentItems] = useState([]);
+    const [type, setType] = useState("");
 
     const ctxValue = {
+        currentProject,
+        setCurrentProject: handleSetCurrentProject,
+
         history,
         activeTab,
         activeLayer,
         currentItem,
         currentVideosPaths,
+        currentViews,
 
         highlightedButton,
         setHighlightedButton,
@@ -141,6 +210,10 @@ export default function SidebarContextProvider({ children }) {
 
         currentItems,
         setCurrentItems,
+
+        type,
+        setType,
+
         goToItem: handleCurrentItem,
         goToTab,
         goBack: handleGoBack,
