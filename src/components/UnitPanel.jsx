@@ -1,5 +1,4 @@
 import { useState, useContext } from 'react';
-import { DATA } from '../data/layers';
 
 import { SidebarContext } from '../store/SidebarContextProvider';
 import { MainContext } from '../store/MainContextProvider';
@@ -9,7 +8,7 @@ import DOOR_ICON from "../assets/icons/door.svg"
 import TOILET_ICON from "../assets/icons/bathroom.png"
 
 export default function UnitPanel() {
-    const { currentItem } = useContext(SidebarContext);
+    const { currentProject, currentItem } = useContext(SidebarContext);
     const { handleInterior, handleBalconyView, handleGalleryType } = useContext(MainContext);
 
     const [isVisualsOpen, setIsVisualsOpen] = useState(true);
@@ -17,7 +16,7 @@ export default function UnitPanel() {
     const [isPaymentPlanOpen, setIsPaymentPlanOpen] = useState(false);
 
     //temporary visuals and payment plan
-    const unitType = DATA.project.unitTypes[currentItem.unitTypeId];
+    const unitType = currentProject.unitTypes[currentItem.unitTypeId];
     const serviceRooms = unitType.serviceRooms;
     const gallery = unitType.gallery;
     const cutSections = unitType.cutSections;

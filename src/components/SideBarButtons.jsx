@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { SidebarContext } from "../store/SidebarContextProvider";
-import { TABS, LAYERS, DATA } from "../data/layers";
+import { TABS, LAYERS} from "../data/layers";
 
 import ZoneButton from "./buttons/ZoneButton";
 import AmenityButton from "./buttons/AmenityButton";
@@ -12,7 +12,7 @@ import FloorButton from "./buttons/FloorButton";
 import ApartmentButton from "./buttons/ApartmentButton";
 
 export default function SidebarButtons() {
-  const { activeTab, activeLayer, currentItem, setCurrentItems, setType, goToItem } = useContext(SidebarContext);
+  const { currentProject, activeTab, activeLayer, currentItem, setCurrentItems, setType, goToItem } = useContext(SidebarContext);
   let items = [];
   let type = "";
   let Component = null;
@@ -27,21 +27,21 @@ export default function SidebarButtons() {
   if (activeLayer === null) {
     if (activeTab === TABS.ZONES) {
       // items = TAB_CONFIG[TABS.ZONES].getItems();
-      items = DATA.project.zones.items;
+      items = currentProject.zones.items;
       Component = ZoneButton;
       propName = "zone";
       layerKey = LAYERS.ZONE_DETAIL;
     }
     else if (activeTab === TABS.AMENITIES) {
       // items = TAB_CONFIG[TABS.AMENITIES].getItems();
-      items = DATA.project.amenities.items;
+      items = currentProject.amenities.items;
       Component = AmenityButton;
       propName = "amenity";
       layerKey = LAYERS.AMENITY_DETAIL;
     }
     else if (activeTab === TABS.SURROUNDINGS) {
       // items = TAB_CONFIG[TABS.SURROUNDINGS].getItems();
-      items = DATA.project.surroundings.items;
+      items = currentProject.surroundings.items;
       // console.log(items);
 
       Component = SurroundingButton;
@@ -98,7 +98,7 @@ export default function SidebarButtons() {
     }
     else if (activeLayer === LAYERS.SURROUNDING_DETAIL) {
       // Keep showing surroundings items when viewing detail
-      items = DATA.project.surroundings.items;
+      items = currentProject.surroundings.items;
       Component = SurroundingButton;
       propName = "surrounding";
       layerKey = LAYERS.SURROUNDING_DETAIL;

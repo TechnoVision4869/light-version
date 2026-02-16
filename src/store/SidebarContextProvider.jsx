@@ -3,6 +3,9 @@ import { createContext, useCallback, useState } from "react";
 import { TABS, LAYERS, DATA } from "../data/layers";
 
 export const SidebarContext = createContext({
+    currentProject: null,
+    setCurrentProject: () => { },
+
     history: [],
     activeTab: "",
     activeLayer: "",
@@ -29,27 +32,35 @@ export const SidebarContext = createContext({
 });
 
 export default function SidebarContextProvider({ children }) {
-    const initHistory = [
+    const [currentProject, setCurrentProject] = useState(null);
+
+    const getInitHistory = useCallback((project) => ([
         {
             tab: TABS.HOME,
             layer: null,
             item: null,
             videosPath: {
-                forwardVideo: DATA.project.zoomoutVideo,
+                forwardVideo: project?.zoomoutVideo ?? null,
                 reverseVideo: null,
-                idleVideo: DATA.project.idleVideo,
+                idleVideo: project?.idleVideo ?? null,
             },
             views: null,
         },
-    ];
+    ]), []);
 
-    const [history, setHistory] = useState(initHistory);
+    const [history, setHistory] = useState(getInitHistory(currentProject));
     const [sidebarOpen, setSidebarOpen] = useState(false); // set true when sidebar is open
 
     const [highlightedButton, setHighlightedButton] = useState(null);
 
+    // Reset history when project changes
+    const handleSetCurrentProject = useCallback((project) => {
+        setCurrentProject(project);
+        setHistory(getInitHistory(project));
+    }, [getInitHistory]);
+
     // Get current state from history
-    const currentEntry = history[history.length - 1];
+    const currentEntry = history[history.length - 1] ?? getInitHistory(currentProject)[0];
     const {
         tab: activeTab,
         layer: activeLayer,
@@ -83,7 +94,7 @@ export default function SidebarContextProvider({ children }) {
         const calculatedViews = selectedItem.views || null;
 
         setHistory(() => [
-            ...initHistory,
+            ...getInitHistory(currentProject),
             {
                 tab: tabKey,
                 layer: null,
@@ -92,7 +103,7 @@ export default function SidebarContextProvider({ children }) {
                 views: calculatedViews,
             },
         ]);
-    }, []);
+    }, [currentProject, getInitHistory]);
 
     const handleCurrentItem = useCallback((item, layerKey) => {
         const targetLayer = layerKey;
@@ -169,8 +180,8 @@ export default function SidebarContextProvider({ children }) {
 
     // Go to home (reset everything)
     const handleGoHome = useCallback(() => {
-        setHistory(initHistory);
-    }, []);
+        setHistory(getInitHistory(currentProject));
+    }, [currentProject, getInitHistory]);
 
     const handleSidebarState = useCallback((state) => {
         // console.log(state);
@@ -181,6 +192,9 @@ export default function SidebarContextProvider({ children }) {
     const [type, setType] = useState("");
 
     const ctxValue = {
+        currentProject,
+        setCurrentProject: handleSetCurrentProject,
+
         history,
         activeTab,
         activeLayer,

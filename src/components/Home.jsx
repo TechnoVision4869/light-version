@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback, useContext } from "react";
 import { StatusBar } from "@capacitor/status-bar";
 import { Capacitor } from '@capacitor/core';
 import { App as CapApp } from "@capacitor/app"
-import { TABS, LAYERS, DATA } from "../data/layers.js";
+import { TABS, LAYERS } from "../data/layers.js";
 // Hooks
 import { useVideoViewer } from "./hooks/useVideoViewer.jsx";
 
@@ -48,6 +48,7 @@ export default function Home() {
 
   // Context
   const {
+    currentProject,
     history,
     activeTab,
     activeLayer,
@@ -87,15 +88,15 @@ export default function Home() {
         goHome();
         break;
       case TABS.ZONES:
-        selectedItem = DATA.project.zones;
+        selectedItem = currentProject.zones;
         checkSwithingBetweenTabs(tab, selectedItem);
         break;
       case TABS.AMENITIES:
-        selectedItem = DATA.project.amenities;
+        selectedItem = currentProject.amenities;
         checkSwithingBetweenTabs(tab, selectedItem);
         break;
       case TABS.SURROUNDINGS:
-        selectedItem = DATA.project.surroundings;
+        selectedItem = currentProject.surroundings;
         checkSwithingBetweenTabs(tab, selectedItem);
         break;
       default:
