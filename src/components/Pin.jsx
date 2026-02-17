@@ -1,11 +1,10 @@
 import MAP_PIN from "../assets/images/map-pin.png";
 import ICON_PIN from "../assets/images/icon-pin-transparent.png";
 
-export default function Pin({ type, label, style }) {
+export default function Pin({ type, label, className = "" }) {
   return (
     <div
-      className={`absolute pointer-events-none select-none z-20 ${type === 'search' ? 'search-hotspot' : ''}`}
-      style={style}
+      className={`select-none ${type === 'search' ? 'search-hotspot' : ''} ${className}`}
     >
       {type === 'search' ? (
         <div className="w-6 h-6 relative">
@@ -18,7 +17,7 @@ export default function Pin({ type, label, style }) {
             <img src={MAP_PIN} className="w-36 opacity-70 h-auto" />
           </div>
         ) : (
-          <div className="text-white opacity-0 w-46 h-46 text-2xl font-bold text-center whitespace-pre-line px-2 py-1 bg-black/50 rounded">
+          <div className="text-white opacity-100 w-46 h-46 text-2xl font-bold text-center whitespace-pre-line px-2 py-1 bg-black/50 rounded">
             {label}
           </div>
         )

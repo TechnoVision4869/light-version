@@ -384,6 +384,7 @@ export default function Home() {
             </div>
             <HomeButton
               onHomeClick={() => {
+                if (activeTab === TABS.HOME) return;
                 if (
                   (activeTab === TABS.ZONES ||
                     activeTab === TABS.AMENITIES ||
@@ -618,7 +619,7 @@ export default function Home() {
                   </button>
                 </div>
               </div>
-            : null}
+              : null}
 
             <div className="w-18 h-auto ml-auto">
               <button onClick={() => { console.log(history); }}>

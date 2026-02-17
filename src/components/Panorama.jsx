@@ -14,8 +14,6 @@ export default function Panorama({ unit }) {
   const ZOOM_IN = 1.333; // zoomed in view (match FOV ≈ 61.93°)
 
   const ZOOM_DURATION = 750;
-  const HOTSPOT_HIT_RADIUS = 28;
-  const DRAG_THRESHOLD = 6;
 
   const easing = {
     easeIn: (x) => x * x * x,
@@ -24,13 +22,9 @@ export default function Panorama({ unit }) {
   };
 
   const viewerRef = useRef(null);
-  const [hotspotPositions, setHotspotPositions] = useState({});
-  const containerRef = useRef(null);
   const [isTransitioning, setIsTransitioning] = useState(false); // blur overlay state
   const transitionTimeoutRef = useRef(null);
   const [isFurnished, setIsFurnished] = useState(true);
-  const pointerStateRef = useRef({ id: null, x: 0, y: 0, moved: false });
-  const pointerResetTimeoutRef = useRef(null);
   const zoomOnLoadRef = useRef(true);
 
   // Get unit data
@@ -60,63 +54,18 @@ export default function Panorama({ unit }) {
     }, 500);
   }, [isFurnished, room]);
 
-  // Calculate hotspot screen position (v4-compatible)
-  const getHotspotScreenPosition = useCallback((viewer, yaw, pitch) => {
-    const oyaw = viewer.camera.yaw;
-    const opitch = viewer.camera.pitch;
-
-    const rect = containerRef.current?.getBoundingClientRect();
-    if (!rect || rect.width === 0 || rect.height === 0) return null;
-
-    const { width, height } = rect;
-
-    // Use HFOV directly from viewer (no conversions)
-    const hfov = viewer.camera.fov; // HORIZONTAL FOV in degrees
-    const toRadian = (deg) => (deg * Math.PI) / 180;
-
-    // Normalize yaw delta
-    let deltaYaw = yaw - oyaw;
-    if (deltaYaw < -180) deltaYaw += 360;
-    if (deltaYaw > 180) deltaYaw -= 360;
-    if (Math.abs(deltaYaw) > 90) return null; // behind camera
-
-    // Calculate screen position using HFOV directly
-    const hfovRad = toRadian(hfov);
-    const rx = Math.tan(hfovRad / 2);
-
-    // For vertical, account for aspect ratio
-    const aspectRatio = width / height;
-    const ry = Math.tan(hfovRad / 2) / aspectRatio;
-
-    const pointX = Math.tan(toRadian(-deltaYaw)) / rx;
-    const pointY = Math.tan(toRadian(opitch - pitch)) / ry; // swapped for correct direction
-
-    // Clamp to screen bounds with small margin
-    const x = Math.max(0, Math.min(width, width / 2 + (pointX * width) / 2));
-    const y = Math.max(0, Math.min(height, height / 2 + (pointY * height) / 2));
-
-    return { x, y };
-  }, []);
-
-  // Update hotspot positions
-  const updateHotspots = useCallback(() => {
-    if (!viewerRef.current) return;
-
-    const positions = {};
-    hotspotsRef.current.forEach((spot) => {
-      const pos = getHotspotScreenPosition(viewerRef.current, spot.yaw, spot.pitch);
-      if (pos) positions[spot.id] = pos;
-    });
-    setHotspotPositions(positions);
-  }, [getHotspotScreenPosition]);
 
   // Projection (memoized)
   const projection = useMemo(() => new EquirectProjection({ src: currentImage }), [currentImage]);
 
-  // Handle view changes (pan/zoom)
-  const handleViewChange = useCallback(() => {
-    updateHotspots();
-  }, [updateHotspots]);
+  // Refresh hotspot positions when data changes
+  useEffect(() => {
+    if (!viewerRef.current?.hotspot?.refresh) return;
+    const refreshId = setTimeout(() => {
+      viewerRef.current?.hotspot?.refresh?.();
+    }, 0);
+    return () => clearTimeout(refreshId);
+  }, [hotspots, currentImage]);
 
   // Find room by name
   const findRoomById = useCallback((roomLabel) => {
@@ -182,100 +131,6 @@ export default function Panorama({ unit }) {
     }, ZOOM_DURATION);
   }, [findRoomById, isFurnished]);
 
-  const resetPointerState = useCallback(() => {
-    pointerStateRef.current = { id: null, x: 0, y: 0, moved: false };
-  }, []);
-
-  const handlePointerDownCapture = useCallback((event) => {
-    if (event.button !== undefined && event.button !== 0) return;
-    pointerStateRef.current = {
-      id: event.pointerId,
-      x: event.clientX,
-      y: event.clientY,
-      moved: false,
-    };
-  }, []);
-
-  const handlePointerMoveCapture = useCallback((event) => {
-    const state = pointerStateRef.current;
-    if (!state || state.id !== event.pointerId) return;
-
-    const dx = event.clientX - state.x;
-    const dy = event.clientY - state.y;
-    if (!state.moved && dx * dx + dy * dy > DRAG_THRESHOLD * DRAG_THRESHOLD) {
-      state.moved = true;
-    }
-  }, [DRAG_THRESHOLD]);
-
-  const checkHotspotHit = useCallback((clientX, clientY) => {
-    const rect = containerRef.current?.getBoundingClientRect();
-    if (!rect) return null;
-
-    const x = clientX - rect.left;
-    const y = clientY - rect.top;
-    const hitRadiusSq = HOTSPOT_HIT_RADIUS * HOTSPOT_HIT_RADIUS;
-
-    for (const spot of hotspotsRef.current) {
-      const pos = hotspotPositions[spot.id];
-      if (!pos) continue;
-      const dx = pos.x - x;
-      const dy = pos.y - y;
-      if (dx * dx + dy * dy <= hitRadiusSq) {
-        return spot;
-      }
-    }
-    return null;
-  }, [hotspotPositions, HOTSPOT_HIT_RADIUS]);
-
-  const handlePointerUpCapture = useCallback((event) => {
-    const state = pointerStateRef.current;
-
-    // If no movement detected, check for hotspot hit
-    if (state && !state.moved && state.id === event.pointerId) {
-      const hitSpot = checkHotspotHit(event.clientX, event.clientY);
-      if (hitSpot) {
-        handleHotspotClick(hitSpot);
-      }
-    }
-
-    if (pointerResetTimeoutRef.current) {
-      clearTimeout(pointerResetTimeoutRef.current);
-    }
-    pointerResetTimeoutRef.current = setTimeout(() => {
-      resetPointerState();
-      pointerResetTimeoutRef.current = null;
-    }, 0);
-  }, [resetPointerState, checkHotspotHit, handleHotspotClick]);
-
-  const handleClickCapture = useCallback((event) => {
-    const state = pointerStateRef.current;
-    if (state.moved) {
-      resetPointerState();
-      return;
-    }
-
-    // For mouse clicks (touch already handled in pointerup)
-    if (event.pointerType === 'mouse' || !event.pointerType) {
-      const hitSpot = checkHotspotHit(event.clientX, event.clientY);
-      if (hitSpot) {
-        handleHotspotClick(hitSpot);
-      }
-    }
-
-    if (pointerResetTimeoutRef.current) {
-      clearTimeout(pointerResetTimeoutRef.current);
-      pointerResetTimeoutRef.current = null;
-    }
-    resetPointerState();
-  }, [handleHotspotClick, resetPointerState, checkHotspotHit]);
-
-  const handlePointerCancelCapture = useCallback(() => {
-    if (pointerResetTimeoutRef.current) {
-      clearTimeout(pointerResetTimeoutRef.current);
-      pointerResetTimeoutRef.current = null;
-    }
-    resetPointerState();
-  }, [resetPointerState]);
 
   // Handle new image load (v4's "imageLoaded" equivalent)
   const handleLoad = useCallback(() => {
@@ -302,19 +157,12 @@ export default function Panorama({ unit }) {
       setIsTransitioning(false);
     }, 500);
 
-    updateHotspots();
-  }, [updateHotspots]);
+  }, []);
 
   return (
     <div
       className="relative w-screen h-screen"
-      ref={containerRef}
       style={{ touchAction: "none" }}
-      onPointerDownCapture={handlePointerDownCapture}
-      onPointerMoveCapture={handlePointerMoveCapture}
-      onPointerUpCapture={handlePointerUpCapture}
-      onPointerCancelCapture={handlePointerCancelCapture}
-      onClickCapture={handleClickCapture}
     >
       {/* Current viewer */}
       <View360
@@ -322,10 +170,26 @@ export default function Panorama({ unit }) {
         className="view360-fullscreen"
         projection={projection}
         onLoad={handleLoad}
-        onViewChange={handleViewChange}
         zoomRange={{ min: 0.8, max: ZOOM_IN }}
         initialYaw={190}
-      />
+        rotate={{ speed: 6 }}
+        style={{ touchAction: "none" }}
+        scrollable={false}
+      >
+        <div className="view360-hotspots">
+          {hotspots.map((spot) => (
+            <div
+              key={spot.id}
+              className="view360-hotspot"
+              data-yaw={spot.yaw}
+              data-pitch={spot.pitch}
+              onClick={() => handleHotspotClick(spot)}
+            >
+              <Pin type={spot.type} label={spot.label} />
+            </div>
+          ))}
+        </div>
+      </View360>
 
       <InteriorNav
         levels={levels}
@@ -342,24 +206,6 @@ export default function Panorama({ unit }) {
       {/* Blur overlay during transition (hides load gap) */}
       {isTransitioning && <div className="motion-blur-overlay absolute inset-0 pointer-events-none" />}
 
-      {/* Hotspots */}
-      {hotspots.map((spot) => {
-        const pos = hotspotPositions[spot.id];
-        if (!pos) return null;
-        return (
-          <Pin
-            key={spot.id}
-            type={spot.type}
-            label={spot.label}
-            style={{
-              left: `${pos.x}px`,
-              top: `${pos.y}px`,
-              transform: "translate(0%, -50%)",
-              zIndex: 40,
-            }}
-          />
-        );
-      })}
     </div>
   );
 }

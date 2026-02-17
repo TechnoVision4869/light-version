@@ -4,6 +4,7 @@ import { Capacitor } from '@capacitor/core';
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { SidebarContext } from "./store/SidebarContextProvider";
 import Home from "./components/Home";
+import { AuthGuard } from "./components/auth/auth-guard";
 import ProjectSelector from "./components/ProjectSelector";
 import SplashVideo from "./components/SplashVideo";
 import LoginPage from "./components/auth/login-page";
@@ -28,10 +29,21 @@ export default function App() {
     lockOrientation();
   }, []);
 
+  const getProjectSlug = (project) => {
+    const name = project?.name || project?.title || project?.id || "";
+    return name
+      .toString()
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  };
+
   const handleProjectSelect = (project) => {
     setCurrentProject(project);
     setShowSplash(true);
-    navigate("/home");
+    const projectSlug = getProjectSlug(project);
+    navigate(`/${projectSlug}`);
   };
 
   const getIntroVideoUrl = () => {
@@ -39,15 +51,11 @@ export default function App() {
     return currentProject?.introVideo || `/kog/videos/home/intro1.mp4`;
   };
 
-  // if (!isAuthenticated) {
-  //   return <LoginPage />;
-  // }
-
   return (
     <Routes>
       <Route path="/" element={<ProjectSelector onProjectSelect={handleProjectSelect} />} />
       <Route
-        path="/home"
+        path="/:projectSlug"
         element={
           showSplash ? (
             <SplashVideo src={getIntroVideoUrl()} onFinished={() => setShowSplash(false)} />
@@ -57,5 +65,22 @@ export default function App() {
         }
       />
     </Routes>
+
+    // <Routes>
+    //   <Route path="/" element={<LoginPage />} />
+    //   <Route path="/projects" element={<AuthGuard>
+    //     <ProjectSelector onProjectSelect={handleProjectSelect} />
+    //   </AuthGuard>} />
+    //   <Route
+    //     path="/home"
+    //     element={<AuthGuard>
+    //       showSplash ? (
+    //       <SplashVideo src={getIntroVideoUrl()} onFinished={() => setShowSplash(false)} />
+    //       ) : (
+    //       <Home />
+    //       )
+    //     </AuthGuard>}
+    //   />
+    // </Routes>
   );
 }
