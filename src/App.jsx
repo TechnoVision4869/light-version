@@ -1,19 +1,18 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import { AuthGuard } from "./components/auth/auth-guard";
 import LoginPage from "./components/auth/login-page";
-// import DashboardPage from "./components/dashboard/dashboard-page";
-// import SettingsPage from "./components/settings/settings-page";
+import AdminDashboard from "./components/admin/AdminDashboard";
+// AuthConsumer is no longer needed directly in App.jsx as App is rendered conditionally in main.jsx
 
 export default function App() {
   return (
-    // <Routes>
-    //   {/* <Route path="/" element={<LoginPage />} /> */}
-    //   {/* <Route path="/dashboard" element={<AuthGuard><DashboardPage /></AuthGuard>} /> */}
-    //   {/* <Route path="/settings" element={<AuthGuard><SettingsPage /></AuthGuard>} /> */}
-    //   {/* <Route path="/home" element={<AuthGuard><Home /></AuthGuard>} /> */}
-    //   <Route path="/" element={<Home />} />
-    // </Routes>
-    <Home />
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      {/* Protected routes */}
+      <Route path="/" element={<AuthGuard><Home /></AuthGuard>} />
+      <Route path="/admin" element={<AuthGuard><AdminDashboard /></AuthGuard>} />
+      {/* Add other protected routes here */}
+    </Routes>
   );
 }

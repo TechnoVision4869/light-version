@@ -13,9 +13,9 @@ class ApiService {
    * @param {string} url - Base API URL (e.g., "https://api.example.com")
    */
   constructor(url) {
-    this.apiUrl = url;              // Base API endpoint
-    this.apiToken = "";             // Stores JWT token for auth
-    this.options = {};              // Default request options & headers
+    this.apiUrl = url; // Base API endpoint
+    this.apiToken = ""; // Stores JWT token for auth
+    this.options = {}; // Default request options & headers
   }
 
   /**
@@ -27,7 +27,7 @@ class ApiService {
     this.apiToken = apiToken;
     this.options.headers = {
       ...this.options.headers,
-      Authorization: `Bearer ${apiToken}`,  // Format: "Bearer <token>"
+      Authorization: `Bearer ${apiToken}`, // Format: "Bearer <token>"
     };
   }
 
@@ -38,7 +38,7 @@ class ApiService {
   unsetToken() {
     this.options.headers = {
       ...this.options.headers,
-      Authorization: undefined,  // Clear auth header
+      Authorization: undefined, // Clear auth header
     };
   }
 
@@ -58,20 +58,20 @@ class ApiService {
     // Build default request options
     const settings = merge(
       {
-        body: data ? JSON.stringify(data) : undefined,  // Stringify JSON body
-        method: toUpper(method),                        // Convert method to uppercase
+        body: data ? JSON.stringify(data) : undefined, // Stringify JSON body
+        method: toUpper(method), // Convert method to uppercase
         headers: {
           Accept: "*/*",
-          "Content-Type": "application/json",         // Default JSON
+          "Content-Type": "application/json", // Default JSON
         },
       },
-      options  // Merge with custom options
+      options, // Merge with custom options
     );
 
     // For multipart (file upload), don't stringify and remove Content-Type
     // Let browser set it with boundary automatically
     if (isMultipart) {
-      settings.body = data;  // Keep FormData as-is
+      settings.body = data; // Keep FormData as-is
       settings.headers = omit(settings.headers, ["Content-Type"]);
     }
 
@@ -104,7 +104,7 @@ class ApiService {
    */
   convertToJson(response) {
     try {
-      return response.json();  // Parse JSON from response body
+      return response.json(); // Parse JSON from response body
     } catch (jsonError) {
       let errorMessage;
       // Build detailed error message from available info
@@ -166,9 +166,13 @@ class ApiService {
   async request(endpointUrl, options = {}) {
     return fetch(endpointUrl, {
       ...options,
-      credentials: "include",  // Send/receive httpOnly cookies for session
+      headers: {
+        ...options.headers,
+        accept: "application/json",
+        Authorization: `Bearer ${this.apiToken}`,
+      },
     })
-      .then(this.checkStatus.bind(this))    // Validate HTTP status (2xx vs 4xx/5xx)
+      .then(this.checkStatus.bind(this)) // Validate HTTP status (2xx vs 4xx/5xx)
       .then(this.convertToJson.bind(this)); // Parse response as JSON
   }
 
@@ -182,6 +186,7 @@ class ApiService {
    * apiService.get("/posts", { page: 1 })
    */
   async get(endpoint, queryParams, options) {
+    console.log("token", this.apiToken);
     const url = this.parseEndpoint(endpoint, queryParams);
     const parsedOptions = this.parseOptions({
       method: "get",
@@ -261,6 +266,8 @@ class ApiService {
 // Create singleton instance with base URL from config
 // Note: Set VITE_API_URL in .env file
 // Example: VITE_API_URL=https://api.example.com
-export const apiService = new ApiService(import.meta.env.VITE_API_URL || "http://localhost:3000");
+export const apiService = new ApiService(
+  import.meta.env.VITE_API_URL || "http://localhost:3000",
+);
 
 export default ApiService;
