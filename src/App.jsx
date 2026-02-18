@@ -8,6 +8,7 @@ import { AuthGuard } from "./components/auth/auth-guard";
 import ProjectSelector from "./components/ProjectSelector";
 import SplashVideo from "./components/SplashVideo";
 import LoginPage from "./components/auth/login-page";
+import AdminDashboard from "./components/admin/AdminDashboard";
 // import DashboardPage from "./components/dashboard/dashboard-page";
 // import SettingsPage from "./components/settings/settings-page";
 
@@ -76,6 +77,14 @@ export default function App() {
           </AuthGuard>
         }
       />
+      {/* <Route
+        path="/admin"
+        element={
+          <AuthGuard>
+            <AdminDashboard />
+          </AuthGuard>
+        }
+      /> */}
       <Route
         path="/:projectSlug"
         element={

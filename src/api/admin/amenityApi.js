@@ -14,47 +14,19 @@ class AmenityApi {
   }
 
   async getById(id) {
-    return new Promise((resolve, reject) => {
-      try {
-        const resp = apiService.get(`amenities/${id}`);
-        resolve(resp);
-      } catch (err) {
-        reject(new Error("Internal server error", err));
-      }
-    });
+    return apiService.get(`amenities/${id}`);
   }
 
   async create(data) {
-    return new Promise((resolve, reject) => {
-      try {
-        const resp = apiService.post("amenities", data);
-        resolve(resp);
-      } catch (err) {
-        reject(new Error("Internal server error", err));
-      }
-    });
+    return apiService.post("amenities", data);
   }
 
   async update(id, data) {
-    return new Promise((resolve, reject) => {
-      try {
-        const resp = apiService.patch(`amenities/${id}`, data);
-        resolve(resp);
-      } catch (err) {
-        reject(new Error("Internal server error", err));
-      }
-    });
+    return apiService.patch(`amenities/${id}`, data);
   }
 
   async delete(id) {
-    return new Promise((resolve, reject) => {
-      try {
-        const resp = apiService.delete(`amenities/${id}`);
-        resolve(resp);
-      } catch (err) {
-        reject(new Error("Internal server error", err));
-      }
-    });
+    return apiService.delete(`amenities/${id}`);
   }
 }
 

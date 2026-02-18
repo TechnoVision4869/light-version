@@ -2,91 +2,39 @@ import { apiService } from "../../services/api.service";
 
 class UnitApi {
   async getAll() {
-    return new Promise((resolve, reject) => {
-      try {
-        const resp = apiService.get("units");
-        resolve(resp);
-      } catch (err) {
-        reject(new Error("Internal server error", err));
-      }
-    });
+    return apiService.get("units");
   }
 
   async getById(id) {
-    return new Promise((resolve, reject) => {
-      try {
-        const resp = apiService.get(`units/${id}`);
-        resolve(resp);
-      } catch (err) {
-        reject(new Error("Internal server error", err));
-      }
-    });
+    return apiService.get(`units/${id}`);
   }
 
   async getByProperty(propertyId) {
-    return new Promise((resolve, reject) => {
-      try {
-        const resp = apiService.get(`units/property/${propertyId}`);
-        resolve(resp);
-      } catch (err) {
-        reject(new Error("Internal server error", err));
-      }
-    });
+    return apiService.get(`units/property/${propertyId}`);
   }
 
   async getByFloor(floorId) {
-    return new Promise((resolve, reject) => {
-      try {
-        const resp = apiService.get(`units/floor/${floorId}`);
-        resolve(resp);
-      } catch (err) {
-        reject(new Error("Internal server error", err));
-      }
-    });
+    return apiService.get(`units/floor/${floorId}`);
+  }
+
+  async getByBlock(blockId) {
+    return apiService.get(`units/block/${blockId}`);
   }
 
   async getByCode(unitCode) {
-    return new Promise((resolve, reject) => {
-      try {
-        const resp = apiService.get(`units/code/${unitCode}`);
-        resolve(resp);
-      } catch (err) {
-        reject(new Error("Internal server error", err));
-      }
-    });
+    return apiService.get(`units/code/${unitCode}`);
   }
 
   async create(data) {
-    return new Promise((resolve, reject) => {
-      try {
-        const resp = apiService.post("units", data);
-        resolve(resp);
-      } catch (err) {
-        reject(new Error("Internal server error", err));
-      }
-    });
+    return apiService.post("units", data);
   }
 
   async update(id, data) {
-    return new Promise((resolve, reject) => {
-      try {
-        const resp = apiService.patch(`units/${id}`, data);
-        resolve(resp);
-      } catch (err) {
-        reject(new Error("Internal server error", err));
-      }
-    });
+    return apiService.patch(`units/${id}`, data);
   }
 
   async delete(id) {
-    return new Promise((resolve, reject) => {
-      try {
-        const resp = apiService.delete(`units/${id}`);
-        resolve(resp);
-      } catch (err) {
-        reject(new Error("Internal server error", err));
-      }
-    });
+    return apiService.delete(`units/${id}`);
   }
 }
 
