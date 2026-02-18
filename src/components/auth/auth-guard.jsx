@@ -11,13 +11,17 @@ export const AuthGuard = ({ children }) => {
   useEffect(() => {
     if (!auth.isAuthenticated && auth.isInitialized) {
       // Store the return URL for after login
-      sessionStorage.setItem("authReturnUrl", location.pathname + location.search);
-      navigate("/");
-    } else if (auth.isAuthenticated && auth.isInitialized) {
-      setChecked(true);
+      sessionStorage.setItem(
+        "authReturnUrl",
+        location.pathname + location.search,
+      );
+      navigate("/login"); // Corrected: Redirect to login page
+    } else {
+      setChecked(true); // User is authenticated and initialized, allow content to render
     }
-  }, [auth.isAuthenticated, auth.isInitialized, navigate, location]);
+  }, [auth.isAuthenticated, auth.isInitialized]);
 
+  // Render nothing until authentication state has been checked
   if (!checked) {
     return null;
   }

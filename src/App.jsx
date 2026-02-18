@@ -3,7 +3,6 @@ import { ScreenOrientation } from "@capacitor/screen-orientation";
 import { Capacitor } from "@capacitor/core";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { SidebarContext } from "./store/SidebarContextProvider";
-import { Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import { AuthGuard } from "./components/auth/auth-guard";
 import ProjectSelector from "./components/ProjectSelector";
@@ -13,7 +12,6 @@ import LoginPage from "./components/auth/login-page";
 // import SettingsPage from "./components/settings/settings-page";
 
 export default function App() {
-  const { isAuthenticated } = useAuth();
   const { currentProject, setCurrentProject } = useContext(SidebarContext);
   const [showSplash, setShowSplash] = useState(false);
   const navigate = useNavigate();
@@ -71,7 +69,7 @@ export default function App() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route
-        path="/projects"
+        path="/"
         element={
           <AuthGuard>
             <ProjectSelector onProjectSelect={handleProjectSelect} />
@@ -82,13 +80,14 @@ export default function App() {
         path="/:projectSlug"
         element={
           <AuthGuard>
-            showSplash ? (
-            <SplashVideo
-              src={getIntroVideoUrl()}
-              onFinished={() => setShowSplash(false)}
-            />
+            {showSplash ? (
+              <SplashVideo
+                src={getIntroVideoUrl()}
+                onFinished={() => setShowSplash(false)}
+              />
             ) : (
-            <Home />)
+              <Home />
+            )}
           </AuthGuard>
         }
       />
