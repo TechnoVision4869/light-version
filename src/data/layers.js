@@ -1,7 +1,8 @@
 // import { PROJECT_MIX as PROJECT } from "./project-mix";
-import { PROJECT_HORIZONTAL as PROJECT } from "./project-horizontal";
+// import { PROJECT_HORIZONTAL as PROJECT } from "./project-horizontal";
+import { DEVELOPER_TBK as DEVELOPER } from "./project-kog";
 
-export const DATA = PROJECT;
+export const DATA = DEVELOPER;
 
 // Navigation Tabs (top-level categories)
 export const TABS = {

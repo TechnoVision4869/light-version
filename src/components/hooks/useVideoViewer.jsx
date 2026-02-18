@@ -4,7 +4,7 @@ import { TABS, LAYERS } from "../../data/layers";
 import { SidebarContext } from "../../store/SidebarContextProvider";
 
 export function useVideoViewer() {
-  const { history, activeTab, activeLayer, currentItem, currentVideosPaths, goBack } = useContext(SidebarContext);
+  const { history, activeTab, activeLayer, currentViews, currentVideosPaths, goBack } = useContext(SidebarContext);
 
   const [isVideosLoaded, setIsVideosLoaded] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -20,24 +20,23 @@ export function useVideoViewer() {
   const isInitPlayedRef = useRef(true); // Flag to indicate if we have played the initial video (Home idle)
 
   const [currentViewIndex, setCurrentViewIndex] = useState(0);
-  const numViews = 4;
+  const numViews = currentViews?.length || 0;
 
-  // Function to handle view changes (uses activeTab and currentItem derived above)
+  // Function to handle view changes (uses activeTab and currentViews derived above)
   const changeView = useCallback(
     (direction) => {
-      console.log(
-        "useVideoViewer: changeView called with direction:",
-        direction,
-      );
-      // Use the locally derived activeTab and currentItem
-      // console.log("current item", currentItem);
+      // console.log(
+      //   "useVideoViewer: changeView called with direction:",
+      //   direction,
+      // );
+      // Use the locally derived activeTab and currentViews
 
       let newIndex = currentViewIndex + (direction === "next" ? 1 : -1);
       // Handle wrap-around
       if (newIndex >= numViews) newIndex = 0;
       if (newIndex < 0) newIndex = numViews - 1;
 
-      const newViewVideos = currentItem.views[newIndex]?.videos;
+      const newViewVideos = currentViews?.[newIndex]?.videos;
       if (!newViewVideos) {
         console.error("Could not get video paths for view index:", newIndex);
         return;
@@ -50,7 +49,7 @@ export function useVideoViewer() {
           newViewVideos.idleVideo,
         );
       } else {
-        const buildingViewVideos = currentItem.views[currentViewIndex]?.videos;
+        const buildingViewVideos = currentViews?.[currentViewIndex]?.videos;
         if (!buildingViewVideos?.reverseVideo) {
           console.error(
             "Could not get reverse video path for current view index:",
@@ -66,7 +65,7 @@ export function useVideoViewer() {
       }
       setCurrentViewIndex(newIndex);
     },
-    [history, currentViewIndex],
+    [currentViewIndex, currentViews, numViews],
   );
 
   const playVideo = useCallback(

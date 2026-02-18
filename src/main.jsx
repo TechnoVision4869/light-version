@@ -21,5 +21,7 @@ createRoot(document.getElementById("root")).render(
         </MainContextProvider>
       </AuthProvider>
     </BrowserRouter>
+      </AuthProvider>
+    </BrowserRouter>
   </StrictMode>,
 );
