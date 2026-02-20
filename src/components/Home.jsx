@@ -78,6 +78,7 @@ export default function Home() {
 
   const handleActiveTab = useCallback((tab) => {
     let selectedItem = null;
+    let layer = null;
     switch (tab) {
       case activeTab:
         break;
@@ -86,21 +87,26 @@ export default function Home() {
         break;
       case TABS.ZONES:
         selectedItem = currentProject.zones;
-        checkSwithingBetweenTabs(tab, selectedItem);
+        if(selectedItem.items.length === 1) {
+          selectedItem = selectedItem.items[0];
+          layer = LAYERS.ZONE_DETAIL;
+          checkSwithingBetweenTabs(tab, layer, selectedItem);
+        }
+        checkSwithingBetweenTabs(tab, layer, selectedItem);
         break;
       case TABS.AMENITIES:
         selectedItem = currentProject.amenities;
-        checkSwithingBetweenTabs(tab, selectedItem);
+        checkSwithingBetweenTabs(tab, layer, selectedItem);
         break;
       case TABS.SURROUNDINGS:
         selectedItem = currentProject.surroundings;
-        checkSwithingBetweenTabs(tab, selectedItem);
+        checkSwithingBetweenTabs(tab, layer, selectedItem);
         break;
       default:
         break;
     }
 
-    function checkSwithingBetweenTabs(tab, item) {
+    function checkSwithingBetweenTabs(tab, layer, item) {
       const isFromHome = activeTab === TABS.HOME;
 
       // uncomment to play reverse then forward when switching between non-home tabs
@@ -108,7 +114,7 @@ export default function Home() {
       //     viewerProps.StartReverse(true, () => goToTab(tab, item, true));
       //     return;
       //   }
-      goToTab(tab, item, isFromHome);
+      goToTab(tab, layer, item, isFromHome);
     }
 
     setTimeout(() => {
