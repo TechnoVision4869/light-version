@@ -20,6 +20,10 @@ export default function SidebarButtons() {
   let layerKey = null;
 
   useEffect(() => {
+    if(activeLayer === LAYERS.FLOOR) {
+      setCurrentItems(null);
+      return;
+    }
     setCurrentItems(items);
     setType(type);
   }, [activeTab, activeLayer]);
@@ -28,9 +32,18 @@ export default function SidebarButtons() {
     if (activeTab === TABS.ZONES) {
       // items = TAB_CONFIG[TABS.ZONES].getItems();
       items = currentProject.zones.items;
+      if(items.length === 1) {
+        console.log("1 zone only");
+
+        items = items[0].properties;
+        Component = BuildingButton;
+        propName = "building";
+        layerKey = LAYERS.BUILDING;
+      } else {
       Component = ZoneButton;
       propName = "zone";
       layerKey = LAYERS.ZONE_DETAIL;
+      }
     }
     else if (activeTab === TABS.AMENITIES) {
       // items = TAB_CONFIG[TABS.AMENITIES].getItems();

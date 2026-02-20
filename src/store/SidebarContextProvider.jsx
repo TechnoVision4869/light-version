@@ -80,7 +80,7 @@ export default function SidebarContextProvider({ children }) {
         }) || null;
     }, []);
 
-    const goToTab = useCallback((tabKey, selectedItem, isFromHome = true) => {
+    const goToTab = useCallback((tabKey, layerKey = null, selectedItem, isFromHome = true) => {
         // console.log(selectedItem);
 
         const calculatedVideosPath = isFromHome
@@ -97,7 +97,7 @@ export default function SidebarContextProvider({ children }) {
             ...getInitHistory(currentProject),
             {
                 tab: tabKey,
-                layer: null,
+                layer: layerKey,
                 item: selectedItem,
                 videosPath: calculatedVideosPath,
                 views: calculatedViews,
