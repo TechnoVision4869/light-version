@@ -180,7 +180,7 @@ export const LoginForm = (props) => {
             style={{
               width: "100%",
               borderRadius: 12,
-              backgroundColor: loading ? "#465345" : "#5E6D59",
+              backgroundColor: loading ? "#465345" : "#4F6F4F",
               color: "#f9fafb",
               border: "none",
               padding: "12px 16px",

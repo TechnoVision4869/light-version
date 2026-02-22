@@ -9,6 +9,7 @@ import ProjectSelector from "./components/ProjectSelector";
 import SplashVideo from "./components/SplashVideo";
 import LoginPage from "./components/auth/login-page";
 import AdminDashboard from "./components/admin/AdminDashboard";
+import UsersPage from "./components/user/UsersPage";
 // import DashboardPage from "./components/dashboard/dashboard-page";
 // import SettingsPage from "./components/settings/settings-page";
 
@@ -82,6 +83,14 @@ export default function App() {
         element={
           <AuthGuard>
             <AdminDashboard />
+          </AuthGuard>
+        }
+      />
+      <Route
+        path="/users"
+        element={
+          <AuthGuard>
+            <UsersPage />
           </AuthGuard>
         }
       />

@@ -113,6 +113,17 @@ class ApiService {
    * @returns {Promise<object>} Parsed JSON response
    */
   convertToJson(response) {
+    // Handle 204 No Content or empty responses
+    if (response.status === 204 || response.status === 200) {
+      const contentLength = response.headers.get('content-length');
+      const contentType = response.headers.get('content-type');
+      
+      // If there's no content or content-type isn't JSON, return empty object
+      if (!contentLength || contentLength === '0' || !contentType?.includes('application/json')) {
+        return {};
+      }
+    }
+    
     try {
       return response.json(); // Parse JSON from response body
     } catch (jsonError) {
