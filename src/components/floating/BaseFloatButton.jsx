@@ -1,10 +1,10 @@
 import { LAYERS } from '../../data/layers';
 
-export default function BaseFloatButton({ name, layerType = null, style = {}, isOpaque, onSelect, showName = true, triClass = "triangle" }) {
+export default function BaseFloatButton({ name, layerType = null, style = {}, isSelected, onSelect, showName = true, triClass = "triangle" }) {
     // const isFloor = layerType === LAYERS.BUILDING;
 
     return (
-        <button className={`base-float-btn ${isOpaque ? "bg-[#418AFF]" : "bg-[#3E4A5C] opacity-80"}
+        <button className={`base-float-btn ${isSelected ? "bg-[#418AFF]" : "bg-[#3E4A5C] opacity-90"}
          hover:bg-[#357AEE] text-sm text-white px-[8px] py-1 ${triClass ? "rounded-lg" : "rounded-xl"} flex items-center gap-2 z-20`}
             style={{
                 position: 'absolute',

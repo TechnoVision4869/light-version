@@ -175,6 +175,7 @@ export default function Panorama({ unit }) {
         rotate={{ speed: 6 }}
         style={{ touchAction: "none" }}
         scrollable={false}
+        pitchRange={{ min: -30, max: 15 }}
       >
         <div className="view360-hotspots">
           {hotspots.map((spot) => (

@@ -30,9 +30,12 @@ export default function Balcony({ apartment }) {
                 className="view360-fullscreen"
                 projection={projection}
                 onReady={handleReady}
-                initialZoom={ZOOM_OUT}
+                initialZoom={ZOOM_NORMAL}
                 zoomRange={{ min: ZOOM_OUT, max: ZOOM_IN }}
                 pitchRange={{ min: 0, max: 25 }}
+                rotate={{ speed: 6 }}
+                style={{ touchAction: "none" }}
+                scrollable={false}
             />
         </div>
     );

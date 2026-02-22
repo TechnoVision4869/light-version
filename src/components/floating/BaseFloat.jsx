@@ -155,7 +155,7 @@ export default function BaseFloating({ mediaRef }) {
                             left: `${pos.left}px`,
                             top: `${pos.top}px`,
                         }}
-                        isOpaque={isOpaque}
+                        isSelected={isSelected}
                         onSelect={() => {
                             if (isSelected) {
                                 // console.log("Selected item:", item);
@@ -168,31 +168,6 @@ export default function BaseFloating({ mediaRef }) {
                     />
                 )
             }
-            // if (index % 2 === 0)
-            //     return (
-            //         <BaseFloatButton
-            //             key={item.id}
-            //             name={item.displayName}
-            //             tabType={activeTab}
-            //             layerType={activeLayer}
-            //             showName={false}
-            //             triClass="triangle-small-up"
-            //             style={{
-            //                 left: `${pos.left}px`,
-            //                 top: `${pos.top}px`,
-            //             }}
-            //             isOpaque={isOpaque}
-            //             onSelect={() => {
-            //                 if (isSelected) {
-            //                     // console.log("Selected item:", item);
-
-            //                     goToItem(item, layerKey);
-            //                     setHighlightedButton(null);
-            //                 }
-            //                 else setHighlightedButton(item);
-            //             }}
-            //         />
-            //     )
 
             return (
                 <BaseFloatButton
@@ -206,7 +181,7 @@ export default function BaseFloating({ mediaRef }) {
                         left: `${pos.left}px`,
                         top: `${pos.top}px`,
                     }}
-                    isOpaque={isOpaque}
+                    isSelected={isSelected}
                     onSelect={() => {
                         if (isSelected) {
                             // console.log("Selected item:", item);
