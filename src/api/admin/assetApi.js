@@ -5,6 +5,19 @@ class AssetApi {
     return apiService.get("assets");
   }
 
+  /**
+   * List assets with optional filters (search, type, tag, isActive).
+   * @param {{ search?: string, type?: string, tag?: string, isActive?: boolean }} filters
+   */
+  async list(filters = {}) {
+    const params = {};
+    if (filters.search) params.search = filters.search;
+    if (filters.type && filters.type !== "all") params.type = filters.type;
+    if (filters.tag) params.tag = filters.tag;
+    if (filters.isActive !== undefined) params.isActive = String(filters.isActive);
+    return apiService.get("assets", Object.keys(params).length ? params : undefined);
+  }
+
   async getById(id) {
     return apiService.get(`assets/${id}`);
   }

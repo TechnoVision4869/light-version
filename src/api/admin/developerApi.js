@@ -2,7 +2,9 @@ import { apiService } from "../../services/api.service";
 
 class DeveloperApi {
   async getAll() {
-    return apiService.get("developers");
+    const res = await apiService.get("developers");
+    if (res && Array.isArray(res.data)) return res.data;
+    return Array.isArray(res) ? res : [];
   }
 
   async getById(id) {

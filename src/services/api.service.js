@@ -16,6 +16,16 @@ class ApiService {
     this.apiUrl = url; // Base API endpoint
     this.apiToken = ""; // Stores JWT token for auth
     this.options = {}; // Default request options & headers
+    this.onUnauthorized = null; // Called on 401 / invalid token to clear auth and redirect
+  }
+
+  /**
+   * Set callback for Unauthorized (401) or invalid token responses.
+   * Typically clears token/storage and redirects to login.
+   * @param {function} callback - No arguments
+   */
+  setOnUnauthorized(callback) {
+    this.onUnauthorized = callback;
   }
 
   /**
@@ -136,8 +146,21 @@ class ApiService {
       response
         .json()
         .then((jsonError) => {
+          const status = response.status;
+          const statusCode = jsonError?.statusCode;
+          const message = (jsonError?.message || "").toLowerCase();
+          const isUnauthorized =
+            status === 401 ||
+            statusCode === 401 ||
+            message.includes("invalid token") ||
+            message.includes("user not found") ||
+            jsonError?.error === "Unauthorized";
+
+          if (isUnauthorized && typeof this.onUnauthorized === "function") {
+            this.onUnauthorized();
+          }
+
           let errorMessage;
-          // Build detailed error message from server response
           if (jsonError.message && jsonError.description) {
             errorMessage = `${jsonError.message}, ${jsonError.description}.`;
           } else if (jsonError.message) {
@@ -149,7 +172,9 @@ class ApiService {
           reject(jsonError);
         })
         .catch(() => {
-          // Fallback if response body is not JSON
+          if (response.status === 401 && typeof this.onUnauthorized === "function") {
+            this.onUnauthorized();
+          }
           const error = new Error(`${response.status} ${response.statusText}`);
           reject(error);
         });

@@ -77,14 +77,14 @@ export default function App() {
           </AuthGuard>
         }
       />
-      {/* <Route
-        path="/admin"
+      <Route
+        path="/dashboard"
         element={
           <AuthGuard>
             <AdminDashboard />
           </AuthGuard>
         }
-      /> */}
+      />
       <Route
         path="/:projectSlug"
         element={

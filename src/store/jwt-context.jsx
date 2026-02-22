@@ -119,6 +119,17 @@ export const AuthProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      localStorage.removeItem("auth");
+      apiService.unsetToken();
+      dispatch({ type: ActionType.LOGOUT });
+      navigate("/login");
+    };
+    apiService.setOnUnauthorized(handleUnauthorized);
+    return () => apiService.setOnUnauthorized(null);
+  }, [navigate]);
+
   const login = async ({ email, password }) => {
     const response = await authApi.login({ email, password });
     console.log(response);
