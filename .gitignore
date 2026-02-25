@@ -138,3 +138,6 @@ dist
 # Bundle analysis
 stats.html
 resources/android/**/*
+
+public/projects/
+public/kog/

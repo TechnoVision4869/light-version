@@ -13,25 +13,28 @@ const initialState = {
   isAuthenticated: false,
   isInitialized: false,
   user: null,
+  accessToken: null, // Add accessToken to state
 };
 
 const handlers = {
   [ActionType.INITIALIZE]: (state, action) => {
-    const { isAuthenticated, user } = action.payload;
+    const { isAuthenticated, user, accessToken } = action.payload;
     return {
       ...state,
       isAuthenticated,
       isInitialized: true,
       user,
+      accessToken,
     };
   },
 
   [ActionType.LOGIN]: (state, action) => {
-    const { user } = action.payload;
+    const { user, accessToken } = action.payload;
     return {
       ...state,
       isAuthenticated: true,
       user,
+      accessToken,
     };
   },
 
@@ -39,6 +42,7 @@ const handlers = {
     ...state,
     isAuthenticated: false,
     user: null,
+    accessToken: null,
   }),
 };
 
@@ -59,18 +63,33 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initialize = async () => {
       try {
-        // Restore token from localStorage if available
-        const storedUser = localStorage.getItem("user");
+        const storedAuth = localStorage.getItem("auth"); // Changed key from "user" to "auth" for clarity
 
-        if ( storedUser) {
-          // Token exists, restore it
-          dispatch({
-            type: ActionType.INITIALIZE,
-            payload: {
-              isAuthenticated: true,
-              user: JSON.parse(storedUser),
-            },
-          });
+        if (storedAuth) {
+          const { user, access_token } = JSON.parse(storedAuth);
+
+          if (access_token && user) {
+            apiService.setToken(access_token); // Re-apply token to apiService
+            dispatch({
+              type: ActionType.INITIALIZE,
+              payload: {
+                isAuthenticated: true,
+                user,
+                accessToken: access_token,
+              },
+            });
+          } else {
+            // Data in localStorage is incomplete or invalid
+            localStorage.removeItem("auth");
+            dispatch({
+              type: ActionType.INITIALIZE,
+              payload: {
+                isAuthenticated: false,
+                user: null,
+                accessToken: null,
+              },
+            });
+          }
         } else {
           // No stored session, initialize as unauthenticated
           dispatch({
@@ -78,17 +97,19 @@ export const AuthProvider = ({ children }) => {
             payload: {
               isAuthenticated: false,
               user: null,
+              accessToken: null,
             },
           });
         }
       } catch (err) {
-        // Clear invalid stored data
-        localStorage.removeItem("user");
+        console.error("Failed to initialize auth from localStorage:", err);
+        localStorage.removeItem("auth"); // Clear potentially corrupted data
         dispatch({
           type: ActionType.INITIALIZE,
           payload: {
             isAuthenticated: false,
             user: null,
+            accessToken: null,
           },
         });
       }
@@ -98,35 +119,54 @@ export const AuthProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      localStorage.removeItem("auth");
+      apiService.unsetToken();
+      dispatch({ type: ActionType.LOGOUT });
+      navigate("/login");
+    };
+    apiService.setOnUnauthorized(handleUnauthorized);
+    return () => apiService.setOnUnauthorized(null);
+  }, [navigate]);
+
   const login = async ({ email, password }) => {
     const response = await authApi.login({ email, password });
     console.log(response);
-  
-    if (response && response.user) {
+
+    if (response && response.user && response.access_token) {
+      // Ensure access_token is present
       const { access_token, user } = response;
-      
-      // Store token in apiService (adds Authorization header to all requests)
-      apiService.setToken(access_token);
-      
-      // Store token in localStorage for persistence across page reloads
-      localStorage.setItem("user", JSON.stringify(user));
-      
+
+      apiService.setToken(access_token); // Store token in apiService
+
+      // Store both user and access_token for persistence
+      localStorage.setItem("auth", JSON.stringify({ user, access_token }));
+
       dispatch({
-        type: ActionType.INITIALIZE,
+        type: ActionType.LOGIN, // Changed from INITIALIZE to LOGIN action
         payload: {
-          user: user,
-          isAuthenticated: true,
+          user,
+          accessToken: access_token,
         },
       });
 
-      navigate("/home");
+      navigate("/");
+    } else {
+      // Handle login failure, e.g., throw an error or display a message
+      console.error(
+        "Login failed: Invalid response from authApi.login",
+        response,
+      );
+      // You might want to throw an error here or return a status
+      throw new Error("Login failed");
     }
   };
 
- 
   const logout = async () => {
-    await authApi.logout();
-    localStorage.removeItem("user");
+    // You might not have an authApi.logout if it's just client-side token invalidation
+    // await authApi.logout(); // Uncomment if you have a logout endpoint
+    localStorage.removeItem("auth"); // Changed key from "user" to "auth"
     apiService.unsetToken();
     dispatch({
       type: ActionType.LOGOUT,
