@@ -6,6 +6,7 @@ import { projectApi } from "../../api/admin/projectApi";
 import { propertyApi } from "../../api/admin/propertyApi";
 import { surroundingApi } from "../../api/admin/surroundingApi";
 import { unitApi } from "../../api/admin/unitApi";
+import { unitTypeApi } from "../../api/admin/unitTypeApi";
 import { zoneApi } from "../../api/admin/zoneApi";
 import { blockApi } from "../../api/admin/blockApi";
 import { ENTITY_TYPES, PROPERTY_TYPES, AssetType } from "./types";
@@ -313,6 +314,55 @@ export const resourceConfigs = {
       (parentNode?.data?.type || parentNode?.data?.propertyType) ===
       PROPERTY_TYPES.TOWNHOUSE,
   },
+  [ENTITY_TYPES.UNIT_TYPE]: {
+    title: "Unit Type",
+    api: unitTypeApi,
+    schema: yup.object().shape({
+      name: yup.string().required(),
+      projectId: yup.string().required(),
+      bedrooms: yup.number().integer().nullable(),
+      bathrooms: yup.number().integer().nullable(),
+      serviceRoomNames: yup.array().of(yup.string()).nullable(),
+      area: yup.number().nullable(),
+      gallery: yup.array().of(yup.string()).nullable(),
+      cutSections: yup.array().of(yup.string()).nullable(),
+      floorPlans: yup.array().of(yup.string()).nullable(),
+      paymentPlans: yup.array().nullable(),
+    }),
+    fields: [
+      nameField(),
+      idField("projectId", "Project ID"),
+      {
+        name: "bedrooms",
+        label: "Bedrooms",
+        control: CONTROL_TYPES.NUMBER,
+        required: false,
+        disabled: false,
+      },
+      {
+        name: "bathrooms",
+        label: "Bathrooms",
+        control: CONTROL_TYPES.NUMBER,
+        required: false,
+        disabled: false,
+      },
+      {
+        name: "area",
+        label: "Area (m²)",
+        control: CONTROL_TYPES.NUMBER,
+        required: false,
+        disabled: false,
+      },
+      {
+        name: "serviceRoomNames",
+        label: "Service room names (comma-separated)",
+        control: CONTROL_TYPES.TEXT,
+        required: false,
+        disabled: false,
+      },
+    ],
+    childTypes: [],
+  },
   [ENTITY_TYPES.UNIT]: {
     title: "Unit",
     api: unitApi,
@@ -347,7 +397,14 @@ export const resourceConfigs = {
       assetField("reverseAssetId", "Reverse", [AssetType.VIDEO, AssetType.PANORAMA]),
       assetField("sideAssetId", "Side", [AssetType.VIDEO, AssetType.PANORAMA]),
       { name: "displayName", label: "Display Name", control: CONTROL_TYPES.TEXT, required: false, disabled: false },
-      { name: "unitTypeId", label: "Unit Type", control: CONTROL_TYPES.TEXT, required: false, disabled: false },
+      {
+        name: "unitTypeId",
+        label: "Unit Type",
+        control: CONTROL_TYPES.SELECT,
+        required: false,
+        disabled: false,
+        optionsFromApi: "unitType",
+      },
       { name: "price", label: "Price", control: CONTROL_TYPES.NUMBER, required: false, disabled: false },
       { name: "area", label: "Area", control: CONTROL_TYPES.NUMBER, required: false, disabled: false },
       { name: "bedrooms", label: "Bedrooms", control: CONTROL_TYPES.NUMBER, required: false, disabled: false },

@@ -30,6 +30,7 @@ export function DynamicForm({
   injectedFieldUpdate,
   onInjectedFieldConsumed,
   onFormAssetIdsChange,
+  unitTypes = [],
 }) {
   const [localData, setLocalData] = useState({});
 
@@ -155,8 +156,17 @@ export function DynamicForm({
     }
 
     if (control === CONTROL_TYPES.SELECT) {
-      const rawOpts = options || (name === "type" && selectedNode.type === ENTITY_TYPES.PROPERTY ? Object.values(PROPERTY_TYPES) : []);
-      const opts = (rawOpts || []).map((opt) =>
+      let rawOpts = options;
+      if (field.optionsFromApi === "unitType" && Array.isArray(unitTypes)) {
+        rawOpts = unitTypes.map((ut) => ({
+          value: ut.id,
+          label: ut.name || ut.id || "Unnamed",
+        }));
+      } else if (name === "type" && selectedNode.type === ENTITY_TYPES.PROPERTY) {
+        rawOpts = Object.values(PROPERTY_TYPES);
+      }
+      rawOpts = rawOpts || [];
+      const opts = rawOpts.map((opt) =>
         typeof opt === "object" && opt !== null && "value" in opt && "label" in opt
           ? opt
           : { value: opt, label: String(opt) }

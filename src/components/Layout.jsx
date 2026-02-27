@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
+import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import TECHNO_LOGO from "../assets/techno.png";
-import { DATA } from '../data/layers';
-import { useAuth } from './hooks/use-auth';
+import { DATA } from "../data/layers";
+import { useAuth } from "./hooks/use-auth";
 
 export default function Layout({ children, backgroundImage }) {
   const { user } = useAuth();
@@ -12,15 +12,18 @@ export default function Layout({ children, backgroundImage }) {
   const location = useLocation();
 
   const allMenuItems = [
-    { label: 'Dashboard', path: '/admin', icon: 'dashboard' },
-    { label: 'Projects', path: '/', icon: 'projects' },
-    { label: 'Users', path: '/users', icon: 'users' },
+    { label: "Dashboard", path: "/dashboard", icon: "dashboard" },
+    { label: "Projects", path: "/", icon: "projects" },
+    { label: "Users", path: "/users", icon: "users" },
   ];
 
   // Filter menu items based on user role
-  const menuItems = allMenuItems.filter(item => {
+  const menuItems = allMenuItems.filter((item) => {
     // Hide Users page for developer_marketing and developer_sales roles
-    if (item.path === '/users' && (user?.role === 'developer_marketing' || user?.role === 'developer_sales')) {
+    if (
+      item.path === "/users" &&
+      (user?.role === "developer_marketing" || user?.role === "developer_sales")
+    ) {
       return false;
     }
     return true;
@@ -35,7 +38,7 @@ export default function Layout({ children, backgroundImage }) {
 
   const renderIcon = (iconType) => {
     switch (iconType) {
-      case 'dashboard':
+      case "dashboard":
         return (
           <svg
             className="w-5 h-5"
@@ -51,7 +54,7 @@ export default function Layout({ children, backgroundImage }) {
             />
           </svg>
         );
-      case 'projects':
+      case "projects":
         return (
           <svg
             className="w-5 h-5"
@@ -67,7 +70,7 @@ export default function Layout({ children, backgroundImage }) {
             />
           </svg>
         );
-      case 'users':
+      case "users":
         return (
           <svg
             className="w-5 h-5"
@@ -89,14 +92,14 @@ export default function Layout({ children, backgroundImage }) {
   };
 
   return (
-    <div 
+    <div
       className="min-h-screen text-white"
       style={{
-        backgroundColor: backgroundImage ? 'transparent' : '#434343',
-        backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
-        backgroundSize: backgroundImage ? 'cover' : 'auto',
-        backgroundPosition: backgroundImage ? 'center' : 'auto',
-        backgroundAttachment: backgroundImage ? 'fixed' : 'auto',
+        backgroundColor: backgroundImage ? "transparent" : "#434343",
+        backgroundImage: backgroundImage ? `url(${backgroundImage})` : "none",
+        backgroundSize: backgroundImage ? "cover" : "auto",
+        backgroundPosition: backgroundImage ? "center" : "auto",
+        backgroundAttachment: backgroundImage ? "fixed" : "auto",
       }}
     >
       <Toaster position="top-center" />
@@ -132,7 +135,7 @@ export default function Layout({ children, backgroundImage }) {
       {/* Sidebar Menu */}
       <div
         className={`fixed left-0 top-0 h-screen w-52 sm:w-64 bg-[#1C1C1C] shadow-2xl z-25 transform transition-transform duration-300 ease-in-out ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="p-6 flex flex-col h-full">
@@ -143,8 +146,8 @@ export default function Layout({ children, backgroundImage }) {
                 onClick={() => handleNavigation(item.path)}
                 className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-colors flex items-center gap-3 ${
                   isCurrentPage(item.path)
-                    ? 'bg-white/20 text-white'
-                    : 'text-white hover:bg-white/10'
+                    ? "bg-white/20 text-white"
+                    : "text-white hover:bg-white/10"
                 }`}
               >
                 {renderIcon(item.icon)}
@@ -166,9 +169,7 @@ export default function Layout({ children, backgroundImage }) {
 
       {/* Main Content - Centered */}
       <div className="w-full min-h-screen flex items-center justify-center px-4 pt-20 pb-4 sm:pt-6">
-        <div className="max-w-6xl w-full">
-          {children}
-        </div>
+        <div className="max-w-6xl w-full">{children}</div>
       </div>
     </div>
   );

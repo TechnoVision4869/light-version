@@ -12,6 +12,7 @@ export const ENTITY_TYPES = {
   FLOOR: "floor",
   BLOCK: "block",
   UNIT: "unit",
+  UNIT_TYPE: "unitType",
   AMENITY: "amenity",
   SURROUNDING: "surrounding",
   ASSET: "asset",

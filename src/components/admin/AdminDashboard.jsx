@@ -21,11 +21,12 @@ import { propertyApi } from "../../api/admin/propertyApi";
 import { floorApi } from "../../api/admin/floorApi";
 import { blockApi } from "../../api/admin/blockApi";
 import { unitApi } from "../../api/admin/unitApi";
+import { unitTypeApi } from "../../api/admin/unitTypeApi";
 import { amenityApi } from "../../api/admin/amenityApi";
 import { surroundingApi } from "../../api/admin/surroundingApi";
 import { apiService } from "../../services/api.service";
 
-const USE_MOCK_DATA = false;
+const USE_MOCK_DATA = true;
 
 // type kept for call-site consistency; can be used later for type-specific labels
 function getDisplayName(entity, type) {
@@ -46,6 +47,20 @@ function getAssetFileUrl(assetId) {
   if (!assetId) return null;
   const base = apiService.apiUrl?.replace(/\/$/, "") || "";
   return `${base}/assets/file/${assetId}`;
+}
+
+/** Normalize unit type form data for API (e.g. serviceRoomNames string -> array). */
+function normalizeUnitTypePayload(data) {
+  const out = { ...data };
+  if (typeof out.serviceRoomNames === "string") {
+    out.serviceRoomNames = out.serviceRoomNames
+      ? out.serviceRoomNames
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : undefined;
+  }
+  return out;
 }
 
 function getMockInitialState() {
@@ -89,6 +104,7 @@ export default function AdminDashboard() {
   const [surroundingsByProject, setSurroundingsByProject] = useState(
     () => initialMock?.surroundingsByProject ?? {},
   );
+  const [unitTypes, setUnitTypes] = useState(() => []);
   const [mockAssets, setMockAssets] = useState(
     () => initialMock?.assets ?? null,
   );
@@ -117,6 +133,22 @@ export default function AdminDashboard() {
   useEffect(() => {
     loadDevelopers();
   }, [loadDevelopers]);
+
+  const loadUnitTypes = useCallback(async () => {
+    // if (USE_MOCK_DATA) return;
+    try {
+      const list = await unitTypeApi.getAll({ limit: 500 });
+      setUnitTypes(Array.isArray(list) ? list : []);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to load unit types");
+      setUnitTypes([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadUnitTypes();
+  }, [loadUnitTypes]);
 
   const loadProjects = useCallback(
     async (developerId) => {
@@ -353,6 +385,7 @@ export default function AdminDashboard() {
         const folderZonesId = `folder-zones-${proj.id}`;
         const folderAmenitiesId = `folder-amenities-${proj.id}`;
         const folderSurroundingsId = `folder-surroundings-${proj.id}`;
+        const folderUnitTypesId = `folder-unit-types-${proj.id}`;
         out.push(
           {
             id: folderZonesId,
@@ -374,7 +407,14 @@ export default function AdminDashboard() {
             name: "Surroundings",
             parentId: proj.id,
             data: { childType: ENTITY_TYPES.SURROUNDING, projectId: proj.id },
-          }
+          },
+          {
+            id: folderUnitTypesId,
+            type: "FOLDER",
+            name: "Unit Types",
+            parentId: proj.id,
+            data: { childType: ENTITY_TYPES.UNIT_TYPE, projectId: proj.id },
+          },
         );
         const zones = zonesByProject[proj.id] ?? [];
         zones.forEach((z) => {
@@ -472,6 +512,17 @@ export default function AdminDashboard() {
             data: { ...s, projectId: s.projectId || proj.id },
           });
         });
+        (unitTypes || [])
+          .filter((ut) => ut.projectId === proj.id)
+          .forEach((ut) => {
+            out.push({
+              id: ut.id,
+              type: ENTITY_TYPES.UNIT_TYPE,
+              name: getDisplayName(ut, ENTITY_TYPES.UNIT_TYPE),
+              parentId: folderUnitTypesId,
+              data: { ...ut, projectId: ut.projectId || proj.id },
+            });
+          });
       });
     });
     return out;
@@ -487,6 +538,7 @@ export default function AdminDashboard() {
     unitsByBlock,
     amenitiesByProject,
     surroundingsByProject,
+    unitTypes,
   ]);
 
   const handleToggle = useCallback(
@@ -596,6 +648,8 @@ export default function AdminDashboard() {
         base.data = { projectId: parentId, name: "New Amenity" };
       if (childType === ENTITY_TYPES.SURROUNDING && parent)
         base.data = { projectId: parentId, name: "New Surrounding" };
+      if (childType === ENTITY_TYPES.UNIT_TYPE)
+        base.data = { projectId: parentId, name: "New Unit Type" };
       setSelectedNode({ ...base, id: null });
     },
     [nodes],
@@ -724,6 +778,9 @@ export default function AdminDashboard() {
               [parentId]: (prev[parentId] ?? []).filter((s) => s.id !== id),
             }));
             break;
+          case ENTITY_TYPES.UNIT_TYPE:
+            setUnitTypes((prev) => (prev ?? []).filter((ut) => ut.id !== id));
+            break;
           default:
             break;
         }
@@ -761,6 +818,9 @@ export default function AdminDashboard() {
         case ENTITY_TYPES.SURROUNDING:
           await surroundingApi.delete(id);
           break;
+        case ENTITY_TYPES.UNIT_TYPE:
+          await unitTypeApi.delete(id);
+          break;
         default:
           throw new Error("Unknown type");
       }
@@ -768,6 +828,7 @@ export default function AdminDashboard() {
       setDeleteTarget(null);
       if (selectedNode?.id === deleteTarget.id) setSelectedNode(null);
       const pid = deleteTarget.parentId;
+      if (deleteTarget.type === ENTITY_TYPES.UNIT_TYPE) loadUnitTypes();
       if (deleteTarget.type === ENTITY_TYPES.PROJECT && pid) loadProjects(pid);
       if (deleteTarget.type === ENTITY_TYPES.ZONE && pid) loadZones(pid);
       if (deleteTarget.type === ENTITY_TYPES.PROPERTY && pid)
@@ -801,6 +862,7 @@ export default function AdminDashboard() {
     loadUnitsForProperty,
     loadAmenities,
     loadSurroundings,
+    loadUnitTypes,
   ]);
 
   const nextMockId = useCallback(
@@ -921,6 +983,13 @@ export default function AdminDashboard() {
                   ),
                 }));
                 break;
+              case ENTITY_TYPES.UNIT_TYPE:
+                setUnitTypes((prev) =>
+                  (prev ?? []).map((ut) =>
+                    ut.id === id ? { ...ut, ...updated } : ut,
+                  ),
+                );
+                break;
               default:
                 break;
             }
@@ -1000,6 +1069,9 @@ export default function AdminDashboard() {
                   [data.projectId]: [...(prev[data.projectId] ?? []), entity],
                 }));
                 break;
+              case ENTITY_TYPES.UNIT_TYPE:
+                setUnitTypes((prev) => [...(prev ?? []), entity]);
+                break;
               default:
                 break;
             }
@@ -1049,6 +1121,12 @@ export default function AdminDashboard() {
             case ENTITY_TYPES.SURROUNDING:
               await surroundingApi.update(id, data);
               break;
+            case ENTITY_TYPES.UNIT_TYPE: {
+              const payload = normalizeUnitTypePayload(data);
+              await unitTypeApi.update(id, payload);
+              await loadUnitTypes();
+              break;
+            }
             default:
               throw new Error("Unknown type");
           }
@@ -1094,6 +1172,12 @@ export default function AdminDashboard() {
               created = await surroundingApi.create(data);
               if (data.projectId) loadSurroundings(data.projectId);
               break;
+            case ENTITY_TYPES.UNIT_TYPE: {
+              const payload = normalizeUnitTypePayload(data);
+              created = await unitTypeApi.create(payload);
+              await loadUnitTypes();
+              break;
+            }
             default:
               throw new Error("Unknown type");
           }
@@ -1132,12 +1216,16 @@ export default function AdminDashboard() {
       loadUnitsForProperty,
       loadAmenities,
       loadSurroundings,
+      loadUnitTypes,
     ],
   );
 
   const [injectedFieldUpdate, setInjectedFieldUpdate] = useState(null);
   const [formAssetIds, setFormAssetIds] = useState(null);
-  const handleInjectedFieldConsumed = useCallback(() => setInjectedFieldUpdate(null), []);
+  const handleInjectedFieldConsumed = useCallback(
+    () => setInjectedFieldUpdate(null),
+    [],
+  );
 
   useEffect(() => {
     setFormAssetIds(null);
@@ -1179,7 +1267,9 @@ export default function AdminDashboard() {
     const config = selectedNode ? resourceConfigs[selectedNode.type] : null;
     const fields = config?.fields;
     const assetFieldNames = Array.isArray(fields)
-      ? fields.filter((f) => f.control === CONTROL_TYPES.ASSET).map((f) => f.name)
+      ? fields
+          .filter((f) => f.control === CONTROL_TYPES.ASSET)
+          .map((f) => f.name)
       : [
           "introAssetId",
           "idleAssetId",
@@ -1198,7 +1288,9 @@ export default function AdminDashboard() {
       const id =
         formAssetIds?.[key] ??
         nodeData[key] ??
-        (injectedFieldUpdate?.key === key ? injectedFieldUpdate?.value : undefined);
+        (injectedFieldUpdate?.key === key
+          ? injectedFieldUpdate?.value
+          : undefined);
       if (id) map[id] = mockById?.[id] ?? getAssetFileUrl(id);
     });
     return map;
@@ -1219,7 +1311,7 @@ export default function AdminDashboard() {
   }, [focusedAssetField, selectedNode]);
 
   return (
-    <div className="h-screen flex flex-col bg-muted/30">
+    <div className="h-screen flex flex-col bg-muted/30 text-black">
       <header className="bg-background border-b border-border px-6 py-4 shrink-0">
         <h1 className="text-xl font-bold">Admin Dashboard</h1>
       </header>
@@ -1250,6 +1342,7 @@ export default function AdminDashboard() {
             injectedFieldUpdate={injectedFieldUpdate}
             onInjectedFieldConsumed={handleInjectedFieldConsumed}
             onFormAssetIdsChange={setFormAssetIds}
+            unitTypes={unitTypes}
           />
         </div>
 

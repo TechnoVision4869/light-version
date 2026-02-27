@@ -34,6 +34,8 @@ function getIcon(type) {
       return <Layers className="w-4 h-4 shrink-0" />;
     case ENTITY_TYPES.UNIT:
       return <DoorOpen className="w-4 h-4 shrink-0" />;
+    case ENTITY_TYPES.UNIT_TYPE:
+      return <Layers className="w-4 h-4 shrink-0" />;
     case ENTITY_TYPES.BLOCK:
       return <Box className="w-4 h-4 shrink-0" />;
     case ENTITY_TYPES.AMENITY:
@@ -166,7 +168,7 @@ export function FlowTree({
             style={{ paddingLeft: `${(level + 1) * 16 + 32}px` }}
             className="py-1 space-y-0.5"
           >
-            {(isFolder ? [node.data.childType] : allowedChildTypes).map((childType) => (
+            {(isFolder ? [node.data?.childType].filter(Boolean) : allowedChildTypes).map((childType) => (
               <button
                 key={childType}
                 type="button"
@@ -183,7 +185,7 @@ export function FlowTree({
     );
   };
 
-  const developers = nodes.filter((n) => n.type === ENTITY_TYPES.DEVELOPER);
+  const rootNodes = getChildren(null);
 
   return (
     <div className="h-full flex flex-col border-r border-border bg-background">
@@ -199,12 +201,12 @@ export function FlowTree({
         </button>
       </div>
       <div className="flex-1 overflow-auto p-1">
-        {developers.length === 0 ? (
+        {rootNodes.length === 0 ? (
           <p className="p-4 text-sm text-muted-foreground text-center">
             No developers. Click &quot;Developer&quot; to add one.
           </p>
         ) : (
-          developers.map((dev) => renderNode(dev, 0))
+          rootNodes.map((node) => renderNode(node, 0))
         )}
       </div>
     </div>
