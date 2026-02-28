@@ -50,7 +50,7 @@ function getAssetFileUrl(assetId) {
   return `${base}/assets/file/${assetId}`;
 }
 
-/** Normalize unit type form data for API (e.g. serviceRoomNames string -> array). */
+/** Normalize unit type form data for simple update (e.g. serviceRoomNames string -> array). */
 function normalizeUnitTypePayload(data) {
   const out = { ...data };
   if (typeof out.serviceRoomNames === "string") {
@@ -62,6 +62,66 @@ function normalizeUnitTypePayload(data) {
       : undefined;
   }
   return out;
+}
+
+/** Build unit type createFull API body. */
+function normalizeUnitTypeFullPayload(data) {
+  const num = (v) => (v === "" || v == null ? null : Number(v));
+  const serviceRooms = typeof data.serviceRoomNames === "string"
+    ? data.serviceRoomNames.split(",").map((s) => s.trim()).filter(Boolean)
+    : Array.isArray(data.serviceRoomNames) ? data.serviceRoomNames : [];
+  const toAssetItems = (items) => {
+    if (!Array.isArray(items)) return [];
+    return items.map((id) => (typeof id === "string" ? { assetId: id } : { assetId: id?.assetId ?? id }));
+  };
+  const paymentPlans = Array.isArray(data.paymentPlans) ? data.paymentPlans.map((p) => ({
+    downPayment: num(p.downPayment) ?? 0,
+    monthly: num(p.monthly) ?? 0,
+    years: num(p.years) ?? 0,
+  })) : [];
+  const levels = Array.isArray(data.levels) ? data.levels : [];
+  const body = {
+    name: data.name ?? "",
+    bedrooms: num(data.bedrooms) ?? null,
+    bathrooms: num(data.bathrooms) ?? null,
+    area: num(data.area) ?? null,
+    serviceRooms,
+    gallery: toAssetItems(data.gallery ?? []),
+    cutSections: toAssetItems(data.cutSections ?? []),
+    floorPlans: toAssetItems(data.floorPlans ?? []),
+    paymentPlans,
+    levels,
+  };
+  if (data.projectId) body.projectId = data.projectId;
+  return body;
+}
+
+/** Build unit API body with correct keys and types (numbers, null for empty optionals). */
+function normalizeUnitPayload(data) {
+  const num = (v) =>
+    v === "" || v == null ? null : Number(v);
+  const str = (v) =>
+    v === "" || v == null ? null : String(v);
+  return {
+    unitCode: str(data.unitCode) ?? "",
+    visualTypeId: str(data.visualTypeId),
+    propertyId: str(data.propertyId) ?? "",
+    floorId: str(data.floorId) || null,
+    blockId: str(data.blockId) || null,
+    balconyAssetId: str(data.balconyAssetId) || null,
+    forwardAssetId: str(data.forwardAssetId) || null,
+    reverseAssetId: str(data.reverseAssetId) || null,
+    sideAssetId: str(data.sideAssetId) || null,
+    displayName: str(data.displayName),
+    unitTypeId: str(data.unitTypeId),
+    price: num(data.price),
+    area: num(data.area),
+    bedrooms: num(data.bedrooms),
+    bathrooms: num(data.bathrooms),
+    balconyView: str(data.balconyView),
+    x: num(data.x),
+    y: num(data.y),
+  };
 }
 
 function getMockInitialState() {
@@ -387,7 +447,15 @@ export default function AdminDashboard() {
         const folderAmenitiesId = `folder-amenities-${proj.id}`;
         const folderSurroundingsId = `folder-surroundings-${proj.id}`;
         const folderUnitTypesId = `folder-unit-types-${proj.id}`;
+        // Folder order under project (Unit Types first for visibility)
         out.push(
+          {
+            id: folderUnitTypesId,
+            type: "FOLDER",
+            name: "Unit Types",
+            parentId: proj.id,
+            data: { childType: ENTITY_TYPES.UNIT_TYPE, projectId: proj.id },
+          },
           {
             id: folderZonesId,
             type: "FOLDER",
@@ -408,13 +476,6 @@ export default function AdminDashboard() {
             name: "Surroundings",
             parentId: proj.id,
             data: { childType: ENTITY_TYPES.SURROUNDING, projectId: proj.id },
-          },
-          {
-            id: folderUnitTypesId,
-            type: "FOLDER",
-            name: "Unit Types",
-            parentId: proj.id,
-            data: { childType: ENTITY_TYPES.UNIT_TYPE, projectId: proj.id },
           },
         );
         const zones = zonesByProject[proj.id] ?? [];
@@ -1113,9 +1174,11 @@ export default function AdminDashboard() {
             case ENTITY_TYPES.BLOCK:
               await blockApi.update(id, data);
               break;
-            case ENTITY_TYPES.UNIT:
-              await unitApi.update(id, data);
+            case ENTITY_TYPES.UNIT: {
+              const payload = normalizeUnitPayload(data);
+              await unitApi.update(id, payload);
               break;
+            }
             case ENTITY_TYPES.AMENITY:
               await amenityApi.update(id, data);
               break;
@@ -1159,12 +1222,14 @@ export default function AdminDashboard() {
               created = await blockApi.create(data);
               if (data.propertyId) loadBlocks(data.propertyId);
               break;
-            case ENTITY_TYPES.UNIT:
-              created = await unitApi.create(data);
-              if (data.floorId) loadUnitsForFloor(data.floorId);
-              else if (data.blockId) loadUnitsForBlock(data.blockId);
-              else if (data.propertyId) loadUnitsForProperty(data.propertyId);
+            case ENTITY_TYPES.UNIT: {
+              const payload = normalizeUnitPayload(data);
+              created = await unitApi.create(payload);
+              if (payload.floorId) loadUnitsForFloor(payload.floorId);
+              else if (payload.blockId) loadUnitsForBlock(payload.blockId);
+              else if (payload.propertyId) loadUnitsForProperty(payload.propertyId);
               break;
+            }
             case ENTITY_TYPES.AMENITY:
               created = await amenityApi.create(data);
               if (data.projectId) loadAmenities(data.projectId);
@@ -1174,8 +1239,8 @@ export default function AdminDashboard() {
               if (data.projectId) loadSurroundings(data.projectId);
               break;
             case ENTITY_TYPES.UNIT_TYPE: {
-              const payload = normalizeUnitTypePayload(data);
-              created = await unitTypeApi.create(payload);
+              const payload = normalizeUnitTypeFullPayload(data);
+              created = await unitTypeApi.createFull(payload);
               await loadUnitTypes();
               break;
             }
@@ -1267,10 +1332,11 @@ export default function AdminDashboard() {
     const map = {};
     const config = selectedNode ? resourceConfigs[selectedNode.type] : null;
     const fields = config?.fields;
-    const assetFieldNames = Array.isArray(fields)
-      ? fields
-          .filter((f) => f.control === CONTROL_TYPES.ASSET)
-          .map((f) => f.name)
+    const assetFields = Array.isArray(fields)
+      ? fields.filter((f) => f.control === CONTROL_TYPES.ASSET || f.control === CONTROL_TYPES.ASSET_ARRAY)
+      : [];
+    const assetFieldNames = assetFields.length
+      ? assetFields.map((f) => f.name)
       : [
           "introAssetId",
           "idleAssetId",
@@ -1285,27 +1351,35 @@ export default function AdminDashboard() {
         ? Object.fromEntries((mockAssets ?? []).map((a) => [a.id, a.url]))
         : null;
     const nodeData = selectedNode?.data ?? {};
-    assetFieldNames.forEach((key) => {
-      const id =
+    const addId = (id) => {
+      if (id) map[id] = mockById?.[id] ?? getAssetFileUrl(id);
+    };
+    const keysToConsider = new Set(assetFieldNames);
+    Object.keys(formAssetIds || {}).forEach((k) => keysToConsider.add(k));
+    keysToConsider.forEach((key) => {
+      const val =
         formAssetIds?.[key] ??
         nodeData[key] ??
-        (injectedFieldUpdate?.key === key
-          ? injectedFieldUpdate?.value
-          : undefined);
-      if (id) map[id] = mockById?.[id] ?? getAssetFileUrl(id);
+        (injectedFieldUpdate?.key === key ? injectedFieldUpdate?.value : undefined);
+      if (Array.isArray(val)) val.forEach(addId);
+      else addId(val);
     });
     return map;
   }, [selectedNode, mockAssets, injectedFieldUpdate, formAssetIds]);
 
   const acceptableTypesForField = useMemo(() => {
     if (!focusedAssetField || !selectedNode) return [];
+    if (focusedAssetField.includes("furnitureImgId") || focusedAssetField.includes("unfurnitureImgId")) {
+      return [AssetType.IMAGE, AssetType.THUMBNAIL];
+    }
     const config = resourceConfigs[selectedNode.type];
     const fields = config?.fields;
     if (Array.isArray(fields)) {
-      const field = fields.find(
-        (f) =>
-          f.name === focusedAssetField && f.control === CONTROL_TYPES.ASSET,
-      );
+      let field = fields.find((f) => f.name === focusedAssetField && f.control === CONTROL_TYPES.ASSET);
+      if (!field && focusedAssetField.includes("-")) {
+        const baseName = focusedAssetField.replace(/-\d+$/, "");
+        field = fields.find((f) => f.name === baseName && f.control === CONTROL_TYPES.ASSET_ARRAY);
+      }
       if (field?.allowedTypes?.length) return field.allowedTypes;
     }
     return ASSET_TYPES;

@@ -8,7 +8,9 @@ import {
   ChevronDown,
   ChevronRight,
   Plus,
+  Trash2,
 } from "lucide-react";
+import { toast } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AddAssetModal } from "./AddAssetModal";
@@ -46,6 +48,24 @@ export function AssetsLibrary({
   const [typeFilter, setTypeFilter] = useState("all");
   const [expandedTags, setExpandedTags] = useState(new Set());
   const [addModalOpen, setAddModalOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
+
+  const handleDeleteAsset = async (e, asset) => {
+    e.stopPropagation();
+    if (mockAssets !== null) return;
+    if (!asset?.id) return;
+    if (!window.confirm(`Delete asset "${asset.assetKey || asset.name || asset.id}"?`)) return;
+    setDeletingId(asset.id);
+    try {
+      await assetApi.delete(asset.id);
+      setAssets((prev) => prev.filter((a) => a.id !== asset.id));
+      toast.success("Asset deleted");
+    } catch (err) {
+      toast.error(err?.message || "Failed to delete asset");
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   const filters = useMemo(
     () => ({
@@ -223,6 +243,17 @@ export function AssetsLibrary({
                             <span className="truncate flex-1">
                               {asset.assetKey || asset.name || asset.id}
                             </span>
+                            {mockAssets === null && (
+                              <button
+                                type="button"
+                                onClick={(e) => handleDeleteAsset(e, asset)}
+                                disabled={deletingId === asset.id}
+                                className="p-1 rounded hover:bg-destructive/20 text-destructive shrink-0 disabled:opacity-50"
+                                title="Delete asset"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            )}
                           </div>
                         </div>
                       ))}

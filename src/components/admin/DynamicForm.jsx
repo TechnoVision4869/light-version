@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Save, X } from "lucide-react";
+import { Save, X, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,6 +28,7 @@ export function DynamicForm({
   onAddChild,
   assetPreviewUrls,
   injectedFieldUpdate,
+  // eslint-disable-next-line no-unused-vars -- parent passes for asset field injection
   onInjectedFieldConsumed,
   onFormAssetIdsChange,
   unitTypes = [],
@@ -41,12 +42,27 @@ export function DynamicForm({
 
   useEffect(() => {
     if (!onFormAssetIdsChange || !fields) return;
-    const assetFields = fields.filter((f) => f.control === CONTROL_TYPES.ASSET);
-    if (assetFields.length === 0) return;
     const ids = {};
-    assetFields.forEach((f) => {
-      const v = localData[f.name];
-      if (v != null && v !== "") ids[f.name] = v;
+    fields.forEach((f) => {
+      if (f.control === CONTROL_TYPES.ASSET) {
+        const v = localData[f.name];
+        if (v != null && v !== "") ids[f.name] = v;
+      } else if (f.control === CONTROL_TYPES.ASSET_ARRAY) {
+        const v = localData[f.name];
+        if (Array.isArray(v) && v.length > 0) ids[f.name] = v.filter((id) => id != null && id !== "");
+      } else if (f.control === CONTROL_TYPES.LEVELS_ARRAY) {
+        const levels = localData[f.name];
+        if (Array.isArray(levels)) {
+          const levelAssetIds = [];
+          levels.forEach((level) => {
+            (level.rooms ?? []).forEach((room) => {
+              if (room.furnitureImgId) levelAssetIds.push(room.furnitureImgId);
+              if (room.unfurnitureImgId) levelAssetIds.push(room.unfurnitureImgId);
+            });
+          });
+          if (levelAssetIds.length > 0) ids.levelsAssetIds = levelAssetIds;
+        }
+      }
     });
     onFormAssetIdsChange(ids);
   }, [localData, fields, onFormAssetIdsChange]);
@@ -57,7 +73,18 @@ export function DynamicForm({
       const initialData = {};
       fields.forEach((f) => {
         const key = f.name;
-        initialData[key] = data?.[key] ?? "";
+        if (f.control === CONTROL_TYPES.ASSET_ARRAY || f.control === CONTROL_TYPES.PAYMENT_PLANS_ARRAY || f.control === CONTROL_TYPES.LEVELS_ARRAY) {
+          const raw = data?.[key];
+          if (f.control === CONTROL_TYPES.ASSET_ARRAY) {
+            initialData[key] = Array.isArray(raw) ? raw.map((x) => (typeof x === "string" ? x : x?.assetId ?? "")) : [];
+          } else if (f.control === CONTROL_TYPES.PAYMENT_PLANS_ARRAY) {
+            initialData[key] = Array.isArray(raw) ? raw.map((p) => ({ downPayment: p.downPayment ?? "", monthly: p.monthly ?? "", years: p.years ?? "" })) : [];
+          } else {
+            initialData[key] = Array.isArray(raw) ? raw : [];
+          }
+        } else {
+          initialData[key] = data?.[key] ?? "";
+        }
       });
       setLocalData(initialData);
     } else if (schema) {
@@ -75,12 +102,65 @@ export function DynamicForm({
     setLocalData((prev) => ({ ...prev, [key]: value }));
   };
 
+  const updateArray = (key, index, valueOrUpdater) => {
+    setLocalData((prev) => {
+      const arr = Array.isArray(prev[key]) ? [...prev[key]] : [];
+      arr[index] = typeof valueOrUpdater === "function" ? valueOrUpdater(arr[index]) : valueOrUpdater;
+      return { ...prev, [key]: arr };
+    });
+  };
+
+  const addToArray = (key, newItem) => {
+    setLocalData((prev) => ({
+      ...prev,
+      [key]: [...(Array.isArray(prev[key]) ? prev[key] : []), newItem],
+    }));
+  };
+
+  const removeFromArray = (key, index) => {
+    setLocalData((prev) => {
+      const arr = Array.isArray(prev[key]) ? [...prev[key]] : [];
+      arr.splice(index, 1);
+      return { ...prev, [key]: arr };
+    });
+  };
+
   useEffect(() => {
-    if (injectedFieldUpdate?.key != null) {
-      const { key, value } = injectedFieldUpdate;
-      setLocalData((prev) => ({ ...prev, [key]: value }));
+    if (injectedFieldUpdate?.key == null) return;
+    const { key, value } = injectedFieldUpdate;
+    const levelsRoomMatch = key.match(/^levels-(\d+)-room-(\d+)-(furnitureImgId|unfurnitureImgId)$/);
+    if (levelsRoomMatch && fields?.some((f) => f.name === "levels" && f.control === CONTROL_TYPES.LEVELS_ARRAY)) {
+      const [, levelIdxStr, roomIdxStr, subField] = levelsRoomMatch;
+      const levelIdx = parseInt(levelIdxStr, 10);
+      const roomIdx = parseInt(roomIdxStr, 10);
+      if (!Number.isNaN(levelIdx) && !Number.isNaN(roomIdx)) {
+        setLocalData((prev) => {
+          const levels = Array.isArray(prev.levels) ? [...prev.levels] : [];
+          const level = levels[levelIdx];
+          if (!level?.rooms?.[roomIdx]) return { ...prev, [key]: value };
+          const rooms = level.rooms.map((r, i) => (i === roomIdx ? { ...r, [subField]: value ?? "" } : r));
+          levels[levelIdx] = { ...level, rooms };
+          return { ...prev, levels };
+        });
+        return;
+      }
     }
-  }, [injectedFieldUpdate]);
+    const match = key.match(/^(.+)-(\d+)$/);
+    if (match && fields) {
+      const [, fieldName, idxStr] = match;
+      const idx = parseInt(idxStr, 10);
+      const isArrayField = fields.some((f) => f.name === fieldName && f.control === CONTROL_TYPES.ASSET_ARRAY);
+      if (isArrayField && !Number.isNaN(idx)) {
+        setLocalData((prev) => {
+          const arr = [...(Array.isArray(prev[fieldName]) ? prev[fieldName] : [])];
+          arr[idx] = value;
+          return { ...prev, [fieldName]: arr };
+        });
+        return;
+      }
+    }
+    setLocalData((prev) => ({ ...prev, [key]: value }));
+  }, [injectedFieldUpdate, fields]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -128,7 +208,7 @@ export function DynamicForm({
     : [];
 
   const renderConfigField = (field) => {
-    const { name, label, control, required, disabled, options, allowedTypes } = field;
+    const { name, label, control, required, disabled, options, allowedTypes = [] } = field;
     const value = localData[name] ?? "";
 
     if (control === CONTROL_TYPES.ASSET) {
@@ -143,6 +223,325 @@ export function DynamicForm({
           onFocus={onFieldFocus}
           isFocused={focusedAssetField === name}
         />
+      );
+    }
+
+    if (control === CONTROL_TYPES.ASSET_ARRAY) {
+      const list = Array.isArray(value) ? value : [];
+      return (
+        <div key={name} className="space-y-2">
+          <Label className="block">{label}</Label>
+          {list.map((assetId, idx) => (
+            <div key={idx} className="flex items-center gap-2">
+              <div className="flex-1 min-w-0">
+                <AssetFieldInput
+                  fieldKey={`${name}-${idx}`}
+                  label=""
+                  value={assetId}
+                  assetPreviewUrl={assetId ? assetPreviewUrls?.[assetId] : null}
+                  onChange={(id) => updateArray(name, idx, id)}
+                  onFocus={onFieldFocus}
+                  isFocused={focusedAssetField === `${name}-${idx}`}
+                  acceptableTypes={allowedTypes}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => removeFromArray(name, idx)}
+                className="p-1.5 rounded hover:bg-destructive/20 text-destructive shrink-0"
+                title="Remove"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addToArray(name, "")}
+            className="flex items-center gap-1.5 px-2 py-1.5 text-sm text-primary hover:bg-primary/10 rounded border border-dashed border-primary/50"
+          >
+            <Plus className="w-4 h-4" /> Add
+          </button>
+        </div>
+      );
+    }
+
+    if (control === CONTROL_TYPES.PAYMENT_PLANS_ARRAY) {
+      const list = Array.isArray(value) ? value : [];
+      return (
+        <div key={name} className="space-y-3">
+          <Label className="block">{label}</Label>
+          {list.map((plan, idx) => (
+            <div key={idx} className="p-3 rounded-lg border border-border bg-muted/30 space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-medium text-muted-foreground">Plan {idx + 1}</span>
+                <button
+                  type="button"
+                  onClick={() => removeFromArray(name, idx)}
+                  className="p-1 rounded hover:bg-destructive/20 text-destructive"
+                  title="Remove plan"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                <div>
+                  <Label className="text-xs">Down payment</Label>
+                  <Input
+                    type="number"
+                    value={plan.downPayment === "" || plan.downPayment == null ? "" : plan.downPayment}
+                    onChange={(e) => updateArray(name, idx, (p) => ({ ...p, downPayment: e.target.value === "" ? "" : Number(e.target.value) }))}
+                    className="mt-0.5 h-8"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs">Monthly</Label>
+                  <Input
+                    type="number"
+                    value={plan.monthly === "" || plan.monthly == null ? "" : plan.monthly}
+                    onChange={(e) => updateArray(name, idx, (p) => ({ ...p, monthly: e.target.value === "" ? "" : Number(e.target.value) }))}
+                    className="mt-0.5 h-8"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs">Years</Label>
+                  <Input
+                    type="number"
+                    value={plan.years === "" || plan.years == null ? "" : plan.years}
+                    onChange={(e) => updateArray(name, idx, (p) => ({ ...p, years: e.target.value === "" ? "" : Number(e.target.value) }))}
+                    className="mt-0.5 h-8"
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addToArray(name, { downPayment: "", monthly: "", years: "" })}
+            className="flex items-center gap-1.5 px-2 py-1.5 text-sm text-primary hover:bg-primary/10 rounded border border-dashed border-primary/50"
+          >
+            <Plus className="w-4 h-4" /> Add payment plan
+          </button>
+        </div>
+      );
+    }
+
+    if (control === CONTROL_TYPES.LEVELS_ARRAY) {
+      const list = Array.isArray(value) ? value : [];
+      const defaultRoom = () => ({ displayName: "", furnitureImgId: "", unfurnitureImgId: "", x: "", y: "", hotspots: [] });
+      const defaultHotspot = () => ({ yaw: "", pitch: "", type: "scene", label: "" });
+      const defaultLevel = () => ({ name: "", rooms: [defaultRoom()] });
+      return (
+        <div key={name} className="space-y-3">
+          <Label className="block">{label}</Label>
+          {list.map((level, levelIdx) => (
+            <div key={levelIdx} className="p-3 rounded-lg border border-border bg-muted/30 space-y-3">
+              <div className="flex justify-between items-center gap-2">
+                <Input
+                  placeholder="Level name (e.g. Ground)"
+                  value={level.name ?? ""}
+                  onChange={(e) => updateArray(name, levelIdx, (l) => ({ ...l, name: e.target.value }))}
+                  className="h-8 flex-1"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeFromArray(name, levelIdx)}
+                  className="p-1.5 rounded hover:bg-destructive/20 text-destructive shrink-0"
+                  title="Remove level"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+              <div className="pl-2 border-l-2 border-border space-y-2">
+                <span className="text-xs font-medium text-muted-foreground">Rooms</span>
+                {(level.rooms ?? []).map((room, roomIdx) => (
+                  <div key={roomIdx} className="p-2 rounded bg-background space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-muted-foreground">Room {roomIdx + 1}</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const level = list[levelIdx];
+                          const rooms = [...(level.rooms ?? [])];
+                          rooms.splice(roomIdx, 1);
+                          const newRooms = rooms.length === 0 ? [defaultRoom()] : rooms;
+                          const levelsCopy = list.map((l, i) => (i === levelIdx ? { ...l, rooms: newRooms } : l));
+                          update(name, levelsCopy);
+                        }}
+                        className="p-1 rounded hover:bg-destructive/20 text-destructive"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <Label className="text-xs">Display name</Label>
+                        <Input
+                          value={room.displayName ?? ""}
+                          onChange={(e) => {
+                            const levelsCopy = [...list];
+                            if (!levelsCopy[levelIdx].rooms) levelsCopy[levelIdx].rooms = [];
+                            levelsCopy[levelIdx].rooms = [...levelsCopy[levelIdx].rooms];
+                            levelsCopy[levelIdx].rooms[roomIdx] = { ...room, displayName: e.target.value };
+                            update(name, levelsCopy);
+                          }}
+                          className="mt-0.5 h-8"
+                          placeholder="Living Room"
+                        />
+                      </div>
+                      <div className="col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div>
+                          <Label className="text-xs">Furniture image</Label>
+                          <AssetFieldInput
+                            fieldKey={`levels-${levelIdx}-room-${roomIdx}-furnitureImgId`}
+                            label=""
+                            value={room.furnitureImgId ?? ""}
+                            assetPreviewUrl={room.furnitureImgId ? assetPreviewUrls?.[room.furnitureImgId] : null}
+                            onChange={(id) => {
+                              const levelsCopy = list.map((l, i) =>
+                                i === levelIdx
+                                  ? { ...l, rooms: (l.rooms ?? []).map((r, ri) => (ri === roomIdx ? { ...r, furnitureImgId: id ?? "" } : r)) }
+                                  : l
+                              );
+                              update(name, levelsCopy);
+                            }}
+                            onFocus={onFieldFocus}
+                            isFocused={focusedAssetField === `levels-${levelIdx}-room-${roomIdx}-furnitureImgId`}
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-xs">Unfurniture image</Label>
+                          <AssetFieldInput
+                            fieldKey={`levels-${levelIdx}-room-${roomIdx}-unfurnitureImgId`}
+                            label=""
+                            value={room.unfurnitureImgId ?? ""}
+                            assetPreviewUrl={room.unfurnitureImgId ? assetPreviewUrls?.[room.unfurnitureImgId] : null}
+                            onChange={(id) => {
+                              const levelsCopy = list.map((l, i) =>
+                                i === levelIdx
+                                  ? { ...l, rooms: (l.rooms ?? []).map((r, ri) => (ri === roomIdx ? { ...r, unfurnitureImgId: id ?? "" } : r)) }
+                                  : l
+                              );
+                              update(name, levelsCopy);
+                            }}
+                            onFocus={onFieldFocus}
+                            isFocused={focusedAssetField === `levels-${levelIdx}-room-${roomIdx}-unfurnitureImgId`}
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <Label className="text-xs">X</Label>
+                        <Input
+                          type="number"
+                          value={room.x === "" || room.x == null ? "" : room.x}
+                          onChange={(e) => {
+                            const levelsCopy = [...list];
+                            if (!levelsCopy[levelIdx].rooms) levelsCopy[levelIdx].rooms = [];
+                            levelsCopy[levelIdx].rooms = [...levelsCopy[levelIdx].rooms];
+                            levelsCopy[levelIdx].rooms[roomIdx] = { ...room, x: e.target.value === "" ? "" : Number(e.target.value) };
+                            update(name, levelsCopy);
+                          }}
+                          className="mt-0.5 h-8"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs">Y</Label>
+                        <Input
+                          type="number"
+                          value={room.y === "" || room.y == null ? "" : room.y}
+                          onChange={(e) => {
+                            const levelsCopy = [...list];
+                            if (!levelsCopy[levelIdx].rooms) levelsCopy[levelIdx].rooms = [];
+                            levelsCopy[levelIdx].rooms = [...levelsCopy[levelIdx].rooms];
+                            levelsCopy[levelIdx].rooms[roomIdx] = { ...room, y: e.target.value === "" ? "" : Number(e.target.value) };
+                            update(name, levelsCopy);
+                          }}
+                          className="mt-0.5 h-8"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <span className="text-xs text-muted-foreground">Hotspots</span>
+                      {(room.hotspots ?? []).map((hp, hpIdx) => (
+                        <div key={hpIdx} className="flex flex-wrap items-center gap-1">
+                          <Input type="number" placeholder="yaw" value={hp.yaw ?? ""} onChange={(e) => {
+                            const levelsCopy = [...list];
+                            if (!levelsCopy[levelIdx].rooms) levelsCopy[levelIdx].rooms = [];
+                            levelsCopy[levelIdx].rooms = [...levelsCopy[levelIdx].rooms];
+                            const rooms = levelsCopy[levelIdx].rooms[roomIdx].hotspots ? [...levelsCopy[levelIdx].rooms[roomIdx].hotspots] : [];
+                            rooms[hpIdx] = { ...hp, yaw: e.target.value === "" ? "" : Number(e.target.value) };
+                            levelsCopy[levelIdx].rooms[roomIdx] = { ...levelsCopy[levelIdx].rooms[roomIdx], hotspots: rooms };
+                            update(name, levelsCopy);
+                          }} className="w-16 h-7 text-xs" />
+                          <Input type="number" placeholder="pitch" value={hp.pitch ?? ""} onChange={(e) => {
+                            const levelsCopy = [...list];
+                            if (!levelsCopy[levelIdx].rooms) levelsCopy[levelIdx].rooms = [];
+                            levelsCopy[levelIdx].rooms = [...levelsCopy[levelIdx].rooms];
+                            const rooms = levelsCopy[levelIdx].rooms[roomIdx].hotspots ? [...levelsCopy[levelIdx].rooms[roomIdx].hotspots] : [];
+                            rooms[hpIdx] = { ...hp, pitch: e.target.value === "" ? "" : Number(e.target.value) };
+                            levelsCopy[levelIdx].rooms[roomIdx] = { ...levelsCopy[levelIdx].rooms[roomIdx], hotspots: rooms };
+                            update(name, levelsCopy);
+                          }} className="w-16 h-7 text-xs" />
+                          <Input placeholder="type" value={hp.type ?? ""} onChange={(e) => {
+                            const levelsCopy = [...list];
+                            if (!levelsCopy[levelIdx].rooms) levelsCopy[levelIdx].rooms = [];
+                            levelsCopy[levelIdx].rooms = [...levelsCopy[levelIdx].rooms];
+                            const rooms = levelsCopy[levelIdx].rooms[roomIdx].hotspots ? [...levelsCopy[levelIdx].rooms[roomIdx].hotspots] : [];
+                            rooms[hpIdx] = { ...hp, type: e.target.value };
+                            levelsCopy[levelIdx].rooms[roomIdx] = { ...levelsCopy[levelIdx].rooms[roomIdx], hotspots: rooms };
+                            update(name, levelsCopy);
+                          }} className="w-20 h-7 text-xs" />
+                          <Input placeholder="label" value={hp.label ?? ""} onChange={(e) => {
+                            const levelsCopy = [...list];
+                            if (!levelsCopy[levelIdx].rooms) levelsCopy[levelIdx].rooms = [];
+                            levelsCopy[levelIdx].rooms = [...levelsCopy[levelIdx].rooms];
+                            const rooms = levelsCopy[levelIdx].rooms[roomIdx].hotspots ? [...levelsCopy[levelIdx].rooms[roomIdx].hotspots] : [];
+                            rooms[hpIdx] = { ...hp, label: e.target.value };
+                            levelsCopy[levelIdx].rooms[roomIdx] = { ...levelsCopy[levelIdx].rooms[roomIdx], hotspots: rooms };
+                            update(name, levelsCopy);
+                          }} className="w-20 h-7 text-xs" />
+                          <button type="button" onClick={() => {
+                            const levelsCopy = [...list];
+                            if (!levelsCopy[levelIdx].rooms) levelsCopy[levelIdx].rooms = [];
+                            levelsCopy[levelIdx].rooms = [...levelsCopy[levelIdx].rooms];
+                            const rooms = [...(levelsCopy[levelIdx].rooms[roomIdx].hotspots ?? [])];
+                            rooms.splice(hpIdx, 1);
+                            levelsCopy[levelIdx].rooms[roomIdx] = { ...levelsCopy[levelIdx].rooms[roomIdx], hotspots: rooms };
+                            update(name, levelsCopy);
+                          }} className="p-1 text-destructive hover:bg-destructive/20 rounded"><Trash2 className="w-3 h-3" /></button>
+                        </div>
+                      ))}
+                      <button type="button" onClick={() => {
+                        const levelsCopy = [...list];
+                        if (!levelsCopy[levelIdx].rooms) levelsCopy[levelIdx].rooms = [];
+                        levelsCopy[levelIdx].rooms = [...levelsCopy[levelIdx].rooms];
+                        levelsCopy[levelIdx].rooms[roomIdx] = { ...levelsCopy[levelIdx].rooms[roomIdx], hotspots: [...(levelsCopy[levelIdx].rooms[roomIdx].hotspots ?? []), defaultHotspot()] };
+                        update(name, levelsCopy);
+                      }} className="flex items-center gap-1 text-xs text-primary hover:bg-primary/10 rounded px-1.5 py-1"><Plus className="w-3 h-3" /> Hotspot</button>
+                    </div>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => {
+                    const levelsCopy = list.map((l, i) => (i === levelIdx ? { ...l, rooms: [...(l.rooms ?? []), defaultRoom()] } : l));
+                    update(name, levelsCopy);
+                  }}
+                  className="flex items-center gap-1.5 text-xs text-primary hover:bg-primary/10 rounded border border-dashed border-primary/50 px-2 py-1"
+                >
+                  <Plus className="w-3.5 h-3.5" /> Add room
+                </button>
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addToArray(name, defaultLevel())}
+            className="flex items-center gap-1.5 px-2 py-1.5 text-sm text-primary hover:bg-primary/10 rounded border border-dashed border-primary/50"
+          >
+            <Plus className="w-4 h-4" /> Add level
+          </button>
+        </div>
       );
     }
 
