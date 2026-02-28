@@ -19,9 +19,9 @@ export default function Layout({ children, backgroundImage, fullscreen = false }
 
   // Filter menu items based on user role
   const menuItems = allMenuItems.filter((item) => {
-    // Hide Users page for developer_marketing and developer_sales roles
+    // Hide Users and Dashboard pages for developer_marketing and developer_sales roles
     if (
-      item.path === "/users" &&
+      (item.path === "/users" || item.path === "/dashboard") &&
       (user?.role === "developer_marketing" || user?.role === "developer_sales")
     ) {
       return false;

@@ -9,7 +9,8 @@ import { assetsApi } from '@/api/assetsApi';
 export default function ProjectSelector({ developerId, onProjectSelect, onBackButtonClick }) {
   const { user } = useAuth();
   const [projects, setProjects] = useState([]);
-  const [backgroundImage, setBackgroundImage] = useState(null);
+  const [developerAssets, setDeveloperAssets] = useState({backgroundImage: null, logoImage: null});
+  const [thumbnailUrls, setThumbnailUrls] = useState({});
   const [loading, setLoading] = useState(true);
 
   const fetchProjects = async () => {
@@ -18,7 +19,21 @@ export default function ProjectSelector({ developerId, onProjectSelect, onBackBu
       const response = await projectApi.getByDeveloper(developerId);
       setProjects(response);
 
-      await fetchDeveloperAssets();
+      // Fetch thumbnails for all projects
+      const thumbnails = {};
+      for (const project of response) {
+        if (project.thumbnailAssetId) {
+          try {
+            const url = await assetsApi.getAssetFileUrl(project.thumbnailAssetId);
+            if (url) {
+              thumbnails[project.id] = url;
+            }
+          } catch (error) {
+            console.error(`Failed to fetch thumbnail for project ${project.id}:`, error);
+          }
+        }
+      }
+      setThumbnailUrls(thumbnails);
     } catch (error) {
       console.error("Error fetching projects:", error);
       toast.error("Failed to fetch projects");
@@ -32,51 +47,65 @@ export default function ProjectSelector({ developerId, onProjectSelect, onBackBu
     try {
       const developer = await developerApi.getById(developerId);
       if (developer?.backgroundImageAssetId) {
-        const response = await assetsApi.getAsset(developer.backgroundImageAssetId);
-        console.log(response);
-        
-        setBackgroundImage(response.url);
+        const backgroundImg = await assetsApi.getAssetFileUrl(developer.backgroundImageAssetId);
+        if (backgroundImg) {
+        setDeveloperAssets((prev) => ({ ...prev, backgroundImage: backgroundImg }));
+      } else {
+        console.warn("Asset response missing URL:", backgroundImg);
+        toast.error("Failed to load background image");
+      }
+      }
+      if (developer?.logoAssetId) {
+        const logoImg = await assetsApi.getAssetFileUrl(developer.logoAssetId);
+        if (logoImg) {
+        setDeveloperAssets((prev) => ({ ...prev, logoImage: logoImg }));
+      } else {
+        console.warn("Asset response missing URL:", logoImg);
+        toast.error("Failed to load logo image");
+      }
       }
     } catch (error) {
       console.error("Error fetching developer assets:", error);
+      toast.error("Failed to load developer assets");
     }
   };
 
   useEffect(() => {
     if (developerId) {
       fetchProjects();
+      fetchDeveloperAssets();
     }
   }, [developerId]);
 
   const showBackButton = ['admin', 'system_admin', 'system_technician'].includes(user?.role);
 
   return (
-    <Layout backgroundImage={backgroundImage}>
+    <Layout backgroundImage={developerAssets.backgroundImage} fullscreen={true}>
 
       <div
         className="w-full h-screen flex flex-col items-center justify-start pt-8"
-        style={backgroundImage ? {
-          backgroundImage: `url(${backgroundImage})`,
+        style={{
+          backgroundImage: `url(${developerAssets.backgroundImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundAttachment: "fixed",
-        } : {
-          backgroundColor: "#488343",
         }}
       >
+        <div className="mb-8">
+          <img
+            src={developerAssets.logoImage}
+            alt="Developer Logo"
+            className="w-auto h-auto max-h-18 xl:max-h-22 xl:w-22 max-w-[90vw] xl:max-w-md"
+          />
+        </div>
         {showBackButton && onBackButtonClick && (
           <button
             onClick={onBackButtonClick}
-            className="mb-4 text-white text-sm font-medium hover:opacity-70 transition-opacity"
+            className="text-white text-sm font-medium hover:opacity-70 transition-opacity"
           >
             ← Back to Developers
           </button>
         )}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white tracking-wide">
-            Select Project
-          </h1>
-        </div>
         <div className="flex-1 flex flex-col items-center justify-center w-full px-4">
           {loading ? (
             <div className="text-white text-lg">Loading projects...</div>
@@ -102,7 +131,7 @@ export default function ProjectSelector({ developerId, onProjectSelect, onBackBu
                   >
                     <div className="px-3 pt-3">
                       <img
-                        src={project.thumbnail}
+                        src={thumbnailUrls[project.id] || project.thumbnail}
                         alt={project.name}
                         className="rounded-2xl w-full h-auto object-cover"
                       />

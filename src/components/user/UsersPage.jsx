@@ -27,7 +27,7 @@ export default function UsersPage() {
   const fetchUsers = async () => {
     try {
       let response;
-      if (user?.role === 'admin' || user?.role === 'system_admin') {
+      if (user?.role === 'admin' || user?.role === 'system_admin' || user?.role === 'system_technician') {
         response = await userApi.getAll();
       } else if (user?.role === 'developer_admin' ){
         // console.log(user.developerId);

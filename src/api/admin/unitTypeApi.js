@@ -43,7 +43,7 @@ class UnitTypeApi {
   }
 
   async update(id, data) {
-    return apiService.patch(`unit-types/${id}`, data);
+    return apiService.patch(`unit-types/${id}/full`, data);
   }
 
   async delete(id) {
