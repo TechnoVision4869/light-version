@@ -75,13 +75,13 @@ function normalizeUnitTypeFullPayload(data) {
     return items.map((id) => (typeof id === "string" ? { assetId: id } : { assetId: id?.assetId ?? id }));
   };
   const paymentPlans = Array.isArray(data.paymentPlans) ? data.paymentPlans.map((p) => ({
-    downPayment: num(p.downPayment) ?? 0,
-    monthly: num(p.monthly) ?? 0,
-    years: num(p.years) ?? 0,
+    downPayment: num(p.downPayment) ?? null,
+    monthly: num(p.monthly) ?? null,
+    years: num(p.years) ?? null,
   })) : [];
   const levels = Array.isArray(data.levels) ? data.levels : [];
   const body = {
-    name: data.name ?? "",
+    name: data.name ?? null,
     bedrooms: num(data.bedrooms) ?? null,
     bathrooms: num(data.bathrooms) ?? null,
     area: num(data.area) ?? null,
@@ -103,9 +103,9 @@ function normalizeUnitPayload(data) {
   const str = (v) =>
     v === "" || v == null ? null : String(v);
   return {
-    unitCode: str(data.unitCode) ?? "",
+    unitCode: str(data.unitCode) ?? null,
     visualTypeId: str(data.visualTypeId),
-    propertyId: str(data.propertyId) ?? "",
+    propertyId: str(data.propertyId) ?? null,
     floorId: str(data.floorId) || null,
     blockId: str(data.blockId) || null,
     balconyAssetId: str(data.balconyAssetId) || null,
@@ -128,6 +128,7 @@ function getMockInitialState() {
   if (!USE_MOCK_DATA) return null;
   return getInitialMockState();
 }
+
 
 export default function AdminDashboard() {
   const initialMock = useRef(getMockInitialState()).current;
@@ -171,6 +172,15 @@ export default function AdminDashboard() {
   );
 
   const [selectedNode, setSelectedNode] = useState(null);
+  const [selectedDeveloperId, setSelectedDeveloperId] = useState(null);
+
+  useEffect(() => {
+    if (!selectedNode) return;
+    if (selectedNode.type === ENTITY_TYPES.DEVELOPER && selectedNode.id) {
+      setSelectedDeveloperId(selectedNode.id);
+    }
+  }, [selectedNode]);
+
   const [expandedIds, setExpandedIds] = useState(() => {
     if (!USE_MOCK_DATA || !initialMock?.developers?.length) return new Set();
     return new Set([initialMock.developers[0].id]);
@@ -1427,11 +1437,8 @@ export default function AdminDashboard() {
             focusedAssetField={focusedAssetField}
             onAssetClick={handleAssetClick}
             acceptableTypes={acceptableTypesForField}
-            developerId={
-              selectedNode?.type === ENTITY_TYPES.DEVELOPER
-                ? selectedNode?.id
-                : selectedNode?.data?.developerId
-            }
+            developerId={selectedDeveloperId}
+            disabled={!selectedDeveloperId}
             mockAssets={USE_MOCK_DATA ? (mockAssets ?? []) : null}
             onAddMockAsset={
               USE_MOCK_DATA

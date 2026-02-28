@@ -51,8 +51,7 @@ export function AddAssetModal({
   useEffect(() => {
     if (tag.trim()) {
       const filtered = existingTags.filter(
-        (t) =>
-          t.toLowerCase().includes(tag.toLowerCase()) && t !== tag
+        (t) => t.toLowerCase().includes(tag.toLowerCase()) && t !== tag,
       );
       setTagSuggestions(filtered.slice(0, 8));
     } else {
@@ -82,7 +81,8 @@ export function AddAssetModal({
     if (isMock) {
       const mockAsset = {
         id: `mock-asset-${Date.now()}`,
-        assetKey: name.trim() || file?.name?.replace(/\.[^/.]+$/, "") || "asset",
+        assetKey:
+          name.trim() || file?.name?.replace(/\.[^/.]+$/, "") || "asset",
         type,
         tag: tag.trim(),
         url: previewUrl || "",
@@ -98,7 +98,6 @@ export function AddAssetModal({
       formData.append("file", file);
       formData.append("type", type);
       formData.append("tag", tag.trim());
-      if (name.trim()) formData.append("assetKey", name.trim());
       if (developerId) formData.append("developerId", developerId);
       const result = await apiUpload(formData);
       onAdd(result);
@@ -122,7 +121,7 @@ export function AddAssetModal({
             <div
               className={cn(
                 "mt-1 border-2 border-dashed rounded-lg p-6 text-center transition-colors",
-                "border-muted-foreground/30 hover:border-primary/50"
+                "border-muted-foreground/30 hover:border-primary/50",
               )}
             >
               <input
@@ -132,7 +131,10 @@ export function AddAssetModal({
                 className="hidden"
                 id="asset-file"
               />
-              <label htmlFor="asset-file" className="cursor-pointer flex flex-col items-center gap-1">
+              <label
+                htmlFor="asset-file"
+                className="cursor-pointer flex flex-col items-center gap-1"
+              >
                 <Upload className="w-8 h-8 text-muted-foreground" />
                 <span className="text-sm">
                   {file ? file.name : "Click to select"}
@@ -141,7 +143,11 @@ export function AddAssetModal({
             </div>
             {previewUrl && (
               <div className="mt-2 rounded border overflow-hidden">
-                <img src={previewUrl} alt="" className="w-full h-40 object-cover" />
+                <img
+                  src={previewUrl}
+                  alt=""
+                  className="w-full h-40 object-cover"
+                />
               </div>
             )}
           </div>
@@ -203,18 +209,13 @@ export function AddAssetModal({
             />
           </div>
 
-          {error && (
-            <p className="text-sm text-destructive">{error}</p>
-          )}
+          {error && <p className="text-sm text-destructive">{error}</p>}
 
           <DialogFooter showCloseButton={false}>
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button
-              type="submit"
-              disabled={!file || !tag.trim() || loading}
-            >
+            <Button type="submit" disabled={!file || !tag.trim() || loading}>
               {loading ? "Uploading…" : "Add Asset"}
             </Button>
           </DialogFooter>

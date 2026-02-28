@@ -76,21 +76,21 @@ export function DynamicForm({
         if (f.control === CONTROL_TYPES.ASSET_ARRAY || f.control === CONTROL_TYPES.PAYMENT_PLANS_ARRAY || f.control === CONTROL_TYPES.LEVELS_ARRAY) {
           const raw = data?.[key];
           if (f.control === CONTROL_TYPES.ASSET_ARRAY) {
-            initialData[key] = Array.isArray(raw) ? raw.map((x) => (typeof x === "string" ? x : x?.assetId ?? "")) : [];
+            initialData[key] = Array.isArray(raw) ? raw.map((x) => (typeof x === "string" ? x : x?.assetId ?? null)) : [];
           } else if (f.control === CONTROL_TYPES.PAYMENT_PLANS_ARRAY) {
-            initialData[key] = Array.isArray(raw) ? raw.map((p) => ({ downPayment: p.downPayment ?? "", monthly: p.monthly ?? "", years: p.years ?? "" })) : [];
+            initialData[key] = Array.isArray(raw) ? raw.map((p) => ({ downPayment: p.downPayment ?? null, monthly: p.monthly ?? null, years: p.years ?? null })) : [];
           } else {
             initialData[key] = Array.isArray(raw) ? raw : [];
           }
         } else {
-          initialData[key] = data?.[key] ?? "";
+          initialData[key] = data?.[key] ?? null;
         }
       });
       setLocalData(initialData);
     } else if (schema) {
       const initialData = {};
       Object.keys(schema.fields).forEach((key) => {
-        initialData[key] = data?.[key] ?? (schema.fields[key].default && schema.fields[key].default()) ?? "";
+        initialData[key] = data?.[key] ?? (schema.fields[key].default && schema.fields[key].default()) ?? null;
       });
       setLocalData(initialData);
     } else {
@@ -138,7 +138,7 @@ export function DynamicForm({
           const levels = Array.isArray(prev.levels) ? [...prev.levels] : [];
           const level = levels[levelIdx];
           if (!level?.rooms?.[roomIdx]) return { ...prev, [key]: value };
-          const rooms = level.rooms.map((r, i) => (i === roomIdx ? { ...r, [subField]: value ?? "" } : r));
+          const rooms = level.rooms.map((r, i) => (i === roomIdx ? { ...r, [subField]: value ?? null } : r));
           levels[levelIdx] = { ...level, rooms };
           return { ...prev, levels };
         });
@@ -209,7 +209,7 @@ export function DynamicForm({
 
   const renderConfigField = (field) => {
     const { name, label, control, required, disabled, options, allowedTypes = [] } = field;
-    const value = localData[name] ?? "";
+    const value = localData[name] ?? null;
 
     if (control === CONTROL_TYPES.ASSET) {
       return (
@@ -257,7 +257,7 @@ export function DynamicForm({
           ))}
           <button
             type="button"
-            onClick={() => addToArray(name, "")}
+            onClick={() => addToArray(name, null)}
             className="flex items-center gap-1.5 px-2 py-1.5 text-sm text-primary hover:bg-primary/10 rounded border border-dashed border-primary/50"
           >
             <Plus className="w-4 h-4" /> Add
@@ -290,7 +290,7 @@ export function DynamicForm({
                   <Input
                     type="number"
                     value={plan.downPayment === "" || plan.downPayment == null ? "" : plan.downPayment}
-                    onChange={(e) => updateArray(name, idx, (p) => ({ ...p, downPayment: e.target.value === "" ? "" : Number(e.target.value) }))}
+                    onChange={(e) => updateArray(name, idx, (p) => ({ ...p, downPayment: e.target.value === "" ? null : Number(e.target.value) }))}
                     className="mt-0.5 h-8"
                   />
                 </div>
@@ -299,7 +299,7 @@ export function DynamicForm({
                   <Input
                     type="number"
                     value={plan.monthly === "" || plan.monthly == null ? "" : plan.monthly}
-                    onChange={(e) => updateArray(name, idx, (p) => ({ ...p, monthly: e.target.value === "" ? "" : Number(e.target.value) }))}
+                    onChange={(e) => updateArray(name, idx, (p) => ({ ...p, monthly: e.target.value === "" ? null : Number(e.target.value) }))}
                     className="mt-0.5 h-8"
                   />
                 </div>
@@ -308,7 +308,7 @@ export function DynamicForm({
                   <Input
                     type="number"
                     value={plan.years === "" || plan.years == null ? "" : plan.years}
-                    onChange={(e) => updateArray(name, idx, (p) => ({ ...p, years: e.target.value === "" ? "" : Number(e.target.value) }))}
+                    onChange={(e) => updateArray(name, idx, (p) => ({ ...p, years: e.target.value === "" ? null : Number(e.target.value) }))}
                     className="mt-0.5 h-8"
                   />
                 </div>
@@ -317,7 +317,7 @@ export function DynamicForm({
           ))}
           <button
             type="button"
-            onClick={() => addToArray(name, { downPayment: "", monthly: "", years: "" })}
+            onClick={() => addToArray(name, { downPayment: null, monthly: null, years: null })}
             className="flex items-center gap-1.5 px-2 py-1.5 text-sm text-primary hover:bg-primary/10 rounded border border-dashed border-primary/50"
           >
             <Plus className="w-4 h-4" /> Add payment plan
@@ -328,9 +328,9 @@ export function DynamicForm({
 
     if (control === CONTROL_TYPES.LEVELS_ARRAY) {
       const list = Array.isArray(value) ? value : [];
-      const defaultRoom = () => ({ displayName: "", furnitureImgId: "", unfurnitureImgId: "", x: "", y: "", hotspots: [] });
-      const defaultHotspot = () => ({ yaw: "", pitch: "", type: "scene", label: "" });
-      const defaultLevel = () => ({ name: "", rooms: [defaultRoom()] });
+      const defaultRoom = () => ({ displayName: null, furnitureImgId: null, unfurnitureImgId: null, x: null, y: null, hotspots: [] });
+      const defaultHotspot = () => ({ yaw: null, pitch: null, type: "scene", label: null });
+      const defaultLevel = () => ({ name: null, rooms: [defaultRoom()] });
       return (
         <div key={name} className="space-y-3">
           <Label className="block">{label}</Label>
@@ -340,7 +340,7 @@ export function DynamicForm({
                 <Input
                   placeholder="Level name (e.g. Ground)"
                   value={level.name ?? ""}
-                  onChange={(e) => updateArray(name, levelIdx, (l) => ({ ...l, name: e.target.value }))}
+                  onChange={(e) => updateArray(name, levelIdx, (l) => ({ ...l, name: e.target.value === "" ? null : e.target.value }))}
                   className="h-8 flex-1"
                 />
                 <button
@@ -382,7 +382,7 @@ export function DynamicForm({
                             const levelsCopy = [...list];
                             if (!levelsCopy[levelIdx].rooms) levelsCopy[levelIdx].rooms = [];
                             levelsCopy[levelIdx].rooms = [...levelsCopy[levelIdx].rooms];
-                            levelsCopy[levelIdx].rooms[roomIdx] = { ...room, displayName: e.target.value };
+                            levelsCopy[levelIdx].rooms[roomIdx] = { ...room, displayName: e.target.value === "" ? null : e.target.value };
                             update(name, levelsCopy);
                           }}
                           className="mt-0.5 h-8"
@@ -400,7 +400,7 @@ export function DynamicForm({
                             onChange={(id) => {
                               const levelsCopy = list.map((l, i) =>
                                 i === levelIdx
-                                  ? { ...l, rooms: (l.rooms ?? []).map((r, ri) => (ri === roomIdx ? { ...r, furnitureImgId: id ?? "" } : r)) }
+                                  ? { ...l, rooms: (l.rooms ?? []).map((r, ri) => (ri === roomIdx ? { ...r, furnitureImgId: id ?? null } : r)) }
                                   : l
                               );
                               update(name, levelsCopy);
@@ -419,7 +419,7 @@ export function DynamicForm({
                             onChange={(id) => {
                               const levelsCopy = list.map((l, i) =>
                                 i === levelIdx
-                                  ? { ...l, rooms: (l.rooms ?? []).map((r, ri) => (ri === roomIdx ? { ...r, unfurnitureImgId: id ?? "" } : r)) }
+                                  ? { ...l, rooms: (l.rooms ?? []).map((r, ri) => (ri === roomIdx ? { ...r, unfurnitureImgId: id ?? null } : r)) }
                                   : l
                               );
                               update(name, levelsCopy);
@@ -453,7 +453,7 @@ export function DynamicForm({
                             const levelsCopy = [...list];
                             if (!levelsCopy[levelIdx].rooms) levelsCopy[levelIdx].rooms = [];
                             levelsCopy[levelIdx].rooms = [...levelsCopy[levelIdx].rooms];
-                            levelsCopy[levelIdx].rooms[roomIdx] = { ...room, y: e.target.value === "" ? "" : Number(e.target.value) };
+                            levelsCopy[levelIdx].rooms[roomIdx] = { ...room, y: e.target.value === "" ? null : Number(e.target.value) };
                             update(name, levelsCopy);
                           }}
                           className="mt-0.5 h-8"
@@ -469,7 +469,7 @@ export function DynamicForm({
                             if (!levelsCopy[levelIdx].rooms) levelsCopy[levelIdx].rooms = [];
                             levelsCopy[levelIdx].rooms = [...levelsCopy[levelIdx].rooms];
                             const rooms = levelsCopy[levelIdx].rooms[roomIdx].hotspots ? [...levelsCopy[levelIdx].rooms[roomIdx].hotspots] : [];
-                            rooms[hpIdx] = { ...hp, yaw: e.target.value === "" ? "" : Number(e.target.value) };
+                            rooms[hpIdx] = { ...hp, yaw: e.target.value === "" ? null : Number(e.target.value) };
                             levelsCopy[levelIdx].rooms[roomIdx] = { ...levelsCopy[levelIdx].rooms[roomIdx], hotspots: rooms };
                             update(name, levelsCopy);
                           }} className="w-16 h-7 text-xs" />
@@ -478,7 +478,7 @@ export function DynamicForm({
                             if (!levelsCopy[levelIdx].rooms) levelsCopy[levelIdx].rooms = [];
                             levelsCopy[levelIdx].rooms = [...levelsCopy[levelIdx].rooms];
                             const rooms = levelsCopy[levelIdx].rooms[roomIdx].hotspots ? [...levelsCopy[levelIdx].rooms[roomIdx].hotspots] : [];
-                            rooms[hpIdx] = { ...hp, pitch: e.target.value === "" ? "" : Number(e.target.value) };
+                            rooms[hpIdx] = { ...hp, pitch: e.target.value === "" ? null : Number(e.target.value) };
                             levelsCopy[levelIdx].rooms[roomIdx] = { ...levelsCopy[levelIdx].rooms[roomIdx], hotspots: rooms };
                             update(name, levelsCopy);
                           }} className="w-16 h-7 text-xs" />
@@ -487,7 +487,7 @@ export function DynamicForm({
                             if (!levelsCopy[levelIdx].rooms) levelsCopy[levelIdx].rooms = [];
                             levelsCopy[levelIdx].rooms = [...levelsCopy[levelIdx].rooms];
                             const rooms = levelsCopy[levelIdx].rooms[roomIdx].hotspots ? [...levelsCopy[levelIdx].rooms[roomIdx].hotspots] : [];
-                            rooms[hpIdx] = { ...hp, type: e.target.value };
+                            rooms[hpIdx] = { ...hp, type: e.target.value || null };
                             levelsCopy[levelIdx].rooms[roomIdx] = { ...levelsCopy[levelIdx].rooms[roomIdx], hotspots: rooms };
                             update(name, levelsCopy);
                           }} className="w-20 h-7 text-xs" />
@@ -496,7 +496,7 @@ export function DynamicForm({
                             if (!levelsCopy[levelIdx].rooms) levelsCopy[levelIdx].rooms = [];
                             levelsCopy[levelIdx].rooms = [...levelsCopy[levelIdx].rooms];
                             const rooms = levelsCopy[levelIdx].rooms[roomIdx].hotspots ? [...levelsCopy[levelIdx].rooms[roomIdx].hotspots] : [];
-                            rooms[hpIdx] = { ...hp, label: e.target.value };
+                            rooms[hpIdx] = { ...hp, label: e.target.value || null };
                             levelsCopy[levelIdx].rooms[roomIdx] = { ...levelsCopy[levelIdx].rooms[roomIdx], hotspots: rooms };
                             update(name, levelsCopy);
                           }} className="w-20 h-7 text-xs" />
@@ -604,7 +604,7 @@ export function DynamicForm({
           <Label>{label}{required && " *"}</Label>
           <Input
             type="number"
-            value={value === "" || value == null ? "" : value}
+            value={value == null || value === "" ? "" : value}
             onChange={(e) => update(name, e.target.value === "" ? null : Number(e.target.value))}
             className="mt-1"
             required={required}
@@ -619,8 +619,8 @@ export function DynamicForm({
         <div key={name}>
           <Label>{label}{required && " *"}</Label>
           <textarea
-            value={value}
-            onChange={(e) => update(name, e.target.value)}
+            value={value ?? ""}
+            onChange={(e) => update(name, e.target.value === "" ? null : e.target.value)}
             className="w-full mt-1 min-h-[80px] rounded-md border border-input bg-transparent px-3 py-2 text-sm"
             required={required}
             disabled={disabled}
@@ -633,8 +633,8 @@ export function DynamicForm({
       <div key={name}>
         <Label>{label}{required && " *"}</Label>
         <Input
-          value={value}
-          onChange={(e) => update(name, e.target.value)}
+          value={value ?? ""}
+          onChange={(e) => update(name, e.target.value === "" ? null : e.target.value)}
           className="mt-1"
           required={required}
           disabled={disabled}
@@ -646,7 +646,7 @@ export function DynamicForm({
   const renderSchemaField = (key, fieldSchema) => {
     const label = toTitleCase(key);
     const isRequired = fieldSchema.tests?.some((t) => t.name === "required");
-    const value = localData[key] ?? "";
+    const value = localData[key] ?? null;
 
     if (key.endsWith("AssetId")) {
       return (
@@ -699,8 +699,8 @@ export function DynamicForm({
           <div key={key}>
             <Label>{label}{isRequired && " *"}</Label>
             <Input
-              value={value}
-              onChange={(e) => update(key, e.target.value)}
+              value={value ?? ""}
+              onChange={(e) => update(key, e.target.value === "" ? null : e.target.value)}
               className="mt-1"
               required={isRequired}
               disabled={key.endsWith("Id")}
