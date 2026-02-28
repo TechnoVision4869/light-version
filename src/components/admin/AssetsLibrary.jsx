@@ -14,6 +14,7 @@ import { toast } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AddAssetModal } from "./AddAssetModal";
+import { ConfirmDeleteDialog } from "./ConfirmDeleteDialog";
 import { assetApi } from "../../api/admin/assetApi";
 import { apiService } from "../../services/api.service";
 import { cn } from "@/lib/utils";
@@ -41,6 +42,7 @@ export function AssetsLibrary({
   developerId,
   mockAssets = null,
   onAddMockAsset,
+  disabled = false,
 }) {
   const [assets, setAssets] = useState(mockAssets ?? []);
   const [loading, setLoading] = useState(!mockAssets);
@@ -48,18 +50,24 @@ export function AssetsLibrary({
   const [typeFilter, setTypeFilter] = useState("all");
   const [expandedTags, setExpandedTags] = useState(new Set());
   const [addModalOpen, setAddModalOpen] = useState(false);
+  const [deleteAssetTarget, setDeleteAssetTarget] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
 
-  const handleDeleteAsset = async (e, asset) => {
+  const handleDeleteAssetClick = (e, asset) => {
     e.stopPropagation();
-    if (mockAssets !== null) return;
+    if (mockAssets !== null || disabled) return;
     if (!asset?.id) return;
-    if (!window.confirm(`Delete asset "${asset.assetKey || asset.name || asset.id}"?`)) return;
-    setDeletingId(asset.id);
+    setDeleteAssetTarget(asset);
+  };
+
+  const confirmDeleteAsset = async () => {
+    if (!deleteAssetTarget?.id) return;
+    setDeletingId(deleteAssetTarget.id);
     try {
-      await assetApi.delete(asset.id);
-      setAssets((prev) => prev.filter((a) => a.id !== asset.id));
+      await assetApi.delete(deleteAssetTarget.id);
+      setAssets((prev) => prev.filter((a) => a.id !== deleteAssetTarget.id));
       toast.success("Asset deleted");
+      setDeleteAssetTarget(null);
     } catch (err) {
       toast.error(err?.message || "Failed to delete asset");
     } finally {
@@ -72,13 +80,19 @@ export function AssetsLibrary({
       search: search.trim() || undefined,
       type: typeFilter === "all" ? undefined : typeFilter,
       isActive: true,
+      developerId: developerId || undefined,
     }),
-    [search, typeFilter]
+    [search, typeFilter, developerId]
   );
 
   useEffect(() => {
     if (mockAssets !== null) {
       setAssets(mockAssets);
+      setLoading(false);
+      return;
+    }
+    if (disabled) {
+      setAssets([]);
       setLoading(false);
       return;
     }
@@ -99,7 +113,7 @@ export function AssetsLibrary({
         if (!cancelled) setLoading(false);
       });
     return () => { cancelled = true; };
-  }, [mockAssets, filters.search, filters.type, filters.isActive]);
+  }, [mockAssets, disabled, filters]);
 
   const filteredByType = useMemo(() => {
     if (acceptableTypes.length === 0) return assets;
@@ -136,7 +150,14 @@ export function AssetsLibrary({
   };
 
   return (
-    <div className="h-full flex flex-col border-l border-border bg-background">
+    <div className={cn("h-full flex flex-col border-l border-border bg-background relative", disabled && "opacity-60")}>
+      {disabled && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/80 rounded-l pointer-events-auto">
+          <p className="text-sm text-muted-foreground text-center px-4">
+            Select a developer to use the Assets Library
+          </p>
+        </div>
+      )}
       <div className="p-3 border-b border-border space-y-3">
         <div className="flex items-center justify-between gap-2">
           <h2 className="font-semibold text-sm">Assets Library</h2>
@@ -144,13 +165,14 @@ export function AssetsLibrary({
             size="sm"
             onClick={() => setAddModalOpen(true)}
             className="shrink-0"
+            disabled={disabled}
           >
             <Plus className="w-4 h-4 mr-1" />
             Add
           </Button>
         </div>
 
-        {focusedAssetField && (
+        {focusedAssetField && !disabled && (
           <div className="p-2 rounded-md bg-primary/10 border border-primary/20 text-xs">
             <span className="font-medium text-primary">Picking for:</span>
             <span className="ml-1 text-primary/90">{focusedAssetField}</span>
@@ -218,10 +240,10 @@ export function AssetsLibrary({
                         <div
                           key={asset.id}
                           role="button"
-                          tabIndex={0}
-                          onClick={() => onAssetClick(asset)}
+                          tabIndex={disabled ? -1 : 0}
+                          onClick={() => !disabled && onAssetClick(asset)}
                           onKeyDown={(e) =>
-                            e.key === "Enter" && onAssetClick(asset)
+                            !disabled && e.key === "Enter" && onAssetClick(asset)
                           }
                           className="rounded-md border border-border hover:border-primary hover:shadow-sm transition-all overflow-hidden"
                         >
@@ -246,7 +268,7 @@ export function AssetsLibrary({
                             {mockAssets === null && (
                               <button
                                 type="button"
-                                onClick={(e) => handleDeleteAsset(e, asset)}
+                                onClick={(e) => handleDeleteAssetClick(e, asset)}
                                 disabled={deletingId === asset.id}
                                 className="p-1 rounded hover:bg-destructive/20 text-destructive shrink-0 disabled:opacity-50"
                                 title="Delete asset"
@@ -278,6 +300,15 @@ export function AssetsLibrary({
         apiUpload={assetApi.upload.bind(assetApi)}
         developerId={developerId}
         isMock={!!mockAssets}
+      />
+
+      <ConfirmDeleteDialog
+        open={!!deleteAssetTarget}
+        onOpenChange={(open) => !open && setDeleteAssetTarget(null)}
+        title={deleteAssetTarget ? `Delete asset "${deleteAssetTarget.assetKey || deleteAssetTarget.name || deleteAssetTarget.id}"?` : "Delete asset?"}
+        description="This action cannot be undone."
+        onConfirm={confirmDeleteAsset}
+        isLoading={deletingId != null}
       />
     </div>
   );

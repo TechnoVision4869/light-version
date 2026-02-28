@@ -6,8 +6,8 @@ class AssetApi {
   }
 
   /**
-   * List assets with optional filters (search, type, tag, isActive).
-   * @param {{ search?: string, type?: string, tag?: string, isActive?: boolean }} filters
+   * List assets with optional filters (search, type, tag, isActive, developerId).
+   * @param {{ search?: string, type?: string, tag?: string, isActive?: boolean, developerId?: string }} filters
    */
   async list(filters = {}) {
     const params = {};
@@ -15,6 +15,7 @@ class AssetApi {
     if (filters.type && filters.type !== "all") params.type = filters.type;
     if (filters.tag) params.tag = filters.tag;
     if (filters.isActive !== undefined) params.isActive = String(filters.isActive);
+    if (filters.developerId) params.developerId = filters.developerId;
     return apiService.get("assets", Object.keys(params).length ? params : undefined);
   }
 
