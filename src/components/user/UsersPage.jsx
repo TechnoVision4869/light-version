@@ -5,56 +5,6 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useAuth } from "../hooks/use-auth";
 
-const sampleDevId = "b8793740-6574-4492-8aae-024a518cd46b";
-
-const sampleUserData = [
-  {
-    id: 1,
-    name: "John Doe",
-    email: "john.doe@example.com",
-    role: "admin",
-    isActive: true,
-    isEmailVerified: true,
-    password: "securePassword123",
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-    role: "developer_admin",
-    isActive: true,
-    isEmailVerified: true,
-    password: "securePassword123",
-  },
-  {
-    id: 3,
-    name: "Bob Johnson",
-    email: "bob.johnson@example.com",
-    role: "developer_sales",
-    isActive: false,
-    isEmailVerified: false,
-    password: "securePassword123",
-  },
-  {
-    id: 4,
-    name: "Alice Williams",
-    email: "alice.williams@example.com",
-    role: "developer_marketing",
-    isActive: true,
-    isEmailVerified: true,
-    password: "securePassword123",
-  },
-  {
-    id: 5,
-    name: "Charlie Brown",
-    email: "charlie.brown@example.com",
-    role: "system_admin",
-    isActive: true,
-    isEmailVerified: false,
-    password: "securePassword123",
-  },
-];
-
 const columns = [
   { header: "Name", accessor: "name" },
   { header: "Email", accessor: "email" },
@@ -63,17 +13,34 @@ const columns = [
 
 export default function UsersPage() {
   const { user } = useAuth();
-  const [users, setUsers] = useState(sampleUserData);
+  const [users, setUsers] = useState([]);
+
+  // Define which roles each user type can create
+  const getCreatableRoles = (userRole) => {
+    const roleMap = {
+      system_admin: ['system_technician', 'developer_admin'],
+      developer_admin: ['developer_marketing', 'developer_sales'],
+    };
+    return roleMap[userRole] || [];
+  };
 
   const fetchUsers = async () => {
     try {
       let response;
-      if (user?.role === 'admin') {
+      if (user?.role === 'admin' || user?.role === 'system_admin') {
         response = await userApi.getAll();
+      } else if (user?.role === 'developer_admin' ){
+        // console.log(user.developerId);
+        response = await userApi.getUsersByDevId(user.developerId);
+        // console.log(response);
       } else {
-        response = await userApi.getUsersByDevId(user?.id);
+        setUsers([]);
+        toast.error("You don't have permission to view users");
+        return
       }
-      setUsers(response.data);
+      
+      // Check if response is an array (from getUsersByDevId) or has data property (from getAll)
+      setUsers(Array.isArray(response) ? response : response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
       toast.error("Failed to fetch users");
@@ -86,13 +53,45 @@ export default function UsersPage() {
 
   const handleCreate = async (newUser) => {
     try {
-      // Only admin and developer_admin can create users
-      if (user?.role !== 'admin' && user?.role !== 'developer_admin') {
+      // Get allowed roles for current user
+      const creatableRoles = getCreatableRoles(user?.role);
+      
+      // Check if user has permission to create users
+      if (creatableRoles.length === 0) {
         toast.error("You don't have permission to create users");
         return;
       }
-      const createdUser = await userApi.create(newUser);
-      setUsers([...users, createdUser]);
+
+      // Validate required fields
+      if (!newUser.email || !newUser.password || !newUser.name || !newUser.role) {
+        toast.error("Please fill in all required fields: email, password, name, and role");
+        return;
+      }
+
+      // Check if the requested role is allowed for this user
+      if (!creatableRoles.includes(newUser.role)) {
+        toast.error(`You can only create users with these roles: ${creatableRoles.join(', ')}`);
+        return;
+      }
+
+      // Prepare user data with all required fields
+      const userData = {
+        email: newUser.email,
+        password: newUser.password,
+        name: newUser.name,
+        role: newUser.role,
+      };
+
+      // Add developerId if provided form (system_admin selecting developer for developer_admin)
+      if (newUser.developerId) {
+        userData.developerId = newUser.developerId;
+      }
+      if(newUser.role === 'developer_sales' || newUser.role === 'developer_marketing') {
+        userData.developerId = user.developerId; // Automatically assign developerId for developer_admin creating sub-users        
+      }
+
+      const createdUser = await userApi.create(userData);
+      setUsers([...users, createdUser.data || createdUser]);
       toast.success("User created successfully");
       console.log("Created user:", createdUser);
     } catch (error) {
@@ -103,14 +102,19 @@ export default function UsersPage() {
 
   const handleEdit = async (editedUser) => {
     try {
-      // Only send the fields that should be updated, exclude password and other sensitive fields
+      // Only send the fields that should be updated: name, isActive, and developerId (if applicable)
       const updateData = {
         name: editedUser.name,
-        email: editedUser.email,
-        role: editedUser.role,
+        isActive: editedUser.isActive,
       };
+      
+      // If system_admin is updating a developer_admin's developer, include developerId
+      if (user?.role === 'system_admin' && editedUser.role === 'developer_admin' && editedUser.developerId) {
+        updateData.developerId = editedUser.developerId;
+      }
+      
       const updatedUser = await userApi.update(editedUser.id, updateData);
-      setUsers(users.map(user => user.id === editedUser.id ? updatedUser : user));
+      setUsers(users.map(user => user.id === editedUser.id ? (updatedUser.data || updatedUser) : user));
       toast.success("User updated successfully");
       console.log("Updated user:", updatedUser);
     } catch (error) {
@@ -121,6 +125,11 @@ export default function UsersPage() {
 
   const handleDelete = async (userToDelete) => {
     try {
+      // Prevent users from deleting themselves
+      if (userToDelete.id === user?.id) {
+        toast.error("You cannot delete yourself");
+        return;
+      }
       await userApi.delete(userToDelete.id);
       // Refetch users to verify deletion actually worked on the backend
       await fetchUsers();

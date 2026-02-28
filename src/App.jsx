@@ -5,7 +5,7 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import { SidebarContext } from "./store/SidebarContextProvider";
 import Home from "./components/Home";
 import { AuthGuard } from "./components/auth/auth-guard";
-import ProjectSelector from "./components/ProjectSelector";
+import SelectionFlow from "./components/SelectionFlow";
 import SplashVideo from "./components/SplashVideo";
 import LoginPage from "./components/auth/login-page";
 import AdminDashboard from "./components/admin/AdminDashboard";
@@ -31,21 +31,10 @@ export default function App() {
     lockOrientation();
   }, []);
 
-  const getProjectSlug = (project) => {
-    const name = project?.name || project?.title || project?.id || "";
-    return name
-      .toString()
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-  };
-
   const handleProjectSelect = (project) => {
     setCurrentProject(project);
     setShowSplash(true);
-    const projectSlug = getProjectSlug(project);
-    navigate(`/${projectSlug}`);
+    navigate("/home");
   };
 
   const getIntroVideoUrl = () => {
@@ -54,27 +43,13 @@ export default function App() {
   };
 
   return (
-    // <Routes>
-    //   <Route path="/" element={<ProjectSelector onProjectSelect={handleProjectSelect} />} />
-    //   <Route
-    //     path="/:projectSlug"
-    //     element={
-    //       showSplash ? (
-    //         <SplashVideo src={getIntroVideoUrl()} onFinished={() => setShowSplash(false)} />
-    //       ) : (
-    //         <Home />
-    //       )
-    //     }
-    //   />
-    // </Routes>
-
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route
         path="/"
         element={
           <AuthGuard>
-            <ProjectSelector onProjectSelect={handleProjectSelect} />
+            <SelectionFlow onProjectSelect={handleProjectSelect} />
           </AuthGuard>
         }
       />
@@ -95,7 +70,7 @@ export default function App() {
         }
       />
       <Route
-        path="/:projectSlug"
+        path="/home"
         element={
           <AuthGuard>
             {showSplash ? (

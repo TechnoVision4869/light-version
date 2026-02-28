@@ -112,7 +112,7 @@ export function AddAssetModal({
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="sm:max-w-lg" showCloseButton={true}>
+      <DialogContent className="text-black sm:max-w-lg" showCloseButton={true}>
         <DialogHeader>
           <DialogTitle>Add New Asset</DialogTitle>
         </DialogHeader>

@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../hooks/use-auth";
+import { developerApi } from "@/api/admin/developerApi";
 import {
   Table,
   TableBody,
@@ -32,21 +34,60 @@ const getDisplayRole = (role, loggedInUserRole) => {
 };
 
 const CreateUserForm = ({ onSuccess, onCancel, loggedInUser }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [developers, setDevelopers] = useState([]);
+  
+  // Fetch developers list when component mounts
+  const fetchDevelopers = async () => {
+    if (loggedInUser?.role === 'system_admin') {
+      try {
+        const devs = await developerApi.getAll();
+        setDevelopers(devs);
+      } catch (error) {
+        console.error("Error fetching developers:", error);
+      } 
+    }
+  };
+
+  useEffect(() => {
+    fetchDevelopers();
+  }, []);
+  
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required").min(2, "Name must be at least 2 characters"),
     email: Yup.string().email("Invalid email address").required("Email is required"),
+    password: Yup.string().required("Password is required").min(6, "Password must be at least 6 characters"),
     role: Yup.string().required("Role is required"),
+    developerId: Yup.string().when('role', {
+      is: 'developer_admin',
+      then: (schema) => schema.required("Developer selection is required for Developer Admin"),
+      otherwise: (schema) => schema.notRequired(),
+    }),
   });
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   // Filter roles based on logged-in user's role
   const getAvailableRoles = () => {
+    if (loggedInUser?.role === 'system_admin') {
+      return [
+        { value: 'system_technician', label: 'System Technician' },
+        { value: 'developer_admin', label: 'Developer Admin' },
+      ];
+    }
     if (loggedInUser?.role === 'developer_admin') {
       return [
         { value: 'developer_marketing', label: 'Marketing' },
         { value: 'developer_sales', label: 'Sales' },
       ];
     }
-    return ROLE_OPTIONS;
+    return [];
   };
 
   const availableRoles = getAvailableRoles();
@@ -55,19 +96,32 @@ const CreateUserForm = ({ onSuccess, onCancel, loggedInUser }) => {
     initialValues: {
       name: "",
       email: "",
+      password: "",
       role: "",
+      developerId: "",
       isActive: true,
       isEmailVerified: false,
-      password: "securePassword123",
     },
     validationSchema,
     onSubmit: async (values) => {
       try {
-        // Add developerId for marketing and sales roles
+        // Add developerId for appropriate roles
         const dataToSubmit = { ...values };
-        if ((values.role === 'developer_marketing' || values.role === 'developer_sales') && loggedInUser?.id) {
-          dataToSubmit.developerId = loggedInUser.id;
+        
+        // For developer_admin created by system_admin, include the selected developerId
+        if (values.role === 'developer_admin' && values.developerId) {
+          dataToSubmit.developerId = values.developerId;
+        } 
+        // For marketing and sales roles created by developer_admin, include their developerId
+        else if ((values.role === 'developer_marketing' || values.role === 'developer_sales') && loggedInUser?.developerId) {
+          dataToSubmit.developerId = loggedInUser.developerId;
         }
+        
+        // Remove empty developerId if not applicable
+        if (!dataToSubmit.developerId) {
+          delete dataToSubmit.developerId;
+        }
+        
         await onSuccess(dataToSubmit);
       } catch (error) {
         console.error("Error creating user:", error);
@@ -110,6 +164,43 @@ const CreateUserForm = ({ onSuccess, onCancel, loggedInUser }) => {
       </div>
 
       <div>
+        <label className="block text-sm font-medium text-white/80 mb-2">Password</label>
+        <div style={{ position: "relative" }}>
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            value={formik.values.password}
+            className="w-full px-3 py-2 pr-10 bg-white/10 border border-white/20 rounded text-white placeholder-white/50 focus:outline-none focus:border-white/40"
+            placeholder="Enter password"
+          />
+          <button
+            type="button"
+            aria-label="toggle password visibility"
+            onClick={handleClickShowPassword}
+            onMouseDown={handleMouseDownPassword}
+            style={{
+              position: "absolute",
+              right: 10,
+              top: "50%",
+              transform: "translateY(-50%)",
+              border: "none",
+              background: "transparent",
+              color: "#eff0f1",
+              padding: 4,
+              cursor: "pointer",
+            }}
+          >
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        </div>
+        {formik.touched.password && formik.errors.password && (
+          <div className="text-red-400 text-sm mt-1">{formik.errors.password}</div>
+        )}
+      </div>
+
+      <div>
         <label className="block text-sm font-medium text-white/80 mb-2">Role</label>
         <select
           name="role"
@@ -129,6 +220,36 @@ const CreateUserForm = ({ onSuccess, onCancel, loggedInUser }) => {
           <div className="text-red-400 text-sm mt-1">{formik.errors.role}</div>
         )}
       </div>
+
+      {loggedInUser?.role === 'system_admin' && (
+        <div>
+          <label className="block text-sm font-medium text-white/80 mb-2">Developer</label>
+          <select
+            name="developerId"
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            value={formik.values.developerId}
+            disabled={formik.values.role === 'system_technician' || !formik.values.role}
+            className={`w-full px-3 py-2 border border-white/20 rounded text-white focus:outline-none focus:border-white/40 ${
+              formik.values.role === 'system_technician' || !formik.values.role
+                ? 'bg-white/5 text-white/50 cursor-not-allowed'
+                : 'bg-white/10 focus:outline-none focus:border-white/40'
+            }`}
+          >
+            <option value="" className="bg-[#1C1C1C]">
+              {formik.values.role === 'system_technician' ? 'All Developers' : 'Select Developer'}
+            </option>
+            {!['system_technician', ''].includes(formik.values.role) && developers.map((dev) => (
+              <option key={dev.id} value={dev.id} className="bg-[#1C1C1C]">
+                {dev.name}
+              </option>
+            ))}
+          </select>
+          {formik.touched.developerId && formik.errors.developerId && (
+            <div className="text-red-400 text-sm mt-1">{formik.errors.developerId}</div>
+          )}
+        </div>
+      )}
 
       <div className="flex gap-2 justify-end pt-4 border-t border-white/20">
         <Button
@@ -160,7 +281,24 @@ const UserDataTable = ({ data, columns, onCreate, onEdit, onDelete, onRowClick }
   const [deletingRowIndex, setDeletingRowIndex] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [developers, setDevelopers] = useState([]);
   const itemsPerPage = 20;
+
+  // Fetch developers list when component mounts (for system_admin)
+  const fetchDevelopers = async () => {
+    if (user?.role === 'system_admin') {
+      try {
+        const devs = await developerApi.getAll();
+        setDevelopers(devs);
+      } catch (error) {
+        console.error("Error fetching developers:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+  fetchDevelopers();
+  }, []);
 
   // Calculate pagination
   const totalPages = Math.ceil((data?.length || 0) / itemsPerPage);
@@ -226,7 +364,7 @@ const UserDataTable = ({ data, columns, onCreate, onEdit, onDelete, onRowClick }
   return (
     <div>
       <div className="flex justify-end mb-4">
-        {(user?.role === 'admin' || user?.role === 'developer_admin') && (
+        {(user?.role === 'system_admin' || user?.role === 'developer_admin') && (
           <Dialog open={isCreating} onOpenChange={setIsCreating}>
             <DialogTrigger asChild>
               <div className="flex flex-row justify-between w-full items-center mb-6">
@@ -264,7 +402,7 @@ const UserDataTable = ({ data, columns, onCreate, onEdit, onDelete, onRowClick }
             </DialogContent>
           </Dialog>
         )}
-        {(user?.role !== 'admin' && user?.role !== 'developer_admin') && (
+        {(user?.role !== 'system_admin' && user?.role !== 'developer_admin') && (
           <h1 className="text-3xl font-bold text-white">Users</h1>
         )}
       </div>
@@ -357,20 +495,33 @@ const UserDataTable = ({ data, columns, onCreate, onEdit, onDelete, onRowClick }
                     <TableRow className="border-white/20 bg-white/5 hover:bg-white/5">
                       <TableCell colSpan={columns.length + 1} className="p-4">
                         <div className="space-y-4">
-                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             {columns.map((column, colIndex) => (
                               <div key={colIndex}>
                                 <label className="block text-sm font-medium text-white/80 mb-2">
                                   {column.header}
                                 </label>
-                                {column.accessor === 'role' ? (
+                                {column.accessor === 'email' ? (
+                                  <input
+                                    type="text"
+                                    value={editedData[column.accessor] || ''}
+                                    disabled
+                                    className="w-full px-3 py-2 bg-white/5 border border-white/20 rounded text-white/50 placeholder-white/30 focus:outline-none cursor-not-allowed"
+                                    placeholder={`Enter ${column.header}`}
+                                  />
+                                ) : column.accessor === 'role' ? (
                                   <select
                                     value={editedData[column.accessor] || ''}
                                     onChange={(e) => handleInputChange(e, column.accessor)}
                                     className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded text-white focus:outline-none focus:border-white/40"
                                   >
                                     <option value="" disabled>Select {column.header}</option>
-                                    {user?.role === 'developer_admin' ? (
+                                    {user?.role === 'system_admin' ? (
+                                      <>
+                                        <option value="system_technician" className="bg-[#1C1C1C]">System Technician</option>
+                                        <option value="developer_admin" className="bg-[#1C1C1C]">Developer Admin</option>
+                                      </>
+                                    ) : user?.role === 'developer_admin' ? (
                                       <>
                                         <option value="developer_marketing" className="bg-[#1C1C1C]">Marketing</option>
                                         <option value="developer_sales" className="bg-[#1C1C1C]">Sales</option>
@@ -394,6 +545,23 @@ const UserDataTable = ({ data, columns, onCreate, onEdit, onDelete, onRowClick }
                                 )}
                               </div>
                             ))}
+                            {user?.role === 'system_admin' && editedData.role === 'developer_admin' && (
+                              <div>
+                                <label className="block text-sm font-medium text-white/80 mb-2">Developer</label>
+                                <select
+                                  value={editedData.developerId || ''}
+                                  onChange={(e) => handleInputChange(e, 'developerId')}
+                                  className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded text-white focus:outline-none focus:border-white/40"
+                                >
+                                  <option value="" disabled className="bg-[#1C1C1C]">Select Developer</option>
+                                  {developers.map((dev) => (
+                                    <option key={dev.id} value={dev.id} className="bg-[#1C1C1C]">
+                                      {dev.name}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            )}
                           </div>
                           <div className="flex gap-2 justify-end pt-2 border-t border-white/20">
                             <Button

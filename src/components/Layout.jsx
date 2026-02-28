@@ -5,16 +5,16 @@ import TECHNO_LOGO from "../assets/techno.png";
 import { DATA } from "../data/layers";
 import { useAuth } from "./hooks/use-auth";
 
-export default function Layout({ children, backgroundImage }) {
-  const { user } = useAuth();
+export default function Layout({ children, backgroundImage, fullscreen = false }) {
+  const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
   const allMenuItems = [
-    { label: "Dashboard", path: "/dashboard", icon: "dashboard" },
-    { label: "Projects", path: "/", icon: "projects" },
-    { label: "Users", path: "/users", icon: "users" },
+    { label: 'Dashboard', path: '/dashboard', icon: 'dashboard' },
+    { label: 'Projects', path: '/', icon: 'projects' },
+    { label: 'Users', path: '/users', icon: 'users' },
   ];
 
   // Filter menu items based on user role
@@ -93,36 +93,34 @@ export default function Layout({ children, backgroundImage }) {
 
   return (
     <div
-      className="min-h-screen text-white"
+      className="min-h-screen text-white flex flex-col"
       style={{
         backgroundColor: backgroundImage ? "transparent" : "#434343",
-        backgroundImage: backgroundImage ? `url(${backgroundImage})` : "none",
-        backgroundSize: backgroundImage ? "cover" : "auto",
-        backgroundPosition: backgroundImage ? "center" : "auto",
-        backgroundAttachment: backgroundImage ? "fixed" : "auto",
       }}
     >
       <Toaster position="top-center" />
 
-      {/* Hamburger Menu Button */}
-      <button
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="fixed top-6 left-6 z-30 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
-      >
-        <svg
-          className="w-6 h-6 text-white"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+      {/* Header Bar */}
+      <header className="fixed top-0 left-0 right-0 h-16 bg-transparent flex items-center px-6 z-40">
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="p-2 rounded-lg hover:bg-white/10 transition-colors mr-4"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-      </button>
+          <svg
+            className="w-6 h-6 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+      </header>
 
       {/* Sidebar Overlay */}
       {sidebarOpen && (
@@ -134,12 +132,12 @@ export default function Layout({ children, backgroundImage }) {
 
       {/* Sidebar Menu */}
       <div
-        className={`fixed left-0 top-0 h-screen w-52 sm:w-64 bg-[#1C1C1C] shadow-2xl z-25 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed left-0 top-16 h-[calc(100vh-4rem)] w-52 sm:w-64 bg-[#1C1C1C] shadow-2xl z-25 transform transition-transform duration-300 ease-in-out ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="p-6 flex flex-col h-full">
-          <nav className="flex flex-col gap-2 flex-1 mt-20">
+          <nav className="flex flex-col gap-2 flex-1 mt-4">
             {menuItems.map((item) => (
               <button
                 key={item.path}
@@ -155,6 +153,27 @@ export default function Layout({ children, backgroundImage }) {
               </button>
             ))}
           </nav>
+
+          {/* Logout Button */}
+          <button
+            onClick={logout}
+            className="w-full px-4 py-3 rounded-lg font-medium transition-colors text-white hover:bg-red-600/20 flex items-center gap-3"
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              />
+            </svg>
+            Logout
+          </button>
         </div>
       </div>
 
@@ -168,8 +187,8 @@ export default function Layout({ children, backgroundImage }) {
       </div>
 
       {/* Main Content - Centered */}
-      <div className="w-full min-h-screen flex items-center justify-center px-4 pt-20 pb-4 sm:pt-6">
-        <div className="max-w-6xl w-full">{children}</div>
+      <div className={`flex-1 w-full flex ${fullscreen ? 'items-stretch' : 'items-center justify-center px-4 pb-4 sm:pb-6'}`}>
+        <div className={fullscreen ? 'w-full' : 'max-w-6xl w-full'}>{children}</div>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import React, {
   useMemo,
   useRef,
 } from "react";
+import Layout from "../Layout";
 import { toast } from "react-hot-toast";
 import { FlowTree } from "./FlowTree";
 import { DynamicForm } from "./DynamicForm";
@@ -26,7 +27,7 @@ import { amenityApi } from "../../api/admin/amenityApi";
 import { surroundingApi } from "../../api/admin/surroundingApi";
 import { apiService } from "../../services/api.service";
 
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 
 // type kept for call-site consistency; can be used later for type-specific labels
 function getDisplayName(entity, type) {
@@ -1311,6 +1312,7 @@ export default function AdminDashboard() {
   }, [focusedAssetField, selectedNode]);
 
   return (
+    <Layout fullscreen={true}>
     <div className="h-screen flex flex-col bg-muted/30 text-black">
       <header className="bg-background border-b border-border px-6 py-4 shrink-0">
         <h1 className="text-xl font-bold">Admin Dashboard</h1>
@@ -1375,5 +1377,6 @@ export default function AdminDashboard() {
         isLoading={deleteLoading}
       />
     </div>
+    </Layout>
   );
 }

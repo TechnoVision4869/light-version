@@ -1,39 +1,86 @@
-import { DATA } from '../data/layers';
 import { useEffect, useState } from 'react';
 import { projectApi } from "../api/admin/projectApi";
 import Layout from './Layout';
+import { useAuth } from './hooks/use-auth';
+import toast from 'react-hot-toast';
+import { developerApi } from '@/api/admin/developerApi';
+import { assetsApi } from '@/api/assetsApi';
 
-export default function ProjectSelector({ onProjectSelect }) {
-  // const projects = DATA.developerProjects;
-  const [projects, setProjects] = useState(DATA.developerProjects);
+export default function ProjectSelector({ developerId, onProjectSelect, onBackButtonClick }) {
+  const { user } = useAuth();
+  const [projects, setProjects] = useState([]);
+  const [backgroundImage, setBackgroundImage] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchProjects = async () => {
     try {
-      const response = await projectApi.getByDeveloper(
-        "07c2b2bb-cfe6-4419-9c1b-c65d926e2717",
-      );
+      setLoading(true);
+      const response = await projectApi.getByDeveloper(developerId);
       setProjects(response);
+
+      await fetchDeveloperAssets();
     } catch (error) {
       console.error("Error fetching projects:", error);
+      toast.error("Failed to fetch projects");
+      setProjects([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchDeveloperAssets = async () => {
+    try {
+      const developer = await developerApi.getById(developerId);
+      if (developer?.backgroundImageAssetId) {
+        const response = await assetsApi.getAsset(developer.backgroundImageAssetId);
+        console.log(response);
+        
+        setBackgroundImage(response.url);
+      }
+    } catch (error) {
+      console.error("Error fetching developer assets:", error);
     }
   };
 
   useEffect(() => {
-    // fetchProjects();
-  }, []);
+    if (developerId) {
+      fetchProjects();
+    }
+  }, [developerId]);
+
+  const showBackButton = ['admin', 'system_admin', 'system_technician'].includes(user?.role);
 
   return (
-    <Layout backgroundImage={DATA.backgroundImage}>
-      <div className="w-full h-screen flex flex-col items-center justify-start pt-8">
+    <Layout backgroundImage={backgroundImage}>
+
+      <div
+        className="w-full h-screen flex flex-col items-center justify-start pt-8"
+        style={backgroundImage ? {
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+        } : {
+          backgroundColor: "#488343",
+        }}
+      >
+        {showBackButton && onBackButtonClick && (
+          <button
+            onClick={onBackButtonClick}
+            className="mb-4 text-white text-sm font-medium hover:opacity-70 transition-opacity"
+          >
+            ← Back to Developers
+          </button>
+        )}
         <div className="mb-8">
-          <img
-            src={DATA.developerLogo}
-            alt="Developer Logo"
-            className="w-auto h-auto max-h-18 xl:max-h-22 xl:w-22 max-w-[90vw] xl:max-w-md"
-          />
+          <h1 className="text-3xl font-bold text-white tracking-wide">
+            Select Project
+          </h1>
         </div>
         <div className="flex-1 flex flex-col items-center justify-center w-full px-4">
-          {projects.length === 0 ? (
+          {loading ? (
+            <div className="text-white text-lg">Loading projects...</div>
+          ) : projects.length === 0 ? (
             <div className="w-full rounded-2xl overflow-hidden backdrop-blur-sm bg-[#1C1C1C8C]">
               <div className="p-8 flex flex-col items-center justify-center text-center">
                 <h2 className="tracking-wide text-2xl font-semibold text-white mb-3">
