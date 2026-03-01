@@ -67,18 +67,28 @@ function normalizeUnitTypePayload(data) {
 /** Build unit type createFull API body. */
 function normalizeUnitTypeFullPayload(data) {
   const num = (v) => (v === "" || v == null ? null : Number(v));
-  const serviceRooms = typeof data.serviceRoomNames === "string"
-    ? data.serviceRoomNames.split(",").map((s) => s.trim()).filter(Boolean)
-    : Array.isArray(data.serviceRoomNames) ? data.serviceRoomNames : [];
+  const serviceRooms =
+    typeof data.serviceRoomNames === "string"
+      ? data.serviceRoomNames
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : Array.isArray(data.serviceRoomNames)
+        ? data.serviceRoomNames
+        : [];
   const toAssetItems = (items) => {
     if (!Array.isArray(items)) return [];
-    return items.map((id) => (typeof id === "string" ? { assetId: id } : { assetId: id?.assetId ?? id }));
+    return items.map((id) =>
+      typeof id === "string" ? { assetId: id } : { assetId: id?.assetId ?? id },
+    );
   };
-  const paymentPlans = Array.isArray(data.paymentPlans) ? data.paymentPlans.map((p) => ({
-    downPayment: num(p.downPayment) ?? null,
-    monthly: num(p.monthly) ?? null,
-    years: num(p.years) ?? null,
-  })) : [];
+  const paymentPlans = Array.isArray(data.paymentPlans)
+    ? data.paymentPlans.map((p) => ({
+        downPayment: num(p.downPayment) ?? null,
+        monthly: num(p.monthly) ?? null,
+        years: num(p.years) ?? null,
+      }))
+    : [];
   const levels = Array.isArray(data.levels) ? data.levels : [];
   const body = {
     name: data.name ?? null,
@@ -98,10 +108,8 @@ function normalizeUnitTypeFullPayload(data) {
 
 /** Build unit API body with correct keys and types (numbers, null for empty optionals). */
 function normalizeUnitPayload(data) {
-  const num = (v) =>
-    v === "" || v == null ? null : Number(v);
-  const str = (v) =>
-    v === "" || v == null ? null : String(v);
+  const num = (v) => (v === "" || v == null ? null : Number(v));
+  const str = (v) => (v === "" || v == null ? null : String(v));
   return {
     unitCode: str(data.unitCode) ?? null,
     visualTypeId: str(data.visualTypeId),
@@ -128,7 +136,6 @@ function getMockInitialState() {
   if (!USE_MOCK_DATA) return null;
   return getInitialMockState();
 }
-
 
 export default function AdminDashboard() {
   const initialMock = useRef(getMockInitialState()).current;
@@ -173,6 +180,8 @@ export default function AdminDashboard() {
 
   const [selectedNode, setSelectedNode] = useState(null);
   const [selectedDeveloperId, setSelectedDeveloperId] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (!selectedNode) return;
@@ -190,14 +199,20 @@ export default function AdminDashboard() {
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const loadDevelopers = useCallback(async () => {
-    if (USE_MOCK_DATA) return;
+    if (USE_MOCK_DATA) {
+      setIsLoading(false);
+      return;
+    }
     try {
+      setIsLoading(true);
       const list = await developerApi.getAll();
       setDevelopers(Array.isArray(list) ? list : []);
     } catch (err) {
       console.error(err);
-      toast.error("Failed to load developers");
+      toast.error("Failed to load developers. Please refresh the page.");
       setDevelopers([]);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -945,6 +960,7 @@ export default function AdminDashboard() {
 
   const handleSave = useCallback(
     async (id, type, data, selectedNodeForValidation) => {
+      setIsSaving(true);
       try {
         const config = resourceConfigs[type];
         if (config?.validate) {
@@ -963,6 +979,7 @@ export default function AdminDashboard() {
             config.validate(data, context);
           } catch (err) {
             toast.error(err?.message || "Validation failed");
+            setIsSaving(false);
             return;
           }
         }
@@ -1204,7 +1221,7 @@ export default function AdminDashboard() {
             default:
               throw new Error("Unknown type");
           }
-          toast.success("Updated");
+          toast.success("Updated successfully");
         } else {
           let created;
           switch (type) {
@@ -1237,7 +1254,8 @@ export default function AdminDashboard() {
               created = await unitApi.create(payload);
               if (payload.floorId) loadUnitsForFloor(payload.floorId);
               else if (payload.blockId) loadUnitsForBlock(payload.blockId);
-              else if (payload.propertyId) loadUnitsForProperty(payload.propertyId);
+              else if (payload.propertyId)
+                loadUnitsForProperty(payload.propertyId);
               break;
             }
             case ENTITY_TYPES.AMENITY:
@@ -1257,7 +1275,7 @@ export default function AdminDashboard() {
             default:
               throw new Error("Unknown type");
           }
-          toast.success("Created");
+          toast.success("Created successfully");
           if (created?.id) {
             setExpandedIds(
               (prev) =>
@@ -1275,7 +1293,10 @@ export default function AdminDashboard() {
           }
         }
       } catch (e) {
-        toast.error(e?.message || "Save failed");
+        console.error("Save error:", e);
+        toast.error(e?.message || "Save failed. Please try again.");
+      } finally {
+        setIsSaving(false);
       }
     },
     [
@@ -1343,7 +1364,11 @@ export default function AdminDashboard() {
     const config = selectedNode ? resourceConfigs[selectedNode.type] : null;
     const fields = config?.fields;
     const assetFields = Array.isArray(fields)
-      ? fields.filter((f) => f.control === CONTROL_TYPES.ASSET || f.control === CONTROL_TYPES.ASSET_ARRAY)
+      ? fields.filter(
+          (f) =>
+            f.control === CONTROL_TYPES.ASSET ||
+            f.control === CONTROL_TYPES.ASSET_ARRAY,
+        )
       : [];
     const assetFieldNames = assetFields.length
       ? assetFields.map((f) => f.name)
@@ -1370,7 +1395,9 @@ export default function AdminDashboard() {
       const val =
         formAssetIds?.[key] ??
         nodeData[key] ??
-        (injectedFieldUpdate?.key === key ? injectedFieldUpdate?.value : undefined);
+        (injectedFieldUpdate?.key === key
+          ? injectedFieldUpdate?.value
+          : undefined);
       if (Array.isArray(val)) val.forEach(addId);
       else addId(val);
     });
@@ -1379,16 +1406,24 @@ export default function AdminDashboard() {
 
   const acceptableTypesForField = useMemo(() => {
     if (!focusedAssetField || !selectedNode) return [];
-    if (focusedAssetField.includes("furnitureImgId") || focusedAssetField.includes("unfurnitureImgId")) {
+    if (
+      focusedAssetField.includes("furnitureImgId") ||
+      focusedAssetField.includes("unfurnitureImgId")
+    ) {
       return [AssetType.IMAGE, AssetType.THUMBNAIL];
     }
     const config = resourceConfigs[selectedNode.type];
     const fields = config?.fields;
     if (Array.isArray(fields)) {
-      let field = fields.find((f) => f.name === focusedAssetField && f.control === CONTROL_TYPES.ASSET);
+      let field = fields.find(
+        (f) =>
+          f.name === focusedAssetField && f.control === CONTROL_TYPES.ASSET,
+      );
       if (!field && focusedAssetField.includes("-")) {
         const baseName = focusedAssetField.replace(/-\d+$/, "");
-        field = fields.find((f) => f.name === baseName && f.control === CONTROL_TYPES.ASSET_ARRAY);
+        field = fields.find(
+          (f) => f.name === baseName && f.control === CONTROL_TYPES.ASSET_ARRAY,
+        );
       }
       if (field?.allowedTypes?.length) return field.allowedTypes;
     }
@@ -1397,67 +1432,84 @@ export default function AdminDashboard() {
 
   return (
     <Layout fullscreen={true}>
-    <div className="h-screen flex flex-col bg-muted/30 text-black">
-      <header className="bg-background border-b border-border px-6 py-4 shrink-0">
-        <h1 className="text-xl font-bold">Admin Dashboard</h1>
-      </header>
+      <div className="h-screen flex flex-col bg-[#2C2C2C] relative">
+        {isLoading && (
+          <div className="absolute inset-0 bg-[#2C2C2C]/90 backdrop-blur-sm z-50 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-white text-lg">Loading Dashboard...</p>
+            </div>
+          </div>
+        )}
+        
+        <header className="bg-[#1C1C1C] border-b border-white/10 px-6 py-4 shrink-0 shadow-lg">
+          <div className="flex items-center justify-between">
+            <h1 className="text-xl font-bold text-white">Admin Dashboard</h1>
+            {selectedDeveloperId && (
+              <span className="text-sm text-white/60">
+                Developer: {developers.find(d => d.id === selectedDeveloperId)?.name || 'Selected'}
+              </span>
+            )}
+          </div>
+        </header>
 
-      <div className="flex-1 flex overflow-hidden min-h-0">
-        <div className="w-80 shrink-0 flex flex-col overflow-hidden">
-          <FlowTree
-            nodes={nodes}
-            selectedId={selectedNode?.id ?? null}
-            expandedIds={expandedIds}
-            onSelect={handleSelect}
-            onToggle={handleToggle}
-            onAdd={handleAdd}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
+        <div className="flex-1 flex overflow-hidden min-h-0">
+          <div className="w-80 shrink-0 flex flex-col overflow-hidden">
+            <FlowTree
+              nodes={nodes}
+              selectedId={selectedNode?.id ?? null}
+              expandedIds={expandedIds}
+              onSelect={handleSelect}
+              onToggle={handleToggle}
+              onAdd={handleAdd}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          </div>
+
+          <div className="flex-1 min-w-0 flex flex-col overflow-hidden border-r border-white/10">
+            <DynamicForm
+              selectedNode={selectedNode}
+              onSave={handleSave}
+              onCancel={() => setFocusedAssetField(null)}
+              onFieldFocus={setFocusedAssetField}
+              focusedAssetField={focusedAssetField}
+              onAddChild={handleAdd}
+              assetPreviewUrls={assetPreviewUrls}
+              injectedFieldUpdate={injectedFieldUpdate}
+              onInjectedFieldConsumed={handleInjectedFieldConsumed}
+              onFormAssetIdsChange={setFormAssetIds}
+              unitTypes={unitTypes}
+              isSaving={isSaving}
+            />
+          </div>
+
+          <div className="w-80 shrink-0 flex flex-col overflow-hidden">
+            <AssetsLibrary
+              focusedAssetField={focusedAssetField}
+              onAssetClick={handleAssetClick}
+              acceptableTypes={acceptableTypesForField}
+              developerId={selectedDeveloperId}
+              disabled={!selectedDeveloperId}
+              mockAssets={USE_MOCK_DATA ? (mockAssets ?? []) : null}
+              onAddMockAsset={
+                USE_MOCK_DATA
+                  ? (asset) => setMockAssets((prev) => [...(prev ?? []), asset])
+                  : undefined
+              }
+            />
+          </div>
         </div>
 
-        <div className="flex-1 min-w-0 flex flex-col overflow-hidden border-r border-border">
-          <DynamicForm
-            selectedNode={selectedNode}
-            onSave={handleSave}
-            onCancel={() => setFocusedAssetField(null)}
-            onFieldFocus={setFocusedAssetField}
-            focusedAssetField={focusedAssetField}
-            onAddChild={handleAdd}
-            assetPreviewUrls={assetPreviewUrls}
-            injectedFieldUpdate={injectedFieldUpdate}
-            onInjectedFieldConsumed={handleInjectedFieldConsumed}
-            onFormAssetIdsChange={setFormAssetIds}
-            unitTypes={unitTypes}
-          />
-        </div>
-
-        <div className="w-80 shrink-0 flex flex-col overflow-hidden">
-          <AssetsLibrary
-            focusedAssetField={focusedAssetField}
-            onAssetClick={handleAssetClick}
-            acceptableTypes={acceptableTypesForField}
-            developerId={selectedDeveloperId}
-            disabled={!selectedDeveloperId}
-            mockAssets={USE_MOCK_DATA ? (mockAssets ?? []) : null}
-            onAddMockAsset={
-              USE_MOCK_DATA
-                ? (asset) => setMockAssets((prev) => [...(prev ?? []), asset])
-                : undefined
-            }
-          />
-        </div>
+        <ConfirmDeleteDialog
+          open={!!deleteTarget}
+          onOpenChange={(open) => !open && setDeleteTarget(null)}
+          title={deleteTarget ? `Delete ${deleteTarget.type}?` : "Delete?"}
+          description="This action cannot be undone."
+          onConfirm={confirmDelete}
+          isLoading={deleteLoading}
+        />
       </div>
-
-      <ConfirmDeleteDialog
-        open={!!deleteTarget}
-        onOpenChange={(open) => !open && setDeleteTarget(null)}
-        title={deleteTarget ? `Delete ${deleteTarget.type}?` : "Delete?"}
-        description="This action cannot be undone."
-        onConfirm={confirmDelete}
-        isLoading={deleteLoading}
-      />
-    </div>
     </Layout>
   );
 }

@@ -95,9 +95,12 @@ export function AddAssetModal({
     setLoading(true);
     try {
       const formData = new FormData();
+      const assetKeyValue =
+        name.trim() || file?.name?.replace(/\.[^/.]+$/, "") || "asset";
       formData.append("file", file);
       formData.append("type", type);
       formData.append("tag", tag.trim());
+      formData.append("assetKey", assetKeyValue);
       if (developerId) formData.append("developerId", developerId);
       const result = await apiUpload(formData);
       onAdd(result);
@@ -200,7 +203,7 @@ export function AddAssetModal({
           </div>
 
           <div>
-            <Label className="text-muted-foreground">Name (optional)</Label>
+            <Label className="text-muted-foreground">Name</Label>
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}

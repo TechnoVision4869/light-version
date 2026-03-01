@@ -9,6 +9,7 @@ import {
   ChevronRight,
   Plus,
   Trash2,
+  Building2,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
@@ -150,21 +151,22 @@ export function AssetsLibrary({
   };
 
   return (
-    <div className={cn("h-full flex flex-col border-l border-border bg-background relative", disabled && "opacity-60")}>
+    <div className={cn("h-full flex flex-col border-l border-white/10 bg-[#1C1C1C] relative", disabled && "opacity-60")}>
       {disabled && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/80 rounded-l pointer-events-auto">
-          <p className="text-sm text-muted-foreground text-center px-4">
-            Select a developer to use the Assets Library
-          </p>
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#1C1C1C]/90 backdrop-blur-sm rounded-l pointer-events-auto">
+          <div className="text-center text-white/60 px-4">
+            <Building2 className="w-12 h-12 mx-auto mb-3 text-white/30" />
+            <p className="text-sm">Select a developer to use the Assets Library</p>
+          </div>
         </div>
       )}
-      <div className="p-3 border-b border-border space-y-3">
+      <div className="p-3 border-b border-white/10 space-y-3">
         <div className="flex items-center justify-between gap-2">
-          <h2 className="font-semibold text-sm">Assets Library</h2>
+          <h2 className="font-semibold text-sm text-white">Assets Library</h2>
           <Button
             size="sm"
             onClick={() => setAddModalOpen(true)}
-            className="shrink-0"
+            className="shrink-0 bg-white/90 text-black hover:bg-white"
             disabled={disabled}
           >
             <Plus className="w-4 h-4 mr-1" />
@@ -222,15 +224,15 @@ export function AssetsLibrary({
                   <button
                     type="button"
                     onClick={() => toggleTag(tag)}
-                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-muted text-sm font-medium"
+                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded hover:bg-white/10 text-sm font-medium text-white transition-colors"
                   >
                     {open ? (
-                      <ChevronDown className="w-4 h-4" />
+                      <ChevronDown className="w-4 h-4 text-white/70" />
                     ) : (
-                      <ChevronRight className="w-4 h-4" />
+                      <ChevronRight className="w-4 h-4 text-white/70" />
                     )}
                     <span className="flex-1 text-left truncate">{tag}</span>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-white/60">
                       ({list.length})
                     </span>
                   </button>
@@ -245,12 +247,12 @@ export function AssetsLibrary({
                           onKeyDown={(e) =>
                             !disabled && e.key === "Enter" && onAssetClick(asset)
                           }
-                          className="rounded-md border border-border hover:border-primary hover:shadow-sm transition-all overflow-hidden"
+                          className="rounded-md border border-white/20 hover:border-white/40 hover:shadow-lg transition-all overflow-hidden"
                         >
-                          <div className="aspect-video bg-muted">
+                          <div className="aspect-video bg-[#2C2C2C]">
                             {(asset.type || "").toLowerCase() === AssetType.VIDEO ? (
                               <div className="w-full h-full flex items-center justify-center">
-                                <Video className="w-8 h-8 text-muted-foreground" />
+                                <Video className="w-8 h-8 text-white/40" />
                               </div>
                             ) : (
                               <img
@@ -260,9 +262,9 @@ export function AssetsLibrary({
                               />
                             )}
                           </div>
-                          <div className="p-2 flex items-center gap-1 text-xs">
-                            {getTypeIcon(asset.type)}
-                            <span className="truncate flex-1">
+                          <div className="p-2 flex items-center gap-1 text-xs bg-[#2C2C2C]">
+                            <span className="text-white/70">{getTypeIcon(asset.type)}</span>
+                            <span className="truncate flex-1 text-white">
                               {asset.assetKey || asset.name || asset.id}
                             </span>
                             {mockAssets === null && (
@@ -270,7 +272,7 @@ export function AssetsLibrary({
                                 type="button"
                                 onClick={(e) => handleDeleteAssetClick(e, asset)}
                                 disabled={deletingId === asset.id}
-                                className="p-1 rounded hover:bg-destructive/20 text-destructive shrink-0 disabled:opacity-50"
+                                className="p-1 rounded hover:bg-red-500/20 text-red-400 shrink-0 disabled:opacity-50 transition-colors"
                                 title="Delete asset"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />

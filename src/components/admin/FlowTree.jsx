@@ -93,9 +93,9 @@ export function FlowTree({
       <div key={node.id}>
         <div
           className={cn(
-            "flex items-center gap-2 py-1.5 pr-1 rounded-md group",
-            !isFolder && "cursor-pointer",
-            isSelected && "bg-primary/10 border-l-2 border-primary"
+            "flex items-center gap-2 py-1.5 pr-1 rounded-md group transition-colors",
+            !isFolder && "cursor-pointer hover:bg-white/5",
+            isSelected && "bg-white/10 border-l-2 border-white"
           )}
           style={{ paddingLeft: `${level * 16 + 8}px` }}
           onClick={!isFolder ? () => onSelect(node) : undefined}
@@ -104,9 +104,9 @@ export function FlowTree({
             type="button"
             onClick={(e) => {
               e.stopPropagation();
-              onToggle(node.id); // Always allow toggling
+              onToggle(node.id);
             }}
-            className="w-6 h-6 flex items-center justify-center shrink-0 rounded hover:bg-muted"
+            className="w-6 h-6 flex items-center justify-center shrink-0 rounded hover:bg-white/10 text-white/70"
           >
             {canExpand ? (
               isExpanded ? (
@@ -121,23 +121,23 @@ export function FlowTree({
           <div
             className="flex-1 flex items-center gap-2 min-w-0"
           >
-            {getIcon(node.type)}
-            <span className={cn("text-sm truncate", isFolder && "font-medium")}>{node.name}</span>
+            <span className="text-white/80">{getIcon(node.type)}</span>
+            <span className={cn("text-sm truncate text-white", isFolder && "font-medium")}>{node.name}</span>
             {propertyType && (
-              <span className="text-xs px-1.5 py-0.5 rounded bg-muted">
+              <span className="text-xs px-1.5 py-0.5 rounded bg-white/10 text-white/80">
                 {propertyType}
               </span>
             )}
           </div>
           {!isFolder && (
-            <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 shrink-0">
+            <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 shrink-0 transition-opacity">
               <button
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
                   onEdit(node);
                 }}
-                className="p-1 rounded hover:bg-muted"
+                className="p-1 rounded hover:bg-white/10 text-white/70 hover:text-white transition-colors"
                 title="Edit"
               >
                 <Edit className="w-3.5 h-3.5" />
@@ -148,7 +148,7 @@ export function FlowTree({
                   e.stopPropagation();
                   onDelete(node);
                 }}
-                className="p-1 rounded hover:bg-destructive/20 text-destructive"
+                className="p-1 rounded hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-colors"
                 title="Delete"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -173,7 +173,7 @@ export function FlowTree({
                 key={childType}
                 type="button"
                 onClick={() => onAdd(childType, isFolder ? node.parentId : node.id)}
-                className="flex items-center gap-2 px-2 py-1 text-xs text-primary hover:bg-primary/10 rounded w-full text-left"
+                className="flex items-center gap-2 px-2 py-1 text-xs text-white/70 hover:bg-white/10 rounded w-full text-left transition-colors hover:text-white"
               >
                 <Plus className="w-3 h-3" />
                 Add {resourceConfigs[childType]?.title ?? childType}
@@ -188,23 +188,25 @@ export function FlowTree({
   const rootNodes = getChildren(null);
 
   return (
-    <div className="h-full flex flex-col border-r border-border bg-background">
-      <div className="p-3 border-b border-border flex items-center justify-between">
-        <h2 className="font-semibold text-sm">Flow Tree</h2>
+    <div className="h-full flex flex-col border-r border-white/10 bg-[#1C1C1C]">
+      <div className="p-3 border-b border-white/10 flex items-center justify-between">
+        <h2 className="font-semibold text-sm text-white">Flow Tree</h2>
         <button
           type="button"
           onClick={() => onAdd(ENTITY_TYPES.DEVELOPER)}
-          className="flex items-center gap-1 px-2 py-1 text-sm bg-primary text-primary-foreground rounded hover:bg-primary/90"
+          className="flex items-center gap-1 px-3 py-1.5 text-sm bg-white/90 text-black rounded-lg hover:bg-white transition-colors font-medium"
         >
           <Plus className="w-4 h-4" />
           Developer
         </button>
       </div>
-      <div className="flex-1 overflow-auto p-1">
+      <div className="flex-1 overflow-auto p-2 scrollbar-custom">
         {rootNodes.length === 0 ? (
-          <p className="p-4 text-sm text-muted-foreground text-center">
-            No developers. Click &quot;Developer&quot; to add one.
-          </p>
+          <div className="p-8 text-center">
+            <Building2 className="w-12 h-12 mx-auto mb-3 text-white/30" />
+            <p className="text-sm text-white/60 mb-2">No developers yet</p>
+            <p className="text-xs text-white/40">Click &quot;Developer&quot; above to get started</p>
+          </div>
         ) : (
           rootNodes.map((node) => renderNode(node, 0))
         )}
