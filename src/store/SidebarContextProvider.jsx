@@ -1,4 +1,4 @@
-import { createContext, useCallback, useState } from "react";
+import { createContext, useCallback, useState, useEffect } from "react";
 
 import { TABS, LAYERS, DATA } from "../data/layers";
 
@@ -190,6 +190,79 @@ export default function SidebarContextProvider({ children }) {
 
     const [currentItems, setCurrentItems] = useState([]);
     const [type, setType] = useState("");
+
+    // Calculate currentItems based on activeTab, activeLayer, and currentItem
+    useEffect(() => {
+        if (!currentProject) {
+            setCurrentItems([]);
+            setType("");
+            return;
+        }
+
+        let items = [];
+        let itemType = "";
+
+        if (activeLayer === null) {
+            // Home level navigation
+            if (activeTab === TABS.ZONES) {
+                items = currentProject.zones?.items || [];
+                // If only one zone, show its properties directly
+                if (items.length === 1) {
+                    items = items[0].properties || [];
+                }
+            }
+            else if (activeTab === TABS.AMENITIES) {
+                items = currentProject.amenities?.items || [];
+            }
+            else if (activeTab === TABS.SURROUNDINGS) {
+                items = currentProject.surroundings?.items || [];
+            }
+        }
+        else {
+            // Deeper layer navigation
+            if (activeLayer === LAYERS.ZONE_DETAIL) {
+                items = currentItem?.properties || [];
+                if (items.length === 1) {
+                    const property = items[0];
+                    if (property.type === "villa") {
+                        items = property.units || [];
+                        if (items.length > 8) itemType = "small";
+                    }
+                    else if (property.type === "town") {
+                        items = property.blocks || [];
+                        if (items.length > 9) itemType = "small";
+                    }
+                }
+            }
+            else if (activeLayer === LAYERS.BUILDING) {
+                if (currentItem?.type === "tower") {
+                    items = currentItem.floors || [];
+                }
+                else {
+                    items = currentItem?.units || [];
+                    if (items.length > 8) itemType = "small";
+                }
+            }
+            else if (activeLayer === LAYERS.FLOOR) {
+                items = currentItem?.units || [];
+                if (items.length > 8) itemType = "small";
+            }
+            else if (activeLayer === LAYERS.SURROUNDING_DETAIL) {
+                // Keep showing surroundings items when viewing detail
+                items = currentProject.surroundings?.items || [];
+            }
+            else if (activeLayer === LAYERS.UNIT) {
+                // Get rooms from unit type interior for floating buttons
+                const unitType = currentProject.unitTypes?.[currentItem?.unitTypeId];
+                if (unitType?.interior?.levels) {
+                    items = unitType.interior.levels.flatMap(level => level.rooms || []);
+                }
+            }
+        }
+
+        setCurrentItems(items);
+        setType(itemType);
+    }, [activeTab, activeLayer, currentItem, currentProject]);
 
     const ctxValue = {
         currentProject,

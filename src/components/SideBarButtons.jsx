@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { SidebarContext } from "../store/SidebarContextProvider";
 import { TABS, LAYERS} from "../data/layers";
 
@@ -12,51 +12,37 @@ import FloorButton from "./buttons/FloorButton";
 import ApartmentButton from "./buttons/ApartmentButton";
 
 export default function SidebarButtons() {
-  const { currentProject, activeTab, activeLayer, currentItem, setCurrentItems, setType, goToItem } = useContext(SidebarContext);
-  let items = [];
-  let type = "";
+  const { currentProject, activeTab, activeLayer, currentItem, currentItems, goToItem } = useContext(SidebarContext);
+  
+  // Determine which component and props to use for rendering
   let Component = null;
   let propName = "";
   let layerKey = null;
 
-  useEffect(() => {
-    if(activeLayer === LAYERS.FLOOR) {
-      setCurrentItems(null);
-      return;
-    }
-    setCurrentItems(items);
-    setType(type);
-  }, [activeTab, activeLayer]);
+  // Don't render sidebar buttons for UNIT layer (UnitPanel is shown instead)
+  if (activeLayer === LAYERS.UNIT) return null;
 
   if (activeLayer === null) {
     if (activeTab === TABS.ZONES) {
-      // items = TAB_CONFIG[TABS.ZONES].getItems();
-      items = currentProject.zones.items;
-      if(items.length === 1) {
-        console.log("1 zone only");
-
-        items = items[0].properties;
+      const zonesItems = currentProject?.zones?.items || [];
+      if (zonesItems.length === 1) {
+        // Single zone: showing properties
         Component = BuildingButton;
         propName = "building";
         layerKey = LAYERS.BUILDING;
       } else {
-      Component = ZoneButton;
-      propName = "zone";
-      layerKey = LAYERS.ZONE_DETAIL;
+        // Multiple zones
+        Component = ZoneButton;
+        propName = "zone";
+        layerKey = LAYERS.ZONE_DETAIL;
       }
     }
     else if (activeTab === TABS.AMENITIES) {
-      // items = TAB_CONFIG[TABS.AMENITIES].getItems();
-      items = currentProject.amenities.items;
       Component = AmenityButton;
       propName = "amenity";
       layerKey = LAYERS.AMENITY_DETAIL;
     }
     else if (activeTab === TABS.SURROUNDINGS) {
-      // items = TAB_CONFIG[TABS.SURROUNDINGS].getItems();
-      items = currentProject.surroundings.items;
-      // console.log(items);
-
       Component = SurroundingButton;
       propName = "surrounding";
       layerKey = LAYERS.SURROUNDING_DETAIL;
@@ -64,19 +50,15 @@ export default function SidebarButtons() {
   }
   else {
     if (activeLayer === LAYERS.ZONE_DETAIL) {
-      items = currentItem.properties;
-      // console.log(items);
-      if (items.length === 1) {
-        if (items[0].type === "villa") {
-          items = items[0].units;
-          if (items.length > 8) type = "small";
+      const properties = currentItem?.properties || [];
+      if (properties.length === 1) {
+        const property = properties[0];
+        if (property.type === "villa") {
           Component = ApartmentButton;
           propName = "apartment";
           layerKey = LAYERS.UNIT;
         }
-        else if (items[0].type === "town") {
-          items = items[0].blocks;
-          if (items.length > 9) type = "small";
+        else if (property.type === "town") {
           Component = BuildingButton;
           propName = "building";
           layerKey = LAYERS.BUILDING;
@@ -89,41 +71,34 @@ export default function SidebarButtons() {
       }
     }
     else if (activeLayer === LAYERS.BUILDING) {
-      // console.log(currentItem.type);
-      if (currentItem.type === "tower") {
-        items = currentItem.floors;
+      if (currentItem?.type === "tower") {
         Component = FloorButton;
         propName = "floor";
         layerKey = LAYERS.FLOOR;
       }
       else {
-        items = currentItem.units;
         Component = ApartmentButton;
         propName = "apartment";
         layerKey = LAYERS.UNIT;
       }
     }
     else if (activeLayer === LAYERS.FLOOR) {
-      items = currentItem.units;
       Component = ApartmentButton;
       propName = "apartment";
       layerKey = LAYERS.UNIT;
     }
     else if (activeLayer === LAYERS.SURROUNDING_DETAIL) {
-      // Keep showing surroundings items when viewing detail
-      items = currentProject.surroundings.items;
       Component = SurroundingButton;
       propName = "surrounding";
       layerKey = LAYERS.SURROUNDING_DETAIL;
     }
-    else if (activeLayer === LAYERS.UNIT) return;
   }
 
-  if (!items || items?.length === 0 || Component === null) return null;
+  if (!currentItems || currentItems.length === 0 || Component === null) return null;
 
   return (
     <div className="max-h-[calc(100vh-205px)] scrollbar-custom overflow-y-auto overflow-x-hidden space-y-3 px-2 py-2">
-      {items.map((item) => (
+      {currentItems.map((item) => (
         <Component
           key={item.id}
           {...{ [propName]: item }}

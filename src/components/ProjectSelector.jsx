@@ -11,17 +11,29 @@ export default function ProjectSelector({ developerId, onProjectSelect, onBackBu
   const [projects, setProjects] = useState([]);
   const [developerAssets, setDeveloperAssets] = useState({backgroundImage: null, logoImage: null});
   const [thumbnailUrls, setThumbnailUrls] = useState({});
+  const [introVideoUrls, setIntroVideoUrls] = useState({});
   const [loading, setLoading] = useState(true);
 
   const fetchProjects = async () => {
     try {
       setLoading(true);
       const response = await projectApi.getByDeveloper(developerId);
+      
+      // Check if response is valid before proceeding
+      if (!response || !Array.isArray(response) || response.length === 0) {
+        setProjects([]);
+        setLoading(false);
+        return;
+      }
+      
       setProjects(response);
 
-      // Fetch thumbnails for all projects
+      // Fetch thumbnails and intro videos for all projects
       const thumbnails = {};
+      const introVideos = {};
+      
       for (const project of response) {
+        // Fetch thumbnail
         if (project.thumbnailAssetId) {
           try {
             const url = await assetsApi.getAssetFileUrl(project.thumbnailAssetId);
@@ -32,8 +44,22 @@ export default function ProjectSelector({ developerId, onProjectSelect, onBackBu
             console.error(`Failed to fetch thumbnail for project ${project.id}:`, error);
           }
         }
+        
+        // Fetch intro video
+        if (project.introAssetId) {
+          try {
+            const url = await assetsApi.getAssetFileUrl(project.introAssetId);
+            if (url) {
+              introVideos[project.id] = url;
+            }
+          } catch (error) {
+            console.error(`Failed to fetch intro video for project ${project.id}:`, error);
+          }
+        }
       }
+      
       setThumbnailUrls(thumbnails);
+      setIntroVideoUrls(introVideos);
     } catch (error) {
       console.error("Error fetching projects:", error);
       toast.error("Failed to fetch projects");
@@ -123,7 +149,7 @@ export default function ProjectSelector({ developerId, onProjectSelect, onBackBu
           ) : (
             <div className="flex flex-wrap gap-8 xl:gap-10 justify-center">
               {projects.map((project) => {
-                const disabled = !project.introVideo;
+                const disabled = !introVideoUrls[project.id];
                 return (
                   <div
                     key={project.id}
@@ -131,7 +157,7 @@ export default function ProjectSelector({ developerId, onProjectSelect, onBackBu
                   >
                     <div className="px-3 pt-3">
                       <img
-                        src={thumbnailUrls[project.id] || project.thumbnail}
+                        src={thumbnailUrls[project.id]}
                         alt={project.name}
                         className="rounded-2xl w-full h-auto object-cover"
                       />
@@ -146,8 +172,11 @@ export default function ProjectSelector({ developerId, onProjectSelect, onBackBu
                       </p>
 
                       <button
-                        onClick={() => onProjectSelect(project)}
-                        disabled={!project.introVideo}
+                        onClick={() => onProjectSelect({ 
+                          ...project, 
+                          introVideoUrl: introVideoUrls[project.id] 
+                        })}
+                        disabled={disabled}
                         className={`w-full py-2 px-4 bg-transparent border ${disabled ? "" : "hover:bg-white hover:text-black hover:border-white"} disabled:text-white/50 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors duration-300`}
                       >
                         {disabled ? "Coming Soon" : "Open Project"}

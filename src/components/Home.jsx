@@ -13,7 +13,6 @@ import InfoPopup from "./InfoPopup.jsx";
 import HomeButton from "./buttons/HomeButton";
 
 import HistoryBreadcrumbs from "./HistoryBreadcrumbs";
-import FilterFloat from "./floating/FilterFloat";
 import BaseFloat from "./floating/BaseFloat";
 
 import Panorama from "./Panorama";
@@ -57,7 +56,7 @@ export default function Home() {
     goToTab,
     goHome } = useContext(SidebarContext);
 
-  const { isPanorama, isBalconyView, galleryType, handleBack } = useContext(MainContext);
+  const { isPanorama, isBalconyView, isRoomInterior, galleryType, handleBack } = useContext(MainContext);
 
   const videoViewer = useVideoViewer();
 
@@ -252,6 +251,45 @@ export default function Home() {
           </div>
           <div className="absolute inset-0">
             <Balcony apartment={currentItem} />
+          </div>
+        </div>
+      )}
+
+      {isRoomInterior && (
+        <div className="fixed inset-0 z-60 flex items-center justify-center">
+          {/* Semi-transparent backdrop */}
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          
+          {/* Modal popup */}
+          <div className="relative z-70 w-11/12 h-5/6 bg-[#2f2f2f] rounded-3xl shadow-2xl overflow-hidden">
+            {/* Back button inside modal */}
+            <button
+              onClick={handleBack}
+              className="absolute top-4 left-4 z-40 w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center
+                hover:bg-white/7 transition
+                disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M31 12H2M2 12L9 6M2 12L9 18"
+                  stroke="black"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            
+            {/* Room interior content */}
+            <div className="w-full h-full">
+              <Balcony apartment={currentItem} />
+            </div>
           </div>
         </div>
       )}
@@ -459,13 +497,6 @@ export default function Home() {
                       <BaseFloat mediaRef={mediaContainerRef} />
                     )}
 
-                  {activeLayer === LAYERS.FLOOR &&
-                    viewerProps.floatingOpacity && (
-                      <FilterFloat
-                        items={currentItem.units}
-                        mediaRef={mediaContainerRef}
-                      />
-                    )}
 
                   {/* left floating chevron to collapse sidebar */}
                   {activeTab !== TABS.HOME &&

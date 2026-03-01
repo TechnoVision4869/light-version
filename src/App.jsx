@@ -39,7 +39,7 @@ export default function App() {
 
   const getIntroVideoUrl = () => {
     if (!currentProject) return null;
-    return currentProject?.introVideo || `/kog/videos/home/intro1.mp4`;
+    return currentProject?.introVideoUrl;
   };
 
   return (

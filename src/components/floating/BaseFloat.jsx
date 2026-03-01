@@ -1,71 +1,59 @@
-import { useState, useEffect, useMemo, useCallback, useContext } from "react";
+import { useContext, useMemo } from "react";
+import { FilterContext } from "../../store/FilterContextProvider";
 import { SidebarContext } from "../../store/SidebarContextProvider";
+import { useFloatingPositions } from "../../hooks/useFloatingPositions";
 import BaseFloatButton from "./BaseFloatButton";
 import AnimFloatButton from "./AnimFloatButton";
 import { TABS, LAYERS } from '../../data/layers';
+import { MainContext } from "@/store/MainContextProvider";
 
 export default function BaseFloating({ mediaRef }) {
-    const container = mediaRef.current;
-
+    const { filters } = useContext(FilterContext);
     const { activeTab, activeLayer, currentItem, currentItems, type, goToItem, highlightedButton, setHighlightedButton } = useContext(SidebarContext);
-    const [buttonPositions, setButtonPositions] = useState([]);
+    const { handleRoomInterior } = useContext(MainContext);
 
-    const triangleOffsetPx = -24; // Approximate triangle tip distance below button center
+    // For FLOOR layer, use filtered items; otherwise use currentItems
+    const itemsToRender = useMemo(() => {
+        if (activeLayer === LAYERS.FLOOR) {
+            // Apply filtering to units
+            const units = currentItems;
+            
+            if (!filters) return units;
 
-    const updatePositions = useCallback(() => {
-        if (!currentItems || !container) return;
-        const w = container.clientWidth;
-        const h = container.clientHeight;
-        const videoW = h * (16 / 9);
-        const videoLeft = (w - videoW) / 2;
+            return units.filter(item => {
+                // Apply unit type filter
+                // if (filters.unitType.length > 0 && !filters.unitType.includes(item.unitType)) {
+                //     return false;
+                // }
 
-        const newPositions = currentItems.map(item => ({
-            left: videoLeft + videoW * item.x,
-            top: h * item.y + triangleOffsetPx,
-        }));
+                // Apply bedroom filter
+                if (filters.bedrooms.length > 0 && !filters.bedrooms.includes(item.bedrooms)) {
+                    return false;
+                }
 
-        setButtonPositions(newPositions);
-    }, [currentItems, container]);
+                // Apply bathroom filter
+                if (filters.bathrooms.length > 0 && !filters.bathrooms.includes(item.bathrooms)) {
+                    return false;
+                }
 
-    // Create a map for O(1) lookup: id → position
-    const itemIdToPosition = useMemo(() => {
-        if (!currentItems) return new Map();
-        const map = new Map();
-        currentItems.forEach((item, index) => {
-            map.set(item.id, buttonPositions[index]);
-        });
-        return map;
-    }, [currentItems, buttonPositions]);
+                // Apply surface area filter
+                if (filters.area !== null && item.area > filters.area) {
+                    return false;
+                }
 
-    // Observe resize
-    useEffect(() => {
-        // console.log("mount");
-        if (!container) return;
-
-        const resizeObserver = new ResizeObserver(updatePositions);
-        resizeObserver.observe(container);
-
-        updatePositions();
-
-        return () => {
-            // console.log("un mount");
-            resizeObserver.disconnect();
+                // Apply budget filter
+                if (filters.price !== null && item.price > filters.price) {
+                    return false;
+                }
+                return true;
+            });
         }
-    }, []); // Empty dependency array ensures this runs once on mount
+        return currentItems;
+    }, [activeLayer, currentItem, currentItems, filters]);
 
-    useEffect(() => {
-        if (activeLayer === LAYERS.UNIT) {
-            setButtonPositions([]);
-        }
-    }, [activeLayer]);
+    const { buttonPositions, itemIdToPosition } = useFloatingPositions(currentItems, mediaRef);
 
-    // console.log(buttonPositions.length);
-    // console.log(currentItems.length);
-
-    // Don't render until positions are ready
-    if (!currentItems || buttonPositions.length !== currentItems.length) return null;
-    if (activeLayer === LAYERS.UNIT) return;
-
+    if (!itemsToRender) return null;
     
     let layerKey = null;
     if (activeLayer !== null) {
@@ -102,15 +90,46 @@ export default function BaseFloating({ mediaRef }) {
         }
     }
 
+    // FLOOR layer - render filtered units
+    if (activeLayer === LAYERS.FLOOR) {
+        return (
+            itemsToRender.map((item) => {
+                const pos = itemIdToPosition.get(item.id);
+                if (!pos) return null;
+
+                const isSelected = highlightedButton === item;
+
+                return (
+                    <BaseFloatButton
+                        key={item.id}
+                        name={item.displayName}
+                        tabType={activeTab}
+                        layerType={activeLayer}
+                        style={{
+                            left: `${pos.left}px`,
+                            top: `${pos.top}px`,
+                        }}
+                        isSelected={isSelected}
+                        onSelect={() => {
+                            if (isSelected) {
+                                goToItem(item, LAYERS.UNIT);
+                                setHighlightedButton(null);
+                            }
+                            else setHighlightedButton(item);
+                        }}
+                    />
+                )
+            })
+        );
+    }
+
     if (activeTab === TABS.SURROUNDINGS) {
         return (
-            currentItems.map((item) => {
+            itemsToRender.map((item) => {
                 const pos = itemIdToPosition.get(item.id);
-                // console.log(item.id, pos);
 
                 if (!pos) return null;
                 const isSelected = currentItem?.id === item.id;
-                // console.log(isSelected);
                 
                 return (
                     <AnimFloatButton
@@ -132,16 +151,48 @@ export default function BaseFloating({ mediaRef }) {
         );
     }
 
+    // Handle UNIT layer - show room buttons
+    if (activeLayer === LAYERS.UNIT) {
+        return (
+            itemsToRender.map((room) => {
+                const pos = itemIdToPosition.get(room.id);
+                if (!pos) return null;
+
+                const isSelected = highlightedButton === room;
+
+                return (
+                    <BaseFloatButton
+                        key={room.id}
+                        name={room.displayName}
+                        tabType={activeTab}
+                        layerType={activeLayer}
+                        style={{
+                            left: `${pos.left}px`,
+                            top: `${pos.top}px`,
+                        }}
+                        isSelected={isSelected}
+                        onSelect={() => {
+                            if (isSelected) {
+                                setHighlightedButton(null);
+                            }
+                            else {
+                                setHighlightedButton(room);
+                                handleRoomInterior();
+                            }
+                        }}
+                    />
+                );
+            })
+        );
+    }
+
+    // Default rendering for other layers
     return (
-        currentItems.map((item) => {
-            // console.log(itemIdToPosition);
-            // console.log(item.id);
+        itemsToRender.map((item) => {
             const pos = itemIdToPosition.get(item.id);
-            // console.log(pos);
 
             if (!pos) return null;
 
-            const isOpaque = (highlightedButton === null || highlightedButton === item);
             const isSelected = highlightedButton === item;
 
             if (type !== "small") {
@@ -158,8 +209,6 @@ export default function BaseFloating({ mediaRef }) {
                         isSelected={isSelected}
                         onSelect={() => {
                             if (isSelected) {
-                                // console.log("Selected item:", item);
-
                                 goToItem(item, layerKey);
                                 setHighlightedButton(null);
                             }
@@ -184,8 +233,6 @@ export default function BaseFloating({ mediaRef }) {
                     isSelected={isSelected}
                     onSelect={() => {
                         if (isSelected) {
-                            // console.log("Selected item:", item);
-
                             goToItem(item, layerKey);
                             setHighlightedButton(null);
                         }

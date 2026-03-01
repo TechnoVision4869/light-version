@@ -201,7 +201,7 @@ export function AssetsLibrary({
                 "px-2 py-1 text-xs rounded-md",
                 typeFilter === t
                   ? "bg-primary text-primary-foreground"
-                  : "bg-muted hover:bg-muted/80"
+                  : "bg-muted hover:bg-muted/80 text-muted-foreground"
               )}
             >
               {t === "all" ? "All" : t.charAt(0).toUpperCase() + t.slice(1)}

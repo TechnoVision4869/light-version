@@ -154,7 +154,7 @@ export const DEVELOPER_MIX = {
                         projectId: "mix",
                         zoneId: "zone1",
                         buildingId: "tower1",
-                        unitTypeId: "unit-type-a",
+                        unitTypeId: "7B_BF_C03",
                         floorId: "floor1",
                         displayName: "A101",
                         area: 85,
@@ -279,41 +279,9 @@ export const DEVELOPER_MIX = {
                       // Tower 2, Floor 1
                       { id: "apartment111", projectId: "mix", zoneId: "zone1", buildingId: "tower2", unitTypeId: "unit-type-g", floorId: "floor1", displayName: "A111", area: 140, price: 260000, bedrooms: 2, bathrooms: 1, balconyView: "/mix/panorama/balcony.jpg", x: 0.4, y: 0.58, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
                       { id: "apartment112", projectId: "mix", zoneId: "zone1", buildingId: "tower2", unitTypeId: "unit-type-f", floorId: "floor1", displayName: "A112", area: 150, price: 325000, bedrooms: 2, bathrooms: 2, balconyView: "/mix/panorama/balcony.jpg", x: 0.21, y: 0.43, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
-                      { id: "apartment113", projectId: "mix", zoneId: "zone1", buildingId: "tower2", unitTypeId: "unit-type-a", floorId: "floor1", displayName: "A113", area: 85, price: 240000, bedrooms: 2, bathrooms: 1, balconyView: "/mix/panorama/balcony.jpg", x: 0.23, y: 0.2, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
+                      { id: "apartment113", projectId: "mix", zoneId: "zone1", buildingId: "tower2", unitTypeId: "7B_BF_C03", floorId: "floor1", displayName: "A113", area: 85, price: 240000, bedrooms: 2, bathrooms: 1, balconyView: "/mix/panorama/balcony.jpg", x: 0.23, y: 0.2, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
                       { id: "apartment114", projectId: "mix", zoneId: "zone1", buildingId: "tower2", unitTypeId: "unit-type-d", floorId: "floor1", displayName: "A114", area: 145, price: 375000, bedrooms: 3, bathrooms: 2, balconyView: "/mix/panorama/balcony.jpg", x: 0.6, y: 0.25, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
                       { id: "apartment115", projectId: "mix", zoneId: "zone1", buildingId: "tower2", unitTypeId: "unit-type-b", floorId: "floor1", displayName: "A115", area: 220, price: 450000, bedrooms: 4, bathrooms: 2, balconyView: "/mix/panorama/balcony.jpg", x: 0.7, y: 0.65, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
-                    ],
-                    features: [
-                      {
-                        id: "amenity1",
-                        displayName: "Meeting Room",
-                        subtitle: "Corridor Amenity",
-                        description: "...",
-                        x: 0.17, y: 0.69,
-                      },
-                    ],
-                  },
-                  {
-                    id: "floor2",
-                    projectId: "mix",
-                    zoneId: "zone1",
-                    buildingId: "tower2",
-                    displayName: "Floor 2",
-                    type: "Residential",
-                    description: "Second floor description...",
-                    x: 0.27, y: 0.49,
-                    videos: {
-                      forwardVideo: "/mix/videos/zones/zone1/tower2/floors/zone1_tower2_floor1_trans.mp4",
-                      reverseVideo: "/mix/videos/zones/zone1/tower2/floors/zone1_tower2_floor1_rev.mp4",
-                      idleVideo: "mix/videos/zones/zone1/tower2/floors/floor2/zone1_tower2_floor2_idle.mp4",
-                    },
-                    units: [
-                      // Tower 2, Floor 2
-                      { id: "apartment221", projectId: "mix", zoneId: "zone1", buildingId: "tower2", unitTypeId: "unit-type-h", floorId: "floor2", displayName: "A221", area: 185, price: 275000, bedrooms: 2, bathrooms: 1, balconyView: "/mix/panorama/balcony.jpg", x: 0.2, y: 0.4, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
-                      { id: "apartment222", projectId: "mix", zoneId: "zone1", buildingId: "tower2", unitTypeId: "unit-type-a", floorId: "floor2", displayName: "A222", area: 85, price: 240000, bedrooms: 2, bathrooms: 1, balconyView: "/mix/panorama/balcony.jpg", x: 0.24, y: 0.2, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
-                      { id: "apartment223", projectId: "mix", zoneId: "zone1", buildingId: "tower2", unitTypeId: "unit-type-c", floorId: "floor2", displayName: "A223", area: 125, price: 300000, bedrooms: 2, bathrooms: 2, balconyView: "/mix/panorama/balcony.jpg", x: 0.475, y: 0.24, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
-                      { id: "apartment224", projectId: "mix", zoneId: "zone1", buildingId: "tower2", unitTypeId: "unit-type-e", floorId: "floor2", displayName: "A224", area: 115, price: 275000, bedrooms: 2, bathrooms: 1, balconyView: "/mix/panorama/balcony.jpg", x: 0.715, y: 0.21, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
-                      { id: "apartment225", projectId: "mix", zoneId: "zone1", buildingId: "tower2", unitTypeId: "unit-type-d", floorId: "floor2", displayName: "A225", area: 145, price: 325000, bedrooms: 3, bathrooms: 2, balconyView: "/mix/panorama/balcony.jpg", x: 0.55, y: 0.5, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } }
                     ],
                     features: [
                       {
@@ -394,8 +362,8 @@ export const DEVELOPER_MIX = {
 
       unitTypes: {
         // Type A: 2B1B, 85m² — e.g., apartment101, 113, 222
-        "unit-type-a": {
-          id: "unit-type-a",
+        "7B_BF_C03": {
+          id: "7B_BF_C03",
           bedrooms: 2, bathrooms: 1,
           area: 85,
           serviceRooms: ["Hard Kitchen"],
@@ -409,43 +377,45 @@ export const DEVELOPER_MIX = {
               rooms: [
                 {
                   id: "room1",
-                  displayName: "Livingroom",
-                  furnitureImg: "/mix/panorama/unit-type-a/rec_f.jpg",
-                  unfurnitureImg: "/mix/panorama/unit-type-a/rec_unf.jpg",
+                  displayName: "B01",
+                  furnitureImg: "/mix/panorama/7B_BF_C03/bedroom_f.jpg",
+                  unfurnitureImg: "/mix/panorama/7B_BF_C03/bedroom_unf.jpg",
                   description: "A spacious livingroom...",
-                  hotspots: [
-                    {
-                      id: 'spot3',
-                      yaw: -35, pitch: 0,
-                      type: 'scene',
-                      label: "Dinning and Kitchen"
-                    },
-
-                  ]
+                  x: 0.48, y: 0.79,
+                  hotspots: []
                 },
                 {
                   id: "room2",
-                  displayName: "Dinning and Kitchen",
-                  furnitureImg: "/mix/panorama/unit-type-a/dining_f.jpg",
-                  unfurnitureImg: "/mix/panorama/unit-type-a/dining_unf.jpg",
-                  hotspots: [
-                    {
-                      id: 'spot1',
-                      yaw: 145, pitch: 0,
-                      type: 'scene',
-                      label: "Livingroom"
-                    },
-                    {
-                      id: 'spot4',
-                      yaw: 160, pitch: 5,
-                      type: 'scene',
-                      label: "Livingroom"
-                    },
-                  ]
+                  displayName: "T01",
+                  furnitureImg: "/mix/panorama/7B_BF_C03/toilet_f.jpg",
+                  unfurnitureImg: "/mix/panorama/7B_BF_C03/toilet_unf.jpg",
+                  x: 0.37, y: 0.46,
+                  hotspots: []
                 },
-                { id: "room3", displayName: "Bedroom", furnitureImg: "/mix/panorama/bedroom.png", unfurnitureImg: "/mix/panorama/bedroom_unf.png", hotspots: [{ id: 'spot1', yaw: -105, pitch: -10, type: 'scene', label: "Livingroom" }] },
-                { id: "room4", displayName: "Master Bedroom", furnitureImg: "/mix/panorama/master_bedroom.png", unfurnitureImg: "/mix/panorama/master_bedroom_unf.png", hotspots: [{ id: 'spot1', yaw: -115, pitch: -5, type: 'scene', label: "Livingroom" }, { id: 'spot2', yaw: -115, pitch: -15, type: 'scene', label: "Bathroom" }] },
-                { id: "room5", displayName: "Bathroom", furnitureImg: "/mix/panorama/bathroom.png", unfurnitureImg: "/mix/panorama/bathroom_unf.png", hotspots: [{ id: 'spot1', yaw: -3, pitch: 0, type: 'scene', label: "Master Bedroom" }] }
+                {
+                  id: "room3",
+                  displayName: "D01",
+                  furnitureImg: "/mix/panorama/7B_BF_C03/dining_f.jpg",
+                  unfurnitureImg: "/mix/panorama/7B_BF_C03/dining_unf.jpg",
+                  x: 0.52, y: 0.42,
+                  hotspots: []
+                },
+                {
+                  id: "room4",
+                  displayName: "K01",
+                  furnitureImg: "/mix/panorama/7B_BF_C03/kitchen_f.jpg",
+                  unfurnitureImg: "/mix/panorama/7B_BF_C03/kitchen_unf.jpg",
+                  x: 0.46, y: 0.59,
+                  hotspots: []
+                },
+                {
+                  id: "room5",
+                  displayName: "L01",
+                  furnitureImg: "/mix/panorama/7B_BF_C03/living_f.jpg",
+                  unfurnitureImg: "/mix/panorama/7B_BF_C03/living_unf.jpg",
+                  x: 0.5, y: 0.19,
+                  hotspots: []
+                }
               ]
             }]
           }

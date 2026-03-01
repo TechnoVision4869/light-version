@@ -222,7 +222,7 @@ class ApiService {
    * apiService.get("/posts", { page: 1 })
    */
   async get(endpoint, queryParams, options) {
-    console.log("token", this.apiToken);
+    // console.log("token", this.apiToken);
     const url = this.parseEndpoint(endpoint, queryParams);
     const parsedOptions = this.parseOptions({
       method: "get",
