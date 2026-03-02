@@ -147,7 +147,25 @@ export function AssetsLibrary({
   };
 
   const handleAddAsset = (created) => {
-    setAssets((prev) => (created ? [created, ...prev] : prev));
+    if (created) {
+      setAssets((prev) => [created, ...prev]);
+      
+      // Auto-switch filter to match uploaded asset type for better UX
+      const uploadedType = (created.type || "").toLowerCase();
+      if (uploadedType && typeFilter !== "all" && typeFilter !== uploadedType) {
+        setTypeFilter(uploadedType);
+        toast.success(`Switched to ${uploadedType} filter to show your new asset`);
+      }
+      
+      // Auto-expand the tag to show the new asset
+      if (created.tag) {
+        setExpandedTags((prev) => {
+          const next = new Set(prev);
+          next.add(created.tag);
+          return next;
+        });
+      }
+    }
   };
 
   return (

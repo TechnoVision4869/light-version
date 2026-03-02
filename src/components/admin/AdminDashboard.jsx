@@ -25,6 +25,7 @@ import { unitApi } from "../../api/admin/unitApi";
 import { unitTypeApi } from "../../api/admin/unitTypeApi";
 import { amenityApi } from "../../api/admin/amenityApi";
 import { surroundingApi } from "../../api/admin/surroundingApi";
+import { assetApi } from "../../api/admin/assetApi";
 import { apiService } from "../../services/api.service";
 
 const USE_MOCK_DATA = false;
@@ -177,6 +178,7 @@ export default function AdminDashboard() {
   const [mockAssets, setMockAssets] = useState(
     () => initialMock?.assets ?? null,
   );
+  const [allAssets, setAllAssets] = useState([]);
 
   const [selectedNode, setSelectedNode] = useState(null);
   const [selectedDeveloperId, setSelectedDeveloperId] = useState(null);
@@ -235,6 +237,21 @@ export default function AdminDashboard() {
   useEffect(() => {
     loadUnitTypes();
   }, [loadUnitTypes]);
+
+  const loadAllAssets = useCallback(async () => {
+    if (USE_MOCK_DATA) return;
+    try {
+      const list = await assetApi.list({ limit: 1000 });
+      setAllAssets(Array.isArray(list) ? list : list?.data ?? []);
+    } catch (err) {
+      console.error(err);
+      setAllAssets([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadAllAssets();
+  }, [loadAllAssets]);
 
   const loadProjects = useCallback(
     async (developerId) => {
@@ -984,6 +1001,22 @@ export default function AdminDashboard() {
           }
         }
 
+        // Project-specific payload shaping (zonesMetadata nested fields)
+        let finalData = { ...data };
+        if (type === ENTITY_TYPES.PROJECT) {
+          const zonesMetadata = {
+            videos: {
+              forwardVideoId: data['zonesMetadata.videos.forwardVideoId'] || null,
+              reverseVideoId: data['zonesMetadata.videos.reverseVideoId'] || null,
+              sideVideoId: data['zonesMetadata.videos.sideVideoId'] || null,
+            },
+          };
+          finalData.zonesMetadata = zonesMetadata;
+          delete finalData['zonesMetadata.videos.forwardVideoId'];
+          delete finalData['zonesMetadata.videos.reverseVideoId'];
+          delete finalData['zonesMetadata.videos.sideVideoId'];
+        }
+
         if (USE_MOCK_DATA) {
           if (id) {
             const node = nodes.find((n) => n.id === id);
@@ -1184,22 +1217,22 @@ export default function AdminDashboard() {
         if (id) {
           switch (type) {
             case ENTITY_TYPES.DEVELOPER:
-              await developerApi.update(id, data);
+              await developerApi.update(id, finalData);
               break;
             case ENTITY_TYPES.PROJECT:
-              await projectApi.update(id, data);
+              await projectApi.update(id, finalData);
               break;
             case ENTITY_TYPES.ZONE:
-              await zoneApi.update(id, data);
+              await zoneApi.update(id, finalData);
               break;
             case ENTITY_TYPES.PROPERTY:
-              await propertyApi.update(id, data);
+              await propertyApi.update(id, finalData);
               break;
             case ENTITY_TYPES.FLOOR:
-              await floorApi.update(id, data);
+              await floorApi.update(id, finalData);
               break;
             case ENTITY_TYPES.BLOCK:
-              await blockApi.update(id, data);
+              await blockApi.update(id, finalData);
               break;
             case ENTITY_TYPES.UNIT: {
               const payload = normalizeUnitPayload(data);
@@ -1226,27 +1259,27 @@ export default function AdminDashboard() {
           let created;
           switch (type) {
             case ENTITY_TYPES.DEVELOPER:
-              created = await developerApi.create(data);
+              created = await developerApi.create(finalData);
               await loadDevelopers();
               break;
             case ENTITY_TYPES.PROJECT:
-              created = await projectApi.create(data);
+              created = await projectApi.create(finalData);
               if (data.developerId) loadProjects(data.developerId);
               break;
             case ENTITY_TYPES.ZONE:
-              created = await zoneApi.create(data);
+              created = await zoneApi.create(finalData);
               if (data.projectId) loadZones(data.projectId);
               break;
             case ENTITY_TYPES.PROPERTY:
-              created = await propertyApi.create(data);
+              created = await propertyApi.create(finalData);
               if (data.zoneId) loadProperties(data.zoneId);
               break;
             case ENTITY_TYPES.FLOOR:
-              created = await floorApi.create(data);
+              created = await floorApi.create(finalData);
               if (data.propertyId) loadFloors(data.propertyId);
               break;
             case ENTITY_TYPES.BLOCK:
-              created = await blockApi.create(data);
+              created = await blockApi.create(finalData);
               if (data.propertyId) loadBlocks(data.propertyId);
               break;
             case ENTITY_TYPES.UNIT: {
@@ -1358,6 +1391,14 @@ export default function AdminDashboard() {
     },
     [focusedAssetField, selectedNode],
   );
+
+  const assetsMap = useMemo(() => {
+    const map = {};
+    allAssets.forEach((asset) => {
+      if (asset.id) map[asset.id] = asset;
+    });
+    return map;
+  }, [allAssets]);
 
   const assetPreviewUrls = useMemo(() => {
     const map = {};
@@ -1481,6 +1522,7 @@ export default function AdminDashboard() {
               onFormAssetIdsChange={setFormAssetIds}
               unitTypes={unitTypes}
               isSaving={isSaving}
+              assetsMap={assetsMap}
             />
           </div>
 

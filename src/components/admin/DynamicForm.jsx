@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Save, X, Plus, Trash2, FolderTree, Folder } from "lucide-react";
+import { Save, X, Plus, Trash2, FolderTree, Folder, ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,8 +33,13 @@ export function DynamicForm({
   onFormAssetIdsChange,
   unitTypes = [],
   isSaving = false,
+  assetsMap = {},
 }) {
   const [localData, setLocalData] = useState({});
+  const [expandedGroups, setExpandedGroups] = useState(() => {
+    // Start with first group expanded by default
+    return new Set();
+  });
 
   const config = useMemo(() => (selectedNode ? resourceConfigs[selectedNode.type] : null), [selectedNode]);
   const schema = useMemo(() => config?.schema, [config]);
@@ -72,9 +77,11 @@ export function DynamicForm({
     const data = selectedNode?.data;
     if (useConfigFields && fields) {
       const initialData = {};
-      fields.forEach((f) => {
+      const processField = (f) => {
         const key = f.name;
-        if (f.control === CONTROL_TYPES.ASSET_ARRAY || f.control === CONTROL_TYPES.PAYMENT_PLANS_ARRAY || f.control === CONTROL_TYPES.LEVELS_ARRAY) {
+        if (f.control === CONTROL_TYPES.ASSET_GROUP && f.fields) {
+          f.fields.forEach(processField);
+        } else if (f.control === CONTROL_TYPES.ASSET_ARRAY || f.control === CONTROL_TYPES.PAYMENT_PLANS_ARRAY || f.control === CONTROL_TYPES.LEVELS_ARRAY) {
           const raw = data?.[key];
           if (f.control === CONTROL_TYPES.ASSET_ARRAY) {
             initialData[key] = Array.isArray(raw) ? raw.map((x) => (typeof x === "string" ? x : x?.assetId ?? null)) : [];
@@ -83,10 +90,18 @@ export function DynamicForm({
           } else {
             initialData[key] = Array.isArray(raw) ? raw : [];
           }
+        } else if (key.includes('.')) {
+          const parts = key.split('.');
+          let value = data;
+          for (const part of parts) {
+            value = value?.[part];
+          }
+          initialData[key] = value ?? null;
         } else {
           initialData[key] = data?.[key] ?? null;
         }
-      });
+      };
+      fields.forEach(processField);
       setLocalData(initialData);
     } else if (schema) {
       const initialData = {};
@@ -100,7 +115,11 @@ export function DynamicForm({
   }, [selectedNode?.id, selectedNode?.data, schema, useConfigFields, fields]);
 
   const update = (key, value) => {
-    setLocalData((prev) => ({ ...prev, [key]: value }));
+    if (key.includes('.')) {
+      setLocalData((prev) => ({ ...prev, [key]: value }));
+    } else {
+      setLocalData((prev) => ({ ...prev, [key]: value }));
+    }
   };
 
   const updateArray = (key, index, valueOrUpdater) => {
@@ -215,6 +234,7 @@ export function DynamicForm({
     const value = localData[name] ?? null;
 
     if (control === CONTROL_TYPES.ASSET) {
+      const assetName = value && assetsMap[value] ? (assetsMap[value].assetKey || assetsMap[value].name) : null;
       return (
         <AssetFieldInput
           key={name}
@@ -222,6 +242,7 @@ export function DynamicForm({
           label={label}
           value={value}
           assetPreviewUrl={value ? assetPreviewUrls?.[value] : null}
+          assetName={assetName}
           onChange={(id) => update(name, id)}
           onFocus={onFieldFocus}
           isFocused={focusedAssetField === name}
@@ -229,11 +250,54 @@ export function DynamicForm({
       );
     }
 
+    if (control === CONTROL_TYPES.ASSET_GROUP) {
+      const groupFields = field.fields || [];
+      const isExpanded = expandedGroups.has(name);
+      const toggleGroup = () => {
+        setExpandedGroups((prev) => {
+          const next = new Set(prev);
+          if (next.has(name)) {
+            next.delete(name);
+          } else {
+            next.add(name);
+          }
+          return next;
+        });
+      };
+
+      return (
+        <div key={name} className="rounded-lg border border-white/20 bg-white/5 overflow-hidden transition-all">
+          <button
+            type="button"
+            onClick={toggleGroup}
+            className="w-full flex items-center justify-between p-4 hover:bg-white/10 transition-colors"
+          >
+            <div className="flex items-center gap-2">
+              {isExpanded ? (
+                <ChevronDown className="w-5 h-5 text-white/70 transition-transform" />
+              ) : (
+                <ChevronRight className="w-5 h-5 text-white/70 transition-transform" />
+              )}
+              <h3 className="text-sm font-semibold text-white">{label}</h3>
+            </div>
+            <span className="text-xs text-white/50">
+              {groupFields.length} field{groupFields.length !== 1 ? 's' : ''}
+            </span>
+          </button>
+          {isExpanded && (
+            <div className="p-4 pt-0 space-y-3 border-t border-white/10 animate-in fade-in slide-in-from-top-2 duration-200">
+              {groupFields.map((subField) => renderConfigField(subField))}
+            </div>
+          )}
+        </div>
+      );
+    }
+
     if (control === CONTROL_TYPES.ASSET_ARRAY) {
       const list = Array.isArray(value) ? value : [];
       return (
         <div key={name} className="space-y-2">
-          <Label className="block">{label}</Label>
+          <Label className="block text-white">{label}</Label>
           {list.map((assetId, idx) => (
             <div key={idx} className="flex items-center gap-2">
               <div className="flex-1 min-w-0">
@@ -242,6 +306,7 @@ export function DynamicForm({
                   label=""
                   value={assetId}
                   assetPreviewUrl={assetId ? assetPreviewUrls?.[assetId] : null}
+                  assetName={assetId && assetsMap[assetId] ? assetsMap[assetId].assetKey || assetsMap[assetId].name : null}
                   onChange={(id) => updateArray(name, idx, id)}
                   onFocus={onFieldFocus}
                   isFocused={focusedAssetField === `${name}-${idx}`}
@@ -552,7 +617,12 @@ export function DynamicForm({
       return (
         <div key={name}>
           <Label className="text-white">{label}{required && " *"}</Label>
-          <Input value={value} className="mt-1 bg-white/5 border-white/20 text-white/60" readOnly disabled />
+          <Input
+            value={value ?? ""}
+            className="mt-1 bg-white/5 border-white/20 text-white/60"
+            readOnly
+            disabled
+          />
         </div>
       );
     }
@@ -574,7 +644,14 @@ export function DynamicForm({
           : { value: opt, label: String(opt) }
       );
       const isBooleanOpts = opts.length > 0 && typeof opts[0].value === "boolean";
-      const selectValue = value === true ? "true" : value === false ? "false" : value;
+      const selectValue =
+        value == null
+          ? ""
+          : value === true
+            ? "true"
+            : value === false
+              ? "false"
+              : value;
       const handleSelectChange = (e) => {
         const v = e.target.value;
         if (isBooleanOpts) update(name, v === "true" ? true : v === "false" ? false : v);
@@ -690,7 +767,7 @@ export function DynamicForm({
             <Label>{label}{isRequired && " *"}</Label>
             <Input
               type="number"
-              value={value}
+              value={value == null || value === "" ? "" : value}
               onChange={(e) => update(key, e.target.value === "" ? null : Number(e.target.value))}
               className="mt-1"
               required={isRequired}
