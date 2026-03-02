@@ -11,12 +11,13 @@ class AssetApi {
    */
   async list(filters = {}) {
     const params = {};
-    if (filters.search) params.search = filters.search;
+    if (filters.limit) params.limit = filters.limit;
     if (filters.type && filters.type !== "all") params.type = filters.type;
-    if (filters.tag) params.tag = filters.tag;
-    if (filters.isActive !== undefined) params.isActive = String(filters.isActive);
     if (filters.developerId) params.developerId = filters.developerId;
-    return apiService.get("assets", Object.keys(params).length ? params : undefined);
+    return apiService.get(
+      "assets",
+      Object.keys(params).length ? params : undefined,
+    );
   }
 
   async getById(id) {

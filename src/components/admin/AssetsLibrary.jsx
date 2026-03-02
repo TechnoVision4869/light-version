@@ -32,7 +32,8 @@ function getTypeIcon(type) {
   const t = (type || "").toLowerCase();
   if (t === AssetType.VIDEO) return <Video className="w-4 h-4 shrink-0" />;
   if (t === AssetType.PANORAMA) return <Compass className="w-4 h-4 shrink-0" />;
-  if (t === AssetType.THUMBNAIL) return <FileImage className="w-4 h-4 shrink-0" />;
+  if (t === AssetType.THUMBNAIL)
+    return <FileImage className="w-4 h-4 shrink-0" />;
   return <Image className="w-4 h-4 shrink-0" />;
 }
 
@@ -78,12 +79,12 @@ export function AssetsLibrary({
 
   const filters = useMemo(
     () => ({
+      limit: 1000,
       search: search.trim() || undefined,
       type: typeFilter === "all" ? undefined : typeFilter,
-      isActive: true,
       developerId: developerId || undefined,
     }),
-    [search, typeFilter, developerId]
+    [search, typeFilter, developerId],
   );
 
   useEffect(() => {
@@ -103,7 +104,9 @@ export function AssetsLibrary({
       .list(filters)
       .then((data) => {
         if (!cancelled) {
-          const list = Array.isArray(data) ? data : data?.data ?? data?.items ?? [];
+          const list = Array.isArray(data)
+            ? data
+            : (data?.data ?? data?.items ?? []);
           setAssets(list);
         }
       })
@@ -113,7 +116,9 @@ export function AssetsLibrary({
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [mockAssets, disabled, filters]);
 
   const filteredByType = useMemo(() => {
@@ -134,7 +139,7 @@ export function AssetsLibrary({
 
   const allTags = useMemo(
     () => Array.from(new Set(assets.map((a) => a.tag).filter(Boolean))),
-    [assets]
+    [assets],
   );
 
   const toggleTag = (tag) => {
@@ -149,14 +154,16 @@ export function AssetsLibrary({
   const handleAddAsset = (created) => {
     if (created) {
       setAssets((prev) => [created, ...prev]);
-      
+
       // Auto-switch filter to match uploaded asset type for better UX
       const uploadedType = (created.type || "").toLowerCase();
       if (uploadedType && typeFilter !== "all" && typeFilter !== uploadedType) {
         setTypeFilter(uploadedType);
-        toast.success(`Switched to ${uploadedType} filter to show your new asset`);
+        toast.success(
+          `Switched to ${uploadedType} filter to show your new asset`,
+        );
       }
-      
+
       // Auto-expand the tag to show the new asset
       if (created.tag) {
         setExpandedTags((prev) => {
@@ -169,12 +176,19 @@ export function AssetsLibrary({
   };
 
   return (
-    <div className={cn("h-full flex flex-col border-l border-white/10 bg-[#1C1C1C] relative", disabled && "opacity-60")}>
+    <div
+      className={cn(
+        "h-full flex flex-col border-l border-white/10 bg-[#1C1C1C] relative",
+        disabled && "opacity-60",
+      )}
+    >
       {disabled && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#1C1C1C]/90 backdrop-blur-sm rounded-l pointer-events-auto">
           <div className="text-center text-white/60 px-4">
             <Building2 className="w-12 h-12 mx-auto mb-3 text-white/30" />
-            <p className="text-sm">Select a developer to use the Assets Library</p>
+            <p className="text-sm">
+              Select a developer to use the Assets Library
+            </p>
           </div>
         </div>
       )}
@@ -210,7 +224,13 @@ export function AssetsLibrary({
         </div>
 
         <div className="flex flex-wrap gap-1">
-          {["all", AssetType.VIDEO, AssetType.IMAGE, AssetType.PANORAMA, AssetType.THUMBNAIL].map((t) => (
+          {[
+            "all",
+            AssetType.VIDEO,
+            AssetType.IMAGE,
+            AssetType.PANORAMA,
+            AssetType.THUMBNAIL,
+          ].map((t) => (
             <button
               key={t}
               type="button"
@@ -219,7 +239,7 @@ export function AssetsLibrary({
                 "px-2 py-1 text-xs rounded-md",
                 typeFilter === t
                   ? "bg-primary text-primary-foreground"
-                  : "bg-muted hover:bg-muted/80 text-muted-foreground"
+                  : "bg-muted hover:bg-muted/80 text-muted-foreground",
               )}
             >
               {t === "all" ? "All" : t.charAt(0).toUpperCase() + t.slice(1)}
@@ -263,12 +283,15 @@ export function AssetsLibrary({
                           tabIndex={disabled ? -1 : 0}
                           onClick={() => !disabled && onAssetClick(asset)}
                           onKeyDown={(e) =>
-                            !disabled && e.key === "Enter" && onAssetClick(asset)
+                            !disabled &&
+                            e.key === "Enter" &&
+                            onAssetClick(asset)
                           }
                           className="rounded-md border border-white/20 hover:border-white/40 hover:shadow-lg transition-all overflow-hidden"
                         >
                           <div className="aspect-video bg-[#2C2C2C]">
-                            {(asset.type || "").toLowerCase() === AssetType.VIDEO ? (
+                            {(asset.type || "").toLowerCase() ===
+                            AssetType.VIDEO ? (
                               <div className="w-full h-full flex items-center justify-center">
                                 <Video className="w-8 h-8 text-white/40" />
                               </div>
@@ -281,14 +304,18 @@ export function AssetsLibrary({
                             )}
                           </div>
                           <div className="p-2 flex items-center gap-1 text-xs bg-[#2C2C2C]">
-                            <span className="text-white/70">{getTypeIcon(asset.type)}</span>
+                            <span className="text-white/70">
+                              {getTypeIcon(asset.type)}
+                            </span>
                             <span className="truncate flex-1 text-white">
                               {asset.assetKey || asset.name || asset.id}
                             </span>
                             {mockAssets === null && (
                               <button
                                 type="button"
-                                onClick={(e) => handleDeleteAssetClick(e, asset)}
+                                onClick={(e) =>
+                                  handleDeleteAssetClick(e, asset)
+                                }
                                 disabled={deletingId === asset.id}
                                 className="p-1 rounded hover:bg-red-500/20 text-red-400 shrink-0 disabled:opacity-50 transition-colors"
                                 title="Delete asset"
@@ -325,7 +352,11 @@ export function AssetsLibrary({
       <ConfirmDeleteDialog
         open={!!deleteAssetTarget}
         onOpenChange={(open) => !open && setDeleteAssetTarget(null)}
-        title={deleteAssetTarget ? `Delete asset "${deleteAssetTarget.assetKey || deleteAssetTarget.name || deleteAssetTarget.id}"?` : "Delete asset?"}
+        title={
+          deleteAssetTarget
+            ? `Delete asset "${deleteAssetTarget.assetKey || deleteAssetTarget.name || deleteAssetTarget.id}"?`
+            : "Delete asset?"
+        }
         description="This action cannot be undone."
         onConfirm={confirmDeleteAsset}
         isLoading={deletingId != null}

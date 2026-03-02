@@ -9,6 +9,7 @@ import { unitApi } from "../../api/admin/unitApi";
 import { unitTypeApi } from "../../api/admin/unitTypeApi";
 import { zoneApi } from "../../api/admin/zoneApi";
 import { blockApi } from "../../api/admin/blockApi";
+import { propertyViewApi } from "../../api/admin/propertyViewApi";
 import { ENTITY_TYPES, PROPERTY_TYPES, AssetType } from "./types";
 
 /** Field control types for UI */
@@ -319,12 +320,38 @@ export const resourceConfigs = {
       assetField("sideAssetId", "Side", [AssetType.VIDEO, AssetType.PANORAMA]),
     ],
     childTypes: (node) => {
+      const steps = [ENTITY_TYPES.PROPERTY_VIEW];
       const pType = node?.data?.type || node?.data?.propertyType;
-      if (pType === PROPERTY_TYPES.VILLA) return [ENTITY_TYPES.UNIT];
-      if (pType === PROPERTY_TYPES.TOWNHOUSE) return [ENTITY_TYPES.BLOCK];
-      if (pType === PROPERTY_TYPES.TOWER) return [ENTITY_TYPES.FLOOR];
-      return [];
+      if (pType === PROPERTY_TYPES.VILLA) steps.push(ENTITY_TYPES.UNIT);
+      if (pType === PROPERTY_TYPES.TOWNHOUSE) steps.push(ENTITY_TYPES.BLOCK);
+      if (pType === PROPERTY_TYPES.TOWER) steps.push(ENTITY_TYPES.FLOOR);
+      return steps;
     },
+  },
+  [ENTITY_TYPES.PROPERTY_VIEW]: {
+    title: "Property View",
+    api: propertyViewApi,
+    schema: yup.object().shape({
+      name: yup.string().required(),
+      propertyId: yup.string().required(),
+      forwardAssetId: yup.string().nullable(),
+      reverseAssetId: yup.string().nullable(),
+      sideAssetId: yup.string().nullable(),
+    }),
+    fields: [
+      nameField(),
+      idField("propertyId", "Property ID"),
+      assetField("forwardAssetId", "Forward", [
+        AssetType.VIDEO,
+        AssetType.PANORAMA,
+      ]),
+      assetField("reverseAssetId", "Reverse", [
+        AssetType.VIDEO,
+        AssetType.PANORAMA,
+      ]),
+      assetField("sideAssetId", "Side", [AssetType.VIDEO, AssetType.PANORAMA]),
+    ],
+    childTypes: [],
   },
   [ENTITY_TYPES.FLOOR]: {
     title: "Floor",

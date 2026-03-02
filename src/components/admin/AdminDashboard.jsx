@@ -27,6 +27,7 @@ import { amenityApi } from "../../api/admin/amenityApi";
 import { surroundingApi } from "../../api/admin/surroundingApi";
 import { assetApi } from "../../api/admin/assetApi";
 import { apiService } from "../../services/api.service";
+import { propertyViewApi } from "../../api/admin/propertyViewApi";
 
 const USE_MOCK_DATA = false;
 
@@ -174,6 +175,9 @@ export default function AdminDashboard() {
   const [surroundingsByProject, setSurroundingsByProject] = useState(
     () => initialMock?.surroundingsByProject ?? {},
   );
+  const [propertyViewsByProperty, setPropertyViewsByProperty] = useState(
+    () => initialMock?.propertyViewsByProperty ?? {},
+  );
   const [unitTypes, setUnitTypes] = useState(() => []);
   const [mockAssets, setMockAssets] = useState(
     () => initialMock?.assets ?? null,
@@ -220,7 +224,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     loadDevelopers();
-  }, [loadDevelopers]);
+  }, []);
 
   const loadUnitTypes = useCallback(async () => {
     // if (USE_MOCK_DATA) return;
@@ -234,14 +238,10 @@ export default function AdminDashboard() {
     }
   }, []);
 
-  useEffect(() => {
-    loadUnitTypes();
-  }, [loadUnitTypes]);
-
   const loadAllAssets = useCallback(async () => {
     if (USE_MOCK_DATA) return;
     try {
-      const list = await assetApi.list({ limit: 1000 });
+      const list = await assetApi.list({ limit: 10000 });
       setAllAssets(Array.isArray(list) ? list : (list?.data ?? []));
     } catch (err) {
       console.error(err);
@@ -251,7 +251,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     loadAllAssets();
-  }, [loadAllAssets]);
+  }, []);
 
   const loadProjects = useCallback(
     async (developerId) => {
@@ -466,6 +466,29 @@ export default function AdminDashboard() {
     [initialMock],
   );
 
+  const loadPropertyViews = useCallback(
+    async (propertyId) => {
+      if (USE_MOCK_DATA && initialMock?.propertyViewsByProperty) {
+        setPropertyViewsByProperty((prev) => ({
+          ...prev,
+          [propertyId]:
+            initialMock.propertyViewsByProperty[propertyId] ??
+            prev[propertyId] ??
+            [],
+        }));
+        return;
+      }
+      try {
+        const list = await propertyViewApi.getByProperty(propertyId);
+        const arr = Array.isArray(list) ? list : [];
+        setPropertyViewsByProperty((prev) => ({ ...prev, [propertyId]: arr }));
+      } catch {
+        setPropertyViewsByProperty((prev) => ({ ...prev, [propertyId]: [] }));
+      }
+    },
+    [initialMock],
+  );
+
   const nodes = useMemo(() => {
     const out = [];
     developers.forEach((dev) => {
@@ -537,6 +560,15 @@ export default function AdminDashboard() {
               name: getDisplayName(prop, ENTITY_TYPES.PROPERTY),
               parentId: z.id,
               data: { ...prop, zoneId: prop.zoneId || z.id },
+            });
+            (propertyViewsByProperty[prop.id] ?? []).forEach((pv) => {
+              out.push({
+                id: pv.id,
+                type: ENTITY_TYPES.PROPERTY_VIEW,
+                name: getDisplayName(pv, ENTITY_TYPES.PROPERTY_VIEW),
+                parentId: prop.id,
+                data: { ...pv, propertyId: pv.propertyId || prop.id },
+              });
             });
             const pt = prop.type || prop.propertyType;
             if (pt === "TOWER") {
@@ -643,6 +675,7 @@ export default function AdminDashboard() {
     amenitiesByProject,
     surroundingsByProject,
     unitTypes,
+    propertyViewsByProperty,
   ]);
 
   const handleToggle = useCallback(
@@ -665,6 +698,7 @@ export default function AdminDashboard() {
           if (pt === "TOWER") loadFloors(id);
           if (pt === "TOWNHOUSE") loadBlocks(id);
           if (pt === "VILLA") loadUnitsForProperty(id);
+          loadPropertyViews(id);
         }
         if (node?.type === ENTITY_TYPES.FLOOR) loadUnitsForFloor(id);
         if (node?.type === ENTITY_TYPES.BLOCK) loadUnitsForBlock(id);
@@ -683,6 +717,7 @@ export default function AdminDashboard() {
       loadUnitsForProperty,
       loadUnitsForFloor,
       loadUnitsForBlock,
+      loadPropertyViews,
     ],
   );
 
@@ -702,6 +737,7 @@ export default function AdminDashboard() {
         if (pt === "TOWER") loadFloors(node.id);
         if (pt === "TOWNHOUSE") loadBlocks(node.id);
         if (pt === "VILLA") loadUnitsForProperty(node.id);
+        loadPropertyViews(node.id);
       }
       if (node?.type === ENTITY_TYPES.FLOOR) loadUnitsForFloor(node.id);
       if (node?.type === ENTITY_TYPES.BLOCK) loadUnitsForBlock(node.id);
@@ -717,6 +753,7 @@ export default function AdminDashboard() {
       loadUnitsForProperty,
       loadUnitsForFloor,
       loadUnitsForBlock,
+      loadPropertyViews,
     ],
   );
 
@@ -735,6 +772,8 @@ export default function AdminDashboard() {
         base.data = { projectId: parentId, name: "New Zone" };
       if (childType === ENTITY_TYPES.PROPERTY && parent)
         base.data = { zoneId: parentId, name: "New Property" };
+      if (childType === ENTITY_TYPES.PROPERTY_VIEW && parent)
+        base.data = { propertyId: parentId, name: "New Property View" };
       if (childType === ENTITY_TYPES.FLOOR && parent)
         base.data = { propertyId: parentId, floorNumber: 1 };
       if (childType === ENTITY_TYPES.BLOCK && parent)
@@ -810,6 +849,11 @@ export default function AdminDashboard() {
               ...prev,
               [parentId]: (prev[parentId] ?? []).filter((p) => p.id !== id),
             }));
+            setPropertyViewsByProperty((prev) => {
+              const next = { ...prev };
+              delete next[id];
+              return next;
+            });
             setFloorsByProperty((prev) => {
               const next = { ...prev };
               delete next[id];
@@ -885,6 +929,12 @@ export default function AdminDashboard() {
           case ENTITY_TYPES.UNIT_TYPE:
             setUnitTypes((prev) => (prev ?? []).filter((ut) => ut.id !== id));
             break;
+          case ENTITY_TYPES.PROPERTY_VIEW:
+            setPropertyViewsByProperty((prev) => ({
+              ...prev,
+              [parentId]: (prev[parentId] ?? []).filter((pv) => pv.id !== id),
+            }));
+            break;
           default:
             break;
         }
@@ -925,6 +975,9 @@ export default function AdminDashboard() {
         case ENTITY_TYPES.UNIT_TYPE:
           await unitTypeApi.delete(id);
           break;
+        case ENTITY_TYPES.PROPERTY_VIEW:
+          await propertyViewApi.delete(id);
+          break;
         default:
           throw new Error("Unknown type");
       }
@@ -948,6 +1001,8 @@ export default function AdminDashboard() {
       if (deleteTarget.type === ENTITY_TYPES.AMENITY && pid) loadAmenities(pid);
       if (deleteTarget.type === ENTITY_TYPES.SURROUNDING && pid)
         loadSurroundings(pid);
+      if (deleteTarget.type === ENTITY_TYPES.PROPERTY_VIEW && pid)
+        loadPropertyViews(pid);
     } catch (e) {
       toast.error(e?.message || "Delete failed");
     } finally {
@@ -967,6 +1022,7 @@ export default function AdminDashboard() {
     loadAmenities,
     loadSurroundings,
     loadUnitTypes,
+    loadPropertyViews,
   ]);
 
   const nextMockId = useCallback(
@@ -1097,6 +1153,14 @@ export default function AdminDashboard() {
                   ),
                 );
                 break;
+              case ENTITY_TYPES.PROPERTY_VIEW:
+                setPropertyViewsByProperty((prev) => ({
+                  ...prev,
+                  [pid]: (prev[pid] ?? []).map((pv) =>
+                    pv.id === id ? { ...pv, ...updated } : pv,
+                  ),
+                }));
+                break;
               default:
                 break;
             }
@@ -1179,6 +1243,15 @@ export default function AdminDashboard() {
               case ENTITY_TYPES.UNIT_TYPE:
                 setUnitTypes((prev) => [...(prev ?? []), entity]);
                 break;
+              case ENTITY_TYPES.PROPERTY_VIEW:
+                setPropertyViewsByProperty((prev) => ({
+                  ...prev,
+                  [data.propertyId]: [
+                    ...(prev[data.propertyId] ?? []),
+                    entity,
+                  ],
+                }));
+                break;
               default:
                 break;
             }
@@ -1236,6 +1309,9 @@ export default function AdminDashboard() {
               await loadUnitTypes();
               break;
             }
+            case ENTITY_TYPES.PROPERTY_VIEW:
+              await propertyViewApi.update(id, finalData);
+              break;
             default:
               throw new Error("Unknown type");
           }
@@ -1290,6 +1366,10 @@ export default function AdminDashboard() {
               await loadUnitTypes();
               break;
             }
+            case ENTITY_TYPES.PROPERTY_VIEW:
+              created = await propertyViewApi.create(finalData);
+              if (data.propertyId) loadPropertyViews(data.propertyId);
+              break;
             default:
               throw new Error("Unknown type");
           }
@@ -1332,6 +1412,7 @@ export default function AdminDashboard() {
       loadAmenities,
       loadSurroundings,
       loadUnitTypes,
+      loadPropertyViews,
     ],
   );
 

@@ -9,6 +9,7 @@ export const ENTITY_TYPES = {
   PROJECT: "project",
   ZONE: "zone",
   PROPERTY: "property",
+  PROPERTY_VIEW: "propertyView",
   FLOOR: "floor",
   BLOCK: "block",
   UNIT: "unit",
