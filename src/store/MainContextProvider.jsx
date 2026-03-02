@@ -1,10 +1,21 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useCallback } from "react";
 
 export const MainContext = createContext({
+  // Overlay state: null (no overlay) or { type, data }
+  overlay: null,
+  
+  // Overlay management methods
+  openPanorama: () => {},
+  openBalconyView: () => {},
+  openRoomInterior: () => {},
+  openGallery: () => {},
+  closeOverlay: () => {},
+  
+  // Deprecated methods (kept for backward compatibility during migration)
   isPanorama: false,
   isBalconyView: false,
+  isRoomInterior: false,
   galleryType: null,
-
   handleInterior: () => {},
   handleBalconyView: () => {},
   handleRoomInterior: () => {},
@@ -13,28 +24,52 @@ export const MainContext = createContext({
 });
 
 export default function MainContextProvider({ children }) {
-  const [isPanorama, setIsPanorama] = useState(false);
-  const [isBalconyView, setIsBalconyView] = useState(false);
-  const [isRoomInterior, setIsRoomInterior] = useState(false);
-  const [galleryType, setGalleryType] = useState(null);
+  // New unified overlay state
+  const [overlay, setOverlay] = useState(null);
 
-  const handleBack = () => {
-    setIsPanorama(false);
-    setIsBalconyView(false);
-    setIsRoomInterior(false);
-    setGalleryType(null);
-  };
+  // Overlay action creators using useCallback for stability
+  const openPanorama = useCallback((unit) => {
+    setOverlay({ type: 'panorama', data: { unit } });
+  }, []);
 
+  const openBalconyView = useCallback((unit) => {
+    setOverlay({ type: 'balcony', data: { unit, view: unit.balconyView } });
+  }, []);
+
+  const openRoomInterior = useCallback((room) => {
+    setOverlay({ type: 'room-interior', data: { room, view: room.furnitureImg } });
+  }, []);
+
+  const openGallery = useCallback((unit, galleryType) => {
+    setOverlay({ type: 'gallery', data: { unit, galleryType } });
+  }, []);
+
+  const closeOverlay = useCallback(() => {
+    setOverlay(null);
+  }, []);
+
+  // Deprecated handler methods (kept for backward compatibility)
+  const handleBack = () => closeOverlay();
+  
   const ctxValue = {
-    isPanorama,
-    isBalconyView,
-    isRoomInterior,
-    galleryType,
-
-    handleInterior: () => setIsPanorama(true),
-    handleBalconyView: () => setIsBalconyView(true),
-    handleRoomInterior: () => setIsRoomInterior(true),
-    handleGalleryType: (type) => setGalleryType(type),
+    // New API
+    overlay,
+    openPanorama,
+    openBalconyView,
+    openRoomInterior,
+    openGallery,
+    closeOverlay,
+    
+    // Deprecated API (for gradual migration)
+    isPanorama: overlay?.type === 'panorama',
+    isBalconyView: overlay?.type === 'balcony',
+    isRoomInterior: overlay?.type === 'room-interior',
+    galleryType: overlay?.type === 'gallery' ? overlay?.data?.galleryType : null,
+    
+    handleInterior: () => { /* deprecated */ },
+    handleBalconyView: () => { /* deprecated */ },
+    handleRoomInterior: () => { /* deprecated */ },
+    handleGalleryType: () => { /* deprecated */ },
     handleBack,
   };
 

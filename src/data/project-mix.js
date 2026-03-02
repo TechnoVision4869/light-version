@@ -161,7 +161,7 @@ export const DEVELOPER_MIX = {
                         price: 250000,
                         bedrooms: 2,
                         bathrooms: 1,
-                        balconyView: "/mix/panorama/balcony.jpg",
+                        balconyView: "/mix/panorama/7B_BF_C03/balcony.jpg",
                         x: 0.40, y: 0.60,
                         videos: {
                           forwardVideo: "/cutsection.mp4",

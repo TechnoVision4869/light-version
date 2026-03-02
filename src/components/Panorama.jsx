@@ -6,7 +6,7 @@ import Pin from "./Pin";
 import "@egjs/react-view360/css/view360.min.css";
 import InteriorNav from "./InteriorNav";
 
-export default function Panorama({ unit }) {
+export default function Panorama({ unit }) {  
   const { currentProject } = useContext(SidebarContext);
 
   const ZOOM_OUT = 0.8; // zoomed out view (match FOV ≈ 118.07°)
@@ -29,8 +29,8 @@ export default function Panorama({ unit }) {
 
   // Get unit data
   const unitType = currentProject.unitTypes[unit.unitTypeId];
-  const levels = unitType.interior.levels;
-  const [room, setRoom] = useState(levels[0].rooms[0]);
+  const levels = unitType.interior.levels;  
+  const [room, setRoom] = useState(levels[0].rooms[0]);  
   const [currentImage, setCurrentImage] = useState(room.furnitureImg);
 
   const hotspots = room.hotspots;

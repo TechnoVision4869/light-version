@@ -9,7 +9,7 @@ import TOILET_ICON from "../assets/icons/bathroom.png"
 
 export default function UnitPanel() {
     const { currentProject, currentItem } = useContext(SidebarContext);
-    const { handleInterior, handleBalconyView, handleGalleryType } = useContext(MainContext);
+    const { openPanorama, openBalconyView, openGallery } = useContext(MainContext);
 
     const [isVisualsOpen, setIsVisualsOpen] = useState(true);
     const [isCutSectionsOpen, setIsCutSectionsOpen] = useState(true);
@@ -81,12 +81,12 @@ export default function UnitPanel() {
                     <div className="flex flex-col gap-2 mt-4">
                         <div className="flex gap-2">
                             <button className="flex-1 border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition"
-                                onClick={handleInterior}
+                                onClick={() => openPanorama(currentItem)}
                             >
                                 Interior
                             </button>
                             {floorPlans && <button className="flex-1 border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition whitespace-nowrap"
-                                onClick={() => handleGalleryType("floorPlans")}
+                                onClick={() => openGallery(currentItem, "floorPlans")}
                             >
                                 Floor Plan
                             </button>}
@@ -99,7 +99,7 @@ export default function UnitPanel() {
                         <hr className="h-divider" />
 
                         <button className="w-full border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition"
-                            onClick={handleBalconyView}
+                            onClick={() => openBalconyView(currentItem)}
                         >
                             Location View
                         </button>
@@ -129,7 +129,7 @@ export default function UnitPanel() {
                     {isVisualsOpen && (
                         <div className="grid grid-cols-2 gap-2 mt-2">
                             {gallery.map((img) => (
-                                <button className='hover:opacity-70' key={img.id} onClick={() => handleGalleryType("gallery")}>
+                                <button className='hover:opacity-70' key={img.id} onClick={() => openGallery(currentItem, "gallery")}>
                                     <img
                                         src={img.src}
                                         alt="Visual"
@@ -165,7 +165,7 @@ export default function UnitPanel() {
                     {isCutSectionsOpen && (
                         <div className="grid grid-cols-2 gap-2 mt-2">
                             {cutSections.map((img) => (
-                                <button className='hover:opacity-70' key={img.id} onClick={() => handleGalleryType("cutSections")}>
+                                <button className='hover:opacity-70' key={img.id} onClick={() => openGallery(currentItem, "cutSections")}>
                                     <img
                                         src={img.src}
                                         alt="Visual"

@@ -1,52 +1,42 @@
-import { createContext, useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 
+import { SidebarContext } from "./SidebarContext";
 import { TABS, LAYERS, DATA } from "../data/layers";
+import { enrichProjectData } from "../lib/enrichProjectData";
+import { APP_CONFIG } from "../config/appConfig";
 
-export const SidebarContext = createContext({
-    currentProject: null,
-    setCurrentProject: () => { },
-
-    history: [],
-    activeTab: "",
-    activeLayer: "",
-    currentItem: {},
-    currentVideosPath: {},
-    currentViews: null,
-
-    highlightedButton: null,
-    setHighlightedButton: () => { },
-
-    sidebarOpen: false,
-    handleSidebarState: () => { },
-
-    currentItems: [],
-    setCurrentItems: () => { },
-
-    type: "",
-    setType: () => { },
-
-    goToItem: () => { },
-    goToTab: () => { },
-    goBack: () => { },
-    goHome: () => { },
-});
+export { SidebarContext };
 
 export default function SidebarContextProvider({ children }) {
+    const useMockup = APP_CONFIG.USE_MOCKUP;
     const [currentProject, setCurrentProject] = useState(null);
 
-    const getInitHistory = useCallback((project) => ([
+    const getInitHistory = useCallback((project) => {
+        // Helper to get the video URL from project, checking both naming patterns
+        // (mock data uses zoomoutVideo/idleVideo, API uses zoomoutAssetId/idleAssetId after enrichment)
+        const getVideoUrl = (project, ...keys) => {
+            if (!project) return null;
+            for (const key of keys) {
+                if (project[key]) return project[key];
+            }
+            return null;
+        };
+
+        return [
         {
             tab: TABS.HOME,
             layer: null,
             item: null,
             videosPath: {
-                forwardVideo: project?.zoomoutVideo ?? null,
+                forwardVideo: getVideoUrl(project, 'zoomoutVideo', 'zoomoutAssetId') ?? null,
                 reverseVideo: null,
-                idleVideo: project?.idleVideo ?? null,
+                idleVideo: getVideoUrl(project, 'idleVideo', 'idleAssetId') ?? null,
             },
             views: null,
         },
-    ]), []);
+    ]
+    }, []);
+
 
     const [history, setHistory] = useState(getInitHistory(currentProject));
     const [sidebarOpen, setSidebarOpen] = useState(false); // set true when sidebar is open
@@ -55,9 +45,20 @@ export default function SidebarContextProvider({ children }) {
 
     // Reset history when project changes
     const handleSetCurrentProject = useCallback((project) => {
-        setCurrentProject(project);
-        setHistory(getInitHistory(project));
-    }, [getInitHistory]);
+        const enrich = async () => {
+            try {
+                const enrichedProject = await enrichProjectData(project, useMockup);
+                setCurrentProject(enrichedProject);
+                setHistory(getInitHistory(enrichedProject));
+            } catch (error) {
+                console.error('Error enriching project data:', error);
+                // Fall back to non-enriched project
+                setCurrentProject(project);
+                setHistory(getInitHistory(project));
+            }
+        };
+        enrich();
+    }, [useMockup, getInitHistory]);
 
     // Get current state from history
     const currentEntry = history[history.length - 1] ?? getInitHistory(currentProject)[0];
@@ -265,6 +266,8 @@ export default function SidebarContextProvider({ children }) {
     }, [activeTab, activeLayer, currentItem, currentProject]);
 
     const ctxValue = {
+        useMockup,
+        
         currentProject,
         setCurrentProject: handleSetCurrentProject,
 

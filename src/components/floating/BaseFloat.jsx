@@ -10,7 +10,7 @@ import { MainContext } from "@/store/MainContextProvider";
 export default function BaseFloating({ mediaRef }) {
     const { filters } = useContext(FilterContext);
     const { activeTab, activeLayer, currentItem, currentItems, type, goToItem, highlightedButton, setHighlightedButton } = useContext(SidebarContext);
-    const { handleRoomInterior } = useContext(MainContext);
+    const { openRoomInterior } = useContext(MainContext);
 
     // For FLOOR layer, use filtered items; otherwise use currentItems
     const itemsToRender = useMemo(() => {
@@ -172,13 +172,14 @@ export default function BaseFloating({ mediaRef }) {
                         }}
                         isSelected={isSelected}
                         onSelect={() => {
-                            if (isSelected) {
-                                setHighlightedButton(null);
-                            }
-                            else {
-                                setHighlightedButton(room);
-                                handleRoomInterior();
-                            }
+                            // if (isSelected) {
+                            //     setHighlightedButton(null);
+                            // }
+                            // else {
+                            //     setHighlightedButton(room);
+                                // Pass room data directly to context handler
+                                openRoomInterior(room);
+                            // }
                         }}
                     />
                 );

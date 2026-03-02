@@ -30,11 +30,8 @@ import { MainContext } from "../store/MainContextProvider";
 import TECHNO_LOGO from "../assets/techno.png";
 import Highlight from "./Highlight.jsx";
 import Test from "./Test.jsx";
-// const color = "green";
 
 export default function Home() {
-  // console.log("App renders");
-
   //states
   const [showInfoPopup, setShowInfoPopup] = useState(false);
   const [showI, setShowI] = useState(false);
@@ -56,7 +53,7 @@ export default function Home() {
     goToTab,
     goHome } = useContext(SidebarContext);
 
-  const { isPanorama, isBalconyView, isRoomInterior, galleryType, handleBack } = useContext(MainContext);
+  const { overlay, closeOverlay } = useContext(MainContext);
 
   const videoViewer = useVideoViewer();
 
@@ -85,6 +82,8 @@ export default function Home() {
         goHome();
         break;
       case TABS.ZONES:
+        console.log(currentProject);
+        
         selectedItem = currentProject.zones;
         if(selectedItem.items.length === 1) {
           selectedItem = selectedItem.items[0];
@@ -189,15 +188,17 @@ export default function Home() {
 
   return (
     <>
-      {isPanorama && (
+      {/* Unified Overlay Management */}
+      {overlay?.type === 'panorama' && (
         <div className="absolute inset-0 z-60">
           <div className={`w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4`} />
           <div className="absolute top-2 left-7 z-40">
             <button
-              onClick={handleBack}
+              onClick={closeOverlay}
               className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center
                 hover:bg-white/7 transition
                 disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Close panorama view"
             >
               <svg
                 width="18"
@@ -217,20 +218,21 @@ export default function Home() {
             </button>
           </div>
           <div className="absolute inset-0">
-            <Panorama key="panorama-viewer" unit={currentItem} />
+            <Panorama key="panorama-viewer" unit={overlay.data.unit} />
           </div>
         </div>
       )}
 
-      {isBalconyView && (
+      {overlay?.type === 'balcony' && (
         <div className="absolute inset-0 z-60">
           <div className={`w-screen h-screen bg-[#2f2f2f] p-2 sm:p-4`} />
           <div className="absolute top-2 left-7 z-40">
             <button
-              onClick={handleBack}
+              onClick={closeOverlay}
               className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center
                 hover:bg-white/7 transition
                 disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Close balcony view"
             >
               <svg
                 width="18"
@@ -250,12 +252,12 @@ export default function Home() {
             </button>
           </div>
           <div className="absolute inset-0">
-            <Balcony apartment={currentItem} />
+            <Balcony view={overlay.data?.view} />
           </div>
         </div>
       )}
 
-      {isRoomInterior && (
+      {overlay?.type === 'room-interior' && (
         <div className="fixed inset-0 z-60 flex items-center justify-center">
           {/* Semi-transparent backdrop */}
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
@@ -264,10 +266,11 @@ export default function Home() {
           <div className="relative z-70 w-11/12 h-5/6 bg-[#2f2f2f] rounded-3xl shadow-2xl overflow-hidden">
             {/* Back button inside modal */}
             <button
-              onClick={handleBack}
+              onClick={closeOverlay}
               className="absolute top-4 left-4 z-40 w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center
                 hover:bg-white/7 transition
                 disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Close room interior"
             >
               <svg
                 width="18"
@@ -288,23 +291,23 @@ export default function Home() {
             
             {/* Room interior content */}
             <div className="w-full h-full">
-              <Balcony apartment={currentItem} />
+              <Balcony view={overlay.data?.view} />
             </div>
           </div>
         </div>
       )}
 
-      {galleryType && (
+      {overlay?.type === 'gallery' && (
         <div className="fixed inset-0 z-60">
           {/* Blurred Background */}
           <div className="absolute inset-0 blurred-layer" />
-          {/* <div className={`w-screen h-screen p-2 sm:p-4`} /> */}
           <div className="absolute top-2 left-7 z-40">
             <button
-              onClick={handleBack}
+              onClick={closeOverlay}
               className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center
                 hover:bg-white/7 transition
                 disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Close gallery"
             >
               <svg
                 width="18"
@@ -324,12 +327,11 @@ export default function Home() {
             </button>
           </div>
           <div className="absolute inset-0">
-            <Gallery unit={currentItem} galleryType={galleryType} />
+            <Gallery unit={overlay.data?.unit} galleryType={overlay.data?.galleryType} />
           </div>
         </div>
       )}
       <div className="w-full h-screen bg-[#2f2f2f] py-2 px-3 xl:p-4 overflow-hidden">
-        {/* <LandscapePrompt /> */}
         <div className="w-full h-full flex flex-col">
           {/* Top Tabs */}
           <div className="flex items-center justify-between mb-2 xl:mb-4 px-4">
