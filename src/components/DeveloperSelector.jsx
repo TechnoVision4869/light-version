@@ -3,16 +3,40 @@ import { developerApi } from "../api/admin/developerApi";
 import Layout from './Layout';
 import toast from 'react-hot-toast';
 import { assetsApi } from '@/api/assetsApi';
+import DEFAULT_LOGO from '../../public/default-logo.png'; 
 
 export default function DeveloperSelector({ onDeveloperSelect }) {
   const [developers, setDevelopers] = useState([]);
+  const [developerLogos, setDeveloperLogos] = useState({});
   const [loading, setLoading] = useState(true);
 
   const fetchDevelopers = async () => {
     try {
       setLoading(true);
       const response = await developerApi.getAll();
+
+      if(!response || !Array.isArray(response) || response.length === 0) {
+        setDevelopers([]);
+        setLoading(false);
+        return;
+      }
+
       setDevelopers(response);
+      const logos = {};
+
+      for (const developer of response) {
+        if (developer.logoAssetId) {
+          try {
+            const url = await assetsApi.getAssetFileUrl(developer.logoAssetId);
+            if (url) {
+              logos[developer.id] = url;
+            }
+          } catch (error) {
+            console.error(`Failed to fetch logo for developer ${developer.id}:`, error);
+          }
+        }
+      }
+      setDeveloperLogos(logos);
     } catch (error) {
       console.error("Error fetching developers:", error);
       toast.error("Failed to fetch developers");
@@ -28,8 +52,7 @@ export default function DeveloperSelector({ onDeveloperSelect }) {
 
   const getDeveloperLogo = (developer) => {
     // Return developer logo or a default placeholder
-    // const response = await assetsApi.
-    return developer?.logo || developer?.logoUrl || '/default-logo.png';
+    return developerLogos[developer.id];
   };
 
   if (loading) {
@@ -67,35 +90,28 @@ export default function DeveloperSelector({ onDeveloperSelect }) {
               {developers.map((developer) => (
                 <div
                   key={developer.id}
-                  className="w-[300px] rounded-2xl overflow-hidden backdrop-blur-sm bg-[#1C1C1C8C] cursor-pointer hover:bg-[#2C2C2C8C] transition-colors duration-300"
+                  className="flex flex-col items-center gap-3 p-4 rounded-2xl backdrop-blur-sm bg-[#1C1C1C8C] cursor-pointer hover:bg-[#2C2C2C8C] transition-colors duration-300"
                   onClick={() => onDeveloperSelect(developer)}
                 >
-                  <div className="px-3 pt-3">
-                    <img
-                      src={getDeveloperLogo(developer)}
-                      alt={developer.name}
-                      className="rounded-2xl w-full h-48 object-cover"
-                    />
-                  </div>
+                  <img
+                    src={getDeveloperLogo(developer) || DEFAULT_LOGO}
+                    alt={developer.name}
+                    className="rounded-xl w-full h-24 sm:h-28 lg:h-32 object-cover"
+                  />
 
-                  <div className="p-4">
-                    <h2 className="tracking-wide text-lg font-semibold text-white mb-1">
-                      {developer.name}
-                    </h2>
-                    <p className="text-[#DADADA] text-[11px] mb-4">
-                      {developer.description || 'Real estate development'}
-                    </p>
+                  <h2 className="tracking-wide text-sm sm:text-base font-semibold text-white text-center line-clamp-2">
+                    {developer.name}
+                  </h2>
 
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onDeveloperSelect(developer);
-                      }}
-                      className="w-full py-2 px-4 bg-transparent border border-white hover:bg-white hover:text-black hover:border-white text-white font-medium rounded-xl transition-colors duration-300"
-                    >
-                      Select
-                    </button>
-                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDeveloperSelect(developer);
+                    }}
+                    className="w-full py-1.5 px-3 text-sm bg-transparent border border-white hover:bg-white hover:text-black hover:border-white text-white font-medium rounded-lg transition-colors duration-300"
+                  >
+                    Select
+                  </button>
                 </div>
               ))}
             </div>

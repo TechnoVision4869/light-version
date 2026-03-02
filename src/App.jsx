@@ -10,10 +10,9 @@ import SplashVideo from "./components/SplashVideo";
 import LoginPage from "./components/auth/login-page";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import UsersPage from "./components/user/UsersPage";
-// import DashboardPage from "./components/dashboard/dashboard-page";
-// import SettingsPage from "./components/settings/settings-page";
 
 export default function App() {
+  const MOCKUP = false;
   const { currentProject, setCurrentProject } = useContext(SidebarContext);
   const [showSplash, setShowSplash] = useState(false);
   const navigate = useNavigate();
@@ -49,7 +48,7 @@ export default function App() {
         path="/"
         element={
           <AuthGuard>
-            <SelectionFlow onProjectSelect={handleProjectSelect} />
+            <SelectionFlow onProjectSelect={handleProjectSelect} useMockup={MOCKUP} />
           </AuthGuard>
         }
       />

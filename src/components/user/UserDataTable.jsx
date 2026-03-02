@@ -21,6 +21,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { ConfirmDeleteDialog } from '@/components/admin/ConfirmDeleteDialog';
 import { ROLE_OPTIONS, formatRole } from '@/constants/roles';
 
 const getDisplayRole = (role, loggedInUserRole) => {
@@ -593,31 +594,20 @@ const UserDataTable = ({ data, columns, onCreate, onEdit, onDelete, onRowClick }
       )}
 
       {/* Delete Confirmation Modal */}
-      {deletingRowIndex !== null && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-[#1C1C1C] border border-white/20 rounded-lg p-6 max-w-sm mx-4">
-            <h3 className="text-lg font-semibold text-white mb-2">Confirm Delete</h3>
-            <p className="text-white/70 mb-6">Are you sure you want to delete this user? This action cannot be undone.</p>
-            <div className="flex gap-3 justify-end">
-              <Button
-                size="sm"
-                onClick={handleCancelDelete}
-                className="bg-white/10 border border-white/20 text-white hover:bg-white/20"
-                variant="outline"
-              >
-                Cancel
-              </Button>
-              <Button
-                size="sm"
-                onClick={() => handleConfirmDelete(paginatedData[deletingRowIndex])}
-                className="bg-[#8B3A3A] hover:bg-[#A24242] text-white"
-              >
-                Delete
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmDeleteDialog
+        open={deletingRowIndex !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            handleCancelDelete();
+          }
+        }}
+        title={paginatedData[deletingRowIndex] ? `Delete user "${paginatedData[deletingRowIndex].name}"?` : "Delete user?"}
+        onConfirm={() => {
+          if (deletingRowIndex !== null) {
+            handleConfirmDelete(paginatedData[deletingRowIndex]);
+          }
+        }}
+      />
 
       {/* Pagination Controls */}
       {totalPages > 1 && (

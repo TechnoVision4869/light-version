@@ -4,7 +4,7 @@ import DeveloperSelector from './DeveloperSelector';
 import ProjectSelector from './ProjectSelector';
 import Layout from './Layout';
 
-export default function SelectionFlow({ onProjectSelect }) {
+export default function SelectionFlow({ onProjectSelect, useMockup = false }) {
   const { user } = useAuth();
   const [selectedDeveloper, setSelectedDeveloper] = useState(null);
 
@@ -16,15 +16,15 @@ export default function SelectionFlow({ onProjectSelect }) {
 
   const userNeedsSelection = needsDeveloperSelection.includes(user?.role);
 
-  // If user needs to select a developer and hasn't yet, show DeveloperSelector
-  if (userNeedsSelection && !selectedDeveloper) {
+  // Skip developer selection if useMockup is true
+  if (!useMockup && userNeedsSelection && !selectedDeveloper) {
     return <DeveloperSelector onDeveloperSelect={setSelectedDeveloper} />;
   }
 
   // If user has selected a developer or has one pre-assigned, show ProjectSelector
-  const developerId = selectedDeveloper?.id || user?.developerId;
+  const developerId = useMockup ? 'mockup' : (selectedDeveloper?.id || user?.developerId);
 
-  if (!developerId) {
+  if (!useMockup && !developerId) {
     return (
       <Layout>
         <div className="w-full h-screen flex items-center justify-center">
@@ -39,6 +39,7 @@ export default function SelectionFlow({ onProjectSelect }) {
       developerId={developerId} 
       onProjectSelect={onProjectSelect}
       onBackButtonClick={() => setSelectedDeveloper(null)}
+      useMockup={useMockup}
     />
   );
 }

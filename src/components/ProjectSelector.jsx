@@ -5,8 +5,9 @@ import { useAuth } from './hooks/use-auth';
 import toast from 'react-hot-toast';
 import { developerApi } from '@/api/admin/developerApi';
 import { assetsApi } from '@/api/assetsApi';
+import { DATA } from '../data/layers';
 
-export default function ProjectSelector({ developerId, onProjectSelect, onBackButtonClick }) {
+export default function ProjectSelector({ developerId, onProjectSelect, onBackButtonClick, useMockup = false }) {
   const { user } = useAuth();
   const [projects, setProjects] = useState([]);
   const [developerAssets, setDeveloperAssets] = useState({backgroundImage: null, logoImage: null});
@@ -17,49 +18,73 @@ export default function ProjectSelector({ developerId, onProjectSelect, onBackBu
   const fetchProjects = async () => {
     try {
       setLoading(true);
-      const response = await projectApi.getByDeveloper(developerId);
       
-      // Check if response is valid before proceeding
-      if (!response || !Array.isArray(response) || response.length === 0) {
-        setProjects([]);
-        setLoading(false);
-        return;
-      }
-      
-      setProjects(response);
+      if (useMockup) {
+        // Load from mock data
+        const mockProjects = DATA.developerProjects || [];
+        setProjects(mockProjects);
+        
+        // Build mock thumbnail and intro video URLs
+        const thumbnails = {};
+        const introVideos = {};
+        
+        mockProjects.forEach((project) => {
+          if (project.thumbnail) {
+            thumbnails[project.id] = project.thumbnail;
+          }
+          if (project.introVideo) {
+            introVideos[project.id] = project.introVideo;
+          }
+        });
+        
+        setThumbnailUrls(thumbnails);
+        setIntroVideoUrls(introVideos);
+      } else {
+        // Load from API
+        const response = await projectApi.getByDeveloper(developerId);
+        
+        // Check if response is valid before proceeding
+        if (!response || !Array.isArray(response) || response.length === 0) {
+          setProjects([]);
+          setLoading(false);
+          return;
+        }
+        
+        setProjects(response);
 
-      // Fetch thumbnails and intro videos for all projects
-      const thumbnails = {};
-      const introVideos = {};
-      
-      for (const project of response) {
-        // Fetch thumbnail
-        if (project.thumbnailAssetId) {
-          try {
-            const url = await assetsApi.getAssetFileUrl(project.thumbnailAssetId);
-            if (url) {
-              thumbnails[project.id] = url;
+        // Fetch thumbnails and intro videos for all projects
+        const thumbnails = {};
+        const introVideos = {};
+        
+        for (const project of response) {
+          // Fetch thumbnail
+          if (project.thumbnailAssetId) {
+            try {
+              const url = await assetsApi.getAssetFileUrl(project.thumbnailAssetId);
+              if (url) {
+                thumbnails[project.id] = url;
+              }
+            } catch (error) {
+              console.error(`Failed to fetch thumbnail for project ${project.id}:`, error);
             }
-          } catch (error) {
-            console.error(`Failed to fetch thumbnail for project ${project.id}:`, error);
+          }
+          
+          // Fetch intro video
+          if (project.introAssetId) {
+            try {
+              const url = await assetsApi.getAssetFileUrl(project.introAssetId);
+              if (url) {
+                introVideos[project.id] = url;
+              }
+            } catch (error) {
+              console.error(`Failed to fetch intro video for project ${project.id}:`, error);
+            }
           }
         }
         
-        // Fetch intro video
-        if (project.introAssetId) {
-          try {
-            const url = await assetsApi.getAssetFileUrl(project.introAssetId);
-            if (url) {
-              introVideos[project.id] = url;
-            }
-          } catch (error) {
-            console.error(`Failed to fetch intro video for project ${project.id}:`, error);
-          }
-        }
+        setThumbnailUrls(thumbnails);
+        setIntroVideoUrls(introVideos);
       }
-      
-      setThumbnailUrls(thumbnails);
-      setIntroVideoUrls(introVideos);
     } catch (error) {
       console.error("Error fetching projects:", error);
       toast.error("Failed to fetch projects");
@@ -71,37 +96,73 @@ export default function ProjectSelector({ developerId, onProjectSelect, onBackBu
 
   const fetchDeveloperAssets = async () => {
     try {
-      const developer = await developerApi.getById(developerId);
-      if (developer?.backgroundImageAssetId) {
-        const backgroundImg = await assetsApi.getAssetFileUrl(developer.backgroundImageAssetId);
-        if (backgroundImg) {
-        setDeveloperAssets((prev) => ({ ...prev, backgroundImage: backgroundImg }));
+      if (useMockup) {
+        // Load from mock data
+        setDeveloperAssets({
+          backgroundImage: DATA.backgroundImage || null,
+          logoImage: DATA.developerLogo || null
+        });
       } else {
-        console.warn("Asset response missing URL:", backgroundImg);
-        toast.error("Failed to load background image");
-      }
-      }
-      if (developer?.logoAssetId) {
-        const logoImg = await assetsApi.getAssetFileUrl(developer.logoAssetId);
-        if (logoImg) {
-        setDeveloperAssets((prev) => ({ ...prev, logoImage: logoImg }));
-      } else {
-        console.warn("Asset response missing URL:", logoImg);
-        toast.error("Failed to load logo image");
-      }
+        // Load from API
+        const developer = await developerApi.getById(developerId);
+        if (developer?.backgroundImageAssetId) {
+          const backgroundImg = await assetsApi.getAssetFileUrl(developer.backgroundImageAssetId);
+          if (backgroundImg) {
+          setDeveloperAssets((prev) => ({ ...prev, backgroundImage: backgroundImg }));
+        } else {
+          console.warn("Asset response missing URL:", backgroundImg);
+          toast.error("Failed to load background image");
+        }
+        }
+        if (developer?.logoAssetId) {
+          const logoImg = await assetsApi.getAssetFileUrl(developer.logoAssetId);
+          if (logoImg) {
+          setDeveloperAssets((prev) => ({ ...prev, logoImage: logoImg }));
+        } else {
+          console.warn("Asset response missing URL:", logoImg);
+          toast.error("Failed to load logo image");
+        }
+        }
       }
     } catch (error) {
       console.error("Error fetching developer assets:", error);
-      toast.error("Failed to load developer assets");
+      if (!useMockup) {
+        toast.error("Failed to load developer assets");
+      }
+    }
+  };
+
+  const fetchSelectedProject = async (projectId, introVideoUrl) => {
+    try {
+      if (useMockup) {
+        const selectedProject = projects.find(p => p.id === projectId);
+        if (selectedProject) {
+          onProjectSelect({ ...selectedProject, introVideoUrl });
+        } else {
+          toast.error("Failed to load project details.");
+        }
+
+      } else {
+        const response = await projectApi.getById(projectId);
+        if (response) {
+          onProjectSelect({ ...response.developerProjects[0], introVideoUrl });
+        } else {
+          toast.error("Failed to load project details.");
+        }
+      }
+      
+    } catch (error) {
+      console.log(error);
+      toast.error("An error occurred while loading project details.");
     }
   };
 
   useEffect(() => {
-    if (developerId) {
+    if (useMockup || developerId) {
       fetchProjects();
       fetchDeveloperAssets();
     }
-  }, [developerId]);
+  }, [developerId, useMockup]);
 
   const showBackButton = ['admin', 'system_admin', 'system_technician'].includes(user?.role);
 
@@ -172,10 +233,7 @@ export default function ProjectSelector({ developerId, onProjectSelect, onBackBu
                       </p>
 
                       <button
-                        onClick={() => onProjectSelect({ 
-                          ...project, 
-                          introVideoUrl: introVideoUrls[project.id] 
-                        })}
+                        onClick={() => fetchSelectedProject(project.id, introVideoUrls[project.id])}
                         disabled={disabled}
                         className={`w-full py-2 px-4 bg-transparent border ${disabled ? "" : "hover:bg-white hover:text-black hover:border-white"} disabled:text-white/50 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors duration-300`}
                       >

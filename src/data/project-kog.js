@@ -1245,7 +1245,7 @@ export const DEVELOPER_TBK = {
                     {
                         id: "amenity1",
                         displayName: "Fitness",
-                        subtitle: "Gym & Training Zones",
+                        subtitle: "Gym & Training",
                         thumbnail: "kog/thumbnails/amenities/amenity1.jpg",
                         description: "A luxurious clubhouse with a lounge, restaurant, and dedicated kids' area.",
                         x: 0.47, y: 0.55,
