@@ -242,7 +242,7 @@ export default function AdminDashboard() {
     if (USE_MOCK_DATA) return;
     try {
       const list = await assetApi.list({ limit: 1000 });
-      setAllAssets(Array.isArray(list) ? list : list?.data ?? []);
+      setAllAssets(Array.isArray(list) ? list : (list?.data ?? []));
     } catch (err) {
       console.error(err);
       setAllAssets([]);
@@ -1001,22 +1001,7 @@ export default function AdminDashboard() {
           }
         }
 
-        // Project-specific payload shaping (zonesMetadata nested fields)
         let finalData = { ...data };
-        if (type === ENTITY_TYPES.PROJECT) {
-          const zonesMetadata = {
-            videos: {
-              forwardVideoId: data['zonesMetadata.videos.forwardVideoId'] || null,
-              reverseVideoId: data['zonesMetadata.videos.reverseVideoId'] || null,
-              sideVideoId: data['zonesMetadata.videos.sideVideoId'] || null,
-            },
-          };
-          finalData.zonesMetadata = zonesMetadata;
-          delete finalData['zonesMetadata.videos.forwardVideoId'];
-          delete finalData['zonesMetadata.videos.reverseVideoId'];
-          delete finalData['zonesMetadata.videos.sideVideoId'];
-        }
-
         if (USE_MOCK_DATA) {
           if (id) {
             const node = nodes.find((n) => n.id === id);
@@ -1482,13 +1467,17 @@ export default function AdminDashboard() {
             </div>
           </div>
         )}
-        
+
         <header className="bg-[#1C1C1C] border-b border-white/10 px-6 py-4 shrink-0 shadow-lg">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl font-bold text-white">Admin Dashboard</h1>
+            <h1 className="text-xl font-bold text-white mx-auto">
+              Admin Dashboard
+            </h1>
             {selectedDeveloperId && (
               <span className="text-sm text-white/60">
-                Developer: {developers.find(d => d.id === selectedDeveloperId)?.name || 'Selected'}
+                Developer:{" "}
+                {developers.find((d) => d.id === selectedDeveloperId)?.name ||
+                  "Selected"}
               </span>
             )}
           </div>

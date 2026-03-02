@@ -75,19 +75,29 @@ export function AssetFieldInput({
           </Button>
         )}
       </div>
-      {value && assetPreviewUrl && (
+      {value && (
         <div className="rounded-md border border-white/20 overflow-hidden bg-white/5">
           <div className="aspect-video max-h-24 w-full relative">
-            {assetPreviewUrl.match(/\.(mp4|webm|ogg)$/i) ? (
-              <div className="w-full h-full flex items-center justify-center bg-[#2C2C2C] text-white/60 text-xs">
-                Video Preview
-              </div>
+            {assetPreviewUrl ? (
+              assetPreviewUrl.match(/\.(mp4|webm|ogg)$/i) ? (
+                <video
+                  src={assetPreviewUrl}
+                  className="w-full h-full object-cover"
+                  muted
+                  playsInline
+                  preload="metadata"
+                />
+              ) : (
+                <img
+                  src={assetPreviewUrl}
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
+              )
             ) : (
-              <img
-                src={assetPreviewUrl}
-                alt=""
-                className="w-full h-full object-cover"
-              />
+              <div className="w-full h-full flex items-center justify-center bg-[#2C2C2C] text-white/60 text-xs">
+                Loading preview...
+              </div>
             )}
           </div>
         </div>

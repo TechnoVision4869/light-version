@@ -49,10 +49,12 @@ export function DynamicForm({
   useEffect(() => {
     if (!onFormAssetIdsChange || !fields) return;
     const ids = {};
-    fields.forEach((f) => {
+    const processField = (f) => {
       if (f.control === CONTROL_TYPES.ASSET) {
         const v = localData[f.name];
         if (v != null && v !== "") ids[f.name] = v;
+      } else if (f.control === CONTROL_TYPES.ASSET_GROUP && f.fields) {
+        f.fields.forEach(processField);
       } else if (f.control === CONTROL_TYPES.ASSET_ARRAY) {
         const v = localData[f.name];
         if (Array.isArray(v) && v.length > 0) ids[f.name] = v.filter((id) => id != null && id !== "");
@@ -69,7 +71,8 @@ export function DynamicForm({
           if (levelAssetIds.length > 0) ids.levelsAssetIds = levelAssetIds;
         }
       }
-    });
+    };
+    fields.forEach(processField);
     onFormAssetIdsChange(ids);
   }, [localData, fields, onFormAssetIdsChange]);
 
