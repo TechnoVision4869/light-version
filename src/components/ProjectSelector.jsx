@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { projectApi } from "../api/admin/projectApi";
+import { APP_CONFIG } from '../config/appConfig';
 import Layout from './Layout';
 import { useAuth } from './hooks/use-auth';
 import toast from 'react-hot-toast';
@@ -7,7 +8,8 @@ import { developerApi } from '@/api/admin/developerApi';
 import { assetsApi } from '@/api/assetsApi';
 import { DATA } from '../data/layers';
 
-export default function ProjectSelector({ developerId, onProjectSelect, onBackButtonClick, useMockup = false }) {
+export default function ProjectSelector({ developerId, onProjectSelect, onBackButtonClick }) {
+  const useMockup = APP_CONFIG.USE_MOCKUP;
   const { user } = useAuth();
   const [projects, setProjects] = useState([]);
   const [developerAssets, setDeveloperAssets] = useState({backgroundImage: null, logoImage: null});

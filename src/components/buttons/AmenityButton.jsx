@@ -19,7 +19,7 @@ export default function AmenityButton({ amenity, isDisabled, isSelected, goToIte
             </div>
             <div className="w-full rounded-lg overflow-hidden bg-black/10">
                 <img
-                    src={amenity.thumbnail}
+                    src={amenity.thumbnail ? amenity.thumbnail : amenity.thumbnailAssetId}
                     alt={amenity.displayName}
                     className="w-full h-full object-cover"
                 />

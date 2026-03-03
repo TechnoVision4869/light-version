@@ -125,15 +125,15 @@ export default function BaseFloating({ mediaRef }) {
 
     if (activeTab === TABS.SURROUNDINGS) {
         return (
-            itemsToRender.map((item) => {
+            itemsToRender.map((item, i) => {
                 const pos = itemIdToPosition.get(item.id);
 
                 if (!pos) return null;
-                const isSelected = currentItem?.id === item.id;
+                const isSelected = currentItem?.name === item.name;
                 
                 return (
                     <AnimFloatButton
-                        key={item.id}
+                        key={Math.random()}
                         name={item.displayName}
                         icon={item.iconSrc}
                         style={{
@@ -144,7 +144,8 @@ export default function BaseFloating({ mediaRef }) {
                             goToItem(item, LAYERS.SURROUNDING_DETAIL);
                         }}
                         isSelected={isSelected}
-                        nameDirection={item.nameDirection || "right"}
+                        // nameDirection={item.nameDirection || "right"}
+                        nameDirection={i % 2 === 0 ? "right" : "left"}
                     />
                 );
             })
@@ -199,8 +200,8 @@ export default function BaseFloating({ mediaRef }) {
             if (type !== "small") {
                 return (
                     <BaseFloatButton
-                        key={item.id}
-                        name={item.displayName}
+                        key={Math.random()}
+                        name={item.displayName ? item.displayName : item.zoneName}
                         tabType={activeTab}
                         layerType={activeLayer}
                         style={{
@@ -221,7 +222,7 @@ export default function BaseFloating({ mediaRef }) {
 
             return (
                 <BaseFloatButton
-                    key={item.id}
+                    key={Math.random()}
                     name={item.displayName}
                     tabType={activeTab}
                     layerType={activeLayer}

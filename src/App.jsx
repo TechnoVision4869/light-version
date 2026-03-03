@@ -12,7 +12,6 @@ import AdminDashboard from "./components/admin/AdminDashboard";
 import UsersPage from "./components/user/UsersPage";
 
 export default function App() {
-  const MOCKUP = false;
   const { currentProject, setCurrentProject } = useContext(SidebarContext);
   const [showSplash, setShowSplash] = useState(false);
   const navigate = useNavigate();
@@ -48,7 +47,7 @@ export default function App() {
         path="/"
         element={
           <AuthGuard>
-            <SelectionFlow onProjectSelect={handleProjectSelect} useMockup={MOCKUP} />
+            <SelectionFlow onProjectSelect={handleProjectSelect} />
           </AuthGuard>
         }
       />

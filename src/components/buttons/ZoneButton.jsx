@@ -28,7 +28,8 @@ export default function ZoneButton({ zone, isDisabled, goToItem }) {
         >
             <div className="text-left">
                 <div className="text-md font-bold text-white leading-tight">
-                    {zone.displayName}
+                    {zone.displayName ? zone.displayName : zone.zoneName
+}
                 </div>
                 <div className="text-xs text-white/60 leading-tight py-1">
                     {zone.subtitle}
@@ -36,8 +37,9 @@ export default function ZoneButton({ zone, isDisabled, goToItem }) {
             </div>
             <div className="w-full rounded-lg overflow-hidden bg-black/10">
                 <img
-                    src={zone.thumbnail}
-                    alt={zone.displayName}
+                    src={zone.thumbnail? zone.thumbnail : zone.thumbnailAssetId}
+                    alt={zone.displayName ? zone.displayName : zone.zoneName
+}
                     className="w-full h-full object-cover"
                 />
             </div>

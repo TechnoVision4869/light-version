@@ -82,8 +82,6 @@ export default function Home() {
         goHome();
         break;
       case TABS.ZONES:
-        console.log(currentProject);
-        
         selectedItem = currentProject.zones;
         if(selectedItem.items.length === 1) {
           selectedItem = selectedItem.items[0];

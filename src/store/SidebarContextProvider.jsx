@@ -82,15 +82,31 @@ export default function SidebarContextProvider({ children }) {
     }, []);
 
     const goToTab = useCallback((tabKey, layerKey = null, selectedItem, isFromHome = true) => {
+        console.log(tabKey);
         // console.log(selectedItem);
-
-        const calculatedVideosPath = isFromHome
+        let calculatedVideosPath = null;
+        if(useMockup) {
+            calculatedVideosPath = isFromHome
             ? selectedItem.videos
             : {
                 forwardVideo: selectedItem.zoomoutVideo,
                 reverseVideo: selectedItem.videos.reverseVideo,
                 idleVideo: selectedItem.videos.idleVideo,
             };
+        }else {
+            calculatedVideosPath = isFromHome
+            ? {
+                forwardVideo: tabKey === "zones" ? selectedItem.zonesForwardVideoId : selectedItem.forwardVideoId,
+                reverseVideo: tabKey === "zones" ? selectedItem.zonesReverseVideoId : selectedItem.reverseVideoId,
+                idleVideo: tabKey === "zones" ? selectedItem.zonesSideVideoId : selectedItem.sideVideoId,
+            }
+            : {
+                forwardVideo: tabKey === "zones" ? selectedItem.zonesZoomoutVideoId : selectedItem.zoomoutVideoId,
+                reverseVideo: tabKey === "zones" ? selectedItem.zonesReverseVideoId : selectedItem.reverseVideoId,
+                idleVideo: tabKey === "zones" ? selectedItem.zonesSideVideoId : selectedItem.sideVideoId,
+            };
+        }
+        
 
         const calculatedViews = selectedItem.views || null;
 
@@ -129,7 +145,17 @@ export default function SidebarContextProvider({ children }) {
 
         // Determine videosPath and views with careful fallbacks.
         // Use `undefined` to detect missing values and `null` to represent explicit absence.
-        let videosPath = item?.videos; // undefined if not present
+        let videosPath = null;
+        if(useMockup) {
+            videosPath = item?.videos; // undefined if not present
+        } else {
+                videosPath = {
+                    forwardVideo: item.forwardVideoId,
+                    reverseVideo: item.reverseVideoId,
+                    idleVideo: item.sideVideoId,
+                }
+        }
+
         let views = item?.views; // undefined if not present
 
         // Try to determine the parent property depending on where we are coming from.

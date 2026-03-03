@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useAuth } from './hooks/use-auth';
+import { APP_CONFIG } from '../config/appConfig';
 import DeveloperSelector from './DeveloperSelector';
 import ProjectSelector from './ProjectSelector';
 import Layout from './Layout';
 
-export default function SelectionFlow({ onProjectSelect, useMockup = false }) {
+export default function SelectionFlow({ onProjectSelect }) {
+  const useMockup = APP_CONFIG.USE_MOCKUP;
   const { user } = useAuth();
   const [selectedDeveloper, setSelectedDeveloper] = useState(null);
 
@@ -39,7 +41,6 @@ export default function SelectionFlow({ onProjectSelect, useMockup = false }) {
       developerId={developerId} 
       onProjectSelect={onProjectSelect}
       onBackButtonClick={() => setSelectedDeveloper(null)}
-      useMockup={useMockup}
     />
   );
 }

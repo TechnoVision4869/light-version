@@ -100,7 +100,7 @@ export default function SidebarButtons() {
     <div className="max-h-[calc(100vh-205px)] scrollbar-custom overflow-y-auto overflow-x-hidden space-y-3 px-2 py-2">
       {currentItems.map((item) => (
         <Component
-          key={item.id}
+          key={Math.random()} // Using random key since items may not have unique IDs, but ideally they should
           {...{ [propName]: item }}
           goToItem={() => goToItem(item, layerKey)}
         />
