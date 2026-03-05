@@ -28,6 +28,7 @@ import { surroundingApi } from "../../api/admin/surroundingApi";
 import { assetApi } from "../../api/admin/assetApi";
 import { apiService } from "../../services/api.service";
 import { propertyViewApi } from "../../api/admin/propertyViewApi";
+import { featureApi } from "../../api/admin/featureApi";
 
 const USE_MOCK_DATA = false;
 
@@ -178,6 +179,8 @@ export default function AdminDashboard() {
   const [propertyViewsByProperty, setPropertyViewsByProperty] = useState(
     () => initialMock?.propertyViewsByProperty ?? {},
   );
+  const [featuresByProperty, setFeaturesByProperty] = useState(() => ({}));
+  const [featuresByFloor, setFeaturesByFloor] = useState(() => ({}));
   const [unitTypes, setUnitTypes] = useState(() => []);
   const [mockAssets, setMockAssets] = useState(
     () => initialMock?.assets ?? null,
@@ -217,6 +220,8 @@ export default function AdminDashboard() {
     surroundings: new Set(),
     unitTypes: new Set(),
     propertyViews: new Set(),
+    featuresForProperty: new Set(),
+    featuresForFloor: new Set(),
   });
 
   const loadDevelopers = useCallback(async () => {
@@ -544,6 +549,30 @@ export default function AdminDashboard() {
     [initialMock],
   );
 
+  const loadFeaturesByProperty = useCallback(async (propertyId) => {
+    if (loadedCache.current.featuresForProperty.has(propertyId)) return;
+    loadedCache.current.featuresForProperty.add(propertyId);
+    try {
+      const list = await featureApi.getByProperty(propertyId);
+      const arr = Array.isArray(list) ? list : [];
+      setFeaturesByProperty((prev) => ({ ...prev, [propertyId]: arr }));
+    } catch {
+      setFeaturesByProperty((prev) => ({ ...prev, [propertyId]: [] }));
+    }
+  }, []);
+
+  const loadFeaturesByFloor = useCallback(async (floorId) => {
+    if (loadedCache.current.featuresForFloor.has(floorId)) return;
+    loadedCache.current.featuresForFloor.add(floorId);
+    try {
+      const list = await featureApi.getByFloor(floorId);
+      const arr = Array.isArray(list) ? list : [];
+      setFeaturesByFloor((prev) => ({ ...prev, [floorId]: arr }));
+    } catch {
+      setFeaturesByFloor((prev) => ({ ...prev, [floorId]: [] }));
+    }
+  }, []);
+
   const nodes = useMemo(() => {
     const out = [];
     developers.forEach((dev) => {
@@ -616,25 +645,84 @@ export default function AdminDashboard() {
               parentId: z.id,
               data: { ...prop, zoneId: prop.zoneId || z.id },
             });
+            const pt = prop.type || prop.propertyType;
+            
+            // Property Views folder
+            const folderPropertyViewsId = `folder-property-views-${prop.id}`;
+            out.push({
+              id: folderPropertyViewsId,
+              type: "FOLDER",
+              name: "Property Views",
+              parentId: prop.id,
+              data: { childType: ENTITY_TYPES.PROPERTY_VIEW, propertyId: prop.id },
+            });
             (propertyViewsByProperty[prop.id] ?? []).forEach((pv) => {
               out.push({
                 id: pv.id,
                 type: ENTITY_TYPES.PROPERTY_VIEW,
                 name: getDisplayName(pv, ENTITY_TYPES.PROPERTY_VIEW),
-                parentId: prop.id,
+                parentId: folderPropertyViewsId,
                 data: { ...pv, propertyId: pv.propertyId || prop.id },
               });
             });
-            const pt = prop.type || prop.propertyType;
+
             if (pt === "TOWER") {
+              // Features folder for TOWER property
+              const folderFeaturesPropertyId = `folder-features-property-${prop.id}`;
+              out.push({
+                id: folderFeaturesPropertyId,
+                type: "FOLDER",
+                name: "Features",
+                parentId: prop.id,
+                data: { childType: ENTITY_TYPES.FEATURE, propertyId: prop.id },
+              });
+              (featuresByProperty[prop.id] ?? []).forEach((feat) => {
+                out.push({
+                  id: feat.id,
+                  type: ENTITY_TYPES.FEATURE,
+                  name: getDisplayName(feat, ENTITY_TYPES.FEATURE),
+                  parentId: folderFeaturesPropertyId,
+                  data: { ...feat, propertyId: feat.propertyId || prop.id },
+                });
+              });
+
+              // Floors folder
+              const folderFloorsId = `folder-floors-${prop.id}`;
+              out.push({
+                id: folderFloorsId,
+                type: "FOLDER",
+                name: "Floors",
+                parentId: prop.id,
+                data: { childType: ENTITY_TYPES.FLOOR, propertyId: prop.id },
+              });
               (floorsByProperty[prop.id] ?? []).forEach((f) => {
                 out.push({
                   id: f.id,
                   type: ENTITY_TYPES.FLOOR,
                   name: getDisplayName(f, ENTITY_TYPES.FLOOR),
-                  parentId: prop.id,
+                  parentId: folderFloorsId,
                   data: { ...f, propertyId: f.propertyId || prop.id },
                 });
+                
+                // Features folder for floor
+                const folderFeaturesFloorId = `folder-features-floor-${f.id}`;
+                out.push({
+                  id: folderFeaturesFloorId,
+                  type: "FOLDER",
+                  name: "Features",
+                  parentId: f.id,
+                  data: { childType: ENTITY_TYPES.FEATURE, floorId: f.id },
+                });
+                (featuresByFloor[f.id] ?? []).forEach((feat) => {
+                  out.push({
+                    id: feat.id,
+                    type: ENTITY_TYPES.FEATURE,
+                    name: getDisplayName(feat, ENTITY_TYPES.FEATURE),
+                    parentId: folderFeaturesFloorId,
+                    data: { ...feat, floorId: feat.floorId || f.id },
+                  });
+                });
+
                 (unitsByFloor[f.id] ?? []).forEach((u) => {
                   out.push({
                     id: u.id,
@@ -650,12 +738,21 @@ export default function AdminDashboard() {
                 });
               });
             } else if (pt === "TOWNHOUSE") {
+              // Blocks folder
+              const folderBlocksId = `folder-blocks-${prop.id}`;
+              out.push({
+                id: folderBlocksId,
+                type: "FOLDER",
+                name: "Blocks",
+                parentId: prop.id,
+                data: { childType: ENTITY_TYPES.BLOCK, propertyId: prop.id },
+              });
               (blocksByProperty[prop.id] ?? []).forEach((b) => {
                 out.push({
                   id: b.id,
                   type: ENTITY_TYPES.BLOCK,
                   name: getDisplayName(b, ENTITY_TYPES.BLOCK),
-                  parentId: prop.id,
+                  parentId: folderBlocksId,
                   data: { ...b, propertyId: b.propertyId || prop.id },
                 });
                 (unitsByBlock[b.id] ?? []).forEach((u) => {
@@ -731,6 +828,8 @@ export default function AdminDashboard() {
     surroundingsByProject,
     unitTypes,
     propertyViewsByProperty,
+    featuresByProperty,
+    featuresByFloor,
   ]);
 
   const handleToggle = useCallback(
@@ -751,12 +850,18 @@ export default function AdminDashboard() {
         if (node?.type === ENTITY_TYPES.ZONE) loadProperties(id);
         if (node?.type === ENTITY_TYPES.PROPERTY) {
           const pt = node.data?.type || node.data?.propertyType;
-          if (pt === "TOWER") loadFloors(id);
+          if (pt === "TOWER") {
+            loadFloors(id);
+            loadFeaturesByProperty(id);
+          }
           if (pt === "TOWNHOUSE") loadBlocks(id);
           if (pt === "VILLA") loadUnitsForProperty(id);
           loadPropertyViews(id);
         }
-        if (node?.type === ENTITY_TYPES.FLOOR) loadUnitsForFloor(id);
+        if (node?.type === ENTITY_TYPES.FLOOR) {
+          loadUnitsForFloor(id);
+          loadFeaturesByFloor(id);
+        }
         if (node?.type === ENTITY_TYPES.BLOCK) loadUnitsForBlock(id);
         return next;
       });
@@ -775,6 +880,8 @@ export default function AdminDashboard() {
       loadUnitsForBlock,
       loadPropertyViews,
       loadUnitTypes,
+      loadFeaturesByProperty,
+      loadFeaturesByFloor,
     ],
   );
 
@@ -792,12 +899,18 @@ export default function AdminDashboard() {
       if (node?.type === ENTITY_TYPES.ZONE) loadProperties(node.id);
       if (node?.type === ENTITY_TYPES.PROPERTY) {
         const pt = node.data?.type || node.data?.propertyType;
-        if (pt === "TOWER") loadFloors(node.id);
+        if (pt === "TOWER") {
+          loadFloors(node.id);
+          loadFeaturesByProperty(node.id);
+        }
         if (pt === "TOWNHOUSE") loadBlocks(node.id);
         if (pt === "VILLA") loadUnitsForProperty(node.id);
         loadPropertyViews(node.id);
       }
-      if (node?.type === ENTITY_TYPES.FLOOR) loadUnitsForFloor(node.id);
+      if (node?.type === ENTITY_TYPES.FLOOR) {
+        loadUnitsForFloor(node.id);
+        loadFeaturesByFloor(node.id);
+      }
       if (node?.type === ENTITY_TYPES.BLOCK) loadUnitsForBlock(node.id);
     },
     [
@@ -813,6 +926,8 @@ export default function AdminDashboard() {
       loadUnitsForBlock,
       loadPropertyViews,
       loadUnitTypes,
+      loadFeaturesByProperty,
+      loadFeaturesByFloor,
     ],
   );
 
@@ -827,16 +942,46 @@ export default function AdminDashboard() {
       };
       if (childType === ENTITY_TYPES.PROJECT && parent)
         base.data = { developerId: parentId, name: "New Project" };
-      if (childType === ENTITY_TYPES.ZONE && parent)
-        base.data = { projectId: parentId, name: "New Zone" };
+      if (childType === ENTITY_TYPES.ZONE && parent) {
+        const projectId =
+          parent?.type === "FOLDER" && parent?.data?.projectId
+            ? parent.data.projectId
+            : parentId;
+        base.data = { projectId, name: "New Zone" };
+      }
       if (childType === ENTITY_TYPES.PROPERTY && parent)
         base.data = { zoneId: parentId, name: "New Property" };
-      if (childType === ENTITY_TYPES.PROPERTY_VIEW && parent)
-        base.data = { propertyId: parentId, name: "New Property View" };
-      if (childType === ENTITY_TYPES.FLOOR && parent)
-        base.data = { propertyId: parentId, floorNumber: 1 };
-      if (childType === ENTITY_TYPES.BLOCK && parent)
-        base.data = { propertyId: parentId, displayName: "New Block" };
+      if (childType === ENTITY_TYPES.PROPERTY_VIEW && parent) {
+        const propertyId =
+          parent?.type === "FOLDER" && parent?.data?.propertyId
+            ? parent.data.propertyId
+            : parentId;
+        base.data = { propertyId, name: "New Property View" };
+      }
+      if (childType === ENTITY_TYPES.FEATURE && parent) {
+        // Feature is added from a FOLDER (Features folder under property or floor)
+        if (parent?.type === "FOLDER" && parent?.data?.childType === ENTITY_TYPES.FEATURE) {
+          if (parent.data.floorId) {
+            base.data = { floorId: parent.data.floorId, propertyId: null, name: "New Feature" };
+          } else if (parent.data.propertyId) {
+            base.data = { propertyId: parent.data.propertyId, floorId: null, name: "New Feature" };
+          }
+        }
+      }
+      if (childType === ENTITY_TYPES.FLOOR && parent) {
+        const propertyId =
+          parent?.type === "FOLDER" && parent?.data?.propertyId
+            ? parent.data.propertyId
+            : parentId;
+        base.data = { propertyId, floorNumber: 1 };
+      }
+      if (childType === ENTITY_TYPES.BLOCK && parent) {
+        const propertyId =
+          parent?.type === "FOLDER" && parent?.data?.propertyId
+            ? parent.data.propertyId
+            : parentId;
+        base.data = { propertyId, displayName: "New Block" };
+      }
       if (childType === ENTITY_TYPES.UNIT && parent) {
         base.data = {
           propertyId: parent?.data?.propertyId || parentId,
@@ -846,12 +991,27 @@ export default function AdminDashboard() {
         if (parent?.type === ENTITY_TYPES.FLOOR) base.data.floorId = parentId;
         if (parent?.type === ENTITY_TYPES.BLOCK) base.data.blockId = parentId;
       }
-      if (childType === ENTITY_TYPES.AMENITY && parent)
-        base.data = { projectId: parentId, name: "New Amenity" };
-      if (childType === ENTITY_TYPES.SURROUNDING && parent)
-        base.data = { projectId: parentId, name: "New Surrounding" };
-      if (childType === ENTITY_TYPES.UNIT_TYPE)
-        base.data = { projectId: parentId, name: "New Unit Type" };
+      if (childType === ENTITY_TYPES.AMENITY && parent) {
+        const projectId =
+          parent?.type === "FOLDER" && parent?.data?.projectId
+            ? parent.data.projectId
+            : parentId;
+        base.data = { projectId, name: "New Amenity" };
+      }
+      if (childType === ENTITY_TYPES.SURROUNDING && parent) {
+        const projectId =
+          parent?.type === "FOLDER" && parent?.data?.projectId
+            ? parent.data.projectId
+            : parentId;
+        base.data = { projectId, name: "New Surrounding" };
+      }
+      if (childType === ENTITY_TYPES.UNIT_TYPE && parent) {
+        const projectId =
+          parent?.type === "FOLDER" && parent?.data?.projectId
+            ? parent.data.projectId
+            : parentId;
+        base.data = { projectId, name: "New Unit Type" };
+      }
       setSelectedNode({ ...base, id: null });
     },
     [nodes],
@@ -994,6 +1154,26 @@ export default function AdminDashboard() {
               [parentId]: (prev[parentId] ?? []).filter((pv) => pv.id !== id),
             }));
             break;
+          case ENTITY_TYPES.FEATURE: {
+            const featureData = deleteTarget?.data;
+            if (featureData?.propertyId) {
+              setFeaturesByProperty((prev) => ({
+                ...prev,
+                [featureData.propertyId]: (
+                  prev[featureData.propertyId] ?? []
+                ).filter((f) => f.id !== id),
+              }));
+            }
+            if (featureData?.floorId) {
+              setFeaturesByFloor((prev) => ({
+                ...prev,
+                [featureData.floorId]: (prev[featureData.floorId] ?? []).filter(
+                  (f) => f.id !== id,
+                ),
+              }));
+            }
+            break;
+          }
           default:
             break;
         }
@@ -1036,6 +1216,9 @@ export default function AdminDashboard() {
           break;
         case ENTITY_TYPES.PROPERTY_VIEW:
           await propertyViewApi.delete(id);
+          break;
+        case ENTITY_TYPES.FEATURE:
+          await featureApi.delete(id);
           break;
         default:
           throw new Error("Unknown type");
@@ -1094,6 +1277,17 @@ export default function AdminDashboard() {
         loadedCache.current.propertyViews.delete(pid);
         loadPropertyViews(pid);
       }
+      if (deleteTarget.type === ENTITY_TYPES.FEATURE) {
+        const featureData = deleteTarget?.data;
+        if (featureData?.propertyId) {
+          loadedCache.current.featuresForProperty.delete(featureData.propertyId);
+          loadFeaturesByProperty(featureData.propertyId);
+        }
+        if (featureData?.floorId) {
+          loadedCache.current.featuresForFloor.delete(featureData.floorId);
+          loadFeaturesByFloor(featureData.floorId);
+        }
+      }
     } catch (e) {
       toast.error(e?.message || "Delete failed");
     } finally {
@@ -1114,6 +1308,8 @@ export default function AdminDashboard() {
     loadSurroundings,
     loadUnitTypes,
     loadPropertyViews,
+    loadFeaturesByProperty,
+    loadFeaturesByFloor,
   ]);
 
   const nextMockId = useCallback(
@@ -1394,12 +1590,24 @@ export default function AdminDashboard() {
             case ENTITY_TYPES.UNIT_TYPE: {
               const payload = normalizeUnitTypePayload(data);
               await unitTypeApi.update(id, payload);
-              if (data.projectId) loadedCache.current.unitTypes.delete(data.projectId);
+              if (data.projectId)
+                loadedCache.current.unitTypes.delete(data.projectId);
               await loadUnitTypes(data.projectId);
               break;
             }
             case ENTITY_TYPES.PROPERTY_VIEW:
               await propertyViewApi.update(id, finalData);
+              break;
+            case ENTITY_TYPES.FEATURE:
+              await featureApi.update(id, finalData);
+              if (data.propertyId) {
+                loadedCache.current.featuresForProperty.delete(data.propertyId);
+                await loadFeaturesByProperty(data.propertyId);
+              }
+              if (data.floorId) {
+                loadedCache.current.featuresForFloor.delete(data.floorId);
+                await loadFeaturesByFloor(data.floorId);
+              }
               break;
             default:
               throw new Error("Unknown type");
@@ -1479,7 +1687,8 @@ export default function AdminDashboard() {
             case ENTITY_TYPES.UNIT_TYPE: {
               const payload = normalizeUnitTypeFullPayload(data);
               created = await unitTypeApi.createFull(payload);
-              if (data.projectId) loadedCache.current.unitTypes.delete(data.projectId);
+              if (data.projectId)
+                loadedCache.current.unitTypes.delete(data.projectId);
               await loadUnitTypes(data.projectId);
               break;
             }
@@ -1488,6 +1697,17 @@ export default function AdminDashboard() {
               if (data.propertyId) {
                 loadedCache.current.propertyViews.delete(data.propertyId);
                 loadPropertyViews(data.propertyId);
+              }
+              break;
+            case ENTITY_TYPES.FEATURE:
+              created = await featureApi.create(finalData);
+              if (data.propertyId) {
+                loadedCache.current.featuresForProperty.delete(data.propertyId);
+                loadFeaturesByProperty(data.propertyId);
+              }
+              if (data.floorId) {
+                loadedCache.current.featuresForFloor.delete(data.floorId);
+                loadFeaturesByFloor(data.floorId);
               }
               break;
             default:
@@ -1533,6 +1753,8 @@ export default function AdminDashboard() {
       loadSurroundings,
       loadUnitTypes,
       loadPropertyViews,
+      loadFeaturesByProperty,
+      loadFeaturesByFloor,
     ],
   );
 

@@ -10,6 +10,7 @@ import { unitTypeApi } from "../../api/admin/unitTypeApi";
 import { zoneApi } from "../../api/admin/zoneApi";
 import { blockApi } from "../../api/admin/blockApi";
 import { propertyViewApi } from "../../api/admin/propertyViewApi";
+import { featureApi } from "../../api/admin/featureApi";
 import { ENTITY_TYPES, PROPERTY_TYPES, AssetType } from "./types";
 
 /** Field control types for UI */
@@ -269,7 +270,7 @@ export const resourceConfigs = {
       highlightAssetId: yup.string().nullable(),
       forwardAssetId: yup.string().nullable(),
       reverseAssetId: yup.string().nullable(),
-      sideAssetId: yup.string().nullable(),
+      idleAssetId: yup.string().nullable(),
     }),
     fields: [
       nameField(),
@@ -324,7 +325,9 @@ export const resourceConfigs = {
       const pType = node?.data?.type || node?.data?.propertyType;
       if (pType === PROPERTY_TYPES.VILLA) steps.push(ENTITY_TYPES.UNIT);
       if (pType === PROPERTY_TYPES.TOWNHOUSE) steps.push(ENTITY_TYPES.BLOCK);
-      if (pType === PROPERTY_TYPES.TOWER) steps.push(ENTITY_TYPES.FLOOR);
+      if (pType === PROPERTY_TYPES.TOWER) {
+        steps.push(ENTITY_TYPES.FEATURE, ENTITY_TYPES.FLOOR);
+      }
       return steps;
     },
   },
@@ -375,6 +378,29 @@ export const resourceConfigs = {
     canCreateChild: (parentNode) =>
       (parentNode?.data?.type || parentNode?.data?.propertyType) ===
       PROPERTY_TYPES.TOWER,
+  },
+  [ENTITY_TYPES.FEATURE]: {
+    title: "Feature",
+    api: featureApi,
+    schema: yup.object().shape({
+      name: yup.string().required(),
+      propertyId: yup.string().nullable(),
+      floorId: yup.string().nullable(),
+      description: yup.string().nullable(),
+    }),
+    fields: [
+      nameField(),
+      idField("propertyId", "Property ID", false),
+      idField("floorId", "Floor ID", false),
+      {
+        name: "description",
+        label: "Description",
+        control: CONTROL_TYPES.TEXTAREA,
+        required: false,
+        disabled: false,
+      },
+    ],
+    childTypes: [],
   },
   [ENTITY_TYPES.BLOCK]: {
     title: "Block",

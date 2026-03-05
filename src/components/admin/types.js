@@ -17,6 +17,7 @@ export const ENTITY_TYPES = {
   AMENITY: "amenity",
   SURROUNDING: "surrounding",
   ASSET: "asset",
+  FEATURE: "feature",
 };
 
 export const PROPERTY_TYPES = {

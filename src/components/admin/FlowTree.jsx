@@ -15,6 +15,7 @@ import {
   Trees,
   Navigation,
   Folder, // Import Folder icon
+  Feather,
 } from "lucide-react";
 import { resourceConfigs } from "./resourceConfigs";
 import { ENTITY_TYPES } from "./types";
@@ -42,7 +43,9 @@ function getIcon(type) {
       return <Trees className="w-4 h-4 shrink-0" />;
     case ENTITY_TYPES.SURROUNDING:
       return <Navigation className="w-4 h-4 shrink-0" />;
-    case 'FOLDER':
+    case ENTITY_TYPES.FEATURE:
+      return <Feather className="w-4 h-4 shrink-0" />;
+    case "FOLDER":
       return <Folder className="w-4 h-4 shrink-0" />;
     default:
       return null;
@@ -64,7 +67,7 @@ export function FlowTree({
   const hasChildren = (nodeId) => nodes.some((n) => n.parentId === nodeId);
 
   const renderNode = (node, level = 0) => {
-    const isFolder = node.type === 'FOLDER';
+    const isFolder = node.type === "FOLDER";
     const children = getChildren(node.id);
     const isExpanded = expandedIds.has(node.id);
     const isSelected = !isFolder && selectedId === node.id; // Folders can't be selected
@@ -93,21 +96,19 @@ export function FlowTree({
       <div key={node.id}>
         <div
           className={cn(
-            "flex items-center gap-2 py-1.5 pr-1 rounded-md group transition-colors",
-            !isFolder && "cursor-pointer hover:bg-white/5",
-            isSelected && "bg-white/10 border-l-2 border-white"
+            "flex items-center gap-2 py-1.5 pr-1 rounded-md group transition-colors cursor-pointer hover:bg-white/5",
+            isSelected && "bg-white/10 border-l-2 border-white",
           )}
           style={{ paddingLeft: `${level * 16 + 8}px` }}
-          onClick={!isFolder ? () => onSelect(node) : undefined}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (!isFolder) {
+              onSelect(node);
+            }
+            onToggle(node.id);
+          }}
         >
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggle(node.id);
-            }}
-            className="w-6 h-6 flex items-center justify-center shrink-0 rounded hover:bg-white/10 text-white/70"
-          >
+          <div className="w-6 h-6 flex items-center justify-center shrink-0 text-white/70">
             {canExpand ? (
               isExpanded ? (
                 <ChevronDown className="w-4 h-4" />
@@ -117,12 +118,17 @@ export function FlowTree({
             ) : (
               <span className="w-4" />
             )}
-          </button>
-          <div
-            className="flex-1 flex items-center gap-2 min-w-0"
-          >
+          </div>
+          <div className="flex-1 flex items-center gap-2 min-w-0">
             <span className="text-white/80">{getIcon(node.type)}</span>
-            <span className={cn("text-sm truncate text-white", isFolder && "font-medium")}>{node.name}</span>
+            <span
+              className={cn(
+                "text-sm truncate text-white",
+                isFolder && "font-medium",
+              )}
+            >
+              {node.name}
+            </span>
             {propertyType && (
               <span className="text-xs px-1.5 py-0.5 rounded bg-white/10 text-white/80">
                 {propertyType}
@@ -158,21 +164,22 @@ export function FlowTree({
         </div>
 
         {isExpanded && children.length > 0 && (
-          <div>
-            {children.map((child) => renderNode(child, level + 1))}
-          </div>
+          <div>{children.map((child) => renderNode(child, level + 1))}</div>
         )}
-        
+
         {isExpanded && (isFolder || allowedChildTypes.length > 0) && (
           <div
             style={{ paddingLeft: `${(level + 1) * 16 + 32}px` }}
             className="py-1 space-y-0.5"
           >
-            {(isFolder ? [node.data?.childType].filter(Boolean) : allowedChildTypes).map((childType) => (
+            {(isFolder
+              ? [node.data?.childType].filter(Boolean)
+              : allowedChildTypes
+            ).map((childType) => (
               <button
                 key={childType}
                 type="button"
-                onClick={() => onAdd(childType, isFolder ? node.parentId : node.id)}
+                onClick={() => onAdd(childType, node.id)}
                 className="flex items-center gap-2 px-2 py-1 text-xs text-white/70 hover:bg-white/10 rounded w-full text-left transition-colors hover:text-white"
               >
                 <Plus className="w-3 h-3" />
@@ -205,7 +212,9 @@ export function FlowTree({
           <div className="p-8 text-center">
             <Building2 className="w-12 h-12 mx-auto mb-3 text-white/30" />
             <p className="text-sm text-white/60 mb-2">No developers yet</p>
-            <p className="text-xs text-white/40">Click &quot;Developer&quot; above to get started</p>
+            <p className="text-xs text-white/40">
+              Click &quot;Developer&quot; above to get started
+            </p>
           </div>
         ) : (
           rootNodes.map((node) => renderNode(node, 0))

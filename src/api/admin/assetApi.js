@@ -24,8 +24,14 @@ class AssetApi {
     return apiService.get(`assets/${id}`);
   }
 
-  async getByDeveloper(developerId) {
-    return apiService.get(`assets/developer/${developerId}`);
+  async getByDeveloper(filters = {}) {
+    const params = {};
+    if (filters.limit) params.limit = filters.limit;
+    if (filters.type && filters.type !== "all") params.type = filters.type;
+    return apiService.get(
+      `assets/developer/${filters.developerId}`,
+      Object.keys(params).length ? params : undefined,
+    );
   }
 
   async upload(formData) {
