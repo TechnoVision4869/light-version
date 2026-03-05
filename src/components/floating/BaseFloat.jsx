@@ -129,13 +129,13 @@ export default function BaseFloating({ mediaRef }) {
                 const pos = itemIdToPosition.get(item.id);
 
                 if (!pos) return null;
-                const isSelected = currentItem?.name === item.name;
+                const isSelected = currentItem?.displayName === item.displayName;
                 
                 return (
                     <AnimFloatButton
                         key={Math.random()}
                         name={item.displayName}
-                        icon={item.iconSrc}
+                        icon={item.iconSrc ? item.iconSrc : item.iconAssetId}
                         style={{
                             left: `${pos.left}px`,
                             top: `${pos.top}px`,
@@ -145,7 +145,6 @@ export default function BaseFloating({ mediaRef }) {
                         }}
                         isSelected={isSelected}
                         // nameDirection={item.nameDirection || "right"}
-                        nameDirection={i % 2 === 0 ? "right" : "left"}
                     />
                 );
             })

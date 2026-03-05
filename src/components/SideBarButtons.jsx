@@ -53,12 +53,14 @@ export default function SidebarButtons() {
       const properties = currentItem?.properties || [];
       if (properties.length === 1) {
         const property = properties[0];
-        if (property.type === "villa") {
+        console.log(property);
+        
+        if (property.type === "villa" || property.type === "VILLA") {
           Component = ApartmentButton;
           propName = "apartment";
           layerKey = LAYERS.UNIT;
         }
-        else if (property.type === "town") {
+        else if (property.type === "town" || property.type === "TOWNHOUSE") {
           Component = BuildingButton;
           propName = "building";
           layerKey = LAYERS.BUILDING;
@@ -71,7 +73,7 @@ export default function SidebarButtons() {
       }
     }
     else if (activeLayer === LAYERS.BUILDING) {
-      if (currentItem?.type === "tower") {
+      if (currentItem?.type === "tower" || currentItem?.type === "TOWER") {
         Component = FloorButton;
         propName = "floor";
         layerKey = LAYERS.FLOOR;

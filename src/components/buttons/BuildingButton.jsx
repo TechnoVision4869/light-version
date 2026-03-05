@@ -8,12 +8,14 @@ import BED_ICON from "../../assets/icons/bed.png"
 import { FILTER_ENUM, getMinMaxRange } from "../helpers/filterHelper";
 
 export default function BuildingButton({ building, isDisabled, goToItem }) {
+    console.log(building);
+    
     const { highlightedButton, setHighlightedButton } = useContext(SidebarContext);
 
     let unitsToFilter = [];
     if (building.type === "tower") unitsToFilter = building.floors.flatMap(floor => floor.units);
     else unitsToFilter = building.units;
-
+    
     const { min: minBedrooms, max: maxBedrooms } = getMinMaxRange(unitsToFilter, FILTER_ENUM.BEDROOMS);
     const { min: minArea, max: maxArea } = getMinMaxRange(unitsToFilter, FILTER_ENUM.AREA);
 

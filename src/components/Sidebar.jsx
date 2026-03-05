@@ -16,6 +16,19 @@ export default function Sidebar() {
         }
     }, [activeLayer]);
 
+    const renderTitle = () => {
+        if(activeLayer === null) {
+            if (activeTab === TABS.ZONES) return "Zones";
+            if (activeTab === TABS.AMENITIES) return "Amenities";
+            if (activeTab === TABS.SURROUNDINGS) return "Surroundings";
+        } else if (activeLayer === LAYERS.ZONE_DETAIL) {
+            return String(currentItem?.zoneName).charAt(0).toUpperCase() + String(currentItem?.zoneName).slice(1);
+        }else {
+            return String(currentItem?.displayName).charAt(0).toUpperCase() + String(currentItem?.displayName).slice(1);
+        }
+        return "";
+    }
+
     return (
         <aside
             className={`bg-white/9 rounded-2xl p-2 py-3 md:py-4 flex-shrink-0 transition-all duration-700 overflow-hidden
@@ -64,8 +77,7 @@ export default function Sidebar() {
                         <>
                             {/* Dynamic sidebar title based on active tab */}
                             <div className="text-white font-semibold my-1 px-3 whitespace-nowrap">
-                                {String(currentItem?.displayName).charAt(0).toUpperCase() +
-                                    String(currentItem?.displayName).slice(1)}
+                                {renderTitle()}
                             </div>
                             <div className="h-0.5 bg-white/50 mx-3 mb-4"></div>
 

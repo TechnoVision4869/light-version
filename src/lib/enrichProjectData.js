@@ -46,7 +46,7 @@ async function transformAssetIds(obj) {
 
   for (const [key, value] of Object.entries(transformed)) {
     // Check if this is an asset/video ID field
-    if ((key.endsWith('AssetId') || key.endsWith('VideoId') || key.includes('highlight')) && typeof value === 'string' && value) {
+    if ((key.endsWith('AssetId') || key.endsWith('VideoId') || key.includes('highlight') || key.includes('zoomOutVideo')) && typeof value === 'string' && value) {
       try {
         // Call the API to get the file URL
         const fileUrl = await assetsApi.getAssetFileUrl(value);

@@ -28,9 +28,9 @@ export default function SidebarContextProvider({ children }) {
             layer: null,
             item: null,
             videosPath: {
-                forwardVideo: getVideoUrl(project, 'zoomoutVideo', 'zoomoutAssetId') ?? null,
+                forwardVideo: getVideoUrl(project, 'zoomoutVideo', 'zoomoutVideoId') ?? null,
                 reverseVideo: null,
-                idleVideo: getVideoUrl(project, 'idleVideo', 'idleAssetId') ?? null,
+                idleVideo: getVideoUrl(project, 'idleVideo', 'idleVideoId') ?? null,
             },
             views: null,
         },
@@ -71,10 +71,14 @@ export default function SidebarContextProvider({ children }) {
     } = currentEntry;
 
     const findPropertyForItem = useCallback((zone, targetItem) => {
+        console.log(zone, targetItem);
+        
         if (!zone?.properties?.length) return null;
         if (zone.properties.length === 1) return zone.properties[0];
 
         return zone.properties.find((property) => {
+            console.log(property);
+            
             if (property.blocks?.some((block) => block.id === targetItem?.id)) return true;
             if (property.units?.some((unit) => unit.id === targetItem?.id)) return true;
             return false;
@@ -93,7 +97,7 @@ export default function SidebarContextProvider({ children }) {
                 reverseVideo: selectedItem.videos.reverseVideo,
                 idleVideo: selectedItem.videos.idleVideo,
             };
-        }else {
+        } else {
             calculatedVideosPath = isFromHome
             ? {
                 forwardVideo: tabKey === "zones" ? selectedItem.zonesForwardVideoId : selectedItem.forwardVideoId,
@@ -101,12 +105,11 @@ export default function SidebarContextProvider({ children }) {
                 idleVideo: tabKey === "zones" ? selectedItem.zonesSideVideoId : selectedItem.sideVideoId,
             }
             : {
-                forwardVideo: tabKey === "zones" ? selectedItem.zonesZoomoutVideoId : selectedItem.zoomoutVideoId,
+                forwardVideo: tabKey === "zones" ? selectedItem.zonesZoomoutVideoId : selectedItem.zoomOutVideo,
                 reverseVideo: tabKey === "zones" ? selectedItem.zonesReverseVideoId : selectedItem.reverseVideoId,
                 idleVideo: tabKey === "zones" ? selectedItem.zonesSideVideoId : selectedItem.sideVideoId,
             };
-        }
-        
+        }        
 
         const calculatedViews = selectedItem.views || null;
 
@@ -172,7 +175,7 @@ export default function SidebarContextProvider({ children }) {
         // - If navigating into a UNIT layer: views should be available only for `villa` properties.
         // - For other layers (e.g., BUILDING) try to use property's views when not present on the item.
         if (targetLayer === LAYERS.UNIT) {
-            if (property?.type === "villa") {
+            if (property?.type === "villa" || property?.type === "VILLA") {
                 if (views === undefined) views = property?.views; // allow views for villa units
             } else {
                 views = null; // explicitly no views for town/tower units

@@ -31,7 +31,7 @@ export default function ApartmentButton({ apartment, isDisabled = false, goToIte
             <div className="flex items-center justify-between whitespace-nowrap min-w-0">
                 {/* Floor Name */}
                 <div className="text-md font-semibold text-white leading-tight flex-shrink-0">
-                    {apartment.displayName}
+                    {apartment.displayName? apartment.displayName : apartment.name}
                 </div>
 
                 {/* Vertical Divider + Floor Type */}

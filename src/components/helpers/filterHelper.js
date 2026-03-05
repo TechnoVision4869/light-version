@@ -7,7 +7,12 @@ export const FILTER_ENUM = {
 }
 
 export function getMinMaxRange(units, filterName) {
-    if (units.length === 0) {
+    if(!units) return {
+        min: 0,
+        max:0,
+    }
+    
+    if (units?.length === 0) {
         return { min: 0, max: 0 };
     }
 
