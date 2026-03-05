@@ -264,13 +264,18 @@ export const resourceConfigs = {
       name: yup.string().required(),
       type: yup.string().oneOf(Object.values(PROPERTY_TYPES)).required(),
       zoneId: yup.string().required(),
-      description: yup.string(),
+      description: yup.string().nullable(),
       x: yup.number().nullable(),
       y: yup.number().nullable(),
-      highlightAssetId: yup.string().nullable(),
+      featureDisplayName: yup.string().nullable(),
+      featureX: yup.number().nullable(),
+      featureY: yup.number().nullable(),
       forwardAssetId: yup.string().nullable(),
       reverseAssetId: yup.string().nullable(),
       idleAssetId: yup.string().nullable(),
+      featureForwardAssetId: yup.string().nullable(),
+      featureReverseAssetId: yup.string().nullable(),
+      featureIdleAssetId: yup.string().nullable(),
     }),
     fields: [
       nameField(),
@@ -304,12 +309,27 @@ export const resourceConfigs = {
         required: false,
         disabled: false,
       },
-      assetField("highlightAssetId", "Highlight", [
-        AssetType.IMAGE,
-        AssetType.VIDEO,
-        AssetType.THUMBNAIL,
-        AssetType.PANORAMA,
-      ]),
+      {
+        name: "featureDisplayName",
+        label: "Feature Display Name",
+        control: CONTROL_TYPES.TEXT,
+        required: false,
+        disabled: false,
+      },
+      {
+        name: "featureX",
+        label: "Feature X",
+        control: CONTROL_TYPES.NUMBER,
+        required: false,
+        disabled: false,
+      },
+      {
+        name: "featureY",
+        label: "Feature Y",
+        control: CONTROL_TYPES.NUMBER,
+        required: false,
+        disabled: false,
+      },
       assetField("forwardAssetId", "Forward", [
         AssetType.VIDEO,
         AssetType.PANORAMA,
@@ -318,7 +338,22 @@ export const resourceConfigs = {
         AssetType.VIDEO,
         AssetType.PANORAMA,
       ]),
-      assetField("sideAssetId", "Side", [AssetType.VIDEO, AssetType.PANORAMA]),
+      assetField("idleAssetId", "Idle", [
+        AssetType.VIDEO,
+        AssetType.PANORAMA,
+      ]),
+      assetField("featureForwardAssetId", "Feature Forward", [
+        AssetType.VIDEO,
+        AssetType.PANORAMA,
+      ]),
+      assetField("featureReverseAssetId", "Feature Reverse", [
+        AssetType.VIDEO,
+        AssetType.PANORAMA,
+      ]),
+      assetField("featureIdleAssetId", "Feature Idle", [
+        AssetType.VIDEO,
+        AssetType.PANORAMA,
+      ]),
     ],
     childTypes: (node) => {
       const steps = [ENTITY_TYPES.PROPERTY_VIEW];

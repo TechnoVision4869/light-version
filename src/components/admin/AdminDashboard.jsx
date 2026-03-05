@@ -646,7 +646,7 @@ export default function AdminDashboard() {
               data: { ...prop, zoneId: prop.zoneId || z.id },
             });
             const pt = prop.type || prop.propertyType;
-            
+
             // Property Views folder
             const folderPropertyViewsId = `folder-property-views-${prop.id}`;
             out.push({
@@ -654,7 +654,10 @@ export default function AdminDashboard() {
               type: "FOLDER",
               name: "Property Views",
               parentId: prop.id,
-              data: { childType: ENTITY_TYPES.PROPERTY_VIEW, propertyId: prop.id },
+              data: {
+                childType: ENTITY_TYPES.PROPERTY_VIEW,
+                propertyId: prop.id,
+              },
             });
             (propertyViewsByProperty[prop.id] ?? []).forEach((pv) => {
               out.push({
@@ -703,7 +706,7 @@ export default function AdminDashboard() {
                   parentId: folderFloorsId,
                   data: { ...f, propertyId: f.propertyId || prop.id },
                 });
-                
+
                 // Features folder for floor
                 const folderFeaturesFloorId = `folder-features-floor-${f.id}`;
                 out.push({
@@ -960,11 +963,22 @@ export default function AdminDashboard() {
       }
       if (childType === ENTITY_TYPES.FEATURE && parent) {
         // Feature is added from a FOLDER (Features folder under property or floor)
-        if (parent?.type === "FOLDER" && parent?.data?.childType === ENTITY_TYPES.FEATURE) {
+        if (
+          parent?.type === "FOLDER" &&
+          parent?.data?.childType === ENTITY_TYPES.FEATURE
+        ) {
           if (parent.data.floorId) {
-            base.data = { floorId: parent.data.floorId, propertyId: null, name: "New Feature" };
+            base.data = {
+              floorId: parent.data.floorId,
+              propertyId: null,
+              name: "New Feature",
+            };
           } else if (parent.data.propertyId) {
-            base.data = { propertyId: parent.data.propertyId, floorId: null, name: "New Feature" };
+            base.data = {
+              propertyId: parent.data.propertyId,
+              floorId: null,
+              name: "New Feature",
+            };
           }
         }
       }
@@ -1280,7 +1294,9 @@ export default function AdminDashboard() {
       if (deleteTarget.type === ENTITY_TYPES.FEATURE) {
         const featureData = deleteTarget?.data;
         if (featureData?.propertyId) {
-          loadedCache.current.featuresForProperty.delete(featureData.propertyId);
+          loadedCache.current.featuresForProperty.delete(
+            featureData.propertyId,
+          );
           loadFeaturesByProperty(featureData.propertyId);
         }
         if (featureData?.floorId) {
@@ -1560,43 +1576,87 @@ export default function AdminDashboard() {
           switch (type) {
             case ENTITY_TYPES.DEVELOPER:
               await developerApi.update(id, finalData);
+              await loadDevelopers();
               break;
             case ENTITY_TYPES.PROJECT:
               await projectApi.update(id, finalData);
+              if (data.developerId) {
+                loadedCache.current.projects.delete(data.developerId);
+                await loadProjects(data.developerId);
+              }
               break;
             case ENTITY_TYPES.ZONE:
               await zoneApi.update(id, finalData);
+              if (data.projectId) {
+                loadedCache.current.zones.delete(data.projectId);
+                await loadZones(data.projectId);
+              }
               break;
             case ENTITY_TYPES.PROPERTY:
               await propertyApi.update(id, finalData);
+              if (data.zoneId) {
+                loadedCache.current.properties.delete(data.zoneId);
+                await loadProperties(data.zoneId);
+              }
               break;
             case ENTITY_TYPES.FLOOR:
               await floorApi.update(id, finalData);
+              if (data.propertyId) {
+                loadedCache.current.floors.delete(data.propertyId);
+                await loadFloors(data.propertyId);
+              }
               break;
             case ENTITY_TYPES.BLOCK:
               await blockApi.update(id, finalData);
+              if (data.propertyId) {
+                loadedCache.current.blocks.delete(data.propertyId);
+                await loadBlocks(data.propertyId);
+              }
               break;
             case ENTITY_TYPES.UNIT: {
               const payload = normalizeUnitPayload(data);
               await unitApi.update(id, payload);
+              if (payload.floorId) {
+                loadedCache.current.unitsForFloor.delete(payload.floorId);
+                await loadUnitsForFloor(payload.floorId);
+              } else if (payload.blockId) {
+                loadedCache.current.unitsForBlock.delete(payload.blockId);
+                await loadUnitsForBlock(payload.blockId);
+              } else if (payload.propertyId) {
+                loadedCache.current.unitsForProperty.delete(payload.propertyId);
+                await loadUnitsForProperty(payload.propertyId);
+              }
               break;
             }
             case ENTITY_TYPES.AMENITY:
               await amenityApi.update(id, data);
+              if (data.projectId) {
+                loadedCache.current.amenities.delete(data.projectId);
+                await loadAmenities(data.projectId);
+              }
               break;
             case ENTITY_TYPES.SURROUNDING:
               await surroundingApi.update(id, data);
+              if (data.projectId) {
+                loadedCache.current.surroundings.delete(data.projectId);
+                await loadSurroundings(data.projectId);
+              }
               break;
             case ENTITY_TYPES.UNIT_TYPE: {
               const payload = normalizeUnitTypePayload(data);
               await unitTypeApi.update(id, payload);
-              if (data.projectId)
+              if (data.projectId) {
                 loadedCache.current.unitTypes.delete(data.projectId);
-              await loadUnitTypes(data.projectId);
+                await loadUnitTypes(data.projectId);
+              }
               break;
             }
             case ENTITY_TYPES.PROPERTY_VIEW:
               await propertyViewApi.update(id, finalData);
+              if (data.propertyId) {
+                loadedCache.current.propertyViews.delete(data.propertyId);
+                await loadPropertyViews(data.propertyId);
+              }
               break;
             case ENTITY_TYPES.FEATURE:
               await featureApi.update(id, finalData);
