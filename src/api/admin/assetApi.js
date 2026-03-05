@@ -41,6 +41,10 @@ class AssetApi {
   async delete(id) {
     return apiService.delete(`assets/${id}`);
   }
+
+  async getAssetFileUrl(assetId) {
+    return apiService.parseEndpoint(`assets/file/${assetId}`);
+  }
 }
 
 export const assetApi = new AssetApi();

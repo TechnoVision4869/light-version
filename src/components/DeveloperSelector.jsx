@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import { developerApi } from "../api/admin/developerApi";
-import Layout from './Layout';
-import toast from 'react-hot-toast';
-import { assetsApi } from '@/api/assetsApi';
-import DEFAULT_LOGO from '../../public/default-logo.png'; 
+import Layout from "./Layout";
+import toast from "react-hot-toast";
+import { assetApi } from "../api/admin/assetApi";
+import DEFAULT_LOGO from "../../public/default-logo.png";
 
 export default function DeveloperSelector({ onDeveloperSelect }) {
   const [developers, setDevelopers] = useState([]);
@@ -15,7 +15,7 @@ export default function DeveloperSelector({ onDeveloperSelect }) {
       setLoading(true);
       const response = await developerApi.getAll();
 
-      if(!response || !Array.isArray(response) || response.length === 0) {
+      if (!response || !Array.isArray(response) || response.length === 0) {
         setDevelopers([]);
         setLoading(false);
         return;
@@ -27,12 +27,15 @@ export default function DeveloperSelector({ onDeveloperSelect }) {
       for (const developer of response) {
         if (developer.logoAssetId) {
           try {
-            const url = await assetsApi.getAssetFileUrl(developer.logoAssetId);
+            const url = await assetApi.getAssetFileUrl(developer.logoAssetId);
             if (url) {
               logos[developer.id] = url;
             }
           } catch (error) {
-            console.error(`Failed to fetch logo for developer ${developer.id}:`, error);
+            console.error(
+              `Failed to fetch logo for developer ${developer.id}:`,
+              error,
+            );
           }
         }
       }

@@ -16,15 +16,14 @@ class UnitTypeApi {
   }
 
   /**
-   * Get unit types scoped to a project.
-   * Frontend-only contract for now; backend should support ?projectId=... filter.
+   * Get unit types for a project. Backend: GET /unit-types/project/:projectId
    */
-  async getByProject(projectId, params = {}) {
-    const query = { ...(params || {}), projectId };
-    const res = await apiService.get("unit-types", query);
-    const data = res?.data ?? res;
-    if (Array.isArray(data)) return data;
-    return Array.isArray(res) ? res : [];
+  async getByProject(projectId) {
+    if (!projectId) return [];
+    const res = await apiService.get(`unit-types/project/${projectId}`);
+    if (Array.isArray(res)) return res;
+    const data = res?.data;
+    return Array.isArray(data) ? data : [];
   }
 
   async getById(id) {

@@ -93,6 +93,20 @@ export function DynamicForm({
           } else {
             initialData[key] = Array.isArray(raw) ? raw : [];
           }
+        } else if (key === "serviceRoomNames") {
+          // API returns serviceRooms: [{ id, name, displayOrder }]; form expects serviceRoomNames (string or array)
+          const rawRooms = data?.serviceRooms;
+          if (Array.isArray(rawRooms) && rawRooms.some((r) => r && typeof r === "object" && "name" in r)) {
+            const sorted = [...rawRooms].sort(
+              (a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0),
+            );
+            initialData[key] = sorted
+              .map((r) => (r && r.name != null ? String(r.name) : ""))
+              .filter(Boolean)
+              .join(", ");
+          } else {
+            initialData[key] = data?.[key] ?? null;
+          }
         } else if (key.includes('.')) {
           const parts = key.split('.');
           let value = data;

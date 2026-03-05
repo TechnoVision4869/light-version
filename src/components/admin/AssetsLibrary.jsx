@@ -101,7 +101,7 @@ export function AssetsLibrary({
     let cancelled = false;
     setLoading(true);
     assetApi
-      .list(filters)
+      .getByDeveloper(developerId)
       .then((data) => {
         if (!cancelled) {
           const list = Array.isArray(data)

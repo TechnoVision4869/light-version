@@ -204,6 +204,21 @@ export default function AdminDashboard() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
+  const loadedCache = useRef({
+    projects: new Set(),
+    zones: new Set(),
+    properties: new Set(),
+    floors: new Set(),
+    blocks: new Set(),
+    unitsForProperty: new Set(),
+    unitsForFloor: new Set(),
+    unitsForBlock: new Set(),
+    amenities: new Set(),
+    surroundings: new Set(),
+    unitTypes: new Set(),
+    propertyViews: new Set(),
+  });
+
   const loadDevelopers = useCallback(async () => {
     if (USE_MOCK_DATA) {
       setIsLoading(false);
@@ -226,15 +241,33 @@ export default function AdminDashboard() {
     loadDevelopers();
   }, []);
 
-  const loadUnitTypes = useCallback(async () => {
-    // if (USE_MOCK_DATA) return;
+  const loadUnitTypes = useCallback(async (projectId) => {
+    if (USE_MOCK_DATA) return;
+    if (projectId && loadedCache.current.unitTypes.has(projectId)) return;
+    if (projectId) loadedCache.current.unitTypes.add(projectId);
     try {
-      const list = await unitTypeApi.getAll({ limit: 500 });
-      setUnitTypes(Array.isArray(list) ? list : []);
+      const list = projectId
+        ? await unitTypeApi.getByProject(projectId)
+        : await unitTypeApi.getAll({ limit: 500 });
+      const arr = Array.isArray(list) ? list : [];
+      if (projectId) {
+        setUnitTypes((prev) => [
+          ...(prev || []).filter((ut) => ut.projectId !== projectId),
+          ...arr,
+        ]);
+      } else {
+        setUnitTypes(arr);
+      }
     } catch (err) {
       console.error(err);
       toast.error("Failed to load unit types");
-      setUnitTypes([]);
+      if (projectId) {
+        setUnitTypes((prev) =>
+          (prev || []).filter((ut) => ut.projectId !== projectId),
+        );
+      } else {
+        setUnitTypes([]);
+      }
     }
   }, []);
 
@@ -255,6 +288,8 @@ export default function AdminDashboard() {
 
   const loadProjects = useCallback(
     async (developerId) => {
+      if (loadedCache.current.projects.has(developerId)) return;
+      loadedCache.current.projects.add(developerId);
       if (USE_MOCK_DATA && initialMock?.projectsByDeveloper) {
         setProjectsByDeveloper((prev) => ({
           ...prev,
@@ -280,6 +315,8 @@ export default function AdminDashboard() {
 
   const loadZones = useCallback(
     async (projectId) => {
+      if (loadedCache.current.zones.has(projectId)) return;
+      loadedCache.current.zones.add(projectId);
       if (USE_MOCK_DATA && initialMock?.zonesByProject) {
         setZonesByProject((prev) => ({
           ...prev,
@@ -301,6 +338,8 @@ export default function AdminDashboard() {
 
   const loadProperties = useCallback(
     async (zoneId) => {
+      if (loadedCache.current.properties.has(zoneId)) return;
+      loadedCache.current.properties.add(zoneId);
       if (USE_MOCK_DATA && initialMock?.propertiesByZone) {
         setPropertiesByZone((prev) => ({
           ...prev,
@@ -321,6 +360,8 @@ export default function AdminDashboard() {
 
   const loadFloors = useCallback(
     async (propertyId) => {
+      if (loadedCache.current.floors.has(propertyId)) return;
+      loadedCache.current.floors.add(propertyId);
       if (USE_MOCK_DATA && initialMock?.floorsByProperty) {
         setFloorsByProperty((prev) => ({
           ...prev,
@@ -342,6 +383,8 @@ export default function AdminDashboard() {
 
   const loadBlocks = useCallback(
     async (propertyId) => {
+      if (loadedCache.current.blocks.has(propertyId)) return;
+      loadedCache.current.blocks.add(propertyId);
       if (USE_MOCK_DATA && initialMock?.blocksByProperty) {
         setBlocksByProperty((prev) => ({
           ...prev,
@@ -363,6 +406,8 @@ export default function AdminDashboard() {
 
   const loadUnitsForProperty = useCallback(
     async (propertyId) => {
+      if (loadedCache.current.unitsForProperty.has(propertyId)) return;
+      loadedCache.current.unitsForProperty.add(propertyId);
       if (USE_MOCK_DATA && initialMock?.unitsByProperty) {
         setUnitsByProperty((prev) => ({
           ...prev,
@@ -384,6 +429,8 @@ export default function AdminDashboard() {
 
   const loadUnitsForFloor = useCallback(
     async (floorId) => {
+      if (loadedCache.current.unitsForFloor.has(floorId)) return;
+      loadedCache.current.unitsForFloor.add(floorId);
       if (USE_MOCK_DATA && initialMock?.unitsByFloor) {
         setUnitsByFloor((prev) => ({
           ...prev,
@@ -404,6 +451,8 @@ export default function AdminDashboard() {
 
   const loadUnitsForBlock = useCallback(
     async (blockId) => {
+      if (loadedCache.current.unitsForBlock.has(blockId)) return;
+      loadedCache.current.unitsForBlock.add(blockId);
       if (USE_MOCK_DATA && initialMock?.unitsByBlock) {
         setUnitsByBlock((prev) => ({
           ...prev,
@@ -424,6 +473,8 @@ export default function AdminDashboard() {
 
   const loadAmenities = useCallback(
     async (projectId) => {
+      if (loadedCache.current.amenities.has(projectId)) return;
+      loadedCache.current.amenities.add(projectId);
       if (USE_MOCK_DATA && initialMock?.amenitiesByProject) {
         setAmenitiesByProject((prev) => ({
           ...prev,
@@ -445,6 +496,8 @@ export default function AdminDashboard() {
 
   const loadSurroundings = useCallback(
     async (projectId) => {
+      if (loadedCache.current.surroundings.has(projectId)) return;
+      loadedCache.current.surroundings.add(projectId);
       if (USE_MOCK_DATA && initialMock?.surroundingsByProject) {
         setSurroundingsByProject((prev) => ({
           ...prev,
@@ -468,6 +521,8 @@ export default function AdminDashboard() {
 
   const loadPropertyViews = useCallback(
     async (propertyId) => {
+      if (loadedCache.current.propertyViews.has(propertyId)) return;
+      loadedCache.current.propertyViews.add(propertyId);
       if (USE_MOCK_DATA && initialMock?.propertyViewsByProperty) {
         setPropertyViewsByProperty((prev) => ({
           ...prev,
@@ -691,6 +746,7 @@ export default function AdminDashboard() {
           loadZones(id);
           loadAmenities(id);
           loadSurroundings(id);
+          loadUnitTypes(id);
         }
         if (node?.type === ENTITY_TYPES.ZONE) loadProperties(id);
         if (node?.type === ENTITY_TYPES.PROPERTY) {
@@ -718,6 +774,7 @@ export default function AdminDashboard() {
       loadUnitsForFloor,
       loadUnitsForBlock,
       loadPropertyViews,
+      loadUnitTypes,
     ],
   );
 
@@ -730,6 +787,7 @@ export default function AdminDashboard() {
         loadZones(node.id);
         loadAmenities(node.id);
         loadSurroundings(node.id);
+        loadUnitTypes(node.id);
       }
       if (node?.type === ENTITY_TYPES.ZONE) loadProperties(node.id);
       if (node?.type === ENTITY_TYPES.PROPERTY) {
@@ -754,6 +812,7 @@ export default function AdminDashboard() {
       loadUnitsForFloor,
       loadUnitsForBlock,
       loadPropertyViews,
+      loadUnitTypes,
     ],
   );
 
@@ -985,24 +1044,56 @@ export default function AdminDashboard() {
       setDeleteTarget(null);
       if (selectedNode?.id === deleteTarget.id) setSelectedNode(null);
       const pid = deleteTarget.parentId;
-      if (deleteTarget.type === ENTITY_TYPES.UNIT_TYPE) loadUnitTypes();
-      if (deleteTarget.type === ENTITY_TYPES.PROJECT && pid) loadProjects(pid);
-      if (deleteTarget.type === ENTITY_TYPES.ZONE && pid) loadZones(pid);
-      if (deleteTarget.type === ENTITY_TYPES.PROPERTY && pid)
+      if (deleteTarget.type === ENTITY_TYPES.UNIT_TYPE) {
+        const projId = deleteTarget.data?.projectId;
+        if (projId) loadedCache.current.unitTypes.delete(projId);
+        loadUnitTypes(projId);
+      }
+      if (deleteTarget.type === ENTITY_TYPES.PROJECT && pid) {
+        loadedCache.current.projects.delete(pid);
+        loadProjects(pid);
+      }
+      if (deleteTarget.type === ENTITY_TYPES.ZONE && pid) {
+        loadedCache.current.zones.delete(pid);
+        loadZones(pid);
+      }
+      if (deleteTarget.type === ENTITY_TYPES.PROPERTY && pid) {
+        loadedCache.current.properties.delete(pid);
         loadProperties(pid);
-      if (deleteTarget.type === ENTITY_TYPES.FLOOR && pid) loadFloors(pid);
-      if (deleteTarget.type === ENTITY_TYPES.BLOCK && pid) loadBlocks(pid);
+      }
+      if (deleteTarget.type === ENTITY_TYPES.FLOOR && pid) {
+        loadedCache.current.floors.delete(pid);
+        loadFloors(pid);
+      }
+      if (deleteTarget.type === ENTITY_TYPES.BLOCK && pid) {
+        loadedCache.current.blocks.delete(pid);
+        loadBlocks(pid);
+      }
       if (deleteTarget.type === ENTITY_TYPES.UNIT) {
         const p = deleteTarget.data;
-        if (p?.floorId) loadUnitsForFloor(p.floorId);
-        else if (p?.blockId) loadUnitsForBlock(p.blockId);
-        else if (p?.propertyId) loadUnitsForProperty(p.propertyId);
+        if (p?.floorId) {
+          loadedCache.current.unitsForFloor.delete(p.floorId);
+          loadUnitsForFloor(p.floorId);
+        } else if (p?.blockId) {
+          loadedCache.current.unitsForBlock.delete(p.blockId);
+          loadUnitsForBlock(p.blockId);
+        } else if (p?.propertyId) {
+          loadedCache.current.unitsForProperty.delete(p.propertyId);
+          loadUnitsForProperty(p.propertyId);
+        }
       }
-      if (deleteTarget.type === ENTITY_TYPES.AMENITY && pid) loadAmenities(pid);
-      if (deleteTarget.type === ENTITY_TYPES.SURROUNDING && pid)
+      if (deleteTarget.type === ENTITY_TYPES.AMENITY && pid) {
+        loadedCache.current.amenities.delete(pid);
+        loadAmenities(pid);
+      }
+      if (deleteTarget.type === ENTITY_TYPES.SURROUNDING && pid) {
+        loadedCache.current.surroundings.delete(pid);
         loadSurroundings(pid);
-      if (deleteTarget.type === ENTITY_TYPES.PROPERTY_VIEW && pid)
+      }
+      if (deleteTarget.type === ENTITY_TYPES.PROPERTY_VIEW && pid) {
+        loadedCache.current.propertyViews.delete(pid);
         loadPropertyViews(pid);
+      }
     } catch (e) {
       toast.error(e?.message || "Delete failed");
     } finally {
@@ -1246,10 +1337,7 @@ export default function AdminDashboard() {
               case ENTITY_TYPES.PROPERTY_VIEW:
                 setPropertyViewsByProperty((prev) => ({
                   ...prev,
-                  [data.propertyId]: [
-                    ...(prev[data.propertyId] ?? []),
-                    entity,
-                  ],
+                  [data.propertyId]: [...(prev[data.propertyId] ?? []), entity],
                 }));
                 break;
               default:
@@ -1306,7 +1394,8 @@ export default function AdminDashboard() {
             case ENTITY_TYPES.UNIT_TYPE: {
               const payload = normalizeUnitTypePayload(data);
               await unitTypeApi.update(id, payload);
-              await loadUnitTypes();
+              if (data.projectId) loadedCache.current.unitTypes.delete(data.projectId);
+              await loadUnitTypes(data.projectId);
               break;
             }
             case ENTITY_TYPES.PROPERTY_VIEW:
@@ -1325,50 +1414,81 @@ export default function AdminDashboard() {
               break;
             case ENTITY_TYPES.PROJECT:
               created = await projectApi.create(finalData);
-              if (data.developerId) loadProjects(data.developerId);
+              if (data.developerId) {
+                loadedCache.current.projects.delete(data.developerId);
+                loadProjects(data.developerId);
+              }
               break;
             case ENTITY_TYPES.ZONE:
               created = await zoneApi.create(finalData);
-              if (data.projectId) loadZones(data.projectId);
+              if (data.projectId) {
+                loadedCache.current.zones.delete(data.projectId);
+                loadZones(data.projectId);
+              }
               break;
             case ENTITY_TYPES.PROPERTY:
               created = await propertyApi.create(finalData);
-              if (data.zoneId) loadProperties(data.zoneId);
+              if (data.zoneId) {
+                loadedCache.current.properties.delete(data.zoneId);
+                loadProperties(data.zoneId);
+              }
               break;
             case ENTITY_TYPES.FLOOR:
               created = await floorApi.create(finalData);
-              if (data.propertyId) loadFloors(data.propertyId);
+              if (data.propertyId) {
+                loadedCache.current.floors.delete(data.propertyId);
+                loadFloors(data.propertyId);
+              }
               break;
             case ENTITY_TYPES.BLOCK:
               created = await blockApi.create(finalData);
-              if (data.propertyId) loadBlocks(data.propertyId);
+              if (data.propertyId) {
+                loadedCache.current.blocks.delete(data.propertyId);
+                loadBlocks(data.propertyId);
+              }
               break;
             case ENTITY_TYPES.UNIT: {
               const payload = normalizeUnitPayload(data);
               created = await unitApi.create(payload);
-              if (payload.floorId) loadUnitsForFloor(payload.floorId);
-              else if (payload.blockId) loadUnitsForBlock(payload.blockId);
-              else if (payload.propertyId)
+              if (payload.floorId) {
+                loadedCache.current.unitsForFloor.delete(payload.floorId);
+                loadUnitsForFloor(payload.floorId);
+              } else if (payload.blockId) {
+                loadedCache.current.unitsForBlock.delete(payload.blockId);
+                loadUnitsForBlock(payload.blockId);
+              } else if (payload.propertyId) {
+                loadedCache.current.unitsForProperty.delete(payload.propertyId);
                 loadUnitsForProperty(payload.propertyId);
+              }
               break;
             }
             case ENTITY_TYPES.AMENITY:
               created = await amenityApi.create(data);
-              if (data.projectId) loadAmenities(data.projectId);
+              if (data.projectId) {
+                loadedCache.current.amenities.delete(data.projectId);
+                loadAmenities(data.projectId);
+              }
               break;
             case ENTITY_TYPES.SURROUNDING:
               created = await surroundingApi.create(data);
-              if (data.projectId) loadSurroundings(data.projectId);
+              if (data.projectId) {
+                loadedCache.current.surroundings.delete(data.projectId);
+                loadSurroundings(data.projectId);
+              }
               break;
             case ENTITY_TYPES.UNIT_TYPE: {
               const payload = normalizeUnitTypeFullPayload(data);
               created = await unitTypeApi.createFull(payload);
-              await loadUnitTypes();
+              if (data.projectId) loadedCache.current.unitTypes.delete(data.projectId);
+              await loadUnitTypes(data.projectId);
               break;
             }
             case ENTITY_TYPES.PROPERTY_VIEW:
               created = await propertyViewApi.create(finalData);
-              if (data.propertyId) loadPropertyViews(data.propertyId);
+              if (data.propertyId) {
+                loadedCache.current.propertyViews.delete(data.propertyId);
+                loadPropertyViews(data.propertyId);
+              }
               break;
             default:
               throw new Error("Unknown type");
@@ -1426,6 +1546,37 @@ export default function AdminDashboard() {
   useEffect(() => {
     setFormAssetIds(null);
   }, [selectedNode?.id]);
+
+  useEffect(() => {
+    if (
+      !selectedNode ||
+      selectedNode.type !== ENTITY_TYPES.UNIT_TYPE ||
+      !selectedNode.id
+    )
+      return;
+    const id = selectedNode.id;
+    let cancelled = false;
+    unitTypeApi
+      .getById(id)
+      .then((full) => {
+        if (cancelled || !full) return;
+        setUnitTypes((prev) =>
+          (prev || []).map((ut) => (ut.id === id ? { ...ut, ...full } : ut)),
+        );
+        setSelectedNode((prev) =>
+          prev && prev.id === id
+            ? { ...prev, data: { ...prev.data, ...full } }
+            : prev,
+        );
+      })
+      .catch((err) => {
+        if (!cancelled) console.error("Failed to load unit type details", err);
+      });
+    return () => {
+      cancelled = true;
+    };
+    // Only re-fetch when unit type id changes, not when we merge full data into selectedNode
+  }, [selectedNode?.type, selectedNode?.id]);
 
   const handleAssetClick = useCallback(
     (asset) => {
