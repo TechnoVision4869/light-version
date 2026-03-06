@@ -8,6 +8,8 @@ import MainContextProvider from "./store/MainContextProvider.jsx";
 import { AuthProvider, AuthConsumer } from "./store/jwt-context.jsx";
 import App from "./App.jsx";
 
+
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
