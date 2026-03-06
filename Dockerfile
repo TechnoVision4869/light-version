@@ -1,4 +1,4 @@
-# Step 1: Build the React/Vite app 
+# Step 1: Build the React/Vite app 1
 FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
