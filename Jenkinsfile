@@ -4,7 +4,7 @@ pipeline {
         SSH_ID = 'vps-ssh-key' 
         VPS_IP = '76.13.56.82'
         FRONTEND_DIR = '/home/realestate-frontend'
-        BACKEND_DIR = '/home/realestate-app' // This is where docker-compose.yml lives
+        BACKEND_DIR = '/home/realestate-app'
     }
     stages {
         stage('Deploy Frontend') {
