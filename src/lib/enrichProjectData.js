@@ -103,7 +103,7 @@ async function transformAssetIds(obj) {
       transformed[key] = await transformAssetIds(value);
     }
   }
-  console.log(transformed);
+  // console.log(transformed);
 
   return transformed;
 }

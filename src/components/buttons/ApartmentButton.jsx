@@ -9,7 +9,7 @@ export default function ApartmentButton({ apartment, isDisabled = false, goToIte
     const handleClick = () => {
         
         if (isSelected) {
-            console.log("ApartmentButton clicked");
+            // console.log("ApartmentButton clicked");
             goToItem();
             setHighlightedButton(null);
         }

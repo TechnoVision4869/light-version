@@ -45,7 +45,7 @@ export default function SidebarContextProvider({ children }) {
 
     // Reset history when project changes
     const handleSetCurrentProject = useCallback((project) => {
-        console.log("project", project);
+        // console.log("project", project);
         
         const enrich = async () => {
             try {
@@ -73,14 +73,12 @@ export default function SidebarContextProvider({ children }) {
     } = currentEntry;
 
     const findPropertyForItem = useCallback((zone, targetItem) => {
-        console.log(zone, targetItem);
+        // console.log(zone, targetItem);
         
         if (!zone?.properties?.length) return null;
         if (zone.properties.length === 1) return zone.properties[0];
 
         return zone.properties.find((property) => {
-            console.log(property);
-            
             if (property.blocks?.some((block) => block.id === targetItem?.id)) return true;
             if (property.units?.some((unit) => unit.id === targetItem?.id)) return true;
             return false;
@@ -88,7 +86,7 @@ export default function SidebarContextProvider({ children }) {
     }, []);
 
     const goToTab = useCallback((tabKey, layerKey = null, selectedItem, isFromHome = true) => {
-        console.log(tabKey);
+        // console.log(tabKey);
         // console.log(selectedItem);
         let calculatedVideosPath = null;
         if(useMockup) {
@@ -174,11 +172,9 @@ export default function SidebarContextProvider({ children }) {
             property = currentItem; // we're currently on a property/building
         } else if (activeLayer === LAYERS.ZONE_DETAIL) {
             property = findPropertyForItem(currentItem, item);
-            console.log(property);
         }
 
         if (videosPath === undefined) {
-            console.log("undefined");
             if(useMockup) {
             videosPath = property?.videos;
             } else {
