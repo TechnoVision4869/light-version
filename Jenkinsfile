@@ -31,7 +31,7 @@ pipeline {
                     
                     # 3. Cleanup VPS Disk (Clears the 15.8GB Cache)
                     docker image prune -f
-                    docker builder prune -f
+                    docker builder prune -a -f
 EOF
                     """
                 }
