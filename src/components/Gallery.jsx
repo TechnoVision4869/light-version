@@ -1,12 +1,17 @@
 import { useState, useCallback, useEffect, useContext } from 'react';
 import { SidebarContext } from '../store/SidebarContextProvider';
+import { APP_CONFIG } from "../config/appConfig";
 
 // Carousel component for gallery
 export default function Gallery({ unit, galleryType }) {
     const { currentProject } = useContext(SidebarContext);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const useMockup = APP_CONFIG.USE_MOCKUP;
 
-    const unitType = currentProject.unitTypes[unit.unitTypeId];
+    const unitType = useMockup 
+        ? currentProject?.unitTypes?.[unit?.unitTypeId]
+        : currentProject?.unitTypes?.find(type => type.name === unit?.visualTypeId);
+    
     const images = unitType?.[galleryType] || [];
 
     const nextSlide = useCallback(() => {

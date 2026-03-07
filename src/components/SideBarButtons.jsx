@@ -52,9 +52,7 @@ export default function SidebarButtons() {
     if (activeLayer === LAYERS.ZONE_DETAIL) {
       const properties = currentItem?.properties || [];
       if (properties.length === 1) {
-        const property = properties[0];
-        console.log(property);
-        
+        const property = properties[0];        
         if (property.type === "villa" || property.type === "VILLA") {
           Component = ApartmentButton;
           propName = "apartment";
@@ -102,7 +100,7 @@ export default function SidebarButtons() {
     <div className="max-h-[calc(100vh-205px)] scrollbar-custom overflow-y-auto overflow-x-hidden space-y-3 px-2 py-2">
       {currentItems.map((item) => (
         <Component
-          key={Math.random()} // Using random key since items may not have unique IDs, but ideally they should
+          key={item.id} // Using item ID as key since items should have unique IDs
           {...{ [propName]: item }}
           goToItem={() => goToItem(item, layerKey)}
         />

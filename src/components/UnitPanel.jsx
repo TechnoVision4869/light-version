@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 
 import { SidebarContext } from '../store/SidebarContextProvider';
 import { MainContext } from '../store/MainContextProvider';
+import { APP_CONFIG } from "../config/appConfig";
 
 import AREA_ICON from "../assets/icons/area.svg"
 import DOOR_ICON from "../assets/icons/door.svg"
@@ -9,19 +10,23 @@ import TOILET_ICON from "../assets/icons/bathroom.png"
 
 export default function UnitPanel() {
     const { currentProject, currentItem } = useContext(SidebarContext);
+    const useMockup = APP_CONFIG.USE_MOCKUP;
+    
     const { openPanorama, openBalconyView, openGallery } = useContext(MainContext);
 
     const [isVisualsOpen, setIsVisualsOpen] = useState(true);
     const [isCutSectionsOpen, setIsCutSectionsOpen] = useState(true);
     const [isPaymentPlanOpen, setIsPaymentPlanOpen] = useState(false);
 
-    //temporary visuals and payment plan
-    const unitType = currentProject.unitTypes[currentItem.unitTypeId];
-    const serviceRooms = unitType.serviceRooms;
-    const gallery = unitType.gallery;
-    const cutSections = unitType.cutSections;
-    const paymentPlans = unitType.paymentPlans;
-    const floorPlans = unitType.floorPlans;
+    const unitType = useMockup 
+        ? currentProject?.unitTypes?.[currentItem?.unitTypeId]
+        : currentProject?.unitTypes?.find(type => type.name === currentItem?.visualTypeId);
+
+    const serviceRooms = unitType?.serviceRooms;
+    const gallery = unitType?.gallery;
+    const cutSections = unitType?.cutSections;
+    const paymentPlans = unitType?.paymentPlans;
+    const floorPlans = unitType?.floorPlans;
     const balconyView = currentItem.balconyView;
 
     return (
@@ -29,19 +34,19 @@ export default function UnitPanel() {
             <div className="flex flex-col gap-3 max-h-[calc(100vh-200px)] scrollbar-custom overflow-auto px-2 py-2 text-white">
                 {/* name and area */}
                 <div>
-                    <h1 className="text-xl font-bold mb-2">{currentItem.displayName}</h1>
-                    <div className="flex items-center gap-1 mb-2">
-                        <div className="w-6 h-6 items-center justify-center">
-                            <img src={AREA_ICON} alt="Area icon" className="w-6 h-6 p-[1px]" />
-                        </div>
-                        <span>Area : {unitType.area} m²</span>
-                    </div>
+                    <h1 className="text-xl font-bold mb-2">{currentItem.displayName || currentItem.name}</h1>
                     <div className="flex items-center gap-1">
                         <div className="w-6 h-6 items-center justify-center">
                             <img src={AREA_ICON} alt="Area icon" className="w-6 h-6 p-[1px]" />
                         </div>
-                        <span>Roof Area : {unitType.roofarea} m²</span>
+                        <span>Area : {Math.round(unitType?.area)} m²</span>
                     </div>
+                    {unitType?.roofarea &&<div className="flex items-center gap-1">
+                        <div className="w-6 h-6 items-center justify-center">
+                            <img src={AREA_ICON} alt="Area icon" className="w-6 h-6 p-[1px]" />
+                        </div>
+                         <span>Roof Area : {Math.round(unitType?.roofarea)} m²</span>
+                    </div>}
                 </div>
 
                 <hr className="h-divider" />
@@ -60,7 +65,7 @@ export default function UnitPanel() {
                         </div>
                         <span>Toilets : {currentItem.bathrooms}</span>
                     </div>
-                    {serviceRooms && <>
+                    {serviceRooms?.length > 0 && <>
                         <div className="flex items-center gap-2 mb-4">
                             <small className="text-sm">+ service Rooms</small>
                             <hr className="flex-grow border-b border-white opacity-50" />
@@ -85,7 +90,7 @@ export default function UnitPanel() {
                             >
                                 Interior
                             </button>
-                            {floorPlans && <button className="flex-1 border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition whitespace-nowrap"
+                            {floorPlans?.length > 0 && <button className="flex-1 border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition whitespace-nowrap"
                                 onClick={() => openGallery(currentItem, "floorPlans")}
                             >
                                 Floor Plan
@@ -128,7 +133,7 @@ export default function UnitPanel() {
                     </button>
                     {isVisualsOpen && (
                         <div className="grid grid-cols-2 gap-2 mt-2">
-                            {gallery.map((img) => (
+                            {gallery?.map((img) => (
                                 <button className='hover:opacity-70' key={img.id} onClick={() => openGallery(currentItem, "gallery")}>
                                     <img
                                         src={img.src}
@@ -164,7 +169,7 @@ export default function UnitPanel() {
                     </button>
                     {isCutSectionsOpen && (
                         <div className="grid grid-cols-2 gap-2 mt-2">
-                            {cutSections.map((img) => (
+                            {cutSections?.map((img) => (
                                 <button className='hover:opacity-70' key={img.id} onClick={() => openGallery(currentItem, "cutSections")}>
                                     <img
                                         src={img.src}
@@ -178,10 +183,11 @@ export default function UnitPanel() {
                     )}
                 </div>
 
+                {paymentPlans?.length > 0 && <>
                 <hr className="h-divider" />
 
                 {/* Payment Plan */}
-                {paymentPlans && <div>
+                 <div>
                     <button
                         onClick={() => setIsPaymentPlanOpen(!isPaymentPlanOpen)}
                         className="flex justify-between w-full"
@@ -199,7 +205,7 @@ export default function UnitPanel() {
                         </svg>
                     </button>
                     {isPaymentPlanOpen && (
-                        paymentPlans.map((plan, index) => (
+                        paymentPlans?.map((plan, index) => (
                             <div className="mt-2 mb-3 flex justify-between gap-2 whitespace-nowrap" key={index}>
                                 <div className="flex-1 text-center">
                                     <div className="font-bold text-xs">{plan.downPayment.toLocaleString()} L.E</div>
@@ -220,7 +226,9 @@ export default function UnitPanel() {
                         )
 
                     )}
-                </div>}
+                </div>
+                </>}
+
             </div>
         </div>
     );
