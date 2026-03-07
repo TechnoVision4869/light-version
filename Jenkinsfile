@@ -22,7 +22,9 @@ pipeline {
                     docker compose up -d --build frontend
                     
                     # 3. Cleanup old images
-                    docker image prune -f
+                   docker image prune -f
+
+                    docker builder prune -f
 EOF
                     """
                 }
