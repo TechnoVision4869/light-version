@@ -6,7 +6,7 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Stage 2: Production (The "Table")
+# Stage 2: Production (The "Table") 
 FROM nginx:alpine
 COPY --from=builder /app/dist /usr/share/nginx/html
 
