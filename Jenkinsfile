@@ -3,33 +3,34 @@ pipeline {
     
     // 1. LIMIT HISTORY: Keeps only the last 5 build logs/metadata
     options {
-        buildDiscarder(logRotator(numToKeepStr: '5'))
+        buildDiscarder(logRotator(numToKeepStr: '2'))
     }
 
     environment {
         SSH_ID = 'vps-ssh-key' 
-        VPS_IP = '76.13.56.82' [cite: 10]
-        FRONTEND_DIR = '/home/realestate-frontend' [cite: 10]
-        BACKEND_DIR = '/home/realestate-app' [cite: 10]
+        VPS_IP = '76.13.56.82'
+        FRONTEND_DIR = '/home/realestate-frontend'
+        BACKEND_DIR = '/home/realestate-app'
     }
 
     stages {
         stage('Deploy Frontend') {
             steps {
-                sshagent([SSH_ID]) { [cite: 11]
+                sshagent([SSH_ID]) {
                     sh """
                     ssh -o StrictHostKeyChecking=no root@${VPS_IP} << 'EOF'
-                    # 1. Update the code [cite: 12]
-                    cd ${FRONTEND_DIR} || exit [cite: 11]
-                    git fetch origin [cite: 12]
-                    git reset --hard origin/main [cite: 12]
+                    # 1. Update the code
+                    cd ${FRONTEND_DIR} || exit
+                    git fetch origin
+                    git reset --hard origin/main
 
-                    # 2. Rebuild the frontend [cite: 12]
-                    cd ${BACKEND_DIR} [cite: 12]
-                    docker compose up -d --build frontend 
+                    # 2. Rebuild the frontend
+                    # Ensure you are in the directory where your docker-compose.yml lives
+                    cd ${BACKEND_DIR}
+                    docker compose up -d --build frontend
                     
                     # 3. Cleanup VPS Disk (Clears the 15.8GB Cache)
-                    docker image prune -f 
+                    docker image prune -f
                     docker builder prune -f
 EOF
                     """
