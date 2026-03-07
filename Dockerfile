@@ -1,4 +1,4 @@
-# Step 1: Build the React/Vite app
+# Stage 1: Build (The "Kitchen")
 FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
@@ -6,13 +6,11 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Step 2: Use a tiny Nginx to serve the files
+# Stage 2: Production (The "Table")
 FROM nginx:alpine
-# Copy the built files from the 'builder' stage
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# This part tells the MINI Nginx how to handle the React files
-# so that the VPS Nginx can talk to it properly.
+# Nginx config for React/Vite Router
 RUN echo "server { \
     listen 80; \
     location / { \
