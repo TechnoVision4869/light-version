@@ -7,9 +7,7 @@ import BED_ICON from "../../assets/icons/bed.png"
 // import helper functions
 import { FILTER_ENUM, getMinMaxRange } from "../helpers/filterHelper";
 
-export default function BuildingButton({ building, isDisabled, goToItem }) {
-    console.log(building);
-    
+export default function BuildingButton({ building, isDisabled, goToItem }) {    
     const { highlightedButton, setHighlightedButton } = useContext(SidebarContext);
 
     let unitsToFilter = [];
@@ -43,7 +41,7 @@ export default function BuildingButton({ building, isDisabled, goToItem }) {
         >
             <div className="text-left text-white">
                 <div className="text-md font-bold leading-tight whitespace-nowrap">
-                    {building.displayName}
+                    {building.displayName ? building.displayName : building.name}
                 </div>
                 <div className="text-sm items-left flex flex-col space-x-0 space-y-2 text-white/60 leading-tight pt-1
                                         md:items-center md:flex-row md:space-x-3 md:space-y-0">
@@ -53,7 +51,7 @@ export default function BuildingButton({ building, isDisabled, goToItem }) {
                     </div>
                     <div className="flex items-center space-x-1">
                         <img src={AREA_ICON} className="w-4 h-auto" />
-                        {minArea === maxArea ? <div>{minArea}</div> : <div>{minArea} - {maxArea}</div>} <span>m²</span>
+                        {minArea === maxArea ? <div>{Math.round(minArea)}</div> : <div>{Math.round(minArea)} - {Math.round(maxArea)}</div>} <span>m²</span>
                     </div>
 
                 </div>

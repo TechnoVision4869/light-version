@@ -125,7 +125,7 @@ export default function BaseFloating({ mediaRef }) {
 
     if (activeTab === TABS.SURROUNDINGS) {
         return (
-            itemsToRender.map((item, i) => {
+            itemsToRender.map((item) => {
                 const pos = itemIdToPosition.get(item.id);
 
                 if (!pos) return null;
@@ -133,7 +133,7 @@ export default function BaseFloating({ mediaRef }) {
                 
                 return (
                     <AnimFloatButton
-                        key={Math.random()}
+                        key={item.id}
                         name={item.displayName}
                         icon={item.iconSrc ? item.iconSrc : item.iconAssetId}
                         style={{
@@ -199,8 +199,8 @@ export default function BaseFloating({ mediaRef }) {
             if (type !== "small") {
                 return (
                     <BaseFloatButton
-                        key={Math.random()}
-                        name={item.displayName ? item.displayName : item.zoneName}
+                        key={item.id}
+                        name={item.displayName || item.zoneName || item.name}
                         tabType={activeTab}
                         layerType={activeLayer}
                         style={{
@@ -221,7 +221,7 @@ export default function BaseFloating({ mediaRef }) {
 
             return (
                 <BaseFloatButton
-                    key={Math.random()}
+                    key={item.id}
                     name={item.displayName}
                     tabType={activeTab}
                     layerType={activeLayer}

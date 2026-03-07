@@ -30,7 +30,7 @@ export default function SidebarContextProvider({ children }) {
             videosPath: {
                 forwardVideo: getVideoUrl(project, 'zoomoutVideo', 'zoomoutVideoId') ?? null,
                 reverseVideo: null,
-                idleVideo: getVideoUrl(project, 'idleVideo', 'idleVideoId') ?? null,
+                idleVideo: getVideoUrl(project, 'idleVideo', 'idleVideoId', 'idleAssetId') ?? null,
             },
             views: null,
         },
@@ -45,6 +45,8 @@ export default function SidebarContextProvider({ children }) {
 
     // Reset history when project changes
     const handleSetCurrentProject = useCallback((project) => {
+        console.log("project", project);
+        
         const enrich = async () => {
             try {
                 const enrichedProject = await enrichProjectData(project, useMockup);
@@ -152,11 +154,16 @@ export default function SidebarContextProvider({ children }) {
         if(useMockup) {
             videosPath = item?.videos; // undefined if not present
         } else {
-                videosPath = {
-                    forwardVideo: item.forwardVideoId,
-                    reverseVideo: item.reverseVideoId,
-                    idleVideo: item.sideVideoId,
-                }
+            const forwardVideo = item.forwardVideoId || item.forwardAssetId;
+            const reverseVideo = item.reverseVideoId || item.reverseAssetId;
+            const idleVideo = item.sideVideoId || item.idleAssetId || item.sideAssetId;
+
+            // Only create videosPath if at least one field has a value
+            if (forwardVideo || reverseVideo || idleVideo) {
+                videosPath = { forwardVideo, reverseVideo, idleVideo };
+            } else {
+                videosPath = undefined;  // Falls back to property?.videos
+            }
         }
 
         let views = item?.views; // undefined if not present
@@ -167,9 +174,21 @@ export default function SidebarContextProvider({ children }) {
             property = currentItem; // we're currently on a property/building
         } else if (activeLayer === LAYERS.ZONE_DETAIL) {
             property = findPropertyForItem(currentItem, item);
+            console.log(property);
         }
 
-        if (videosPath === undefined) videosPath = property?.videos; // still undefined if not present on property
+        if (videosPath === undefined) {
+            console.log("undefined");
+            if(useMockup) {
+            videosPath = property?.videos;
+            } else {
+                videosPath = {
+                    forwardVideo: property?.forwardAssetId,
+                    reverseVideo: property?.reverseAssetId,
+                    idleVideo: property?.idleAssetId,
+                }
+            }
+        } // still undefined if not present on property
 
         // Views availability rules:
         // - If navigating into a UNIT layer: views should be available only for `villa` properties.
@@ -187,6 +206,19 @@ export default function SidebarContextProvider({ children }) {
         // Final fallbacks to the previously-current values if still undefined
         if (videosPath === undefined) videosPath = currentVideosPaths ?? null;
         if (views === undefined) views = currentViews ?? null;
+
+        if(!useMockup) {
+            views = views?.map(view => {
+                return {
+                    name: view.name,
+                    videos: {
+                        forwardVideo: view.forwardAssetId,
+                        reverseVideo: view.reverseAssetId,
+                        idleVideo: view.idleAssetId,
+                    },
+                }
+            })
+        }
 
         setHistory((prev) => [
             ...prev,
@@ -254,18 +286,18 @@ export default function SidebarContextProvider({ children }) {
                 items = currentItem?.properties || [];
                 if (items.length === 1) {
                     const property = items[0];
-                    if (property.type === "villa") {
+                    if (property.type === "villa" || property.type === "VILLA") {
                         items = property.units || [];
                         if (items.length > 8) itemType = "small";
                     }
-                    else if (property.type === "town") {
+                    else if (property.type === "town" || property.type === "TOWNHOUSE") {
                         items = property.blocks || [];
                         if (items.length > 9) itemType = "small";
                     }
                 }
             }
             else if (activeLayer === LAYERS.BUILDING) {
-                if (currentItem?.type === "tower") {
+                if (currentItem?.type === "tower" || currentItem?.type === "TOWER") {
                     items = currentItem.floors || [];
                 }
                 else {

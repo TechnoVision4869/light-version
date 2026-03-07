@@ -159,14 +159,14 @@ export default function ProjectSelector({
       if (useMockup) {
         const selectedProject = projects.find((p) => p.id === projectId);
         if (selectedProject) {
-          onProjectSelect({ ...selectedProject, introVideoUrl });
+          onProjectSelect({ ...selectedProject, id: projectId });
         } else {
           toast.error("Failed to load project details.");
         }
       } else {
         const response = await projectApi.getById(projectId);
         if (response) {
-          onProjectSelect({ ...response.developerProjects[0], introVideoUrl });
+          onProjectSelect({ ...response.developerProjects[0], id: projectId });
         } else {
           toast.error("Failed to load project details.");
         }

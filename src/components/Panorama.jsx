@@ -1,6 +1,7 @@
 import { useState, useMemo, useRef, useEffect, useCallback, useContext } from "react";
 import { SidebarContext } from '../store/SidebarContextProvider';
 import View360, { EquirectProjection } from "@egjs/react-view360";
+import { APP_CONFIG } from "@/config/appConfig";
 
 import Pin from "./Pin";
 import "@egjs/react-view360/css/view360.min.css";
@@ -8,6 +9,7 @@ import InteriorNav from "./InteriorNav";
 
 export default function Panorama({ unit }) {  
   const { currentProject } = useContext(SidebarContext);
+  const useMockup = APP_CONFIG.useMockupData;
 
   const ZOOM_OUT = 0.8; // zoomed out view (match FOV ≈ 118.07°)
   const ZOOM_NORMAL = 1; // default zoom (match FOV = 90°)
@@ -28,24 +30,26 @@ export default function Panorama({ unit }) {
   const zoomOnLoadRef = useRef(true);
 
   // Get unit data
-  const unitType = currentProject.unitTypes[unit.unitTypeId];
-  const levels = unitType.interior.levels;  
-  const [room, setRoom] = useState(levels[0].rooms[0]);  
-  const [currentImage, setCurrentImage] = useState(room.furnitureImg);
+  const unitType = useMockup 
+        ? currentProject?.unitTypes?.[unit?.unitTypeId]
+        : currentProject?.unitTypes?.find(type => type.name === unit?.visualTypeId);
+  const levels = useMockup ? unitType.interior.levels : unitType.levels;
+  const [room, setRoom] = useState(levels[0].rooms[0]);
+  const [currentImage, setCurrentImage] = useState(room.furnitureImgId);
 
   const hotspots = room.hotspots;
   const hotspotsRef = useRef();
   hotspotsRef.current = hotspots; // Sync on every render
 
   useEffect(() => {
-    const allImages = levels.flatMap(l => l.rooms.map(r => r.furnitureImg));
+    const allImages = levels.flatMap(l => l.rooms.map(r => r.furnitureImgId));
     allImages.forEach(src => new Image().src = src);
   }, [levels]);
 
   // Update image when furniture toggle changes
   useEffect(() => {
     setIsTransitioning(true);
-    const newImage = isFurnished ? room.furnitureImg : room.unfurnitureImg;
+    const newImage = isFurnished ? room.furnitureImgId : room.unfurnitureImgId;
     setTimeout(() => {
       setCurrentImage(newImage);
     }, 100);
@@ -87,7 +91,7 @@ export default function Panorama({ unit }) {
 
     // Set new room and image
     setRoom(targetRoom);
-    const newImage = isFurnished ? targetRoom.furnitureImg : targetRoom.unfurnitureImg;
+    const newImage = isFurnished ? targetRoom.furnitureImgId : targetRoom.unfurnitureImgId;
     setCurrentImage(newImage);
 
     // Remove blur overlay after transition
@@ -122,7 +126,7 @@ export default function Panorama({ unit }) {
       // console.log(targetRoom);
 
       if (targetRoom) {
-        const newImage = isFurnished ? targetRoom.furnitureImg : targetRoom.unfurnitureImg;
+        const newImage = isFurnished ? targetRoom.furnitureImgId : targetRoom.unfurnitureImgId;
         setCurrentImage(newImage);
         setRoom(targetRoom);
         // onLoad will be called automatically when image finishes loading

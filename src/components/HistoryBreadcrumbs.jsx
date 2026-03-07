@@ -14,8 +14,8 @@ export default function HistoryBreadcrumbs() {
                             <button
                                 className="w-auto cursor-pointer text-white"
                             >
-                                {String(entry.item.displayName).charAt(0).toUpperCase() +
-                                    String(entry.item.displayName).slice(1)}
+                                {String(entry.item.displayName || entry.item.name || entry.item.zoneName).charAt(0).toUpperCase() +
+                                    String(entry.item.displayName || entry.item.name || entry.item.zoneName).slice(1)}
                             </button>
                             {entry.item.id !== currentItem.id && (
                                 <span className="text-white">›</span>
