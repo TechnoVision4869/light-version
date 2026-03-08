@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { developerApi } from "@/api/admin/developerApi";
 import { assetApi } from "../api/admin/assetApi";
 import { DATA } from "../data/layers";
+import { fetchProjectById } from "../lib/projectFetcher";
 
 export default function ProjectSelector({
   developerId,
@@ -156,20 +157,11 @@ export default function ProjectSelector({
 
   const fetchSelectedProject = async (projectId, introVideoUrl) => {
     try {
-      if (useMockup) {
-        const selectedProject = projects.find((p) => p.id === projectId);
-        if (selectedProject) {
-          onProjectSelect({ ...selectedProject, id: projectId });
-        } else {
-          toast.error("Failed to load project details.");
-        }
+      const project = await fetchProjectById(projectId, useMockup);
+      if (project) {
+        onProjectSelect(project);
       } else {
-        const response = await projectApi.getById(projectId);
-        if (response) {
-          onProjectSelect({ ...response.developerProjects[0], id: projectId });
-        } else {
-          toast.error("Failed to load project details.");
-        }
+        toast.error("Failed to load project details.");
       }
     } catch (error) {
       console.log(error);

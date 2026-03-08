@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { StatusBar } from "@capacitor/status-bar";
 import { Capacitor } from '@capacitor/core';
 import { App as CapApp } from "@capacitor/app"
@@ -39,6 +40,9 @@ export default function Home() {
   // Ref
   const mediaContainerRef = useRef(null);
 
+  // Navigation
+  const navigate = useNavigate();
+
   // Context
   const {
     currentProject,
@@ -51,7 +55,8 @@ export default function Home() {
     sidebarOpen,
     handleSidebarState,
     goToTab,
-    goHome } = useContext(SidebarContext);
+    goHome,
+    clearSelectedProject } = useContext(SidebarContext);
 
   const { overlay, closeOverlay } = useContext(MainContext);
 
@@ -398,6 +403,16 @@ export default function Home() {
               )}
             </div>
             <div className="flex items-center space-x-6">
+              <button
+                onClick={() => {
+                  clearSelectedProject();
+                  navigate("/");
+                }}
+                className="px-4 py-2 rounded-full text-sm font-semibold text-white hover:bg-white/10 transition"
+                aria-label="Back to projects"
+              >
+                HOME
+              </button>
               <button
                 onClick={() => handleActiveTab(TABS.SURROUNDINGS)}
                 className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.SURROUNDINGS

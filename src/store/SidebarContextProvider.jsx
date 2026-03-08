@@ -4,8 +4,11 @@ import { SidebarContext } from "./SidebarContext";
 import { TABS, LAYERS, DATA } from "../data/layers";
 import { enrichProjectData } from "../lib/enrichProjectData";
 import { APP_CONFIG } from "../config/appConfig";
+import { fetchProjectById } from "../lib/projectFetcher";
 
 export { SidebarContext };
+
+const STORAGE_KEY = "selectedProject";
 
 export default function SidebarContextProvider({ children }) {
     const useMockup = APP_CONFIG.USE_MOCKUP;
@@ -52,15 +55,40 @@ export default function SidebarContextProvider({ children }) {
                 const enrichedProject = await enrichProjectData(project, useMockup);
                 setCurrentProject(enrichedProject);
                 setHistory(getInitHistory(enrichedProject));
+                // Save only the project ID to localStorage
+                localStorage.setItem(STORAGE_KEY, project.id);
             } catch (error) {
                 console.error('Error enriching project data:', error);
                 // Fall back to non-enriched project
                 setCurrentProject(project);
                 setHistory(getInitHistory(project));
+                // Save only the project ID to localStorage
+                localStorage.setItem(STORAGE_KEY, project.id);
             }
         };
         enrich();
     }, [useMockup, getInitHistory]);
+
+    // Restore project from localStorage on mount
+    const restoreProject = useCallback(async () => {
+    try {
+        let isMounted = true;
+        const projectId = localStorage.getItem(STORAGE_KEY);
+        if (projectId && isMounted) {
+            const project = await fetchProjectById(projectId, useMockup);
+            if (project && isMounted) {
+                handleSetCurrentProject(project);
+            }
+        }
+        return () => { isMounted = false; };
+    } catch (error) {
+        console.warn("Failed to restore project:", error);
+    }
+    }, [handleSetCurrentProject, useMockup]);
+
+    useEffect(() => {
+        restoreProject();
+    }, [restoreProject]);
 
     // Get current state from history
     const currentEntry = history[history.length - 1] ?? getInitHistory(currentProject)[0];
@@ -213,7 +241,12 @@ export default function SidebarContextProvider({ children }) {
                         idleVideo: view.idleAssetId,
                     },
                 }
-            })
+            }).sort((a, b) => {
+                // Extract numbers from "View N" format and sort numerically
+                const aNum = parseInt(a.name.match(/\d+/)?.[0] || 0);
+                const bNum = parseInt(b.name.match(/\d+/)?.[0] || 0);
+                return aNum - bNum;
+            })            
         }
 
         setHistory((prev) => [
@@ -322,11 +355,19 @@ export default function SidebarContextProvider({ children }) {
         setType(itemType);
     }, [activeTab, activeLayer, currentItem, currentProject]);
 
+    // Clear selected project from localStorage
+    const handleClearSelectedProject = useCallback(() => {
+        localStorage.removeItem(STORAGE_KEY);
+        setCurrentProject(null);
+        setHistory(getInitHistory(null));
+    }, [getInitHistory]);
+
     const ctxValue = {
         useMockup,
         
         currentProject,
         setCurrentProject: handleSetCurrentProject,
+        clearSelectedProject: handleClearSelectedProject,
 
         history,
         activeTab,

@@ -265,8 +265,7 @@ const CreateUserForm = ({ onSuccess, onCancel, loggedInUser }) => {
         <Button
           type="submit"
           size="sm"
-          className="text-white"
-          style={{ backgroundColor: '#4F6F4F' }}
+          className="text-white bg-[#4f6f4f] hover:bg-[#4f6f4f]/80"
         >
           Create
         </Button>
@@ -370,7 +369,7 @@ const UserDataTable = ({ data, columns, onCreate, onEdit, onDelete, onRowClick }
             <DialogTrigger asChild>
               <div className="flex flex-row justify-between w-full items-center mb-6">
                 <h1 className="text-3xl font-bold text-white">Users</h1>
-                <Button className="text-white flex items-center gap-2" style={{ backgroundColor: '#4F6F4F' }}>
+                <Button className="text-white flex items-center gap-2 bg-[#4f6f4f] hover:bg-[#4f6f4f]/80">
                   <svg
                     className="w-4 h-4"
                     fill="none"

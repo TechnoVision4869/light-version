@@ -114,7 +114,7 @@ export function AddAssetModal({
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="text-black sm:max-w-lg" showCloseButton={true}>
+      <DialogContent className="bg-[#1C1C1C] border-white/20 sm:max-w-lg" showCloseButton={true}>
         <DialogHeader>
           <DialogTitle>Add New Asset</DialogTitle>
         </DialogHeader>
@@ -160,13 +160,13 @@ export function AddAssetModal({
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
-              className="w-full mt-1 h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm"
+              className="w-full mt-1 h-9 rounded-md border border-white/20 bg-transparent px-3 py-1 text-sm text-white"
               required
             >
-              <option value={AssetType.IMAGE}>Image</option>
-              <option value={AssetType.VIDEO}>Video</option>
-              <option value={AssetType.PANORAMA}>Panorama</option>
-              <option value={AssetType.THUMBNAIL}>Thumbnail</option>
+              <option value={AssetType.IMAGE} className="bg-[#1C1C1C] text-white">Image</option>
+              <option value={AssetType.VIDEO} className="bg-[#1C1C1C] text-white">Video</option>
+              <option value={AssetType.PANORAMA} className="bg-[#1C1C1C] text-white">Panorama</option>
+              <option value={AssetType.THUMBNAIL} className="bg-[#1C1C1C] text-white">Thumbnail</option>
             </select>
           </div>
 
@@ -184,7 +184,7 @@ export function AddAssetModal({
               required
             />
             {showTagSuggestions && tagSuggestions.length > 0 && (
-              <div className="absolute z-10 top-full left-0 right-0 mt-1 bg-popover border rounded-md shadow-md max-h-40 overflow-auto">
+              <div className="absolute z-10 top-full left-0 right-0 mt-1 bg-[#2C2C2C] border border-white/20 rounded-md shadow-md max-h-40 overflow-auto">
                 {tagSuggestions.map((t) => (
                   <button
                     key={t}
@@ -193,7 +193,7 @@ export function AddAssetModal({
                       setTag(t);
                       setShowTagSuggestions(false);
                     }}
-                    className="w-full px-3 py-2 text-left text-sm hover:bg-accent"
+                    className="w-full px-3 py-2 text-left text-sm text-white hover:bg-white/10"
                   >
                     {t}
                   </button>
@@ -215,10 +215,14 @@ export function AddAssetModal({
           {error && <p className="text-sm text-destructive">{error}</p>}
 
           <DialogFooter showCloseButton={false}>
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button type="button" variant="outline"
+             className="bg-white/10 border border-white/20 text-white hover:bg-white/20"
+             onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit" disabled={!file || !tag.trim() || loading}>
+            <Button type="submit"
+            className="bg-white/90 text-black hover:bg-white"
+            disabled={!file || !tag.trim() || loading}>
               {loading ? "Uploading…" : "Add Asset"}
             </Button>
           </DialogFooter>
