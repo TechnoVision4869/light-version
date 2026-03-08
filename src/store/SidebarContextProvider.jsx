@@ -1,6 +1,7 @@
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useContext } from "react";
 
 import { SidebarContext } from "./SidebarContext";
+import { AuthContext } from "./jwt-context";
 import { TABS, LAYERS, DATA } from "../data/layers";
 import { enrichProjectData } from "../lib/enrichProjectData";
 import { APP_CONFIG } from "../config/appConfig";
@@ -13,6 +14,7 @@ const STORAGE_KEY = "selectedProject";
 export default function SidebarContextProvider({ children }) {
     const useMockup = APP_CONFIG.USE_MOCKUP;
     const [currentProject, setCurrentProject] = useState(null);
+    const { isInitialized: isAuthInitialized } = useContext(AuthContext);
 
     const getInitHistory = useCallback((project) => {
         // Helper to get the video URL from project, checking both naming patterns
@@ -69,22 +71,28 @@ export default function SidebarContextProvider({ children }) {
         enrich();
     }, [useMockup, getInitHistory]);
 
-    // Restore project from localStorage on mount
+    // Restore project from localStorage on mount (after auth is initialized)
     const restoreProject = useCallback(async () => {
     try {
         let isMounted = true;
         const projectId = localStorage.getItem(STORAGE_KEY);
+        
         if (projectId && isMounted) {
-            const project = await fetchProjectById(projectId, useMockup);
-            if (project && isMounted) {
-                handleSetCurrentProject(project);
+            // For API mode, only restore after auth is initialized
+            // For mockup mode, restore immediately
+            if (useMockup || isAuthInitialized) {
+                const project = await fetchProjectById(projectId, useMockup);
+                if (project && isMounted) {
+                    handleSetCurrentProject(project);
+                }
             }
         }
+        
         return () => { isMounted = false; };
     } catch (error) {
         console.warn("Failed to restore project:", error);
     }
-    }, [handleSetCurrentProject, useMockup]);
+    }, [handleSetCurrentProject, useMockup, isAuthInitialized]);
 
     useEffect(() => {
         restoreProject();
