@@ -73,7 +73,8 @@ async function transformAssetIds(obj) {
       (key.endsWith("AssetId") ||
         key.endsWith("VideoId") ||
         key.includes("highlight") ||
-        key.includes("zoomOutVideo")) &&
+        key.includes("zoomOutVideo") ||
+        key.includes("balconyView")) &&
       typeof value === "string" &&
       value
     ) {
@@ -104,7 +105,6 @@ async function transformAssetIds(obj) {
     }
   }
   // console.log(transformed);
-
   return transformed;
 }
 

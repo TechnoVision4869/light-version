@@ -246,7 +246,7 @@ export default function SidebarContextProvider({ children }) {
                     videos: {
                         forwardVideo: view.forwardAssetId,
                         reverseVideo: view.reverseAssetId,
-                        idleVideo: view.idleAssetId,
+                        idleVideo: view.sideAssetId,
                     },
                 }
             }).sort((a, b) => {
