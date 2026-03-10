@@ -733,6 +733,7 @@ export function DynamicForm({
           value={value ?? ""}
           onChange={(e) => update(name, e.target.value === "" ? null : e.target.value)}
           className="mt-1 bg-white/5 border-white/20 text-white placeholder:text-white/40"
+          placeholder={field.placeholder}
           required={required}
           disabled={disabled}
         />

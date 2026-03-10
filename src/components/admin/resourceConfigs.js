@@ -65,7 +65,7 @@ export const resourceConfigs = {
     api: developerApi,
     schema: yup.object().shape({
       name: yup.string().required(),
-      email: yup.string().email().nullable(),
+      email: yup.string().email().required(),
       logoAssetId: yup.string().nullable(),
       backgroundImageAssetId: yup.string().nullable(),
       isActive: yup.boolean().nullable(),
@@ -76,8 +76,9 @@ export const resourceConfigs = {
         name: "email",
         label: "Email",
         control: CONTROL_TYPES.TEXT,
-        required: false,
+        required: true,
         disabled: false,
+        placeholder: "e.g., contact@developer.com",
       },
       assetField("logoAssetId", "Logo", [AssetType.IMAGE, AssetType.THUMBNAIL]),
       assetField("backgroundImageAssetId", "Background Image", [
@@ -397,6 +398,12 @@ export const resourceConfigs = {
     schema: yup.object().shape({
       floorNumber: yup.number().integer().required(),
       propertyId: yup.string().required(),
+      x: yup.number().nullable(),
+      y: yup.number().nullable(),
+      forwardAssetId: yup.string().nullable(),
+      reverseAssetId: yup.string().nullable(),
+      sideAssetId: yup.string().nullable(),
+      highlightAssetId: yup.string().nullable(),
     }),
     fields: [
       {
@@ -407,6 +414,32 @@ export const resourceConfigs = {
         disabled: false,
       },
       idField("propertyId", "Property ID"),
+      {
+        name: "x",
+        label: "X",
+        control: CONTROL_TYPES.NUMBER,
+        required: false,
+        disabled: false,
+      },
+      {
+        name: "y",
+        label: "Y",
+        control: CONTROL_TYPES.NUMBER,
+        required: false,
+        disabled: false,
+      },
+      assetField("forwardAssetId", "Forward", [
+        AssetType.VIDEO,
+        AssetType.PANORAMA,
+      ]),
+      assetField("reverseAssetId", "Reverse", [
+        AssetType.VIDEO,
+        AssetType.PANORAMA,
+      ]),
+      assetField("sideAssetId", "Side", [AssetType.VIDEO, AssetType.PANORAMA]),
+      assetField("highlightAssetId", "Highlight", [
+        AssetType.IMAGE,
+      ]),
     ],
     childTypes: [ENTITY_TYPES.UNIT],
     /** Floor may only be created when parent property type is TOWER */
