@@ -11,6 +11,15 @@ import { FlowTree } from "./FlowTree";
 import { DynamicForm } from "./DynamicForm";
 import { AssetsLibrary } from "./AssetsLibrary";
 import { ConfirmDeleteDialog } from "./ConfirmDeleteDialog";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { ENTITY_TYPES, AssetType, ASSET_TYPES } from "./types";
 import { resourceConfigs } from "./resourceConfigs";
 import { CONTROL_TYPES } from "./resourceConfigs";
@@ -188,6 +197,9 @@ export default function AdminDashboard() {
   const [allAssets, setAllAssets] = useState([]);
 
   const [selectedNode, setSelectedNode] = useState(null);
+  const [isFormDirty, setIsFormDirty] = useState(false);
+  const [pendingSelectNode, setPendingSelectNode] = useState(null);
+  const [leaveFormDialogOpen, setLeaveFormDialogOpen] = useState(false);
   const [selectedDeveloperId, setSelectedDeveloperId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -843,29 +855,57 @@ export default function AdminDashboard() {
         else next.add(id);
         const node = nodes.find((n) => n.id === id);
         if (node && !next.has(id)) return next;
-        if (node?.type === ENTITY_TYPES.DEVELOPER) loadProjects(id);
+        if (node?.type === ENTITY_TYPES.DEVELOPER) loadProjects(node.id);
         if (node?.type === ENTITY_TYPES.PROJECT) {
-          loadZones(id);
-          loadAmenities(id);
-          loadSurroundings(id);
-          loadUnitTypes(id);
+          loadZones(node.id);
+          loadAmenities(node.id);
+          loadSurroundings(node.id);
+          loadUnitTypes(node.id);
         }
-        if (node?.type === ENTITY_TYPES.ZONE) loadProperties(id);
+        if (node?.type === ENTITY_TYPES.ZONE) loadProperties(node.id);
         if (node?.type === ENTITY_TYPES.PROPERTY) {
           const pt = node.data?.type || node.data?.propertyType;
           if (pt === "TOWER") {
-            loadFloors(id);
-            loadFeaturesByProperty(id);
+            loadFloors(node.id);
+            loadFeaturesByProperty(node.id);
           }
-          if (pt === "TOWNHOUSE") loadBlocks(id);
-          if (pt === "VILLA") loadUnitsForProperty(id);
-          loadPropertyViews(id);
+          if (pt === "TOWNHOUSE") loadBlocks(node.id);
+          if (pt === "VILLA") loadUnitsForProperty(node.id);
+          loadPropertyViews(node.id);
         }
         if (node?.type === ENTITY_TYPES.FLOOR) {
-          loadUnitsForFloor(id);
-          loadFeaturesByFloor(id);
+          loadUnitsForFloor(node.id);
+          loadFeaturesByFloor(node.id);
         }
-        if (node?.type === ENTITY_TYPES.BLOCK) loadUnitsForBlock(id);
+        if (node?.type === ENTITY_TYPES.BLOCK) loadUnitsForBlock(node.id);
+
+        // Folder nodes: use real parent ids from folder data.
+        if (node?.type === "FOLDER") {
+          const childType = node.data?.childType;
+          const projectId = node.data?.projectId;
+          const propertyId = node.data?.propertyId;
+          const floorId = node.data?.floorId;
+
+          if (childType === ENTITY_TYPES.ZONE && projectId) loadZones(projectId);
+          if (childType === ENTITY_TYPES.AMENITY && projectId)
+            loadAmenities(projectId);
+          if (childType === ENTITY_TYPES.SURROUNDING && projectId)
+            loadSurroundings(projectId);
+          if (childType === ENTITY_TYPES.UNIT_TYPE && projectId)
+            loadUnitTypes(projectId);
+          if (childType === ENTITY_TYPES.PROPERTY && projectId)
+            loadProperties(projectId);
+          if (childType === ENTITY_TYPES.FLOOR && propertyId)
+            loadFloors(propertyId);
+          if (childType === ENTITY_TYPES.BLOCK && propertyId)
+            loadBlocks(propertyId);
+          if (childType === ENTITY_TYPES.PROPERTY_VIEW && propertyId)
+            loadPropertyViews(propertyId);
+          if (childType === ENTITY_TYPES.FEATURE && propertyId)
+            loadFeaturesByProperty(propertyId);
+          if (childType === ENTITY_TYPES.FEATURE && floorId)
+            loadFeaturesByFloor(floorId);
+        }
         return next;
       });
     },
@@ -888,7 +928,7 @@ export default function AdminDashboard() {
     ],
   );
 
-  const handleSelect = useCallback(
+  const selectNode = useCallback(
     (node) => {
       setSelectedNode(node);
       setFocusedAssetField(null);
@@ -932,6 +972,18 @@ export default function AdminDashboard() {
       loadFeaturesByProperty,
       loadFeaturesByFloor,
     ],
+  );
+
+  const handleSelect = useCallback(
+    (node) => {
+      if (isFormDirty && node?.id !== selectedNode?.id) {
+        setPendingSelectNode(node);
+        setLeaveFormDialogOpen(true);
+        return;
+      }
+      selectNode(node);
+    },
+    [isFormDirty, selectNode, selectedNode?.id],
   );
 
   const handleAdd = useCallback(
@@ -1238,9 +1290,231 @@ export default function AdminDashboard() {
           throw new Error("Unknown type");
       }
       toast.success("Deleted");
+
+      // Reflect deletion immediately in FlowTree (nodes are derived from these states).
+      // We still refetch below for correctness, but this keeps UI consistent instantly.
+      setExpandedIds((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+      const parentEntityIdFromFolder =
+        typeof parentId === "string" && parentId.startsWith("folder-")
+          ? parentId.split("-").slice(2).join("-") || null
+          : null;
+      switch (type) {
+        case ENTITY_TYPES.DEVELOPER:
+          setDevelopers((prev) => (prev ?? []).filter((d) => d.id !== id));
+          setProjectsByDeveloper((prev) => {
+            const next = { ...(prev || {}) };
+            delete next[id];
+            return next;
+          });
+          setSelectedDeveloperId((prev) => (prev === id ? null : prev));
+          break;
+        case ENTITY_TYPES.PROJECT:
+          setProjectsByDeveloper((prev) => ({
+            ...(prev || {}),
+            [parentId]: (prev?.[parentId] ?? []).filter((p) => p.id !== id),
+          }));
+          setUnitTypes((prev) =>
+            (prev ?? []).filter((ut) => ut.projectId !== id),
+          );
+          setZonesByProject((prev) => {
+            const next = { ...(prev || {}) };
+            delete next[id];
+            return next;
+          });
+          setAmenitiesByProject((prev) => {
+            const next = { ...(prev || {}) };
+            delete next[id];
+            return next;
+          });
+          setSurroundingsByProject((prev) => {
+            const next = { ...(prev || {}) };
+            delete next[id];
+            return next;
+          });
+          break;
+        case ENTITY_TYPES.ZONE: {
+          // Zone nodes live under `folder-zones-${projectId}` in the tree, but state is keyed by projectId.
+          // Prefer actual projectId on the node data.
+          const zoneProjectId =
+            deleteTarget?.data?.projectId || parentEntityIdFromFolder;
+          setZonesByProject((prev) => ({
+            ...(prev || {}),
+            [zoneProjectId]: (prev?.[zoneProjectId] ?? []).filter(
+              (z) => z.id !== id,
+            ),
+          }));
+          setPropertiesByZone((prev) => {
+            const next = { ...(prev || {}) };
+            delete next[id];
+            return next;
+          });
+          break;
+        }
+        case ENTITY_TYPES.PROPERTY:
+          setPropertiesByZone((prev) => ({
+            ...(prev || {}),
+            [parentId]: (prev?.[parentId] ?? []).filter((p) => p.id !== id),
+          }));
+          setPropertyViewsByProperty((prev) => {
+            const next = { ...(prev || {}) };
+            delete next[id];
+            return next;
+          });
+          setFloorsByProperty((prev) => {
+            const next = { ...(prev || {}) };
+            delete next[id];
+            return next;
+          });
+          setBlocksByProperty((prev) => {
+            const next = { ...(prev || {}) };
+            delete next[id];
+            return next;
+          });
+          setUnitsByProperty((prev) => {
+            const next = { ...(prev || {}) };
+            delete next[id];
+            return next;
+          });
+          break;
+        case ENTITY_TYPES.FLOOR:
+          setFloorsByProperty((prev) => {
+            const propId =
+              deleteTarget?.data?.propertyId || parentEntityIdFromFolder;
+            return {
+              ...(prev || {}),
+              [propId]: (prev?.[propId] ?? []).filter((f) => f.id !== id),
+            };
+          });
+          setUnitsByFloor((prev) => {
+            const next = { ...(prev || {}) };
+            delete next[id];
+            return next;
+          });
+          setFeaturesByFloor((prev) => {
+            const next = { ...(prev || {}) };
+            delete next[id];
+            return next;
+          });
+          break;
+        case ENTITY_TYPES.BLOCK:
+          setBlocksByProperty((prev) => {
+            const propId =
+              deleteTarget?.data?.propertyId || parentEntityIdFromFolder;
+            return {
+              ...(prev || {}),
+              [propId]: (prev?.[propId] ?? []).filter((b) => b.id !== id),
+            };
+          });
+          setUnitsByBlock((prev) => {
+            const next = { ...(prev || {}) };
+            delete next[id];
+            return next;
+          });
+          break;
+        case ENTITY_TYPES.UNIT: {
+          const p = deleteTarget?.data;
+          const propId = p?.propertyId;
+          const floorId = p?.floorId;
+          const blockId = p?.blockId;
+          if (floorId)
+            setUnitsByFloor((prev) => ({
+              ...(prev || {}),
+              [floorId]: (prev?.[floorId] ?? []).filter((u) => u.id !== id),
+            }));
+          if (blockId)
+            setUnitsByBlock((prev) => ({
+              ...(prev || {}),
+              [blockId]: (prev?.[blockId] ?? []).filter((u) => u.id !== id),
+            }));
+          if (propId)
+            setUnitsByProperty((prev) => ({
+              ...(prev || {}),
+              [propId]: (prev?.[propId] ?? []).filter((u) => u.id !== id),
+            }));
+          break;
+        }
+        case ENTITY_TYPES.AMENITY: {
+          // Amenity nodes live under `folder-amenities-${projectId}` but state is keyed by projectId.
+          const amenityProjectId =
+            deleteTarget?.data?.projectId || parentEntityIdFromFolder;
+          setAmenitiesByProject((prev) => ({
+            ...(prev || {}),
+            [amenityProjectId]: (prev?.[amenityProjectId] ?? []).filter(
+              (a) => a.id !== id,
+            ),
+          }));
+          break;
+        }
+        case ENTITY_TYPES.SURROUNDING: {
+          // Surrounding nodes live under `folder-surroundings-${projectId}` but state is keyed by projectId.
+          const surroundingProjectId =
+            deleteTarget?.data?.projectId || parentEntityIdFromFolder;
+          setSurroundingsByProject((prev) => ({
+            ...(prev || {}),
+            [surroundingProjectId]: (prev?.[surroundingProjectId] ?? []).filter(
+              (s) => s.id !== id,
+            ),
+          }));
+          break;
+        }
+        case ENTITY_TYPES.UNIT_TYPE:
+          setUnitTypes((prev) => (prev ?? []).filter((ut) => ut.id !== id));
+          break;
+        case ENTITY_TYPES.PROPERTY_VIEW:
+          setPropertyViewsByProperty((prev) => {
+            const propId =
+              deleteTarget?.data?.propertyId || parentEntityIdFromFolder;
+            return {
+              ...(prev || {}),
+              [propId]: (prev?.[propId] ?? []).filter((pv) => pv.id !== id),
+            };
+          });
+          break;
+        case ENTITY_TYPES.FEATURE: {
+          const featureData = deleteTarget?.data;
+          const propertyId =
+            featureData?.propertyId ||
+            (typeof parentId === "string" && parentId.startsWith("folder-features-property-")
+              ? parentEntityIdFromFolder
+              : null);
+          const floorId =
+            featureData?.floorId ||
+            (typeof parentId === "string" && parentId.startsWith("folder-features-floor-")
+              ? parentEntityIdFromFolder
+              : null);
+
+          if (propertyId) {
+            setFeaturesByProperty((prev) => ({
+              ...(prev || {}),
+              [propertyId]: (prev?.[propertyId] ?? []).filter((f) => f.id !== id),
+            }));
+          }
+          if (floorId) {
+            setFeaturesByFloor((prev) => ({
+              ...(prev || {}),
+              [floorId]: (prev?.[floorId] ?? []).filter((f) => f.id !== id),
+            }));
+          }
+          break;
+        }
+        default:
+          break;
+      }
+
       setDeleteTarget(null);
       if (selectedNode?.id === deleteTarget.id) setSelectedNode(null);
       const pid = deleteTarget.parentId;
+      const pidFromFolder =
+        typeof pid === "string" && pid.startsWith("folder-")
+          ? pid.split("-").slice(2).join("-") || null
+          : null;
+      const projectId =
+        deleteTarget?.data?.projectId || (deleteTarget?.type === ENTITY_TYPES.PROJECT ? deleteTarget?.id : null) || pidFromFolder;
+      const propertyId = deleteTarget?.data?.propertyId || pidFromFolder;
       if (deleteTarget.type === ENTITY_TYPES.UNIT_TYPE) {
         const projId = deleteTarget.data?.projectId;
         if (projId) loadedCache.current.unitTypes.delete(projId);
@@ -1250,21 +1524,30 @@ export default function AdminDashboard() {
         loadedCache.current.projects.delete(pid);
         loadProjects(pid);
       }
-      if (deleteTarget.type === ENTITY_TYPES.ZONE && pid) {
-        loadedCache.current.zones.delete(pid);
-        loadZones(pid);
+      if (deleteTarget.type === ENTITY_TYPES.ZONE) {
+        const projId = deleteTarget?.data?.projectId || projectId;
+        if (projId) {
+          loadedCache.current.zones.delete(projId);
+          loadZones(projId);
+        }
       }
       if (deleteTarget.type === ENTITY_TYPES.PROPERTY && pid) {
         loadedCache.current.properties.delete(pid);
         loadProperties(pid);
       }
-      if (deleteTarget.type === ENTITY_TYPES.FLOOR && pid) {
-        loadedCache.current.floors.delete(pid);
-        loadFloors(pid);
+      if (deleteTarget.type === ENTITY_TYPES.FLOOR) {
+        const propId = deleteTarget?.data?.propertyId || propertyId;
+        if (propId) {
+          loadedCache.current.floors.delete(propId);
+          loadFloors(propId);
+        }
       }
-      if (deleteTarget.type === ENTITY_TYPES.BLOCK && pid) {
-        loadedCache.current.blocks.delete(pid);
-        loadBlocks(pid);
+      if (deleteTarget.type === ENTITY_TYPES.BLOCK) {
+        const propId = deleteTarget?.data?.propertyId || propertyId;
+        if (propId) {
+          loadedCache.current.blocks.delete(propId);
+          loadBlocks(propId);
+        }
       }
       if (deleteTarget.type === ENTITY_TYPES.UNIT) {
         const p = deleteTarget.data;
@@ -1279,17 +1562,26 @@ export default function AdminDashboard() {
           loadUnitsForProperty(p.propertyId);
         }
       }
-      if (deleteTarget.type === ENTITY_TYPES.AMENITY && pid) {
-        loadedCache.current.amenities.delete(pid);
-        loadAmenities(pid);
+      if (deleteTarget.type === ENTITY_TYPES.AMENITY) {
+        const projId = deleteTarget?.data?.projectId || projectId;
+        if (projId) {
+          loadedCache.current.amenities.delete(projId);
+          loadAmenities(projId);
+        }
       }
-      if (deleteTarget.type === ENTITY_TYPES.SURROUNDING && pid) {
-        loadedCache.current.surroundings.delete(pid);
-        loadSurroundings(pid);
+      if (deleteTarget.type === ENTITY_TYPES.SURROUNDING) {
+        const projId = deleteTarget?.data?.projectId || projectId;
+        if (projId) {
+          loadedCache.current.surroundings.delete(projId);
+          loadSurroundings(projId);
+        }
       }
-      if (deleteTarget.type === ENTITY_TYPES.PROPERTY_VIEW && pid) {
-        loadedCache.current.propertyViews.delete(pid);
-        loadPropertyViews(pid);
+      if (deleteTarget.type === ENTITY_TYPES.PROPERTY_VIEW) {
+        const propId = deleteTarget?.data?.propertyId || propertyId;
+        if (propId) {
+          loadedCache.current.propertyViews.delete(propId);
+          loadPropertyViews(propId);
+        }
       }
       if (deleteTarget.type === ENTITY_TYPES.FEATURE) {
         const featureData = deleteTarget?.data;
@@ -2013,6 +2305,22 @@ export default function AdminDashboard() {
           </div>
 
           <div className="flex-1 min-w-0 flex flex-col overflow-hidden border-r border-white/10">
+            <DynamicForm
+              selectedNode={selectedNode}
+              onSave={handleSave}
+              onCancel={() => setFocusedAssetField(null)}
+              onDirtyChange={setIsFormDirty}
+              onFieldFocus={setFocusedAssetField}
+              focusedAssetField={focusedAssetField}
+              onAddChild={handleAdd}
+              assetPreviewUrls={assetPreviewUrls}
+              injectedFieldUpdate={injectedFieldUpdate}
+              onInjectedFieldConsumed={handleInjectedFieldConsumed}
+              onFormAssetIdsChange={setFormAssetIds}
+              unitTypes={unitTypes}
+              isSaving={isSaving}
+              assetsMap={assetsMap}
+            />
             {(() => {
               // Compute parent data for forms (e.g., parent PROJECT for AMENITY, SURROUNDING, ZONE)
               let parentData = null;
@@ -2094,6 +2402,44 @@ export default function AdminDashboard() {
           onConfirm={confirmDelete}
           isLoading={deleteLoading}
         />
+
+        <Dialog open={leaveFormDialogOpen} onOpenChange={setLeaveFormDialogOpen}>
+          <DialogContent className="bg-[#1C1C1C] border-white/10 text-white">
+            <DialogHeader>
+              <DialogTitle>Switch without saving?</DialogTitle>
+              <DialogDescription className="text-white/60">
+                You have unsaved changes in the current form. If you switch now,
+                your changes will be lost.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                className="bg-transparent border-white/20 text-white hover:bg-white/10"
+                onClick={() => {
+                  setLeaveFormDialogOpen(false);
+                  setPendingSelectNode(null);
+                }}
+              >
+                Stay
+              </Button>
+              <Button
+                type="button"
+                className="bg-red-500 text-white hover:bg-red-600"
+                onClick={() => {
+                  const next = pendingSelectNode;
+                  setLeaveFormDialogOpen(false);
+                  setPendingSelectNode(null);
+                  setIsFormDirty(false);
+                  if (next) selectNode(next);
+                }}
+              >
+                Discard & switch
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </Layout>
   );
