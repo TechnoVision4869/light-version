@@ -2305,22 +2305,6 @@ export default function AdminDashboard() {
           </div>
 
           <div className="flex-1 min-w-0 flex flex-col overflow-hidden border-r border-white/10">
-            <DynamicForm
-              selectedNode={selectedNode}
-              onSave={handleSave}
-              onCancel={() => setFocusedAssetField(null)}
-              onDirtyChange={setIsFormDirty}
-              onFieldFocus={setFocusedAssetField}
-              focusedAssetField={focusedAssetField}
-              onAddChild={handleAdd}
-              assetPreviewUrls={assetPreviewUrls}
-              injectedFieldUpdate={injectedFieldUpdate}
-              onInjectedFieldConsumed={handleInjectedFieldConsumed}
-              onFormAssetIdsChange={setFormAssetIds}
-              unitTypes={unitTypes}
-              isSaving={isSaving}
-              assetsMap={assetsMap}
-            />
             {(() => {
               // Compute parent data for forms (e.g., parent PROJECT for AMENITY, SURROUNDING, ZONE)
               let parentData = null;
@@ -2361,6 +2345,7 @@ export default function AdminDashboard() {
                   selectedNode={selectedNode}
                   onSave={handleSave}
                   onCancel={() => setFocusedAssetField(null)}
+                  onDirtyChange={setIsFormDirty}
                   onFieldFocus={setFocusedAssetField}
                   focusedAssetField={focusedAssetField}
                   onAddChild={handleAdd}
@@ -2426,7 +2411,7 @@ export default function AdminDashboard() {
               </Button>
               <Button
                 type="button"
-                className="bg-red-500 text-white hover:bg-red-600"
+                className="bg-[#8B3A3A] hover:bg-[#A24242] text-white"
                 onClick={() => {
                   const next = pendingSelectNode;
                   setLeaveFormDialogOpen(false);

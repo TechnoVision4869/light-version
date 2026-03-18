@@ -67,7 +67,11 @@ export function DynamicForm({
   parentData = null,
 }) {
   const [localData, setLocalData] = useState({});
-  const initialDataRef = useRef(null);
+  const [savedData, setSavedData] = useState(null);
+  const pendingChildRef = useRef(null);
+  const pendingChildTypeRef = useRef(null);
+  const wasSavingRef = useRef(false);
+  const formRef = useRef(null);
   const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState(() => {
     // Start with first group expanded by default
@@ -114,9 +118,9 @@ export function DynamicForm({
 
   const isDirty = useMemo(() => {
     if (!selectedNode) return false;
-    if (!initialDataRef.current) return false;
-    return stableStringify(localData) !== stableStringify(initialDataRef.current);
-  }, [localData, selectedNode]);
+    if (!savedData) return false;
+    return stableStringify(localData) !== stableStringify(savedData);
+  }, [localData, selectedNode, savedData]);
 
   useEffect(() => {
     onDirtyChange?.(isDirty);
@@ -166,18 +170,18 @@ export function DynamicForm({
       };
       fields.forEach(processField);
       setLocalData(initialData);
-      initialDataRef.current = initialData;
+      setSavedData(initialData);
     } else if (schema) {
       const initialData = {};
       Object.keys(schema.fields).forEach((key) => {
         initialData[key] = data?.[key] ?? (schema.fields[key].default && schema.fields[key].default()) ?? null;
       });
       setLocalData(initialData);
-      initialDataRef.current = initialData;
+      setSavedData(initialData);
     } else {
       const initialData = data && typeof data === "object" ? { ...data } : {};
       setLocalData(initialData);
-      initialDataRef.current = initialData;
+      setSavedData(initialData);
     }
   }, [selectedNode?.id, selectedNode?.data, schema, useConfigFields, fields]);
 
@@ -263,9 +267,27 @@ export function DynamicForm({
     setLocalData((prev) => ({ ...prev, [key]: value }));
   }, [injectedFieldUpdate, fields]);
 
+  useEffect(() => {
+    if (isSaving) {
+      wasSavingRef.current = true;
+    } else if (wasSavingRef.current) {
+      wasSavingRef.current = false;
+      setSavedData({ ...localData });
+      if (pendingChildRef.current) {
+        const { childType, parentId } = pendingChildRef.current;
+        pendingChildRef.current = null;
+        onAddChild(childType, parentId);
+      }
+    }
+  }, [isSaving, onAddChild, localData]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!selectedNode) return;
+    if (pendingChildTypeRef.current) {
+      pendingChildRef.current = { childType: pendingChildTypeRef.current, parentId: selectedNode.id };
+      pendingChildTypeRef.current = null;
+    }
     onSave(selectedNode.id, selectedNode.type, localData, selectedNode);
   };
 
@@ -967,7 +989,7 @@ export function DynamicForm({
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex-1 overflow-auto p-4 scrollbar-custom">
+      <form ref={formRef} onSubmit={handleSubmit} className="flex-1 overflow-auto p-4 scrollbar-custom">
         <div className="max-w-2xl space-y-4">
           {formFields}
 
@@ -981,7 +1003,10 @@ export function DynamicForm({
                     key={childType}
                     type="button"
                     variant="secondary"
-                    onClick={() => onAddChild(childType, selectedNode.id)}
+                    onClick={() => {
+                      pendingChildTypeRef.current = childType;
+                      formRef.current?.requestSubmit();
+                    }}
                     className="bg-white/10 hover:bg-white/20 text-white border-white/20"
                   >
                     + Add {resourceConfigs[childType]?.title || toTitleCase(childType)}
@@ -1032,7 +1057,7 @@ export function DynamicForm({
             </Button>
             <Button
               type="button"
-              className="bg-red-500 text-white hover:bg-red-600"
+              className="bg-[#8B3A3A] hover:bg-[#A24242] text-white"
               onClick={() => {
                 setLeaveDialogOpen(false);
                 onCancel?.();
