@@ -80,11 +80,10 @@ export function AssetsLibrary({
   const filters = useMemo(
     () => ({
       limit: 1000,
-      search: search.trim() || undefined,
       type: typeFilter === "all" ? undefined : typeFilter,
       developerId: developerId || undefined,
     }),
-    [search, typeFilter, developerId],
+    [typeFilter, developerId],
   );
 
   useEffect(() => {
@@ -121,21 +120,40 @@ export function AssetsLibrary({
     };
   }, [mockAssets, disabled, filters]);
 
-  const filteredByType = useMemo(() => {
-    if (acceptableTypes.length === 0) return assets;
-    const set = new Set(acceptableTypes.map((t) => (t || "").toLowerCase()));
-    return assets.filter((a) => set.has((a.type || "").toLowerCase()));
-  }, [assets, acceptableTypes]);
+  const filteredAssets = useMemo(() => {
+    const q = search.trim().toLowerCase();
+
+    let list = assets;
+
+    if (acceptableTypes.length > 0) {
+      const acceptable = new Set(
+        acceptableTypes.map((t) => (t || "").toLowerCase()),
+      );
+      list = list.filter((a) => acceptable.has((a.type || "").toLowerCase()));
+    }
+
+    if (typeFilter !== "all") {
+      const tf = (typeFilter || "").toLowerCase();
+      list = list.filter((a) => ((a?.type || "") + "").toLowerCase() === tf);
+    }
+
+    if (!q) return list;
+
+    // Local search by assetKey only (API doesn't support it yet)
+    return list.filter((a) =>
+      (((a?.assetKey ?? "") + "").toLowerCase() || "").includes(q),
+    );
+  }, [assets, acceptableTypes, typeFilter, search]);
 
   const assetsByTag = useMemo(() => {
     const map = {};
-    filteredByType.forEach((asset) => {
+    filteredAssets.forEach((asset) => {
       const tag = asset.tag || "Untagged";
       if (!map[tag]) map[tag] = [];
       map[tag].push(asset);
     });
     return map;
-  }, [filteredByType]);
+  }, [filteredAssets]);
 
   const allTags = useMemo(
     () => Array.from(new Set(assets.map((a) => a.tag).filter(Boolean))),
@@ -336,7 +354,7 @@ export function AssetsLibrary({
       </div>
 
       <div className="p-2 border-t border-border text-xs text-muted-foreground">
-        {filteredByType.length} asset(s)
+        {filteredAssets.length} asset(s)
       </div>
 
       <AddAssetModal

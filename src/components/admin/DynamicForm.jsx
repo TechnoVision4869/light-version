@@ -1,11 +1,39 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Save, X, Plus, Trash2, FolderTree, Folder, ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { AssetFieldInput } from "./AssetFieldInput";
 import { resourceConfigs, CONTROL_TYPES } from "./resourceConfigs";
 import { ENTITY_TYPES, PROPERTY_TYPES } from "./types";
+
+function stableStringify(value) {
+  const seen = new WeakSet();
+  const normalize = (v) => {
+    if (v === undefined) return null;
+    if (v === null) return null;
+    if (typeof v !== "object") return v;
+    if (seen.has(v)) return null;
+    seen.add(v);
+    if (Array.isArray(v)) return v.map(normalize);
+    const out = {};
+    Object.keys(v)
+      .sort()
+      .forEach((k) => {
+        out[k] = normalize(v[k]);
+      });
+    return out;
+  };
+  return JSON.stringify(normalize(value));
+}
 
 function getNodeName(node) {
   if (!node) return "";
@@ -23,6 +51,7 @@ export function DynamicForm({
   selectedNode,
   onSave,
   onCancel,
+  onDirtyChange,
   onFieldFocus,
   focusedAssetField,
   onAddChild,
@@ -36,12 +65,17 @@ export function DynamicForm({
   assetsMap = {},
 }) {
   const [localData, setLocalData] = useState({});
+  const initialDataRef = useRef(null);
+  const [leaveDialogOpen, setLeaveDialogOpen] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState(() => {
     // Start with first group expanded by default
     return new Set();
   });
 
-  const config = useMemo(() => (selectedNode ? resourceConfigs[selectedNode.type] : null), [selectedNode]);
+  const config = useMemo(
+    () => (selectedNode ? resourceConfigs[selectedNode.type] : null),
+    [selectedNode],
+  );
   const schema = useMemo(() => config?.schema, [config]);
   const fields = config?.fields;
   const useConfigFields = Array.isArray(fields) && fields.length > 0;
@@ -75,6 +109,16 @@ export function DynamicForm({
     fields.forEach(processField);
     onFormAssetIdsChange(ids);
   }, [localData, fields, onFormAssetIdsChange]);
+
+  const isDirty = useMemo(() => {
+    if (!selectedNode) return false;
+    if (!initialDataRef.current) return false;
+    return stableStringify(localData) !== stableStringify(initialDataRef.current);
+  }, [localData, selectedNode]);
+
+  useEffect(() => {
+    onDirtyChange?.(isDirty);
+  }, [isDirty, onDirtyChange]);
 
   useEffect(() => {
     const data = selectedNode?.data;
@@ -120,16 +164,34 @@ export function DynamicForm({
       };
       fields.forEach(processField);
       setLocalData(initialData);
+      initialDataRef.current = initialData;
     } else if (schema) {
       const initialData = {};
       Object.keys(schema.fields).forEach((key) => {
         initialData[key] = data?.[key] ?? (schema.fields[key].default && schema.fields[key].default()) ?? null;
       });
       setLocalData(initialData);
+      initialDataRef.current = initialData;
     } else {
-      setLocalData(data && typeof data === "object" ? { ...data } : {});
+      const initialData = data && typeof data === "object" ? { ...data } : {};
+      setLocalData(initialData);
+      initialDataRef.current = initialData;
     }
   }, [selectedNode?.id, selectedNode?.data, schema, useConfigFields, fields]);
+
+  useEffect(() => {
+    if (!isDirty) return;
+
+    const handler = (e) => {
+      // Note: browsers show a native dialog; custom text is ignored in modern browsers.
+      e.preventDefault();
+      e.returnValue = "";
+      return "";
+    };
+
+    window.addEventListener("beforeunload", handler);
+    return () => window.removeEventListener("beforeunload", handler);
+  }, [isDirty]);
 
   const update = (key, value) => {
     if (key.includes('.')) {
@@ -203,6 +265,15 @@ export function DynamicForm({
     e.preventDefault();
     if (!selectedNode) return;
     onSave(selectedNode.id, selectedNode.type, localData, selectedNode);
+  };
+
+  const handleCancelClick = () => {
+    if (isSaving) return;
+    if (isDirty) {
+      setLeaveDialogOpen(true);
+      return;
+    }
+    onCancel?.();
   };
 
   if (!selectedNode) {
@@ -863,13 +934,44 @@ export function DynamicForm({
                 </>
               )}
             </Button>
-            <Button type="button" variant="outline" onClick={onCancel} className="bg-transparent border-white/20 text-white hover:bg-white/10" disabled={isSaving}>
+            <Button type="button" variant="outline" onClick={handleCancelClick} className="bg-transparent border-white/20 text-white hover:bg-white/10" disabled={isSaving}>
               <X className="w-4 h-4 mr-2" />
               Cancel
             </Button>
           </div>
         </div>
       </form>
+
+      <Dialog open={leaveDialogOpen} onOpenChange={setLeaveDialogOpen}>
+        <DialogContent className="bg-[#1C1C1C] border-white/10 text-white">
+          <DialogHeader>
+            <DialogTitle>Discard unsaved changes?</DialogTitle>
+            <DialogDescription className="text-white/60">
+              You have unsaved data. If you leave now, your changes will be lost.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              className="bg-transparent border-white/20 text-white hover:bg-white/10"
+              onClick={() => setLeaveDialogOpen(false)}
+            >
+              Stay
+            </Button>
+            <Button
+              type="button"
+              className="bg-red-500 text-white hover:bg-red-600"
+              onClick={() => {
+                setLeaveDialogOpen(false);
+                onCancel?.();
+              }}
+            >
+              Discard & leave
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
