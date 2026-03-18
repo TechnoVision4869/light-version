@@ -2336,7 +2336,7 @@ export default function AdminDashboard() {
                 <DynamicForm
                   selectedNode={selectedNode}
                   onSave={handleSave}
-                  onCancel={() => setFocusedAssetField(null)}
+                  onCancel={() => { setSelectedNode(null); setFocusedAssetField(null); setIsFormDirty(false); }}
                   onDirtyChange={setIsFormDirty}
                   onFieldFocus={setFocusedAssetField}
                   focusedAssetField={focusedAssetField}
