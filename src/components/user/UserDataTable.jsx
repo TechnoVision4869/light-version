@@ -21,7 +21,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { ConfirmDeleteDialog } from '@/components/admin/ConfirmDeleteDialog';
+import { ConfirmDialog } from '@/components/admin/ConfirmDialog';
 import { ROLE_OPTIONS, formatRole } from '@/constants/roles';
 
 const getDisplayRole = (role, loggedInUserRole) => {
@@ -593,7 +593,7 @@ const UserDataTable = ({ data, columns, onCreate, onEdit, onDelete, onRowClick }
       )}
 
       {/* Delete Confirmation Modal */}
-      <ConfirmDeleteDialog
+      <ConfirmDialog
         open={deletingRowIndex !== null}
         onOpenChange={(open) => {
           if (!open) {

@@ -3,15 +3,9 @@ import { Save, X, Plus, Trash2, FolderTree, Folder, ChevronDown, ChevronRight } 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+
 import { AssetFieldInput } from "./AssetFieldInput";
+import { ConfirmDialog } from "./ConfirmDialog";
 import PositionPickerButton from "./PositionPickerButton";
 import { resourceConfigs, CONTROL_TYPES } from "./resourceConfigs";
 import { ENTITY_TYPES, PROPERTY_TYPES } from "./types";
@@ -1038,36 +1032,18 @@ export function DynamicForm({
         </div>
       </form>
 
-      <Dialog open={leaveDialogOpen} onOpenChange={setLeaveDialogOpen}>
-        <DialogContent className="bg-[#1C1C1C] border-white/10 text-white">
-          <DialogHeader>
-            <DialogTitle>Discard unsaved changes?</DialogTitle>
-            <DialogDescription className="text-white/60">
-              You have unsaved data. If you leave now, your changes will be lost.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              className="bg-transparent border-white/20 text-white hover:bg-white/10"
-              onClick={() => setLeaveDialogOpen(false)}
-            >
-              Stay
-            </Button>
-            <Button
-              type="button"
-              className="bg-[#8B3A3A] hover:bg-[#A24242] text-white"
-              onClick={() => {
-                setLeaveDialogOpen(false);
-                onCancel?.();
-              }}
-            >
-              Discard & leave
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ConfirmDialog
+        open={leaveDialogOpen}
+        onOpenChange={setLeaveDialogOpen}
+        title="Discard unsaved changes?"
+        description="You have unsaved data. If you leave now, your changes will be lost."
+        cancelLabel="Stay"
+        confirmLabel="Discard & leave"
+        onConfirm={() => {
+          setLeaveDialogOpen(false);
+          onCancel?.();
+        }}
+      />
     </div>
   );
 }

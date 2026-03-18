@@ -10,16 +10,8 @@ import { toast } from "react-hot-toast";
 import { FlowTree } from "./FlowTree";
 import { DynamicForm } from "./DynamicForm";
 import { AssetsLibrary } from "./AssetsLibrary";
-import { ConfirmDeleteDialog } from "./ConfirmDeleteDialog";
+import {ConfirmDialog } from "./ConfirmDialog";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { ENTITY_TYPES, AssetType, ASSET_TYPES } from "./types";
 import { resourceConfigs } from "./resourceConfigs";
 import { CONTROL_TYPES } from "./resourceConfigs";
@@ -2379,7 +2371,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <ConfirmDeleteDialog
+        <ConfirmDialog
           open={!!deleteTarget}
           onOpenChange={(open) => !open && setDeleteTarget(null)}
           title={deleteTarget ? `Delete ${deleteTarget.type}?` : "Delete?"}
@@ -2388,43 +2380,22 @@ export default function AdminDashboard() {
           isLoading={deleteLoading}
         />
 
-        <Dialog open={leaveFormDialogOpen} onOpenChange={setLeaveFormDialogOpen}>
-          <DialogContent className="bg-[#1C1C1C] border-white/10 text-white">
-            <DialogHeader>
-              <DialogTitle>Switch without saving?</DialogTitle>
-              <DialogDescription className="text-white/60">
-                You have unsaved changes in the current form. If you switch now,
-                your changes will be lost.
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                className="bg-transparent border-white/20 text-white hover:bg-white/10"
-                onClick={() => {
-                  setLeaveFormDialogOpen(false);
-                  setPendingSelectNode(null);
-                }}
-              >
-                Stay
-              </Button>
-              <Button
-                type="button"
-                className="bg-[#8B3A3A] hover:bg-[#A24242] text-white"
-                onClick={() => {
-                  const next = pendingSelectNode;
-                  setLeaveFormDialogOpen(false);
-                  setPendingSelectNode(null);
-                  setIsFormDirty(false);
-                  if (next) selectNode(next);
-                }}
-              >
-                Discard & switch
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <ConfirmDialog
+          open={leaveFormDialogOpen}
+          onOpenChange={setLeaveFormDialogOpen}
+          title="Switch without saving?"
+          description="You have unsaved changes in the current form. If you switch now, your changes will be lost."
+          cancelLabel="Stay"
+          confirmLabel="Discard & switch"
+          onCancel={() => setPendingSelectNode(null)}
+          onConfirm={() => {
+            const next = pendingSelectNode;
+            setLeaveFormDialogOpen(false);
+            setPendingSelectNode(null);
+            setIsFormDirty(false);
+            if (next) selectNode(next);
+          }}
+        />
       </div>
     </Layout>
   );
