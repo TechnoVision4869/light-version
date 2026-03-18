@@ -330,7 +330,7 @@ export default function Home() {
             </button>
           </div>
           <div className="absolute inset-0">
-            <Gallery unit={overlay.data?.unit} galleryType={overlay.data?.galleryType} />
+            <Gallery unit={overlay.data?.unit} galleryType={overlay.data?.galleryType} onClose={closeOverlay} />
           </div>
         </div>
       )}
@@ -405,44 +405,6 @@ export default function Home() {
             <div className="flex items-center space-x-6">
               <button
                 onClick={() => {
-                  clearSelectedProject();
-                  navigate("/");
-                }}
-                className="px-4 py-2 rounded-full text-sm font-semibold text-white hover:bg-white/10 transition"
-                aria-label="Back to projects"
-              >
-                HOME
-              </button>
-              <button
-                onClick={() => handleActiveTab(TABS.SURROUNDINGS)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.SURROUNDINGS
-                  ? "bg-white/85 text-black"
-                  : "text-white"
-                  }`}
-              >
-                SURROUNDINGS
-              </button>
-              <button
-                onClick={() => handleActiveTab(TABS.ZONES)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.ZONES
-                  ? "bg-white/85 text-black"
-                  : "text-white"
-                  }`}
-              >
-                ZONES
-              </button>
-              <button
-                onClick={() => handleActiveTab(TABS.AMENITIES)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold ${activeTab === TABS.AMENITIES
-                  ? "bg-white/85 text-black"
-                  : "text-white"
-                  }`}
-              >
-                AMENITIES
-              </button>
-            </div>
-            <HomeButton
-              onHomeClick={() => {
                 if (activeTab === TABS.HOME) return;
                 if (
                   (activeTab === TABS.ZONES ||
@@ -455,6 +417,47 @@ export default function Home() {
                 }
                 goHome();
               }}
+                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition ${activeTab === TABS.HOME
+                  ? "bg-white/85 text-black"
+                  : "text-white"
+                  }`}
+                aria-label="Go to Home"
+              >
+                HOME
+              </button>
+              <button
+                onClick={() => handleActiveTab(TABS.SURROUNDINGS)}
+                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition ${activeTab === TABS.SURROUNDINGS
+                  ? "bg-white/85 text-black"
+                  : "text-white"
+                  }`}
+              >
+                SURROUNDINGS
+              </button>
+              <button
+                onClick={() => handleActiveTab(TABS.ZONES)}
+                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition ${activeTab === TABS.ZONES
+                  ? "bg-white/85 text-black"
+                  : "text-white"
+                  }`}
+              >
+                ZONES
+              </button>
+              <button
+                onClick={() => handleActiveTab(TABS.AMENITIES)}
+                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition ${activeTab === TABS.AMENITIES
+                  ? "bg-white/85 text-black"
+                  : "text-white"
+                  }`}
+              >
+                AMENITIES
+              </button>
+            </div>
+            <HomeButton
+              onHomeClick={() => {
+                  clearSelectedProject();
+                  navigate("/");
+                }}
             />
           </div>
 

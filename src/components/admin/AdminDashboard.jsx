@@ -1920,6 +1920,7 @@ export default function AdminDashboard() {
           "highlightAssetId",
           "forwardAssetId",
           "balconyAssetId",
+          "amenitiesSideVideoId",
         ];
     const mockById =
       USE_MOCK_DATA && Array.isArray(mockAssets)
@@ -2012,21 +2013,60 @@ export default function AdminDashboard() {
           </div>
 
           <div className="flex-1 min-w-0 flex flex-col overflow-hidden border-r border-white/10">
-            <DynamicForm
-              selectedNode={selectedNode}
-              onSave={handleSave}
-              onCancel={() => setFocusedAssetField(null)}
-              onFieldFocus={setFocusedAssetField}
-              focusedAssetField={focusedAssetField}
-              onAddChild={handleAdd}
-              assetPreviewUrls={assetPreviewUrls}
-              injectedFieldUpdate={injectedFieldUpdate}
-              onInjectedFieldConsumed={handleInjectedFieldConsumed}
-              onFormAssetIdsChange={setFormAssetIds}
-              unitTypes={unitTypes}
-              isSaving={isSaving}
-              assetsMap={assetsMap}
-            />
+            {(() => {
+              // Compute parent data for forms (e.g., parent PROJECT for AMENITY, SURROUNDING, ZONE)
+              let parentData = null;
+              if (selectedNode?.type === ENTITY_TYPES.AMENITY && selectedNode?.data?.projectId) {
+                const projectId = selectedNode.data.projectId;
+                // Search through all projects in projectsByDeveloper
+                for (const devProjects of Object.values(projectsByDeveloper)) {
+                  const project = devProjects?.find((p) => p.id === projectId);
+                  if (project) {
+                    parentData = project;
+                    break;
+                  }
+                }
+              } else if (selectedNode?.type === ENTITY_TYPES.SURROUNDING && selectedNode?.data?.projectId) {
+                const projectId = selectedNode.data.projectId;
+                // Search through all projects in projectsByDeveloper
+                for (const devProjects of Object.values(projectsByDeveloper)) {
+                  const project = devProjects?.find((p) => p.id === projectId);
+                  if (project) {
+                    parentData = project;
+                    break;
+                  }
+                }
+              } else if (selectedNode?.type === ENTITY_TYPES.ZONE && selectedNode?.data?.projectId) {
+                const projectId = selectedNode.data.projectId;
+                // Search through all projects in projectsByDeveloper
+                for (const devProjects of Object.values(projectsByDeveloper)) {
+                  const project = devProjects?.find((p) => p.id === projectId);
+                  if (project) {
+                    parentData = project;
+                    break;
+                  }
+                }
+              }
+
+              return (
+                <DynamicForm
+                  selectedNode={selectedNode}
+                  onSave={handleSave}
+                  onCancel={() => setFocusedAssetField(null)}
+                  onFieldFocus={setFocusedAssetField}
+                  focusedAssetField={focusedAssetField}
+                  onAddChild={handleAdd}
+                  assetPreviewUrls={assetPreviewUrls}
+                  injectedFieldUpdate={injectedFieldUpdate}
+                  onInjectedFieldConsumed={handleInjectedFieldConsumed}
+                  onFormAssetIdsChange={setFormAssetIds}
+                  unitTypes={unitTypes}
+                  isSaving={isSaving}
+                  assetsMap={assetsMap}
+                  parentData={parentData}
+                />
+              );
+            })()}
           </div>
 
           <div className="w-80 shrink-0 flex flex-col overflow-hidden">

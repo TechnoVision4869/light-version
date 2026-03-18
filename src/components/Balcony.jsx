@@ -5,7 +5,6 @@ import "@egjs/react-view360/css/view360.min.css";
 /**
  * Generic Balcony/360 View Component
  * @param {string} imageSource - The image URL/path to display (360° equirectangular image)
- * @param {Object} [apartmentData] - Optional: Legacy prop for backward compatibility
  */
 export default function Balcony({ view }) {
   const ZOOM_OUT = 1; // zoomed out view (match FOV ≈ 118.07°)

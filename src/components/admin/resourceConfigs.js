@@ -11,6 +11,7 @@ import { zoneApi } from "../../api/admin/zoneApi";
 import { blockApi } from "../../api/admin/blockApi";
 import { propertyViewApi } from "../../api/admin/propertyViewApi";
 import { featureApi } from "../../api/admin/featureApi";
+import PositionPickerButton from "./PositionPickerButton";
 import { ENTITY_TYPES, PROPERTY_TYPES, AssetType } from "./types";
 
 /** Field control types for UI */
@@ -25,6 +26,7 @@ export const CONTROL_TYPES = {
   PAYMENT_PLANS_ARRAY: "paymentPlansArray",
   LEVELS_ARRAY: "levelsArray",
   READONLY: "readonly",
+  POSITION_PICKER: "positionPicker",
 };
 
 /** Helper: standard name field */
@@ -232,6 +234,16 @@ export const resourceConfigs = {
         name: "y",
         label: "Y",
         control: CONTROL_TYPES.NUMBER,
+        required: false,
+        disabled: false,
+      },
+      {
+        name: "positionPicker",
+        label: "Set Position",
+        control: CONTROL_TYPES.POSITION_PICKER,
+        linkedFields: ["x", "y"],
+        imageWidth: 1920,
+        imageHeight: 1080,
         required: false,
         disabled: false,
       },
@@ -880,6 +892,16 @@ export const resourceConfigs = {
         required: false,
         disabled: false,
       },
+      {
+        name: "positionPicker",
+        label: "Set Position",
+        control: CONTROL_TYPES.POSITION_PICKER,
+        linkedFields: ["x", "y"],
+        imageWidth: 1920,
+        imageHeight: 1080,
+        required: false,
+        disabled: false,
+      },
       assetField("thumbnailAssetId", "Thumbnail", [
         AssetType.IMAGE,
         AssetType.THUMBNAIL,
@@ -941,6 +963,16 @@ export const resourceConfigs = {
         name: "y",
         label: "Y",
         control: CONTROL_TYPES.NUMBER,
+        required: false,
+        disabled: false,
+      },
+      {
+        name: "positionPicker",
+        label: "Set Position",
+        control: CONTROL_TYPES.POSITION_PICKER,
+        linkedFields: ["x", "y"],
+        imageWidth: 1920,
+        imageHeight: 1080,
         required: false,
         disabled: false,
       },

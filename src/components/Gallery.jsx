@@ -3,7 +3,7 @@ import { SidebarContext } from '../store/SidebarContextProvider';
 import { APP_CONFIG } from "../config/appConfig";
 
 // Carousel component for gallery
-export default function Gallery({ unit, galleryType }) {
+export default function Gallery({ unit, galleryType, onClose }) {
     const { currentProject } = useContext(SidebarContext);
     const [currentIndex, setCurrentIndex] = useState(0);
     const useMockup = APP_CONFIG.USE_MOCKUP;
@@ -31,7 +31,13 @@ export default function Gallery({ unit, galleryType }) {
         setStartX(e.clientX);
     };
     const handleMouseUp = (e) => {
-        setTranslateX(startX - e.clientX);
+        const distance = startX - e.clientX;
+        setTranslateX(distance);
+        
+        // If minimal movement, consider it a click on backdrop
+        if (Math.abs(distance) < threshold) {
+            onClose?.();
+        }
     };
 
     const handleTouchStart = (e) => {
@@ -39,7 +45,13 @@ export default function Gallery({ unit, galleryType }) {
     };
 
     const handleTouchEnd = (e) => {
-        setTranslateX(startX - e.changedTouches[0].clientX);
+        const distance = startX - e.changedTouches[0].clientX;
+        setTranslateX(distance);
+        
+        // If minimal movement, consider it a tap on backdrop
+        if (Math.abs(distance) < threshold) {
+            onClose?.();
+        }
     }
 
     useEffect(() => {

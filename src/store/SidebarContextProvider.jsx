@@ -154,7 +154,10 @@ export default function SidebarContextProvider({ children }) {
             {
                 tab: tabKey,
                 layer: layerKey,
-                item: selectedItem,
+                item: {
+                    displayName: String(tabKey).charAt(0).toUpperCase() + String(tabKey).slice(1), 
+                    ...selectedItem
+                },
                 videosPath: calculatedVideosPath,
                 views: calculatedViews,
             },

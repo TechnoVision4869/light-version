@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AssetFieldInput } from "./AssetFieldInput";
+import PositionPickerButton from "./PositionPickerButton";
 import { resourceConfigs, CONTROL_TYPES } from "./resourceConfigs";
 import { ENTITY_TYPES, PROPERTY_TYPES } from "./types";
 
@@ -34,6 +35,7 @@ export function DynamicForm({
   unitTypes = [],
   isSaving = false,
   assetsMap = {},
+  parentData = null,
 }) {
   const [localData, setLocalData] = useState({});
   const [expandedGroups, setExpandedGroups] = useState(() => {
@@ -630,6 +632,61 @@ export function DynamicForm({
       );
     }
 
+    if (control === CONTROL_TYPES.POSITION_PICKER) {
+      const linkedFields = field.linkedFields || ["x", "y"];
+      const currentX = linkedFields[0] ? localData[linkedFields[0]] : undefined;
+      const currentY = linkedFields[1] ? localData[linkedFields[1]] : undefined;
+
+      // Get video source from parent data (e.g., amenitiesSideVideoId from parent PROJECT for AMENITY)
+      let videoSource = null;
+      if (parentData?.amenitiesSideVideoId && assetPreviewUrls && selectedNode?.type === ENTITY_TYPES.AMENITY) {
+        videoSource = parentData.amenitiesSideVideoId;
+      } else if (parentData?.surroundingsSideVideoId && assetPreviewUrls && selectedNode?.type === ENTITY_TYPES.SURROUNDING) {
+        videoSource = parentData.surroundingsSideVideoId;
+      } else if (parentData?.zonesSideVideoId && assetPreviewUrls && selectedNode?.type === ENTITY_TYPES.ZONE) {
+        videoSource = parentData.zonesSideVideoId;
+      }
+
+      return (
+        <div key={name}>
+          <Label className="text-white">{label}{required && " *"}</Label>
+          <div className="mt-2 grid grid-cols-3 gap-2">
+            <div>
+              <Label className="text-xs text-white/80">X</Label>
+              <Input
+                type="number"
+                value={currentX == null || currentX === "" ? "" : currentX}
+                onChange={(e) => update(linkedFields[0], e.target.value === "" ? null : Number(e.target.value))}
+                className="mt-1 h-9 bg-white/5 border-white/20 text-white"
+                placeholder="0.00"
+              />
+            </div>
+            <div>
+              <Label className="text-xs text-white/80">Y</Label>
+              <Input
+                type="number"
+                value={currentY == null || currentY === "" ? "" : currentY}
+                onChange={(e) => update(linkedFields[1], e.target.value === "" ? null : Number(e.target.value))}
+                className="mt-1 h-9 bg-white/5 border-white/20 text-white"
+                placeholder="0.00"
+              />
+            </div>
+            <div className="flex flex-col justify-end">
+              <PositionPickerButton
+                onPositionSelect={(x, y) => {
+                  if (linkedFields[0]) update(linkedFields[0], x);
+                  if (linkedFields[1]) update(linkedFields[1], y);
+                }}
+                currentX={currentX}
+                currentY={currentY}
+                videoSource={videoSource}
+              />
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     if (control === CONTROL_TYPES.READONLY) {
       return (
         <div key={name}>
@@ -811,7 +868,21 @@ export function DynamicForm({
   };
 
   const formFields = useConfigFields
-    ? fields.map((f) => <div key={f.name}>{renderConfigField(f)}</div>)
+    ? fields
+        .filter((f) => {
+          // Skip x and y fields if they're linkedFields of a position picker
+          if (f.name === "x" || f.name === "y") {
+            const positionPickerField = fields.find(
+              (field) =>
+                field.control === CONTROL_TYPES.POSITION_PICKER &&
+                field.linkedFields &&
+                field.linkedFields.includes(f.name)
+            );
+            if (positionPickerField) return false;
+          }
+          return true;
+        })
+        .map((f) => <div key={f.name}>{renderConfigField(f)}</div>)
     : schema && Object.entries(schema.fields).map(([key, fieldSchema]) => (
         <div key={key}>{renderSchemaField(key, fieldSchema)}</div>
       ));
