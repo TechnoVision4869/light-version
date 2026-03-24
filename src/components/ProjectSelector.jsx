@@ -185,7 +185,7 @@ export default function ProjectSelector({
   return (
     <Layout backgroundImage={developerAssets.backgroundImage} fullscreen={true}>
       <div
-        className="w-full h-screen flex flex-col items-center justify-start pt-8"
+        className="w-full h-full flex flex-col items-center justify-start pt-8"
         style={{
           backgroundImage: `url(${developerAssets.backgroundImage})`,
           backgroundSize: "cover",

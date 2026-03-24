@@ -60,8 +60,8 @@ export default function DeveloperSelector({ onDeveloperSelect }) {
 
   if (loading) {
     return (
-      <Layout>
-        <div className="w-full h-screen flex items-center justify-center">
+      <Layout title="Developers" fullscreen={true}>
+        <div className="w-full h-full flex items-center justify-center">
           <div className="text-white text-lg">Loading developers...</div>
         </div>
       </Layout>
@@ -69,13 +69,8 @@ export default function DeveloperSelector({ onDeveloperSelect }) {
   }
 
   return (
-    <Layout>
-      <div className="w-full h-screen flex flex-col items-center justify-start pt-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white tracking-wide">
-            Select Developer
-          </h1>
-        </div>
+    <Layout title="Developers" fullscreen={true}>
+      <div className="w-full h-full flex flex-col items-center justify-start pt-8">
         <div className="flex-1 flex flex-col items-center justify-center w-full px-4">
           {developers.length === 0 ? (
             <div className="w-full rounded-2xl overflow-hidden backdrop-blur-sm bg-[#1C1C1C8C]">

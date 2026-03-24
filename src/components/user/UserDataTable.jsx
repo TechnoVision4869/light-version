@@ -366,9 +366,8 @@ const UserDataTable = ({ data, columns, onCreate, onEdit, onDelete, onRowClick }
       <div className="flex justify-end mb-4">
         {(user?.role === 'system_admin' || user?.role === 'developer_admin') && (
           <Dialog open={isCreating} onOpenChange={setIsCreating}>
-            <DialogTrigger asChild>
-              <div className="flex flex-row justify-between w-full items-center mb-6">
-                <h1 className="text-3xl font-bold text-white">Users</h1>
+            <div className="flex justify-end w-full mb-6">
+              <DialogTrigger asChild>
                 <Button className="text-white flex items-center gap-2 bg-[#4f6f4f] hover:bg-[#4f6f4f]/80">
                   <svg
                     className="w-4 h-4"
@@ -385,8 +384,8 @@ const UserDataTable = ({ data, columns, onCreate, onEdit, onDelete, onRowClick }
                   </svg>
                   Add New
                 </Button>
-              </div>            
-            </DialogTrigger>
+              </DialogTrigger>
+            </div>
             <DialogContent className="sm:max-w-[425px] bg-[#1C1C1C] border-white/20">
               <DialogHeader>
                 <DialogTitle className="text-white">Create New User</DialogTitle>
@@ -401,9 +400,6 @@ const UserDataTable = ({ data, columns, onCreate, onEdit, onDelete, onRowClick }
               />
             </DialogContent>
           </Dialog>
-        )}
-        {(user?.role !== 'system_admin' && user?.role !== 'developer_admin') && (
-          <h1 className="text-3xl font-bold text-white">Users</h1>
         )}
       </div>
 

@@ -42,6 +42,7 @@ export function AssetsLibrary({
   onAssetClick,
   acceptableTypes = [],
   developerId,
+  selectedDeveloperName,
   mockAssets = null,
   onAddMockAsset,
   disabled = false,
@@ -212,7 +213,14 @@ export function AssetsLibrary({
       )}
       <div className="p-3 border-b border-white/10 space-y-3">
         <div className="flex items-center justify-between gap-2">
-          <h2 className="font-semibold text-sm text-white">Assets Library</h2>
+          <div className="min-w-0">
+            <h2 className="font-semibold text-sm text-white">Assets Library</h2>
+            {selectedDeveloperName && !disabled ? (
+              <p className="text-xs text-white/60 mt-1 truncate">
+                Developer: {selectedDeveloperName}
+              </p>
+            ) : null}
+          </div>
           <Button
             size="sm"
             onClick={() => setAddModalOpen(true)}

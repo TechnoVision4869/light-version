@@ -2256,8 +2256,8 @@ export default function AdminDashboard() {
   }, [focusedAssetField, selectedNode]);
 
   return (
-    <Layout fullscreen={true}>
-      <div className="h-screen flex flex-col bg-[#2C2C2C] relative">
+    <Layout fullscreen={true} title="Admin Dashboard" headerClassName="bg-[#1C1C1C]">
+      <div className="h-full flex flex-col bg-[#2C2C2C] relative">
         {isLoading && (
           <div className="absolute inset-0 bg-[#2C2C2C]/90 backdrop-blur-sm z-50 flex items-center justify-center">
             <div className="text-center">
@@ -2266,21 +2266,6 @@ export default function AdminDashboard() {
             </div>
           </div>
         )}
-
-        <header className="bg-[#1C1C1C] border-b border-white/10 px-6 py-4 shrink-0 shadow-lg">
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl font-bold text-white mx-auto">
-              Admin Dashboard
-            </h1>
-            {selectedDeveloperId && (
-              <span className="text-sm text-white/60">
-                Developer:{" "}
-                {developers.find((d) => d.id === selectedDeveloperId)?.name ||
-                  "Selected"}
-              </span>
-            )}
-          </div>
-        </header>
 
         <div className="flex-1 flex overflow-hidden min-h-0">
           <div className="w-80 shrink-0 flex flex-col overflow-hidden">
@@ -2360,6 +2345,11 @@ export default function AdminDashboard() {
               onAssetClick={handleAssetClick}
               acceptableTypes={acceptableTypesForField}
               developerId={selectedDeveloperId}
+              selectedDeveloperName={
+                selectedDeveloperId
+                  ? developers.find((d) => d.id === selectedDeveloperId)?.name || "Selected"
+                  : null
+              }
               disabled={!selectedDeveloperId}
               mockAssets={USE_MOCK_DATA ? (mockAssets ?? []) : null}
               onAddMockAsset={

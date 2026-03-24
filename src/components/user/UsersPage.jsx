@@ -141,8 +141,8 @@ export default function UsersPage() {
   };
 
   return (
-    <Layout>
-      <div className="w-full">
+    <Layout title="Users" fullscreen={true}>
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
         <UserDataTable
           data={users}
           columns={columns}
