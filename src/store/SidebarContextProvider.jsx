@@ -136,14 +136,14 @@ export default function SidebarContextProvider({ children }) {
         } else {
             calculatedVideosPath = isFromHome
             ? {
-                forwardVideo: tabKey === "zones" ? selectedItem.zonesForwardVideoId : selectedItem.forwardVideoId,
-                reverseVideo: tabKey === "zones" ? selectedItem.zonesReverseVideoId : selectedItem.reverseVideoId,
-                idleVideo: tabKey === "zones" ? selectedItem.zonesSideVideoId : selectedItem.sideVideoId,
+                forwardVideo: selectedItem.zonesForwardVideoId || selectedItem.forwardVideoId,
+                reverseVideo: selectedItem.zonesReverseVideoId || selectedItem.reverseVideoId,
+                idleVideo: selectedItem.zonesSideVideoId || selectedItem.sideVideoId,
             }
             : {
-                forwardVideo: tabKey === "zones" ? selectedItem.zonesZoomoutVideoId : selectedItem.zoomOutVideo,
-                reverseVideo: tabKey === "zones" ? selectedItem.zonesReverseVideoId : selectedItem.reverseVideoId,
-                idleVideo: tabKey === "zones" ? selectedItem.zonesSideVideoId : selectedItem.sideVideoId,
+                forwardVideo: selectedItem.zonesZoomoutVideoId || selectedItem.zoomOutVideo,
+                reverseVideo: selectedItem.zonesReverseVideoId || selectedItem.reverseVideoId,
+                idleVideo: selectedItem.zonesSideVideoId || selectedItem.sideVideoId,
             };
         }        
 

@@ -1031,7 +1031,7 @@ export default function AdminDashboard() {
           parent?.type === "FOLDER" && parent?.data?.propertyId
             ? parent.data.propertyId
             : parentId;
-        base.data = { propertyId, floorNumber: 1 };
+        base.data = { propertyId, floorNumber: 1, displayName: "New Floor" };
       }
       if (childType === ENTITY_TYPES.BLOCK && parent) {
         const propertyId =

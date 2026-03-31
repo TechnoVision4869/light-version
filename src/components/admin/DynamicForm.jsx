@@ -33,7 +33,7 @@ function stableStringify(value) {
 function getNodeName(node) {
   if (!node) return "";
   const d = node.data || node;
-  return d.name || d.displayName || d.unitCode || (d.floorNumber != null ? `Floor ${d.floorNumber}` : "") || node.name || "";
+  return d.name || d.displayName || d.unitCode || node.name || "";
 }
 
 function toTitleCase(str) {

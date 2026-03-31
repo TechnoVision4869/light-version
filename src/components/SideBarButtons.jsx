@@ -63,6 +63,11 @@ export default function SidebarButtons() {
           propName = "building";
           layerKey = LAYERS.BUILDING;
         }
+        else {
+          Component = BuildingButton;
+          propName = "building";
+          layerKey = LAYERS.BUILDING;
+        }
       }
       else {
         Component = BuildingButton;

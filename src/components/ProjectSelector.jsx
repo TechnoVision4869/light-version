@@ -28,7 +28,7 @@ export default function ProjectSelector({
   const fetchProjects = async () => {
     try {
       setLoading(true);
-
+      
       if (useMockup) {
         // Load from mock data
         const mockProjects = DATA.developerProjects || [];
@@ -38,7 +38,7 @@ export default function ProjectSelector({
         const thumbnails = {};
         const introVideos = {};
 
-        mockProjects.forEach((project) => {
+        mockProjects.forEach((project) => {          
           if (project.thumbnail) {
             thumbnails[project.id] = project.thumbnail;
           }
@@ -231,13 +231,14 @@ export default function ProjectSelector({
                     key={project.id}
                     className="w-[300px] rounded-2xl overflow-hidden backdrop-blur-sm bg-[#1C1C1C8C]"
                   >
+                    {thumbnailUrls[project.id] &&
                     <div className="px-3 pt-3">
                       <img
                         src={thumbnailUrls[project.id]}
                         alt={project.name}
                         className="rounded-2xl w-full h-auto object-cover"
                       />
-                    </div>
+                    </div>}
 
                     <div className="p-4">
                       <h2 className="tracking-wide text-lg font-semibold text-white mb-1">

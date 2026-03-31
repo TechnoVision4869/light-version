@@ -17,9 +17,7 @@ export const MainContext = createContext({
   isRoomInterior: false,
   galleryType: null,
   handleInterior: () => {},
-  handleBalconyView: () => {},
-  handleRoomInterior: () => {},
-  handleGalleryType: () => {},
+
   handleBack: () => {},
 });
 
@@ -66,10 +64,6 @@ export default function MainContextProvider({ children }) {
     isRoomInterior: overlay?.type === 'room-interior',
     galleryType: overlay?.type === 'gallery' ? overlay?.data?.galleryType : null,
     
-    handleInterior: () => { /* deprecated */ },
-    handleBalconyView: () => { /* deprecated */ },
-    handleRoomInterior: () => { /* deprecated */ },
-    handleGalleryType: () => { /* deprecated */ },
     handleBack,
   };
 

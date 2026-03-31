@@ -36,8 +36,8 @@ export default function App() {
   };
 
   const getIntroVideoUrl = () => {
-    if (!currentProject) return null;
-    return currentProject?.introVideoId;
+    if (!currentProject) return null;    
+    return currentProject?.introVideoId || currentProject?.introVideo;
   };
 
   return (

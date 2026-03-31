@@ -280,12 +280,12 @@ export const resourceConfigs = {
       description: yup.string().nullable(),
       x: yup.number().nullable(),
       y: yup.number().nullable(),
-      featureDisplayName: yup.string().nullable(),
-      featureX: yup.number().nullable(),
-      featureY: yup.number().nullable(),
       forwardAssetId: yup.string().nullable(),
       reverseAssetId: yup.string().nullable(),
       idleAssetId: yup.string().nullable(),
+      featureDisplayName: yup.string().nullable(),
+      featureX: yup.number().nullable(),
+      featureY: yup.number().nullable(),
       featureForwardAssetId: yup.string().nullable(),
       featureReverseAssetId: yup.string().nullable(),
       featureIdleAssetId: yup.string().nullable(),
@@ -322,6 +322,18 @@ export const resourceConfigs = {
         required: false,
         disabled: false,
       },
+      assetField("forwardAssetId", "Forward", [
+        AssetType.VIDEO,
+        AssetType.PANORAMA,
+      ]),
+      assetField("reverseAssetId", "Reverse", [
+        AssetType.VIDEO,
+        AssetType.PANORAMA,
+      ]),
+      assetField("idleAssetId", "Idle", [
+        AssetType.VIDEO,
+        AssetType.PANORAMA,
+      ]),
       {
         name: "featureDisplayName",
         label: "Feature Display Name",
@@ -343,18 +355,6 @@ export const resourceConfigs = {
         required: false,
         disabled: false,
       },
-      assetField("forwardAssetId", "Forward", [
-        AssetType.VIDEO,
-        AssetType.PANORAMA,
-      ]),
-      assetField("reverseAssetId", "Reverse", [
-        AssetType.VIDEO,
-        AssetType.PANORAMA,
-      ]),
-      assetField("idleAssetId", "Idle", [
-        AssetType.VIDEO,
-        AssetType.PANORAMA,
-      ]),
       assetField("featureForwardAssetId", "Feature Forward", [
         AssetType.VIDEO,
         AssetType.PANORAMA,
@@ -408,7 +408,10 @@ export const resourceConfigs = {
     title: "Floor",
     api: floorApi,
     schema: yup.object().shape({
+      displayName: yup.string().required(),
       floorNumber: yup.number().integer().required(),
+      subtitle: yup.string().nullable(),
+      description: yup.string().nullable(),
       propertyId: yup.string().required(),
       x: yup.number().nullable(),
       y: yup.number().nullable(),
@@ -419,6 +422,13 @@ export const resourceConfigs = {
     }),
     fields: [
       {
+        name: "displayName",
+        label: "Display Name",
+        control: CONTROL_TYPES.TEXT,
+        required: true,
+        disabled: false,
+      },
+      {
         name: "floorNumber",
         label: "Floor Number",
         control: CONTROL_TYPES.NUMBER,
@@ -426,6 +436,20 @@ export const resourceConfigs = {
         disabled: false,
       },
       idField("propertyId", "Property ID"),
+      {
+        name: "subtitle",
+        label: "Subtitle",
+        control: CONTROL_TYPES.TEXT,
+        required: false,
+        disabled: false,
+      },
+      {
+        name: "description",
+        label: "Description",
+        control: CONTROL_TYPES.TEXTAREA,
+        required: false,
+        disabled: false,
+      },
       {
         name: "x",
         label: "X",
