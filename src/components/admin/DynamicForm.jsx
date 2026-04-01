@@ -724,14 +724,35 @@ export function DynamicForm({
       const currentX = linkedFields[0] ? localData[linkedFields[0]] : undefined;
       const currentY = linkedFields[1] ? localData[linkedFields[1]] : undefined;
 
-      // Get video source from parent data (e.g., amenitiesSideVideoId from parent PROJECT for AMENITY)
+      // Determine videoSource based on entity type and its parentData
       let videoSource = null;
-      if (parentData?.amenitiesSideVideoId && assetPreviewUrls && selectedNode?.type === ENTITY_TYPES.AMENITY) {
-        videoSource = parentData.amenitiesSideVideoId;
-      } else if (parentData?.surroundingsSideVideoId && assetPreviewUrls && selectedNode?.type === ENTITY_TYPES.SURROUNDING) {
-        videoSource = parentData.surroundingsSideVideoId;
-      } else if (parentData?.zonesSideVideoId && assetPreviewUrls && selectedNode?.type === ENTITY_TYPES.ZONE) {
-        videoSource = parentData.zonesSideVideoId;
+      const type = selectedNode?.type;
+      if (type === ENTITY_TYPES.ZONE) {
+        // parentData = PROJECT
+        videoSource = parentData?.zonesSideVideoId ?? null;
+      } else if (type === ENTITY_TYPES.PROPERTY || type === ENTITY_TYPES.BLOCK) {
+        // parentData = ZONE (PROPERTY=TOWER, BLOCK=TOWNHOUSE)
+        videoSource = parentData?.sideVideoId ?? null;
+      } else if (type === ENTITY_TYPES.FLOOR) {
+        // parentData = PROPERTY
+        videoSource = parentData?.idleAssetId ?? null;
+      } else if (type === ENTITY_TYPES.UNIT) {
+        if (localData.floorId) {
+          // TOWER: parentData = FLOOR
+          videoSource = parentData?.sideAssetId ?? null;
+        } else if (localData.blockId) {
+          // TOWNHOUSE: parentData = PROPERTY
+          videoSource = parentData?.idleAssetId ?? null;
+        } else {
+          // VILLA: parentData = ZONE
+          videoSource = parentData?.sideVideoId ?? null;
+        }
+      } else if (type === ENTITY_TYPES.AMENITY) {
+        // parentData = PROJECT
+        videoSource = parentData?.amenitiesSideVideoId ?? null;
+      } else if (type === ENTITY_TYPES.SURROUNDING) {
+        // parentData = PROJECT
+        videoSource = parentData?.surroundingsSideVideoId ?? null;
       }
 
       return (

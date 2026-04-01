@@ -54,7 +54,9 @@ export default function SidebarContextProvider({ children }) {
         
         const enrich = async () => {
             try {
-                const enrichedProject = await enrichProjectData(project, useMockup);
+                // Load project with depth=3: all the way to units
+                // Depth values: 0=none, 1=zones+amenities, 2=+properties, 3=+units
+                const enrichedProject = await enrichProjectData(project, useMockup, 3);
                 setCurrentProject(enrichedProject);
                 setHistory(getInitHistory(enrichedProject));
                 // Save only the project ID to localStorage

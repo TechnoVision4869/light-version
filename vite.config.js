@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
+// import { VitePWA } from 'vite-plugin-pwa';
 // import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
@@ -12,6 +13,7 @@ export default defineConfig({
       },
     }),
     tailwindcss(),
+    // VitePWA - disabled for now, using manual SW instead
     // visualizer(),
   ],
 

@@ -2283,11 +2283,25 @@ export default function AdminDashboard() {
 
           <div className="flex-1 min-w-0 flex flex-col overflow-hidden border-r border-white/10">
             {(() => {
-              // Compute parent data for forms (e.g., parent PROJECT for AMENITY, SURROUNDING, ZONE)
+              // Helpers to traverse the nodes tree
+              const findNode = (id) => nodes.find((n) => n.id === id);
+              const getParentNode = (nodeId) => {
+                const node = findNode(nodeId);
+                return node ? findNode(node.parentId) : null;
+              };
+
+              // Compute parent data for position picker video source
               let parentData = null;
-              if (selectedNode?.type === ENTITY_TYPES.AMENITY && selectedNode?.data?.projectId) {
+              const nodeType = selectedNode?.type;
+
+              if (
+                (nodeType === ENTITY_TYPES.AMENITY ||
+                  nodeType === ENTITY_TYPES.SURROUNDING ||
+                  nodeType === ENTITY_TYPES.ZONE) &&
+                selectedNode?.data?.projectId
+              ) {
+                // AMENITY / SURROUNDING / ZONE → parentData is PROJECT
                 const projectId = selectedNode.data.projectId;
-                // Search through all projects in projectsByDeveloper
                 for (const devProjects of Object.values(projectsByDeveloper)) {
                   const project = devProjects?.find((p) => p.id === projectId);
                   if (project) {
@@ -2295,25 +2309,45 @@ export default function AdminDashboard() {
                     break;
                   }
                 }
-              } else if (selectedNode?.type === ENTITY_TYPES.SURROUNDING && selectedNode?.data?.projectId) {
-                const projectId = selectedNode.data.projectId;
-                // Search through all projects in projectsByDeveloper
-                for (const devProjects of Object.values(projectsByDeveloper)) {
-                  const project = devProjects?.find((p) => p.id === projectId);
-                  if (project) {
-                    parentData = project;
-                    break;
-                  }
+              } else if (nodeType === ENTITY_TYPES.PROPERTY) {
+                // PROPERTY → parentData is ZONE (immediate parent)
+                const zoneNode = getParentNode(selectedNode.id);
+                if (zoneNode?.type === ENTITY_TYPES.ZONE) {
+                  parentData = zoneNode.data;
                 }
-              } else if (selectedNode?.type === ENTITY_TYPES.ZONE && selectedNode?.data?.projectId) {
-                const projectId = selectedNode.data.projectId;
-                // Search through all projects in projectsByDeveloper
-                for (const devProjects of Object.values(projectsByDeveloper)) {
-                  const project = devProjects?.find((p) => p.id === projectId);
-                  if (project) {
-                    parentData = project;
-                    break;
+              } else if (nodeType === ENTITY_TYPES.BLOCK) {
+                // BLOCK → parentData is ZONE (traverse BLOCK → folder → PROPERTY → ZONE)
+                const folderNode = getParentNode(selectedNode.id);
+                const propertyNode = folderNode ? getParentNode(folderNode.id) : null;
+                const zoneNode = propertyNode ? getParentNode(propertyNode.id) : null;
+                if (zoneNode?.type === ENTITY_TYPES.ZONE) {
+                  parentData = zoneNode.data;
+                }
+              } else if (nodeType === ENTITY_TYPES.FLOOR) {
+                // FLOOR → parentData is PROPERTY (traverse FLOOR → folder → PROPERTY)
+                const folderNode = getParentNode(selectedNode.id);
+                const propertyNode = folderNode ? getParentNode(folderNode.id) : null;
+                if (propertyNode?.type === ENTITY_TYPES.PROPERTY) {
+                  parentData = propertyNode.data;
+                }
+              } else if (nodeType === ENTITY_TYPES.UNIT) {
+                const parentNode = getParentNode(selectedNode.id);
+                if (parentNode?.type === ENTITY_TYPES.PROPERTY) {
+                  // VILLA: parentData is ZONE (traverse UNIT → PROPERTY → ZONE)
+                  const zoneNode = getParentNode(parentNode.id);
+                  if (zoneNode?.type === ENTITY_TYPES.ZONE) {
+                    parentData = zoneNode.data;
                   }
+                } else if (parentNode?.type === ENTITY_TYPES.BLOCK) {
+                  // TOWNHOUSE: parentData is PROPERTY (traverse UNIT → BLOCK → folder → PROPERTY)
+                  const folderNode = getParentNode(parentNode.id);
+                  const propertyNode = folderNode ? getParentNode(folderNode.id) : null;
+                  if (propertyNode?.type === ENTITY_TYPES.PROPERTY) {
+                    parentData = propertyNode.data;
+                  }
+                } else if (parentNode?.type === ENTITY_TYPES.FLOOR) {
+                  // TOWER: parentData is FLOOR (immediate parent)
+                  parentData = parentNode.data;
                 }
               }
 
