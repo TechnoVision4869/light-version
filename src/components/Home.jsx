@@ -37,6 +37,7 @@ export default function Home() {
   //states
   const [showInfoPopup, setShowInfoPopup] = useState(false);
   const [showI, setShowI] = useState(false);
+  const [floorSwitchBlur, setFloorSwitchBlur] = useState(false);
 
   // Ref
   const mediaContainerRef = useRef(null);
@@ -57,7 +58,8 @@ export default function Home() {
     handleSidebarState,
     goToTab,
     goHome,
-    clearSelectedProject } = useContext(SidebarContext);
+    clearSelectedProject,
+    switchToFloor } = useContext(SidebarContext);
 
   const { overlay, closeOverlay } = useContext(MainContext);
 
@@ -77,6 +79,18 @@ export default function Home() {
   };
 
   const isDisabled = !viewerProps.isMediaLoaded || viewerProps.isPlaying;
+
+  // Floors available when at FLOOR layer — pulled from the parent BUILDING entry
+  const parentBuilding = activeLayer === LAYERS.FLOOR ? history[history.length - 2]?.item : null;
+  const floors = parentBuilding?.floors || [];
+
+  const handleFloorSwitch = useCallback((floor) => {
+    if (floor.id === currentItem?.id) return;
+    setFloorSwitchBlur(true);
+    videoViewer.skipNextTransition();
+    switchToFloor(floor);
+    setTimeout(() => setFloorSwitchBlur(false), 800);
+  }, [currentItem, switchToFloor, videoViewer]);
 
   const handleActiveTab = useCallback((tab) => {
     let selectedItem = null;
@@ -503,13 +517,46 @@ export default function Home() {
                       muted
                       playsInline
                       preload="auto"
-                      loop
                     />
 
                     {/* {activeLayer === LAYERS.SURROUNDING_DETAIL && (
                       <AnimatedPath path={currentItem.svgPath} />
                     )} */}
                   </div>
+
+                  {/* Floor switch blur overlay */}
+                  <div
+                    className="absolute inset-0 z-20 backdrop-blur-sm rounded-2xl pointer-events-none transition-opacity duration-300"
+                    style={{ opacity: floorSwitchBlur ? 1 : 0 }}
+                  />
+
+                  {/* Vertical floor buttons */}
+                  {activeLayer === LAYERS.FLOOR && floors.length > 0 && (
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-1.5 max-h-[80%] overflow-y-auto py-1 items-center">
+                      <p className="pb-1">Floors</p>
+                      {[...floors].reverse().map((floor) => (
+                        <button
+                          key={floor.id}
+                          onClick={() => handleFloorSwitch(floor)}
+                          disabled={isDisabled || floor.id === currentItem?.id}
+                          className={`w-9 h-9 rounded-lg font-semibold transition-all flex items-center justify-center
+                            ${
+                              floor.id === currentItem?.id
+                                ? 'bg-white text-black shadow-md'
+                                : 'bg-black/50 backdrop-blur-sm text-white hover:bg-white/20'
+                            }
+                            disabled:cursor-default`}
+                        >
+                          {floor.displayName
+                            .replace(/^roof$/i, "R")
+                            .replace(/^basement$/i, "B")
+                            .replace(/^ground$/i, "G")
+                            .replace(/^penthouse$/i, "P")
+                            .replace(/^floor\s+(\d+)$/i, (_, n) => String(n).padStart(2, "0"))}
+                        </button>
+                      ))}
+                    </div>
+                  )}
 
                   {viewerProps.floatingOpacity &&
                     viewerProps.currentViewIndex === 0 && (

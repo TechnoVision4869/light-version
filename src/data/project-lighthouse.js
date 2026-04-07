@@ -102,8 +102,8 @@ export const DEVELOPER_SOMABAY = {
                 type: "tower",
                 displayName: "7A",
                 highlight: `/${projectName}/highlight/7A Tower.png`,
-                description: "Tower 1 description...",
-                x: 0.45, y: 0.53,
+                description: null,
+                x: 0.57, y: 0.2,
                 videos: {
                   forwardVideo: `/${projectName}/videos/zones/7a/7a_gen_trans.mp4`,
                   reverseVideo: `/${projectName}/videos/zones/7a/7a_gen_rev.mp4`,
@@ -111,19 +111,19 @@ export const DEVELOPER_SOMABAY = {
                 },
                 floors: [
                   {
-                    id: "basement",
+                    id: "floor-1",
                     type: "Residential",
-                    displayName: "Basement",
-                    highlight: `/${projectName}/highlight/basement.png`,
-                    description: "Basement description...",
-                    x: 0.27, y: 0.94,
+                    displayName: "Floor 1",
+                    highlight: `/${projectName}/highlight/7A/Floor 1.png`,
+                    description: null,
+                    x: 0.37, y: 0.94,
                     videos: {
                       forwardVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_trans_to_floor3.mp4`,
                       reverseVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_rev_from_floor3.mp4`,
                       idleVideo: `/${projectName}/videos/zones/7a/floors/basement/7a_floors_basement_idle.mp4`,
                     },
                     units: [
-                      // Tower 1, Basement
+                      // 7A, Floor 1
                       {
                         id: "apartment101",
                         unitTypeId: "7a-unit",
@@ -142,40 +142,24 @@ export const DEVELOPER_SOMABAY = {
                       },
                       { id: "apartment102", unitTypeId: "7a-unit", displayName: "A102", area: 200, price: 400000, bedrooms: 4, bathrooms: 2, balconyView: "/mix/panorama/7a_unit/balcony.jpg", x: 0.25, y: 0.4, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
                     ],
-                    features: [
-                      {
-                        id: "amenity1",
-                        displayName: "Meeting Room",
-                        subtitle: "Corridor Amenity",
-                        description: "...",
-                        x: 0.17, y: 0.69,
-                      },
-                      {
-                        id: "amenity2",
-                        displayName: "Roof",
-                        subtitle: "7A Amenity",
-                        description: "Spacious roof top suitable for family gatherings...",
-                        x: 0.32, y: 0.65,
-                      },
-                    ],
                   },
                   {
-                    id: "ground",
+                    id: "floor-2",
                     projectId: "mix",
                     zoneId: "zone1",
                     buildingId: "tower1",
                     type: "Residential",
-                    displayName: "Ground",
-                    highlight: `/${projectName}/highlight/ground.png`,
-                    description: "Ground floor description...",
-                    x: 0.27, y: 0.81,
+                    displayName: "Floor 2",
+                    highlight: `/${projectName}/highlight/7A/Floor 2.png`,
+                    description: null,
+                    x: 0.37, y: 0.81,
                     videos: {
                       forwardVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_trans_to_floor3.mp4`,
                       reverseVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_rev_from_floor3.mp4`,
                       idleVideo: `/${projectName}/videos/zones/7a/floors/ground/7a_floors_ground_idle.mp4`,
                     },
                     units: [
-                      // Tower 1, Ground
+                      // 7A, Floor 2
                       {
                         id: "apartment201",
                         unitTypeId: "7a-unit",
@@ -196,22 +180,22 @@ export const DEVELOPER_SOMABAY = {
                     ],
                   },
                   {
-                    id: "floor1",
+                    id: "floor-3",
                     projectId: "mix",
                     zoneId: "zone1",
                     buildingId: "tower1",
                     type: "Residential",
-                    displayName: "Floor 1",
-                    highlight: `/${projectName}/highlight/7A/Floor 1.png`,
-                    description: "First floor description...",
-                    x: 0.27, y: 0.67,
+                    displayName: "Floor 3",
+                    highlight: `/${projectName}/highlight/7A/Floor 3.png`,
+                    description: null,
+                    x: 0.37, y: 0.68,
                     videos: {
                       forwardVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_trans_to_floor3.mp4`,
                       reverseVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_rev_from_floor3.mp4`,
                       idleVideo: `/${projectName}/videos/zones/7a/floors/floor1/7a_floors_floor1_idle.mp4`,
                     },
                     units: [
-                      // Tower 1, Floor 1
+                      // 7A, Floor 3
                       {
                         id: "apartment301",
                         unitTypeId: "7a-unit",
@@ -231,14 +215,86 @@ export const DEVELOPER_SOMABAY = {
                       { id: "apartment302", unitTypeId: "7a-unit", displayName: "A302", area: 200, price: 400000, bedrooms: 4, bathrooms: 2, balconyView: "/mix/panorama/7a_unit/balcony.jpg", x: 0.25, y: 0.4, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
                     ],
                   },
+                  {
+                    id: "floor-4",
+                    projectId: "mix",
+                    zoneId: "zone1",
+                    buildingId: "tower1",
+                    type: "Residential",
+                    displayName: "Floor 4",
+                    highlight: `/${projectName}/highlight/7A/Floor 4.png`,
+                    description: null,
+                    x: 0.37, y: 0.55,
+                    videos: {
+                      forwardVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_trans_to_floor3.mp4`,
+                      reverseVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_rev_from_floor3.mp4`,
+                      idleVideo: `/${projectName}/videos/zones/7a/floors/floor1/7a_floors_floor1_idle.mp4`,
+                    },
+                    units: [
+                      // 7A, Floor 4
+                      {
+                        id: "apartment401",
+                        unitTypeId: "7a-unit",
+                        displayName: "A401",
+                        area: 85,
+                        price: 250000,
+                        bedrooms: 2,
+                        bathrooms: 1,
+                        balconyView: "/mix/panorama/7a_unit/balcony.jpg",
+                        x: 0.40, y: 0.60,
+                        videos: {
+                          forwardVideo: "/cutsection.mp4",
+                          reverseVideo: "/cutsection.mp4",
+                          idleVideo: "/cutsection.mp4",
+                        }
+                      },
+                      { id: "apartment402", unitTypeId: "7a-unit", displayName: "A402", area: 200, price: 400000, bedrooms: 4, bathrooms: 2, balconyView: "/mix/panorama/7a_unit/balcony.jpg", x: 0.25, y: 0.4, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
+                    ],
+                  },
+                  {
+                    id: "roof",
+                    projectId: "mix",
+                    zoneId: "zone1",
+                    buildingId: "tower1",
+                    type: "Residential",
+                    displayName: "Roof",
+                    highlight: `/${projectName}/highlight/7A/Roof.png`,
+                    description: null,
+                    x: 0.37, y: 0.42,
+                    videos: {
+                      forwardVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_trans_to_floor3.mp4`,
+                      reverseVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_rev_from_floor3.mp4`,
+                      idleVideo: `/${projectName}/videos/zones/7a/floors/floor1/7a_floors_floor1_idle.mp4`,
+                    },
+                    units: [
+                      // 7A, Roof
+                      {
+                        id: "apartment501",
+                        unitTypeId: "7a-unit",
+                        displayName: "A501",
+                        area: 85,
+                        price: 250000,
+                        bedrooms: 2,
+                        bathrooms: 1,
+                        balconyView: "/mix/panorama/7a_unit/balcony.jpg",
+                        x: 0.40, y: 0.60,
+                        videos: {
+                          forwardVideo: "/cutsection.mp4",
+                          reverseVideo: "/cutsection.mp4",
+                          idleVideo: "/cutsection.mp4",
+                        }
+                      },
+                      { id: "apartment502", unitTypeId: "7a-unit", displayName: "A502", area: 200, price: 400000, bedrooms: 4, bathrooms: 2, balconyView: "/mix/panorama/7a_unit/balcony.jpg", x: 0.25, y: 0.4, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
+                    ],
+                  },
                 ],
                 features: {
                   displayName: "7A Features",
                   x: 0.7, y: 0.65,
                   videos: {
-                    forwardVideo: `/${projectName}/videos/amenities/amenities_gen_trans_from_home.mp4`,
-                    reverseVideo: `/${projectName}/videos/amenities/amenities_gen_rev_trans_to_home.mp4`,
-                    idleVideo: `/${projectName}/videos/amenities/amenities_gen_idle.mp4`,
+                    forwardVideo: `/${projectName}/videos/zones/7a/features/features_gen_trans.mp4`,
+                    reverseVideo: `/${projectName}/videos/zones/7a/features/features_gen_rev.mp4`,
+                    idleVideo: `/${projectName}/videos/zones/7a/features/features_gen_idle.mp4`,
                   },
                   items: [
                   {
@@ -247,6 +303,11 @@ export const DEVELOPER_SOMABAY = {
                     subtitle: "7A Amenity",
                     description: "2-story garage...",
                     x: 0.2, y: 0.67,
+                    videos: {
+                      forwardVideo: `/${projectName}/videos/zones/7a/features/feature1/feature1_trans.mp4`,
+                      reverseVideo: `/${projectName}/videos/zones/7a/features/feature1/feature1_rev.mp4`,
+                      idleVideo: `/${projectName}/videos/zones/7a/features/feature1/feature1_idle.mp4`,
+                    },
                   },
                   {
                     id: "amenity2",
@@ -254,43 +315,47 @@ export const DEVELOPER_SOMABAY = {
                     subtitle: "7A Amenity",
                     description: "Spacious roof top suitable for family gatherings...",
                     x: 0.32, y: 0.65,
+                    videos: {
+                      forwardVideo: `/${projectName}/videos/zones/7a/features/feature2/feature2_trans.mp4`,
+                      reverseVideo: `/${projectName}/videos/zones/7a/features/feature2/feature2_rev.mp4`,
+                      idleVideo: `/${projectName}/videos/zones/7a/features/feature2/feature2_idle.mp4`,
+                    },
                   },
                 ]
                 },
                 views: [
                   {
-                    name: "Front View",
+                    name: "View 1",
                     videos: {
-                      forwardVideo: `/${projectName}/videos/zones/zone1/tower1/views/view1/zone1_tower1_view1_trans.mp4`,
-                      reverseVideo: `/${projectName}/videos/zones/zone1/tower1/views/view1/zone1_tower1_view1_rev.mp4`,
-                      idleVideo: `/${projectName}/videos/zones/zone1/tower1/views/view1/zone1_tower1_view1_idle.mp4`,
+                      forwardVideo: `/${projectName}/videos/zones/7a/views/view1/7a_view1_trans.mp4`,
+                      reverseVideo: `/${projectName}/videos/zones/7a/views/view1/7a_view1_rev.mp4`,
+                      idleVideo: `/${projectName}/videos/zones/7a/views/view1/7a_view1_idle.mp4`,
                     }
                   },
                   {
-                    name: "Right View",
+                    name: "View 2",
                     videos: {
-                      forwardVideo: `/${projectName}/videos/zones/zone1/tower1/views/view2/zone1_tower1_view2_trans.mp4`,
-                      reverseVideo: `/${projectName}/videos/zones/zone1/tower1/views/view2/zone1_tower1_view2_rev.mp4`,
-                      idleVideo: `/${projectName}/videos/zones/zone1/tower1/views/view2/zone1_tower1_view2_idle.mp4`,
+                      forwardVideo: `/${projectName}/videos/zones/7a/views/view2/7a_view2_trans.mp4`,
+                      reverseVideo: `/${projectName}/videos/zones/7a/views/view2/7a_view2_rev.mp4`,
+                      idleVideo: `/${projectName}/videos/zones/7a/views/view2/7a_view2_idle.mp4`,
                     }
                   },
                   {
-                    name: "Back View",
+                    name: "View 3",
                     videos: {
-                      forwardVideo: `/${projectName}/videos/zones/zone1/tower1/views/view3/zone1_tower1_view3_trans.mp4`,
-                      reverseVideo: `/${projectName}/videos/zones/zone1/tower1/views/view3/zone1_tower1_view3_rev.mp4`,
-                      idleVideo: `/${projectName}/videos/zones/zone1/tower1/views/view3/zone1_tower1_view3_idle.mp4`,
+                      forwardVideo: `/${projectName}/videos/zones/7a/views/view3/7a_view3_trans.mp4`,
+                      reverseVideo: `/${projectName}/videos/zones/7a/views/view3/7a_view3_rev.mp4`,
+                      idleVideo: `/${projectName}/videos/zones/7a/views/view3/7a_view3_idle.mp4`,
                     }
                   },
                   {
-                    name: "Left View",
+                    name: "View 4",
                     videos: {
-                      forwardVideo: `/${projectName}/videos/zones/zone1/tower1/views/view4/zone1_tower1_view4_trans.mp4`,
-                      reverseVideo: `/${projectName}/videos/zones/zone1/tower1/views/view4/zone1_tower1_view4_rev.mp4`,
-                      idleVideo: `/${projectName}/videos/zones/zone1/tower1/views/view4/zone1_tower1_view4_idle.mp4`,
+                      forwardVideo: `/${projectName}/videos/zones/7a/views/view4/7a_view4_trans.mp4`,
+                      reverseVideo: `/${projectName}/videos/zones/7a/views/view4/7a_view4_rev.mp4`,
+                      idleVideo: `/${projectName}/videos/zones/7a/views/view4/7a_view4_idle.mp4`,
                     }
                   },
-
                 ],
               },
               // {

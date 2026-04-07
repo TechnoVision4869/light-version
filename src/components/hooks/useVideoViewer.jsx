@@ -15,7 +15,9 @@ export function useVideoViewer() {
 
   const firstVideoRef = useRef(null);
   const secondVideoRef = useRef(null);
+  const visibleRefRef = useRef("second"); // tracks which video element is currently visible/opaque
   const justNavigatedBackRef = useRef(false);
+  const skipNextTransitionRef = useRef(false);
   const playSurroundingsIdleRef = useRef(false);
   const isInitPlayedRef = useRef(true); // Flag to indicate if we have played the initial video (Home idle)
 
@@ -68,6 +70,12 @@ export function useVideoViewer() {
     [currentViewIndex, currentViews, numViews],
   );
 
+  // Always returns the name of the ref that is currently hidden (safe to load into)
+  const getHiddenRef = useCallback(
+    () => (visibleRefRef.current === "second" ? "first" : "second"),
+    [],
+  );
+
   const playVideo = useCallback(
     (src, loop, onloaded = null, onEnded = null, targetRef) => {
       if (!src || !firstVideoRef.current || !secondVideoRef.current) {
@@ -78,6 +86,7 @@ export function useVideoViewer() {
       setIsPlaying(!loop);
       const video =
         targetRef === "second" ? secondVideoRef.current : firstVideoRef.current;
+      video.loop = loop;
       video.src = src;
       video.load();
       video.onloadeddata = () => {
@@ -109,16 +118,18 @@ export function useVideoViewer() {
       // console.log("playTransitionVideo called with videoPath:", transitionVideoPath);
       setFloatingOpacity(0);
 
+      const target = getHiddenRef(); // load on the currently hidden ref — no flash
       const onloaded = () => {
-        setFirstVideoOpacity(1);
-        setSecondVideoOpacity(0);
+        setFirstVideoOpacity(target === "first" ? 1 : 0);
+        setSecondVideoOpacity(target === "second" ? 1 : 0);
+        visibleRefRef.current = target;
       };
       const onEnded = () => {
         playIdleVideo(idleVideoPath);
       };
-      playVideo(transitionVideoPath, false, onloaded, onEnded, "first");
+      playVideo(transitionVideoPath, false, onloaded, onEnded, target);
     },
-    [currentVideosPaths, playVideo],
+    [currentVideosPaths, playVideo, getHiddenRef],
   );
 
   const playReverseVideo = useCallback(
@@ -135,9 +146,11 @@ export function useVideoViewer() {
       // console.log("StartReverse called with reverse video:", currentVideosPaths.reverseVideo);
       setFloatingOpacity(0);
 
+      const target = getHiddenRef(); // load on the currently hidden ref — no flash
       const onloaded = () => {
-        setFirstVideoOpacity(1);
-        setSecondVideoOpacity(0);
+        setFirstVideoOpacity(target === "first" ? 1 : 0);
+        setSecondVideoOpacity(target === "second" ? 1 : 0);
+        visibleRefRef.current = target;
       };
 
       const onEnded = () => {
@@ -152,9 +165,9 @@ export function useVideoViewer() {
         goBack();
       };
 
-      playVideo(videoPath, false, onloaded, onEnded, "first");
+      playVideo(videoPath, false, onloaded, onEnded, target);
     },
-    [currentVideosPaths, playVideo, goBack],
+    [currentVideosPaths, playVideo, goBack, getHiddenRef],
   );
 
   const playIdleVideo = useCallback(
@@ -162,15 +175,17 @@ export function useVideoViewer() {
       if (!videoPath) return;
       // console.log("playIdleVideo called with idleVideo:", videoPath);
 
+      const target = getHiddenRef(); // always load into the hidden ref — no flash
       const onloaded = () => {
-        setFirstVideoOpacity(0);
-        setSecondVideoOpacity(1);
+        setFirstVideoOpacity(target === "first" ? 1 : 0);
+        setSecondVideoOpacity(target === "second" ? 1 : 0);
         setFloatingOpacity(1);
+        visibleRefRef.current = target;
       };
 
-      playVideo(videoPath, true, onloaded, null, "second");
+      playVideo(videoPath, true, onloaded, null, target);
     },
-    [currentVideosPaths, playVideo],
+    [currentVideosPaths, playVideo, getHiddenRef],
   );
 
   const StartReverse = useCallback(
@@ -198,7 +213,8 @@ export function useVideoViewer() {
 
         setCurrentViewIndex(0);
 
-        if (shouldStayIdle) {          
+        if (shouldStayIdle || skipNextTransitionRef.current) {
+          skipNextTransitionRef.current = false;
           playIdleVideo();
         } else {
           if (activeTab === TABS.HOME && isInitPlayedRef.current) {
@@ -249,5 +265,6 @@ export function useVideoViewer() {
     StartReverse,
     currentViewIndex,
     changeView,
+    skipNextTransition: () => { skipNextTransitionRef.current = true; },
   };
 }

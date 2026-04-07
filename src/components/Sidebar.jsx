@@ -21,10 +21,8 @@ export default function Sidebar() {
             if (activeTab === TABS.ZONES) return "Zones";
             if (activeTab === TABS.AMENITIES) return "Amenities";
             if (activeTab === TABS.SURROUNDINGS) return "Surroundings";
-        } else if (activeLayer === LAYERS.ZONE_DETAIL) {
-            return String(currentItem?.zoneName).charAt(0).toUpperCase() + String(currentItem?.zoneName).slice(1);
-        }else {
-            return String(currentItem?.displayName).charAt(0).toUpperCase() + String(currentItem?.displayName).slice(1);
+        } else {
+            return String(currentItem?.zoneName || currentItem?.displayName).charAt(0).toUpperCase() + String(currentItem?.zoneName || currentItem?.displayName).slice(1);
         }
         return "";
     }

@@ -230,15 +230,19 @@ export default function SidebarContextProvider({ children }) {
 
         // Views availability rules:
         // - If navigating into a UNIT layer: views should be available only for `villa` properties.
+        // - If navigating into a FLOOR layer: no views.
         // - For other layers (e.g., BUILDING) try to use property's views when not present on the item.
-        if (targetLayer === LAYERS.UNIT) {
+        if (targetLayer === LAYERS.FLOOR) {
+            views = null; // explicitly no views for floors
+        }
+        else if (targetLayer === LAYERS.UNIT) {
             if (property?.type === "villa" || property?.type === "VILLA") {
                 if (views === undefined) views = property?.views; // allow views for villa units
             } else {
                 views = null; // explicitly no views for town/tower units
             }
         } else {
-            if (views === undefined) views = property?.views; // use property's views for building/floor layers
+            if (views === undefined) views = property?.views; // use property's views for building layers
         }
 
         // Final fallbacks to the previously-current values if still undefined
@@ -274,6 +278,32 @@ export default function SidebarContextProvider({ children }) {
             },
         ]);
     }, [history, currentVideosPaths, currentViews, activeLayer, activeTab, currentItem, findPropertyForItem]);
+
+    // Switch directly to another floor (replaces last history entry)
+    const handleSwitchToFloor = useCallback((floor) => {
+        let videosPath = null;
+        if (useStatic) {
+            videosPath = floor.videos ?? null;
+        } else {
+            const forwardVideo = floor.forwardVideoId || floor.forwardAssetId;
+            const reverseVideo = floor.reverseVideoId || floor.reverseAssetId;
+            const idleVideo = floor.sideVideoId || floor.idleAssetId || floor.sideAssetId;
+            if (forwardVideo || reverseVideo || idleVideo) {
+                videosPath = { forwardVideo, reverseVideo, idleVideo };
+            }
+        }
+
+        setHistory((prev) => [
+            ...prev.slice(0, -1),
+            {
+                tab: activeTab,
+                layer: LAYERS.FLOOR,
+                item: floor,
+                videosPath: videosPath,
+                views: null,
+            },
+        ]);
+    }, [activeTab, useStatic]);
 
     // Go back one step
     const handleGoBack = useCallback(() => {
@@ -405,7 +435,8 @@ export default function SidebarContextProvider({ children }) {
         goToItem: handleCurrentItem,
         goToTab,
         goBack: handleGoBack,
-        goHome: handleGoHome
+        goHome: handleGoHome,
+        switchToFloor: handleSwitchToFloor
     };
 
     return <SidebarContext.Provider value={ctxValue}>{children}</SidebarContext.Provider>
