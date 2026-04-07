@@ -115,7 +115,7 @@ body {
   border-radius: 20%;
   position: absolute;
   top: 50%;
-  right: calc(0% - 7px);
+  right: calc(0% - 5px);
   transform: translateY(-50%) rotate(225deg);
   clip-path: polygon(0% 0%, 100% 100%, 0% 100%);
 }

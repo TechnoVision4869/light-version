@@ -16,7 +16,7 @@ export default function ProjectSelector({
 }) {
   const useStatic = APP_CONFIG.USE_STATIC;
   const usePredefinedPos = APP_CONFIG.USE_PREDEFINED_POS;
-  const predefinedPos = {x: 0.65, y: 0.6};
+  const predefinedPos = {x: 0.77, y: 0.35};
   const { user } = useAuth();
   const [projects, setProjects] = useState([]);
   const [developerAssets, setDeveloperAssets] = useState({
