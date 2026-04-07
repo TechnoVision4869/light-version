@@ -17,6 +17,7 @@ export const LAYERS = {
   // ZONES tab layers
   ZONE_DETAIL: "zone_detail",
   BUILDING: "building", // Could be a tower or villa
+  BUILDING_FEATURE: "building_feature", // Tower features (amenities at building level)
   FLOOR: "floor",
   UNIT: "unit",
   INTERIOR: "interior",

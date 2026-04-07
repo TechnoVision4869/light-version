@@ -39,19 +39,21 @@ export default function Room({ room }) {
         scrollable={false}
       />
 
-      {/* Furniture toggle button */}
-      <div className="absolute bottom-4 right-4 z-40">
-        <button
-          className="w-10 h-10 rounded-2xl p-2 bg-[#383838] flex items-center justify-center hover:bg-white/7 transition"
-          onClick={() => setIsFurnished(f => !f)}
-        >
-          <img
-            className="w-auto h-6 object-contain"
-            src={isFurnished ? UNFURNITURE : FURNITURE}
-            alt={isFurnished ? "Unfurnish" : "Furnish"}
-          />
-        </button>
-      </div>
+      {/* Furniture toggle button — only shown when two distinct images exist */}
+      {room.furnitureImg !== room.unfurnitureImg && (
+        <div className="absolute bottom-4 right-4 z-40">
+          <button
+            className="w-10 h-10 rounded-2xl p-2 bg-[#383838] flex items-center justify-center hover:bg-white/7 transition"
+            onClick={() => setIsFurnished(f => !f)}
+          >
+            <img
+              className="w-auto h-6 object-contain"
+              src={isFurnished ? UNFURNITURE : FURNITURE}
+              alt={isFurnished ? "Unfurnish" : "Furnish"}
+            />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -298,9 +298,9 @@ export const DEVELOPER_SOMABAY = {
                   },
                   items: [
                   {
-                    id: "amenity1",
+                    id: "feature1",
                     displayName: "Garage",
-                    subtitle: "7A Amenity",
+                    subtitle: "7A Feature",
                     description: "2-story garage...",
                     x: 0.2, y: 0.67,
                     videos: {
@@ -310,15 +310,27 @@ export const DEVELOPER_SOMABAY = {
                     },
                   },
                   {
-                    id: "amenity2",
+                    id: "feature2",
                     displayName: "Roof",
-                    subtitle: "7A Amenity",
+                    subtitle: "7A Feature",
                     description: "Spacious roof top suitable for family gatherings...",
                     x: 0.32, y: 0.65,
                     videos: {
                       forwardVideo: `/${projectName}/videos/zones/7a/features/feature2/feature2_trans.mp4`,
                       reverseVideo: `/${projectName}/videos/zones/7a/features/feature2/feature2_rev.mp4`,
                       idleVideo: `/${projectName}/videos/zones/7a/features/feature2/feature2_idle.mp4`,
+                    },
+                  },
+                  {
+                    id: "feature3",
+                    displayName: "Room Service",
+                    subtitle: "7A Feature",
+                    description: "Exclusive room service for residents, offering a variety of dining options and amenities delivered directly to your apartment.",
+                    x: 0.32, y: 0.65,
+                    videos: {
+                      forwardVideo: null,
+                      reverseVideo: null,
+                      idleVideo: `/${projectName}/panorama/7a-features/feature3.jpg`,
                     },
                   },
                 ]

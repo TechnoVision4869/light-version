@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { SidebarContext } from "../store/SidebarContextProvider";
+import { MainContext } from "../store/MainContextProvider";
 import { TABS, LAYERS} from "../data/layers";
 
 import ZoneButton from "./buttons/ZoneButton";
@@ -13,6 +14,7 @@ import ApartmentButton from "./buttons/ApartmentButton";
 
 export default function SidebarButtons() {
   const { currentProject, activeTab, activeLayer, currentItem, currentItems, goToItem } = useContext(SidebarContext);
+  const { openRoomInterior } = useContext(MainContext);
   
   // Determine which component and props to use for rendering
   let Component = null;
@@ -87,6 +89,11 @@ export default function SidebarButtons() {
         layerKey = LAYERS.UNIT;
       }
     }
+    else if (activeLayer === LAYERS.BUILDING_FEATURE) {
+      Component = AmenityButton;
+      propName = "amenity";
+      layerKey = LAYERS.AMENITY_DETAIL;
+    }
     else if (activeLayer === LAYERS.FLOOR) {
       Component = ApartmentButton;
       propName = "apartment";
@@ -99,17 +106,38 @@ export default function SidebarButtons() {
     }
   }
 
-  if (!currentItems || currentItems.length === 0 || Component === null) return null;
+  const isTower = currentItem?.type === "tower" || currentItem?.type === "TOWER";
+  const towerFeatures = activeLayer === LAYERS.BUILDING && isTower ? currentItem?.features : null;
+
+  if (!currentItems || currentItems.length === 0 || Component === null) {
+    if (!towerFeatures) return null;
+  }
 
   return (
     <div className="max-h-[calc(100vh-205px)] scrollbar-custom overflow-y-auto overflow-x-hidden space-y-3 px-2 py-2">
-      {currentItems.map((item) => (
-        <Component
-          key={item.id} // Using item ID as key since items should have unique IDs
-          {...{ [propName]: item }}
-          goToItem={() => goToItem(item, layerKey)}
-        />
-      ))}
+      {towerFeatures && (
+        <button
+          onClick={() => goToItem(towerFeatures, LAYERS.BUILDING_FEATURE)}
+          className="w-full text-left px-3 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-colors border border-white/20"
+        >
+          {towerFeatures.displayName || "Features"}
+        </button>
+      )}
+      {currentItems.map((item) => {
+        const isImageOnly = activeLayer === LAYERS.BUILDING_FEATURE
+          && !item.videos?.forwardVideo
+          && item.videos?.idleVideo;
+        const itemGoToItem = isImageOnly
+          ? () => openRoomInterior({ furnitureImg: item.videos.idleVideo, unfurnitureImg: item.videos.idleVideo })
+          : () => goToItem(item, layerKey);
+        return (
+          <Component
+            key={item.id}
+            {...{ [propName]: item }}
+            goToItem={itemGoToItem}
+          />
+        );
+      })}
     </div>
   );
 }

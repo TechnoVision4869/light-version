@@ -8,7 +8,7 @@ export default function FloorButton({ floor, isDisabled, goToItem, }) {
   const handleClick = () => {
         
         if (isSelected) {
-            console.log("FloorButton clicked");
+            console.log(floor.units.length);
             goToItem();
             setHighlightedButton(null);
         }
@@ -28,17 +28,21 @@ export default function FloorButton({ floor, isDisabled, goToItem, }) {
             : "bg-black/10 hover:bg-white/7"
         }`}
     >
-      <div className="flex items-center justify-between">
+      {/* <div className="flex items-center justify-between"> */}
+      <div className="text-left">
         {/* Floor Name */}
         <div className="text-md font-semibold text-white leading-tight">
           {floor.displayName}
         </div>
+        {floor.units && <div className="text-xs text-white/60 leading-tight py-1">
+          {floor.units.length} Units
+        </div>}
 
         {/* Vertical Divider + Floor Type */}
-        {<div className="flex items-center">
+        {/* {<div className="flex items-center">
           <div className="w-0.5 h-5 bg-white mx-3"></div>
           <div className="font-bold text-white">{floor.type}</div>
-        </div>}
+        </div>} */}
       </div>
     </button>
   );

@@ -232,8 +232,8 @@ export default function SidebarContextProvider({ children }) {
         // - If navigating into a UNIT layer: views should be available only for `villa` properties.
         // - If navigating into a FLOOR layer: no views.
         // - For other layers (e.g., BUILDING) try to use property's views when not present on the item.
-        if (targetLayer === LAYERS.FLOOR) {
-            views = null; // explicitly no views for floors
+        if (targetLayer === LAYERS.FLOOR || targetLayer === LAYERS.BUILDING_FEATURE) {
+            views = null; // explicitly no views for floors or building features
         }
         else if (targetLayer === LAYERS.UNIT) {
             if (property?.type === "villa" || property?.type === "VILLA") {
@@ -377,6 +377,9 @@ export default function SidebarContextProvider({ children }) {
                     items = currentItem?.units || [];
                     if (items.length > 8) itemType = "small";
                 }
+            }
+            else if (activeLayer === LAYERS.BUILDING_FEATURE) {
+                items = currentItem?.items || [];
             }
             else if (activeLayer === LAYERS.FLOOR) {
                 items = currentItem?.units || [];
