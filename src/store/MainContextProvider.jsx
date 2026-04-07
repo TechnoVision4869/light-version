@@ -11,10 +11,6 @@ export const MainContext = createContext({
   openGallery: () => {},
   closeOverlay: () => {},
   
-  // Deprecated methods (kept for backward compatibility during migration)
-  isPanorama: false,
-  isBalconyView: false,
-  isRoomInterior: false,
   galleryType: null,
   handleInterior: () => {},
 
@@ -46,7 +42,6 @@ export default function MainContextProvider({ children }) {
     setOverlay(null);
   }, []);
 
-  // Deprecated handler methods (kept for backward compatibility)
   const handleBack = () => closeOverlay();
   
   const ctxValue = {
@@ -58,10 +53,6 @@ export default function MainContextProvider({ children }) {
     openGallery,
     closeOverlay,
     
-    // Deprecated API (for gradual migration)
-    isPanorama: overlay?.type === 'panorama',
-    isBalconyView: overlay?.type === 'balcony',
-    isRoomInterior: overlay?.type === 'room-interior',
     galleryType: overlay?.type === 'gallery' ? overlay?.data?.galleryType : null,
     
     handleBack,

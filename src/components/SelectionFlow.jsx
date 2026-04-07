@@ -6,7 +6,7 @@ import ProjectSelector from './ProjectSelector';
 import Layout from './Layout';
 
 export default function SelectionFlow({ onProjectSelect }) {
-  const useMockup = APP_CONFIG.USE_MOCKUP;
+  const useStatic = APP_CONFIG.USE_STATIC;
   const { user } = useAuth();
   const [selectedDeveloper, setSelectedDeveloper] = useState(null);
 
@@ -18,15 +18,15 @@ export default function SelectionFlow({ onProjectSelect }) {
 
   const userNeedsSelection = needsDeveloperSelection.includes(user?.role);
 
-  // Skip developer selection if useMockup is true
-  if (!useMockup && userNeedsSelection && !selectedDeveloper) {
+  // Skip developer selection if useStatic is true
+  if (!useStatic && userNeedsSelection && !selectedDeveloper) {
     return <DeveloperSelector onDeveloperSelect={setSelectedDeveloper} />;
   }
 
   // If user has selected a developer or has one pre-assigned, show ProjectSelector
-  const developerId = useMockup ? 'mockup' : (selectedDeveloper?.id || user?.developerId);
+  const developerId = useStatic ? 'developer-id' : (selectedDeveloper?.id || user?.developerId);
 
-  if (!useMockup && !developerId) {
+  if (!useStatic && !developerId) {
     return (
       <Layout>
         <div className="w-full h-screen flex items-center justify-center">

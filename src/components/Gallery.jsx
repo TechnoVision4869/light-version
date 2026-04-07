@@ -6,9 +6,9 @@ import { APP_CONFIG } from "../config/appConfig";
 export default function Gallery({ unit, galleryType, onClose }) {
     const { currentProject } = useContext(SidebarContext);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const useMockup = APP_CONFIG.USE_MOCKUP;
+    const useStatic = APP_CONFIG.USE_STATIC;
 
-    const unitType = useMockup 
+    const unitType = useStatic 
         ? currentProject?.unitTypes?.[unit?.unitTypeId]
         : currentProject?.unitTypes?.find(type => type.name === unit?.visualTypeId);
     

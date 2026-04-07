@@ -10,7 +10,7 @@ import TOILET_ICON from "../assets/icons/bathroom.png"
 
 export default function UnitPanel() {
     const { currentProject, currentItem } = useContext(SidebarContext);
-    const useMockup = APP_CONFIG.USE_MOCKUP;
+    const useStatic = APP_CONFIG.USE_STATIC;
     
     const { openPanorama, openBalconyView, openGallery } = useContext(MainContext);
 
@@ -18,7 +18,7 @@ export default function UnitPanel() {
     const [isCutSectionsOpen, setIsCutSectionsOpen] = useState(true);
     const [isPaymentPlanOpen, setIsPaymentPlanOpen] = useState(false);
 
-    const unitType = useMockup 
+    const unitType = useStatic 
         ? currentProject?.unitTypes?.[currentItem?.unitTypeId]
         : currentProject?.unitTypes?.find(type => type.name === currentItem?.visualTypeId);
 

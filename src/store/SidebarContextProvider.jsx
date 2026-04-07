@@ -12,13 +12,13 @@ export { SidebarContext };
 const STORAGE_KEY = "selectedProject";
 
 export default function SidebarContextProvider({ children }) {
-    const useMockup = APP_CONFIG.USE_MOCKUP;
+    const useStatic = APP_CONFIG.USE_STATIC;
     const [currentProject, setCurrentProject] = useState(null);
     const { isInitialized: isAuthInitialized } = useContext(AuthContext);
 
     const getInitHistory = useCallback((project) => {
         // Helper to get the video URL from project, checking both naming patterns
-        // (mock data uses zoomoutVideo/idleVideo, API uses zoomoutAssetId/idleAssetId after enrichment)
+        // (static data uses zoomoutVideo/idleVideo, API uses zoomoutAssetId/idleAssetId after enrichment)
         const getVideoUrl = (project, ...keys) => {
             if (!project) return null;
             for (const key of keys) {
@@ -54,9 +54,10 @@ export default function SidebarContextProvider({ children }) {
         
         const enrich = async () => {
             try {
-                // Load project with depth=3: all the way to units
-                // Depth values: 0=none, 1=zones+amenities, 2=+properties, 3=+units
-                const enrichedProject = await enrichProjectData(project, useMockup, 3);
+                // Only enrich (preload + cache videos) when using API, not with static data
+                const enrichedProject = useStatic 
+                    ? project 
+                    : await enrichProjectData(project, useStatic, 3);
                 setCurrentProject(enrichedProject);
                 setHistory(getInitHistory(enrichedProject));
                 // Save only the project ID to localStorage
@@ -71,7 +72,7 @@ export default function SidebarContextProvider({ children }) {
             }
         };
         enrich();
-    }, [useMockup, getInitHistory]);
+    }, [useStatic, getInitHistory]);
 
     // Restore project from localStorage on mount (after auth is initialized)
     const restoreProject = useCallback(async () => {
@@ -81,9 +82,9 @@ export default function SidebarContextProvider({ children }) {
         
         if (projectId && isMounted) {
             // For API mode, only restore after auth is initialized
-            // For mockup mode, restore immediately
-            if (useMockup || isAuthInitialized) {
-                const project = await fetchProjectById(projectId, useMockup);
+            // For static mode, restore immediately
+            if (useStatic || isAuthInitialized) {
+                const project = await fetchProjectById(projectId, useStatic);
                 if (project && isMounted) {
                     handleSetCurrentProject(project);
                 }
@@ -94,7 +95,7 @@ export default function SidebarContextProvider({ children }) {
     } catch (error) {
         console.warn("Failed to restore project:", error);
     }
-    }, [handleSetCurrentProject, useMockup, isAuthInitialized]);
+    }, [handleSetCurrentProject, useStatic, isAuthInitialized]);
 
     useEffect(() => {
         restoreProject();
@@ -127,7 +128,7 @@ export default function SidebarContextProvider({ children }) {
         // console.log(tabKey);
         // console.log(selectedItem);
         let calculatedVideosPath = null;
-        if(useMockup) {
+        if(useStatic) {
             calculatedVideosPath = isFromHome
             ? selectedItem.videos
             : {
@@ -190,7 +191,7 @@ export default function SidebarContextProvider({ children }) {
         // Determine videosPath and views with careful fallbacks.
         // Use `undefined` to detect missing values and `null` to represent explicit absence.
         let videosPath = null;
-        if(useMockup) {
+        if(useStatic) {
             videosPath = item?.videos; // undefined if not present
         } else {
             const forwardVideo = item.forwardVideoId || item.forwardAssetId;
@@ -216,7 +217,7 @@ export default function SidebarContextProvider({ children }) {
         }
 
         if (videosPath === undefined) {
-            if(useMockup) {
+            if(useStatic) {
             videosPath = property?.videos;
             } else {
                 videosPath = {
@@ -244,7 +245,7 @@ export default function SidebarContextProvider({ children }) {
         if (videosPath === undefined) videosPath = currentVideosPaths ?? null;
         if (views === undefined) views = currentViews ?? null;
 
-        if(!useMockup) {
+        if(!useStatic) {
             views = views?.map(view => {
                 return {
                     name: view.name,
@@ -376,7 +377,7 @@ export default function SidebarContextProvider({ children }) {
     }, [getInitHistory]);
 
     const ctxValue = {
-        useMockup,
+        useStatic,
         
         currentProject,
         setCurrentProject: handleSetCurrentProject,

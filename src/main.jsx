@@ -2,14 +2,15 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
+import { APP_CONFIG } from "./config/appConfig";
 
 import SidebarContextProvider from "./store/SidebarContextProvider";
 import MainContextProvider from "./store/MainContextProvider.jsx";
 import { AuthProvider, AuthConsumer } from "./store/jwt-context.jsx";
 import App from "./App.jsx";
 
-// Register Service Worker for offline caching and performance
-if ('serviceWorker' in navigator) {
+// Register Service Worker for offline caching and performance (only when using API, not static data)
+if (!APP_CONFIG.USE_STATIC && 'serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
       const registration = await navigator.serviceWorker.register('/sw.js');

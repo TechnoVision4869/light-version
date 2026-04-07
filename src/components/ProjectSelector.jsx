@@ -14,7 +14,9 @@ export default function ProjectSelector({
   onProjectSelect,
   onBackButtonClick,
 }) {
-  const useMockup = APP_CONFIG.USE_MOCKUP;
+  const useStatic = APP_CONFIG.USE_STATIC;
+  const usePredefinedPos = APP_CONFIG.USE_PREDEFINED_POS;
+  const predefinedPos = {x: 0.65, y: 0.6};
   const { user } = useAuth();
   const [projects, setProjects] = useState([]);
   const [developerAssets, setDeveloperAssets] = useState({
@@ -29,16 +31,16 @@ export default function ProjectSelector({
     try {
       setLoading(true);
       
-      if (useMockup) {
-        // Load from mock data
-        const mockProjects = DATA.developerProjects || [];
-        setProjects(mockProjects);
+      if (useStatic) {
+        // Load from static data
+        const staticProjects = DATA.developerProjects || [];
+        setProjects(staticProjects);
 
-        // Build mock thumbnail and intro video URLs
+        // Build static thumbnail and intro video URLs
         const thumbnails = {};
         const introVideos = {};
 
-        mockProjects.forEach((project) => {          
+        staticProjects.forEach((project) => {          
           if (project.thumbnail) {
             thumbnails[project.id] = project.thumbnail;
           }
@@ -114,8 +116,8 @@ export default function ProjectSelector({
 
   const fetchDeveloperAssets = async () => {
     try {
-      if (useMockup) {
-        // Load from mock data
+      if (useStatic) {
+        // Load from static data
         setDeveloperAssets({
           backgroundImage: DATA.backgroundImage || null,
           logoImage: DATA.developerLogo || null,
@@ -149,7 +151,7 @@ export default function ProjectSelector({
       }
     } catch (error) {
       console.error("Error fetching developer assets:", error);
-      if (!useMockup) {
+      if (!useStatic) {
         toast.error("Failed to load developer assets");
       }
     }
@@ -157,7 +159,7 @@ export default function ProjectSelector({
 
   const fetchSelectedProject = async (projectId, introVideoUrl) => {
     try {
-      const project = await fetchProjectById(projectId, useMockup);
+      const project = await fetchProjectById(projectId, useStatic);
       if (project) {
         onProjectSelect(project);
       } else {
@@ -170,11 +172,11 @@ export default function ProjectSelector({
   };
 
   useEffect(() => {
-    if (useMockup || developerId) {
+    if (useStatic || developerId) {
       fetchProjects();
       fetchDeveloperAssets();
     }
-  }, [developerId, useMockup]);
+  }, [developerId, useStatic]);
 
   const showBackButton = [
     "admin",
@@ -222,6 +224,42 @@ export default function ProjectSelector({
                 </p>
               </div>
             </div>
+          ) : usePredefinedPos ? (
+            <>
+              {projects.map((project) => {
+                const disabled = !introVideoUrls[project.id];
+                return (
+                  <div
+                    key={project.id}
+                    className="absolute w-[300px] rounded-2xl overflow-hidden backdrop-blur-sm bg-[#1C1C1C8C]"
+                    style={{
+                      left: `${predefinedPos.x * 100}%`,
+                      top: `${predefinedPos.y * 100}%`,
+                      transform: "translate(-50%, -50%)",
+                    }}
+                  >
+                    {thumbnailUrls[project.id] && (
+                      <div className="px-3 pt-3">
+                        <img src={thumbnailUrls[project.id]} alt={project.name}
+                          className="rounded-2xl w-full h-auto object-cover" />
+                      </div>
+                    )}
+                    <div className="p-4">
+                      <h2 className="tracking-wide text-lg font-semibold text-white mb-1">
+                        {project.name}
+                      </h2>
+                      <button
+                        onClick={() => fetchSelectedProject(project.id, introVideoUrls[project.id])}
+                        disabled={disabled}
+                        className={`w-full py-2 px-4 bg-transparent border ${disabled ? "" : "hover:bg-white hover:text-black hover:border-white"} disabled:text-white/50 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors duration-300`}
+                      >
+                        {disabled ? "Coming Soon" : "Open Project"}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </>
           ) : (
             <div className="flex flex-wrap gap-8 xl:gap-10 justify-center">
               {projects.map((project) => {

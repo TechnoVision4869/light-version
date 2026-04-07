@@ -18,6 +18,7 @@ import BaseFloat from "./floating/BaseFloat";
 
 import Panorama from "./Panorama";
 import Balcony from "./Balcony";
+import Room from "./Room";
 import Gallery from "./Gallery";
 // import AnimatedPath from "./AnimatedPath";
 
@@ -263,7 +264,7 @@ export default function Home() {
       {overlay?.type === 'room-interior' && (
         <div className="fixed inset-0 z-60 flex items-center justify-center">
           {/* Semi-transparent backdrop */}
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={closeOverlay} />
           
           {/* Modal popup */}
           <div className="relative z-70 w-11/12 h-5/6 bg-[#2f2f2f] rounded-3xl shadow-2xl overflow-hidden">
@@ -294,7 +295,7 @@ export default function Home() {
             
             {/* Room interior content */}
             <div className="w-full h-full">
-              <Balcony view={overlay.data?.view} />
+              <Room room={overlay.data?.room} />
             </div>
           </div>
         </div>
