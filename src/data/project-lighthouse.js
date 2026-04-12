@@ -1,6 +1,6 @@
 import SOMABAY_LOGO from '../assets/somabay-logo.svg';
 // import SOMABAY_BG from '../assets/images/somabay-background.jpg';
-import SOMABAY_BG from '../../public/light-house/images/background.png';
+import SOMABAY_BG from '../../public/light-house/images/background.jpeg';
 
 import AirportIcon from '../assets/icons/airport.svg';
 import CairoAirportSvg from '../assets/paths/airport.svg?raw';
@@ -14,7 +14,7 @@ export const DEVELOPER_SOMABAY = {
   developerProjects: [
     {
       id: "light-house",
-      name: "Light House",
+      name: "The Lighthouse",
       thumbnail: null,
       description: "Located at the tip of the peninsula, The Lighthouse Somabay gives you a unique panoramic view of the reef and the bay at once.",
       introVideo: `/${projectName}/videos/loading.mp4`,
@@ -96,7 +96,7 @@ export const DEVELOPER_SOMABAY = {
             },
             properties: [
               {
-                id: "tower1",
+                id: "7a",
                 type: "tower",
                 displayName: "7A",
                 highlight: `/${projectName}/highlight/7A Tower.png`,
@@ -109,180 +109,170 @@ export const DEVELOPER_SOMABAY = {
                 },
                 floors: [
                   {
-                    id: "floor-1",
+                    id: "basement",
                     type: "Residential",
-                    displayName: "Floor 1",
-                    highlight: `/${projectName}/highlight/7A/Floor 1.png`,
+                    displayName: "Basement",
+                    highlight: `/${projectName}/highlight/7A/basement.png`,
                     description: null,
-                    x: 0.21, y: 0.94,
+                    x: 0.21, y: 0.96,
                     videos: {
                       forwardVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_trans_to_floor3.mp4`,
                       reverseVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_rev_from_floor3.mp4`,
                       idleVideo: `/${projectName}/videos/zones/7a/floors/basement/7a_floors_basement_idle.mp4`,
                     },
                     units: [
-                      // 7A, Floor 1
                       {
-                        id: "apartment101",
-                        unitTypeId: "7a-unit",
-                        displayName: "A101",
-                        area: 85,
-                        price: 250000,
-                        bedrooms: 2,
-                        bathrooms: 1,
-                        balconyView: "/mix/panorama/7a_unit/balcony.jpg",
-                        x: 0.40, y: 0.60,
+                        id: "107AC01",
+                        unitTypeId: "107AC01",
+                        displayName: "107AC01",
+                        area: 113.9,
+                        price: null,
+                        bedrooms: null, bathrooms: null,
+                        x: 0.745, y: 0.35,
                         videos: {
-                          forwardVideo: "/cutsection.mp4",
-                          reverseVideo: "/cutsection.mp4",
-                          idleVideo: "/cutsection.mp4",
+                          forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`,
+                          reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`,
+                          idleVideo: `/${projectName}/units/7a/basement/107AC01.png`
                         }
                       },
-                      { id: "apartment102", unitTypeId: "7a-unit", displayName: "A102", area: 200, price: 400000, bedrooms: 4, bathrooms: 2, balconyView: "/mix/panorama/7a_unit/balcony.jpg", x: 0.25, y: 0.4, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
+                      { id: "107AC02", unitTypeId: "107AC02", displayName: "107AC02", area: 95.9, price: null, bedrooms: null, bathrooms: null,
+                        x: 0.635, y: 0.5, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/basement/107AC02.png` } },
+                      { id: "107AC03", unitTypeId: "107AC03", displayName: "107AC03", area: 128.3, price: null, bedrooms: null, bathrooms: null,
+                        x: 0.48, y: 0.68, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/basement/107AC03.png` } },
+                      { id: "107AC04", unitTypeId: "107AC04", displayName: "107AC04", area: 120.9, price: null, bedrooms: null, bathrooms: null,
+                        x: 0.32, y: 0.45, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/basement/107AC04.png` } },
                     ],
                   },
                   {
-                    id: "floor-2",
-                    projectId: "mix",
-                    zoneId: "zone1",
-                    buildingId: "tower1",
+                    id: "ground",
                     type: "Residential",
-                    displayName: "Floor 2",
-                    highlight: `/${projectName}/highlight/7A/Floor 2.png`,
+                    displayName: "Ground",
+                    highlight: `/${projectName}/highlight/7A/ground.png`,
                     description: null,
-                    x: 0.21, y: 0.81,
+                    x: 0.225, y: 0.84,
                     videos: {
                       forwardVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_trans_to_floor3.mp4`,
                       reverseVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_rev_from_floor3.mp4`,
                       idleVideo: `/${projectName}/videos/zones/7a/floors/ground/7a_floors_ground_idle.mp4`,
                     },
                     units: [
-                      // 7A, Floor 2
                       {
-                        id: "apartment201",
-                        unitTypeId: "7a-unit",
-                        displayName: "A201",
-                        area: 85,
-                        price: 250000,
-                        bedrooms: 2,
-                        bathrooms: 1,
-                        balconyView: "/mix/panorama/7a_unit/balcony.jpg",
-                        x: 0.40, y: 0.60,
+                        id: "107A01",
+                        unitTypeId: "107A01",
+                        displayName: "107A01",
+                        area: 113.9,
+                        price: null,
+                        bedrooms: null, bathrooms: null,
+                        x: 0.745, y: 0.35,
                         videos: {
-                          forwardVideo: "/cutsection.mp4",
-                          reverseVideo: "/cutsection.mp4",
-                          idleVideo: "/cutsection.mp4",
+                          forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`,
+                          reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`,
+                          idleVideo: `/${projectName}/units/7a/ground/107A01.png`
                         }
                       },
-                      { id: "apartment202", unitTypeId: "7a-unit", displayName: "A202", area: 200, price: 400000, bedrooms: 4, bathrooms: 2, balconyView: "/mix/panorama/7a_unit/balcony.jpg", x: 0.25, y: 0.4, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
+                      { id: "107A02", unitTypeId: "107A02", displayName: "107A02", area: 95.9, price: null, bedrooms: null, bathrooms: null,
+                        x: 0.635, y: 0.5, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/ground/107A02.png` } },
+                      { id: "107A03", unitTypeId: "107A03", displayName: "107A03", area: 128.3, price: null, bedrooms: null, bathrooms: null,
+                        x: 0.48, y: 0.68, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/ground/107A03.png` } },
+                      { id: "107A04", unitTypeId: "107A04", displayName: "107A04", area: 120.9, price: null, bedrooms: null, bathrooms: null,
+                        x: 0.32, y: 0.45, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/ground/107A04.png` } },
+                    ],
+                  },
+                  {
+                    id: "floor-1",
+                    type: "Residential",
+                    displayName: "Floor 1",
+                    highlight: `/${projectName}/highlight/7A/floor1.png`,
+                    description: null,
+                    x: 0.24, y: 0.705,
+                    videos: {
+                      forwardVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_trans_to_floor3.mp4`,
+                      reverseVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_rev_from_floor3.mp4`,
+                      idleVideo: `/${projectName}/videos/zones/7a/floors/floor1/7a_floors_floor1_idle.mp4`,
+                    },
+                    units: [
+                      {
+                        id: "107A11",
+                        unitTypeId: "107A11",
+                        displayName: "107A11",
+                        area: 113.9,
+                        price: null,
+                        bedrooms: null, bathrooms: null,
+                        x: 0.745, y: 0.35,
+                        videos: {
+                          forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`,
+                          reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`,
+                          idleVideo: `/${projectName}/units/7a/floor1/107A11.png`
+                        }
+                      },
+                      { id: "107A12", unitTypeId: "107A12", displayName: "107A12", area: 95.9, price: null, bedrooms: null, bathrooms: null,
+                        x: 0.635, y: 0.5, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/floor1/107A12.png` } },
+                      { id: "107A13", unitTypeId: "107A13", displayName: "107A13", area: 128.3, price: null, bedrooms: null, bathrooms: null,
+                        x: 0.48, y: 0.68, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/floor1/107A13.png` } },
+                      { id: "107A14", unitTypeId: "107A14", displayName: "107A14", area: 120.9, price: null, bedrooms: null, bathrooms: null,
+                        x: 0.32, y: 0.45, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/floor1/107A14.png` } },
+                    ],
+                  },
+                  {
+                    id: "floor-2",
+                    type: "Residential",
+                    displayName: "Floor 2",
+                    highlight: `/${projectName}/highlight/7A/floor2.png`,
+                    description: null,
+                    x: 0.245, y: 0.575,
+                    videos: {
+                      forwardVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_trans_to_floor3.mp4`,
+                      reverseVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_rev_from_floor3.mp4`,
+                      idleVideo: `/${projectName}/videos/zones/7a/floors/floor2/7a_floors_floor2_idle.mp4`,
+                    },
+                    units: [
+                      {
+                        id: "107A21",
+                        unitTypeId: "107A21",
+                        displayName: "107A21",
+                        area: 116.5,
+                        price: null,
+                        bedrooms: null, bathrooms: null,
+                        x: 0.745, y: 0.35,
+                        videos: {
+                          forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`,
+                          reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`,
+                          idleVideo: `/${projectName}/units/7a/floor2/107A21.png`
+                        }
+                      },
+                      { id: "107A22", unitTypeId: "107A22", displayName: "107A22", area: 157, price: null, bedrooms: null, bathrooms: null,
+                       x: 0.585, y: 0.5, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/floor2/107A22.png` } },
+                      { id: "107A23", unitTypeId: "107A23", displayName: "107A23", area: 160, price: null, bedrooms: null, bathrooms: null,
+                        x: 0.325, y: 0.5, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/floor2/107A23.png` } },
                     ],
                   },
                   {
                     id: "floor-3",
-                    projectId: "mix",
-                    zoneId: "zone1",
-                    buildingId: "tower1",
                     type: "Residential",
                     displayName: "Floor 3",
-                    highlight: `/${projectName}/highlight/7A/Floor 3.png`,
+                    highlight: `/${projectName}/highlight/7A/floor3.png`,
                     description: null,
-                    x: 0.21, y: 0.68,
+                    x: 0.255, y: 0.455,
                     videos: {
                       forwardVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_trans_to_floor3.mp4`,
                       reverseVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_rev_from_floor3.mp4`,
-                      idleVideo: `/${projectName}/videos/zones/7a/floors/floor1/7a_floors_floor1_idle.mp4`,
+                      idleVideo: `/${projectName}/videos/zones/7a/floors/floor3/7a_floors_floor3_idle.mp4`,
                     },
                     units: [
-                      // 7A, Floor 3
                       {
-                        id: "apartment301",
-                        unitTypeId: "7a-unit",
-                        displayName: "A301",
-                        area: 85,
-                        price: 250000,
-                        bedrooms: 2,
-                        bathrooms: 1,
-                        balconyView: "/mix/panorama/7a_unit/balcony.jpg",
-                        x: 0.40, y: 0.60,
+                        id: "107A31",
+                        unitTypeId: "107A31",
+                        displayName: "107A31",
+                        area: 227.4,
+                        price: null,
+                        bedrooms: null, bathrooms: null,
+                        x: 0.37, y: 0.5,
                         videos: {
-                          forwardVideo: "/cutsection.mp4",
-                          reverseVideo: "/cutsection.mp4",
-                          idleVideo: "/cutsection.mp4",
-                        }
+                          forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`,
+                          reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`,
+                          idleVideo: `/${projectName}/units/7a/floor3/107A31.png`
+                        },
                       },
-                      { id: "apartment302", unitTypeId: "7a-unit", displayName: "A302", area: 200, price: 400000, bedrooms: 4, bathrooms: 2, balconyView: "/mix/panorama/7a_unit/balcony.jpg", x: 0.25, y: 0.4, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
-                    ],
-                  },
-                  {
-                    id: "floor-4",
-                    projectId: "mix",
-                    zoneId: "zone1",
-                    buildingId: "tower1",
-                    type: "Residential",
-                    displayName: "Floor 4",
-                    highlight: `/${projectName}/highlight/7A/Floor 4.png`,
-                    description: null,
-                    x: 0.21, y: 0.55,
-                    videos: {
-                      forwardVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_trans_to_floor3.mp4`,
-                      reverseVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_rev_from_floor3.mp4`,
-                      idleVideo: `/${projectName}/videos/zones/7a/floors/floor1/7a_floors_floor1_idle.mp4`,
-                    },
-                    units: [
-                      // 7A, Floor 4
-                      {
-                        id: "apartment401",
-                        unitTypeId: "7a-unit",
-                        displayName: "A401",
-                        area: 85,
-                        price: 250000,
-                        bedrooms: 2,
-                        bathrooms: 1,
-                        balconyView: "/mix/panorama/7a_unit/balcony.jpg",
-                        x: 0.40, y: 0.60,
-                        videos: {
-                          forwardVideo: "/cutsection.mp4",
-                          reverseVideo: "/cutsection.mp4",
-                          idleVideo: "/cutsection.mp4",
-                        }
-                      },
-                      { id: "apartment402", unitTypeId: "7a-unit", displayName: "A402", area: 200, price: 400000, bedrooms: 4, bathrooms: 2, balconyView: "/mix/panorama/7a_unit/balcony.jpg", x: 0.25, y: 0.4, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
-                    ],
-                  },
-                  {
-                    id: "roof",
-                    projectId: "mix",
-                    zoneId: "zone1",
-                    buildingId: "tower1",
-                    type: "Residential",
-                    displayName: "Roof",
-                    highlight: `/${projectName}/highlight/7A/Roof.png`,
-                    description: null,
-                    x: 0.21, y: 0.42,
-                    videos: {
-                      forwardVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_trans_to_floor3.mp4`,
-                      reverseVideo: `/${projectName}/videos/zones/7a/floors/7a_floors_gen_rev_from_floor3.mp4`,
-                      idleVideo: `/${projectName}/videos/zones/7a/floors/floor1/7a_floors_floor1_idle.mp4`,
-                    },
-                    units: [
-                      // 7A, Roof
-                      {
-                        id: "apartment501",
-                        unitTypeId: "7a-unit",
-                        displayName: "A501",
-                        area: 85,
-                        price: 250000,
-                        bedrooms: 2,
-                        bathrooms: 1,
-                        balconyView: "/mix/panorama/7a_unit/balcony.jpg",
-                        x: 0.40, y: 0.60,
-                        videos: {
-                          forwardVideo: "/cutsection.mp4",
-                          reverseVideo: "/cutsection.mp4",
-                          idleVideo: "/cutsection.mp4",
-                        }
-                      },
-                      { id: "apartment502", unitTypeId: "7a-unit", displayName: "A502", area: 200, price: 400000, bedrooms: 4, bathrooms: 2, balconyView: "/mix/panorama/7a_unit/balcony.jpg", x: 0.25, y: 0.4, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
                     ],
                   },
                 ],
@@ -369,7 +359,7 @@ export const DEVELOPER_SOMABAY = {
                 ],
               },
               {
-                id: "tower2",
+                id: "7b1",
                 type: "tower",
                 displayName: "7B 1",
                 highlight: `/${projectName}/highlight/7B1 Tower.png`,
@@ -574,7 +564,7 @@ export const DEVELOPER_SOMABAY = {
                 ],
               },
               {
-                id: "tower3",
+                id: "7b2",
                 type: "tower",
                 displayName: "7B 2",
                 highlight: `/${projectName}/highlight/7B2 Tower.png`,
@@ -779,7 +769,7 @@ export const DEVELOPER_SOMABAY = {
                 ],
               },
               {
-                id: "tower4",
+                id: "7c",
                 type: "tower",
                 displayName: "7C",
                 highlight: `/${projectName}/highlight/7C Tower.png`,

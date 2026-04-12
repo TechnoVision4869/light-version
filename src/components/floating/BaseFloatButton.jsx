@@ -4,7 +4,7 @@ export default function BaseFloatButton({ name, layerType = null, style = {}, is
     const isFloor = layerType === LAYERS.BUILDING;
 
     return (
-        <button className={`base-float-btn ${isSelected ? "bg-[#418AFF]" : "bg-[#3E4A5C] opacity-90"}
+        <button className={`base-float-btn backdrop-blur-md ${isSelected ? "bg-[#418AFF]" : "bg-[#5F5646D5]"}
          hover:bg-[#357AEE] text-sm text-white px-[8px] py-1 ${triClass ? "rounded-lg" : "rounded-xl"} flex items-center gap-2 z-20`}
             style={{
                 position: 'absolute',
@@ -15,7 +15,7 @@ export default function BaseFloatButton({ name, layerType = null, style = {}, is
         >
             {!showName && <span className='whitespace-nowrap'>{name.split(" ")[1]}</span>}
             {showName && <span className='whitespace-nowrap'>{name}</span>}
-            {isFloor ? <span className='triangle-right'></span> : <span className='triangle-small-down'></span>}
+            {isFloor ? <span className='triangle-right backdrop-blur-sm'></span> : <span className='triangle-small-down'></span>}
             {/* <span className={triClass}></span> */}
         </button>
     )

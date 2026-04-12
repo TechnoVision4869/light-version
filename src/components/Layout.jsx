@@ -4,7 +4,7 @@ import { Toaster } from "react-hot-toast";
 import TECHNO_LOGO from "../assets/techno.png";
 import { useAuth } from "./hooks/use-auth";
 
-export default function Layout({ children, backgroundImage, fullscreen = false, title = "", headerClassName = "bg-transparent" }) {
+export default function Layout({ children, backgroundImage, fullscreen = false, title = "", headerClassName = "bg-transparent", showHeader = true }) {
   const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
@@ -100,33 +100,54 @@ export default function Layout({ children, backgroundImage, fullscreen = false, 
       <Toaster position="top-center" />
 
       {/* Header Bar */}
-      <header className={`fixed top-0 left-0 right-0 h-14 z-40 ${headerClassName}`}>
-        <div className="relative flex items-center justify-center h-full px-6">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="absolute left-6 p-2 rounded-lg hover:bg-white/10 transition-colors shrink-0"
-          >
-            <svg
-              className="w-6 h-6 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+      {showHeader ? (
+        <header className={`fixed top-0 left-0 right-0 h-14 z-40 ${headerClassName}`}>
+          <div className="relative flex items-center justify-center h-full px-6">
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="absolute left-6 p-2 rounded-lg hover:bg-white/10 transition-colors shrink-0"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
-          {title ? (
+              <svg
+                className="w-6 h-6 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+            {title ? (
               <h1 className="text-xl font-semibold text-white text-center truncate max-w-full px-16">
                 {title}
               </h1>
-          ) : null}
-        </div>
-      </header>
+            ) : null}
+          </div>
+        </header>
+      ) : (
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="fixed top-2 left-6 z-40 p-2 rounded-lg hover:bg-white/10 transition-colors"
+        >
+          <svg
+            className="w-6 h-6 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+      )}
 
       {/* Sidebar Overlay */}
       {sidebarOpen && (
@@ -138,7 +159,7 @@ export default function Layout({ children, backgroundImage, fullscreen = false, 
 
       {/* Sidebar Menu */}
       <div
-        className={`fixed left-0 top-14 h-[calc(100vh-3.5rem)] w-52 sm:w-64 bg-[#1C1C1C] shadow-2xl z-25 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed left-0 ${showHeader ? 'top-14 h-[calc(100vh-3.5rem)]' : 'top-14 h-screen'} w-52 sm:w-64 bg-[#1C1C1C] shadow-2xl z-25 transform transition-transform duration-300 ease-in-out ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -193,9 +214,9 @@ export default function Layout({ children, backgroundImage, fullscreen = false, 
       </div>
 
       {/* Main Content */}
-      <div className={`w-full pt-14 ${fullscreen ? '' : 'px-4 pb-4 sm:pb-6'}`}>
+      <div className={`w-full ${showHeader ? 'pt-14' : ''} ${fullscreen ? '' : 'px-4 pb-4 sm:pb-6'}`}>
         <div
-          className={fullscreen ? 'w-full h-[calc(100vh-3.5rem)]' : 'max-w-6xl w-full min-h-[calc(100vh-3.5rem)] mx-auto flex items-center justify-center'}
+          className={fullscreen ? `w-full ${showHeader ? 'h-[calc(100vh-3.5rem)]' : 'h-screen'}` : 'max-w-6xl w-full min-h-[calc(100vh-3.5rem)] mx-auto flex items-center justify-center'}
         >
           {children}
         </div>

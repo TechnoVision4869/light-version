@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { projectApi } from "../api/admin/projectApi";
 import { APP_CONFIG } from "../config/appConfig";
 import Layout from "./Layout";
@@ -8,6 +8,7 @@ import { developerApi } from "@/api/admin/developerApi";
 import { assetApi } from "../api/admin/assetApi";
 import { DATA } from "../data/layers";
 import { fetchProjectById } from "../lib/projectFetcher";
+import PROJECT_HIGHLIGHT from "../../public/light-house/images/project-highlight.png";
 
 export default function ProjectSelector({
   developerId,
@@ -16,7 +17,7 @@ export default function ProjectSelector({
 }) {
   const useStatic = APP_CONFIG.USE_STATIC;
   const usePredefinedPos = APP_CONFIG.USE_PREDEFINED_POS;
-  const predefinedPos = {x: 0.77, y: 0.35};
+  const predefinedPos = {x: 0.42, y: 0.4};
   const { user } = useAuth();
   const [projects, setProjects] = useState([]);
   const [developerAssets, setDeveloperAssets] = useState({
@@ -27,6 +28,33 @@ export default function ProjectSelector({
   const [introVideoUrls, setIntroVideoUrls] = useState({});
   const [loading, setLoading] = useState(true);
 
+  const containerRef = useRef(null);
+  const [predefinedPixelPos, setPredefinedPixelPos] = useState({ left: 0, top: 0 });
+  const [isProjectHovered, setIsProjectHovered] = useState(false);
+
+  const updatePredefinedPos = useCallback(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    const videoW = h * (16 / 9);
+    const videoLeft = (w - videoW) / 2;
+    setPredefinedPixelPos({
+      left: videoLeft + videoW * predefinedPos.x,
+      top: h * predefinedPos.y,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!usePredefinedPos) return;
+    const container = containerRef.current;
+    if (!container) return;
+    const ro = new ResizeObserver(updatePredefinedPos);
+    ro.observe(container);
+    updatePredefinedPos();
+    return () => ro.disconnect();
+  }, [usePredefinedPos, updatePredefinedPos]);
+  
   const fetchProjects = async () => {
     try {
       setLoading(true);
@@ -185,82 +213,86 @@ export default function ProjectSelector({
   ].includes(user?.role);
 
   return (
-    <Layout backgroundImage={developerAssets.backgroundImage} fullscreen={true}>
+    <Layout backgroundImage={developerAssets.backgroundImage} fullscreen={true} showHeader={false}>
       <div
-        className="w-full h-full flex flex-col items-center justify-start pt-8"
-        style={{
-          backgroundImage: `url(${developerAssets.backgroundImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-        }}
+        ref={containerRef}
+        className="relative w-full h-full overflow-hidden"
       >
-        <div className="mb-8">
+        {/* Background image */}
+        {developerAssets.backgroundImage && (
           <img
-            src={developerAssets.logoImage}
-            alt="Developer Logo"
-            className="w-auto h-auto max-h-18 xl:max-h-22 xl:w-22 max-w-[90vw] xl:max-w-md"
+            src={developerAssets.backgroundImage}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover"
           />
-        </div>
-        {showBackButton && onBackButtonClick && (
-          <button
-            onClick={onBackButtonClick}
-            className="text-white text-sm font-medium hover:opacity-70 transition-opacity"
-          >
-            ← Back to Developers
-          </button>
         )}
-        <div className="flex-1 flex flex-col items-center justify-center w-full px-4">
-          {loading ? (
-            <div className="text-white text-lg">Loading projects...</div>
-          ) : projects.length === 0 ? (
-            <div className="w-full rounded-2xl overflow-hidden backdrop-blur-sm bg-[#1C1C1C8C]">
-              <div className="p-8 flex flex-col items-center justify-center text-center">
-                <h2 className="tracking-wide text-2xl font-semibold text-white mb-3">
-                  No Projects Available
-                </h2>
-                <p className="text-[#DADADA] text-sm mb-6">
-                  There are currently no projects to display.
-                </p>
+
+        {/* Project highlight overlay — same cover sizing = pixel-perfect match */}
+        {usePredefinedPos && !loading && projects.length > 0 && (
+          <img
+            src={PROJECT_HIGHLIGHT}
+            alt=""
+            className={`absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-300 ${isProjectHovered ? 'opacity-70' : 'opacity-100'}`}
+          />
+        )}
+
+        {/* UI content */}
+        <div className="relative z-10 w-full h-full flex flex-col items-center justify-start pt-8">
+          <div className="mb-8">
+            <img
+              src={developerAssets.logoImage}
+              alt="Developer Logo"
+              className="w-auto h-auto max-h-18 xl:max-h-22 xl:w-22 max-w-[90vw] xl:max-w-md"
+            />
+          </div>
+          {showBackButton && !useStatic && onBackButtonClick && (
+            <button
+              onClick={onBackButtonClick}
+              className="text-white text-sm font-medium hover:opacity-70 transition-opacity"
+            >
+              ← Back to Developers
+            </button>
+          )}
+          <div className="flex-1 flex flex-col items-center justify-center w-full px-4">
+            {loading ? (
+              <div className="text-white text-lg">Loading projects...</div>
+            ) : projects.length === 0 ? (
+              <div className="w-full rounded-2xl overflow-hidden backdrop-blur-sm bg-[#1C1C1C8C]">
+                <div className="p-8 flex flex-col items-center justify-center text-center">
+                  <h2 className="tracking-wide text-2xl font-semibold text-white mb-3">
+                    No Projects Available
+                  </h2>
+                  <p className="text-[#DADADA] text-sm mb-6">
+                    There are currently no projects to display.
+                  </p>
+                </div>
               </div>
-            </div>
-          ) : usePredefinedPos ? (
-            <>
-              {projects.map((project) => {
-                const disabled = !introVideoUrls[project.id];
-                return (
-                  <div
-                    key={project.id}
-                    className="absolute w-[300px] rounded-2xl overflow-hidden backdrop-blur-sm bg-[#1C1C1C8C]"
-                    style={{
-                      left: `${predefinedPos.x * 100}%`,
-                      top: `${predefinedPos.y * 100}%`,
-                      transform: "translate(-50%, -50%)",
-                    }}
-                  >
-                    {thumbnailUrls[project.id] && (
-                      <div className="px-3 pt-3">
-                        <img src={thumbnailUrls[project.id]} alt={project.name}
-                          className="rounded-2xl w-full h-auto object-cover" />
-                      </div>
-                    )}
-                    <div className="p-4">
-                      <h2 className="tracking-wide text-lg font-semibold text-white mb-1">
-                        {project.name}
-                      </h2>
-                      <button
-                        onClick={() => fetchSelectedProject(project.id, introVideoUrls[project.id])}
-                        disabled={disabled}
-                        className={`w-full py-2 px-4 bg-transparent border ${disabled ? "" : "hover:bg-white hover:text-black hover:border-white"} disabled:text-white/50 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors duration-300`}
+            ) : usePredefinedPos ? (
+              <>
+                {projects.map((project) => {
+                  const disabled = !introVideoUrls[project.id];
+                  return (
+                    <button
+                      key={project.id}
+                      disabled={disabled}
+                      className="absolute rounded-2xl overflow-hidden backdrop-blur-sm bg-[#00000066]
+                       text-white p-2 text-xl
+                       hover:bg-[#000000aa] disabled:bg-[00000044] disabled:text-white/50 disabled:cursor-not-allowed transition-colors duration-300"
+                      onClick={() => fetchSelectedProject(project.id, introVideoUrls[project.id])}
+                      onMouseEnter={() => !disabled && setIsProjectHovered(true)}
+                      onMouseLeave={() => setIsProjectHovered(false)}
+                      style={{
+                        left: `${predefinedPixelPos.left}px`,
+                        top: `${predefinedPixelPos.top}px`,
+                      }}
                       >
-                        {disabled ? "Coming Soon" : "Open Project"}
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </>
-          ) : (
+                         {<span className='whitespace-nowrap'>{disabled ? "Coming Soon" : project.name}</span>}
+                    </button>
+                      
+                  );
+                })}
+              </>
+            ) : (
             <div className="flex flex-wrap gap-8 xl:gap-10 justify-center">
               {projects.map((project) => {
                 const disabled = !introVideoUrls[project.id];
@@ -304,6 +336,7 @@ export default function ProjectSelector({
               })}
             </div>
           )}
+          </div>
         </div>
       </div>
     </Layout>

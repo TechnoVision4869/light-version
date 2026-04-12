@@ -87,9 +87,11 @@ export default function Home() {
   const handleFloorSwitch = useCallback((floor) => {
     if (floor.id === currentItem?.id) return;
     setFloorSwitchBlur(true);
-    videoViewer.skipNextTransition();
-    switchToFloor(floor);
-    setTimeout(() => setFloorSwitchBlur(false), 800);
+    setTimeout(() => {
+      videoViewer.skipNextTransition();
+      switchToFloor(floor);
+      setTimeout(() => setFloorSwitchBlur(false), 600);
+    }, 250);
   }, [currentItem, switchToFloor, videoViewer]);
 
   const handleActiveTab = useCallback((tab) => {
