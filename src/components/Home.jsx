@@ -32,6 +32,7 @@ import { MainContext } from "../store/MainContextProvider";
 import TECHNO_LOGO from "../assets/techno.png";
 import Highlight from "./Highlight.jsx";
 import Test from "./Test.jsx";
+import { APP_CONFIG } from "../config/appConfig";
 
 export default function Home() {
   //states
@@ -59,7 +60,8 @@ export default function Home() {
     goToTab,
     goHome,
     clearSelectedProject,
-    switchToFloor } = useContext(SidebarContext);
+    switchToFloor,
+    currentVideosPaths } = useContext(SidebarContext);
 
   const { overlay, closeOverlay } = useContext(MainContext);
 
@@ -520,6 +522,15 @@ export default function Home() {
                       playsInline
                       preload="auto"
                     />
+
+                    {/* Unit idle image (shown when IDLE_TYPE is image) */}
+                    {APP_CONFIG.IDLE_TYPE === "image" && activeLayer === LAYERS.UNIT && !viewerProps.isPlaying && currentVideosPaths?.idleVideo && (
+                      <img
+                        src={currentVideosPaths.idleVideo}
+                        className="w-full h-full object-cover object-center rounded-2xl absolute inset-0 z-[11]"
+                        alt="Unit view"
+                      />
+                    )}
 
                     {/* {activeLayer === LAYERS.SURROUNDING_DETAIL && (
                       <AnimatedPath path={currentItem.svgPath} />

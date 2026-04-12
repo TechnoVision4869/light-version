@@ -37,7 +37,7 @@ export function useFloatingPositions(items, mediaRef) {
         return map;
     }, [items, buttonPositions]);
 
-    // Observe resize
+    // Observe resize and re-run when items or container changes
     useEffect(() => {
         if (!container) return;
 
@@ -49,7 +49,7 @@ export function useFloatingPositions(items, mediaRef) {
         return () => {
             resizeObserver.disconnect();
         }
-    }, []); // Empty dependency array ensures this runs once on mount
+    }, [container, updatePositions]);
 
     return {
         buttonPositions,

@@ -102,7 +102,6 @@ export default function UnitPanel() {
                 {balconyView &&
                     <>
                         <hr className="h-divider" />
-
                         <button className="w-full border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition"
                             onClick={() => openBalconyView(currentItem)}
                         >
