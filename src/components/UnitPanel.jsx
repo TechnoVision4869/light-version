@@ -12,7 +12,8 @@ export default function UnitPanel() {
     const { currentProject, currentItem } = useContext(SidebarContext);
     const useStatic = APP_CONFIG.USE_STATIC;
     
-    const { openPanorama, openBalconyView, openGallery } = useContext(MainContext);
+    const { openPanorama, openBalconyView, openGallery, openRoomInterior } = useContext(MainContext);
+    const useHotspots = APP_CONFIG.USE_HOTSPOTS;
 
     const [isVisualsOpen, setIsVisualsOpen] = useState(true);
     const [isCutSectionsOpen, setIsCutSectionsOpen] = useState(true);
@@ -86,14 +87,20 @@ export default function UnitPanel() {
                     <div className="flex flex-col gap-2 mt-4">
                         <div className="flex gap-2">
                             <button className="flex-1 border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition"
-                                onClick={() => openPanorama(currentItem)}
+                                onClick={() => {
+                                    if (useHotspots) {
+                                        openPanorama(currentItem);
+                                    } else {
+                                        const firstRoom = unitType?.interior?.levels?.[0]?.rooms?.[0];
+                                        if (firstRoom) openRoomInterior(firstRoom);
+                                    }
+                                }}
                             >
                                 Interior
                             </button>
                             {floorPlans?.length > 0 && <button className="flex-1 border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition whitespace-nowrap"
                                 onClick={() => openGallery(currentItem, "floorPlans")}
-                            >
-                                Floor Plan
+                            > Floor Plan
                             </button>}
                         </div>
                     </div>
@@ -104,8 +111,7 @@ export default function UnitPanel() {
                         <hr className="h-divider" />
                         <button className="w-full border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition"
                             onClick={() => openBalconyView(currentItem)}
-                        >
-                            Location View
+                        > Location View
                         </button>
                     </>
                 }
@@ -182,52 +188,50 @@ export default function UnitPanel() {
                     )}
                 </div>
 
-                {paymentPlans?.length > 0 && <>
-                <hr className="h-divider" />
-
-                {/* Payment Plan */}
-                 <div>
-                    <button
-                        onClick={() => setIsPaymentPlanOpen(!isPaymentPlanOpen)}
-                        className="flex justify-between w-full"
-                    >
-                        <span className='font-semibold'>Payment Plan</span>
-                        <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            className={`transition-transform ${isPaymentPlanOpen ? 'rotate-180' : ''}`}
+                {paymentPlans?.length > 0 &&
+                <>
+                    <hr className="h-divider" />
+                    {/* Payment Plan */}
+                    <div>
+                        <button
+                            onClick={() => setIsPaymentPlanOpen(!isPaymentPlanOpen)}
+                            className="flex justify-between w-full"
                         >
-                            <path d="M6 10L12 18L18 10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </button>
-                    {isPaymentPlanOpen && (
-                        paymentPlans?.map((plan, index) => (
-                            <div className="mt-2 mb-3 flex justify-between gap-2 whitespace-nowrap" key={index}>
-                                <div className="flex-1 text-center">
-                                    <div className="font-bold text-xs">{plan.downPayment.toLocaleString()} L.E</div>
-                                    <div className="text-xs text-white/70">Down Payment</div>
+                            <span className='font-semibold'>Payment Plan</span>
+                            <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="white"
+                                xmlns="http://www.w3.org/2000/svg"
+                                className={`transition-transform ${isPaymentPlanOpen ? 'rotate-180' : ''}`}
+                            >
+                                <path d="M6 10L12 18L18 10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </button>
+                        {isPaymentPlanOpen && (
+                            paymentPlans?.map((plan, index) => (
+                                <div className="mt-2 mb-3 flex justify-between gap-2 whitespace-nowrap" key={index}>
+                                    <div className="flex-1 text-center">
+                                        <div className="font-bold text-xs">{plan.downPayment.toLocaleString()} L.E</div>
+                                        <div className="text-xs text-white/70">Down Payment</div>
+                                    </div>
+                                    <div className="v-divider"></div>
+                                    <div className="flex-1 text-center">
+                                        <div className="font-bold text-xs">{plan.monthly.toLocaleString()} L.E</div>
+                                        <div className="text-xs text-white/70">Monthly</div>
+                                    </div>
+                                    <div className="v-divider"></div>
+                                    <div className="flex-1 text-center">
+                                        <div className="font-bold text-xs">{plan.years}</div>
+                                        <div className="text-xs text-white/70">Years</div>
+                                    </div>
                                 </div>
-                                <div className="v-divider"></div>
-                                <div className="flex-1 text-center">
-                                    <div className="font-bold text-xs">{plan.monthly.toLocaleString()} L.E</div>
-                                    <div className="text-xs text-white/70">Monthly</div>
-                                </div>
-                                <div className="v-divider"></div>
-                                <div className="flex-1 text-center">
-                                    <div className="font-bold text-xs">{plan.years}</div>
-                                    <div className="text-xs text-white/70">Years</div>
-                                </div>
-                            </div>
-                        )
-                        )
-
-                    )}
-                </div>
-                </>}
-
+                            ))
+                        )}
+                    </div>
+                </>
+                }
             </div>
         </div>
     );

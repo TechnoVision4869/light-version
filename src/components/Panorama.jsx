@@ -9,7 +9,7 @@ import InteriorNav from "./InteriorNav";
 
 export default function Panorama({ unit }) {  
   const { currentProject } = useContext(SidebarContext);
-  const useMockup = APP_CONFIG.useMockupData;
+  const useStatic = APP_CONFIG.USE_STATIC;
 
   const ZOOM_OUT = 0.8; // zoomed out view (match FOV ≈ 118.07°)
   const ZOOM_NORMAL = 1; // default zoom (match FOV = 90°)
@@ -30,10 +30,10 @@ export default function Panorama({ unit }) {
   const zoomOnLoadRef = useRef(true);
 
   // Get unit data
-  const unitType = useMockup 
+  const unitType = useStatic 
         ? currentProject?.unitTypes?.[unit?.unitTypeId]
         : currentProject?.unitTypes?.find(type => type.name === unit?.visualTypeId);
-  const levels = useMockup ? unitType.interior.levels : unitType.levels;
+  const levels = useStatic ? unitType.interior.levels : unitType.levels;
   const [room, setRoom] = useState(levels[0].rooms[0]);
   const [currentImage, setCurrentImage] = useState(room.furnitureImgId);
 

@@ -390,10 +390,12 @@ export default function SidebarContextProvider({ children }) {
                 items = currentProject.surroundings?.items || [];
             }
             else if (activeLayer === LAYERS.UNIT) {
-                // Get rooms from unit type interior for floating buttons
-                const unitType = currentProject.unitTypes?.[currentItem?.unitTypeId];
-                if (unitType?.interior?.levels) {
-                    items = unitType.interior.levels.flatMap(level => level.rooms || []);
+                // Get rooms from unit type interior for floating buttons (only in hotspot/panorama mode)
+                if (!APP_CONFIG.USE_HOTSPOTS) {
+                    const unitType = currentProject.unitTypes?.[currentItem?.unitTypeId];
+                    if (unitType?.interior?.levels) {
+                        items = unitType.interior.levels.flatMap(level => level.rooms || []);
+                    }
                 }
             }
         }

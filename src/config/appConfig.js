@@ -9,5 +9,6 @@ export const APP_CONFIG = {
   USE_STATIC: true,
   USE_PREDEFINED_POS: true,
   IDLE_TYPE: ASSET_TYPES.IMAGE,
-  
+  // Set to true to use panorama hotspots for unit interior, false for single room-interior popup
+  USE_HOTSPOTS: false,
 };

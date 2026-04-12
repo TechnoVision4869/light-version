@@ -127,7 +127,7 @@ export const DEVELOPER_SOMABAY = {
                         displayName: "107AC01",
                         area: 113.9,
                         price: null,
-                        bedrooms: null, bathrooms: null,
+                        bedrooms: 2, bathrooms: 1,
                         x: 0.745, y: 0.35,
                         videos: {
                           forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`,
@@ -135,11 +135,11 @@ export const DEVELOPER_SOMABAY = {
                           idleVideo: `/${projectName}/units/7a/basement/107AC01.png`
                         }
                       },
-                      { id: "107AC02", unitTypeId: "107AC02", displayName: "107AC02", area: 95.9, price: null, bedrooms: null, bathrooms: null,
+                      { id: "107AC02", unitTypeId: "107AC02", displayName: "107AC02", area: 95.9, price: null, bedrooms: 1, bathrooms: 1,
                         x: 0.635, y: 0.5, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/basement/107AC02.png` } },
-                      { id: "107AC03", unitTypeId: "107AC03", displayName: "107AC03", area: 128.3, price: null, bedrooms: null, bathrooms: null,
+                      { id: "107AC03", unitTypeId: "107AC03", displayName: "107AC03", area: 128.3, price: null, bedrooms: 2, bathrooms: 2,
                         x: 0.48, y: 0.68, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/basement/107AC03.png` } },
-                      { id: "107AC04", unitTypeId: "107AC04", displayName: "107AC04", area: 120.9, price: null, bedrooms: null, bathrooms: null,
+                      { id: "107AC04", unitTypeId: "107AC04", displayName: "107AC04", area: 120.9, price: null, bedrooms: 2, bathrooms: 2,
                         x: 0.32, y: 0.45, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/basement/107AC04.png` } },
                     ],
                   },
@@ -162,7 +162,7 @@ export const DEVELOPER_SOMABAY = {
                         displayName: "107A01",
                         area: 113.9,
                         price: null,
-                        bedrooms: null, bathrooms: null,
+                        bedrooms: 2, bathrooms: 1,
                         x: 0.745, y: 0.35,
                         videos: {
                           forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`,
@@ -170,11 +170,11 @@ export const DEVELOPER_SOMABAY = {
                           idleVideo: `/${projectName}/units/7a/ground/107A01.png`
                         }
                       },
-                      { id: "107A02", unitTypeId: "107A02", displayName: "107A02", area: 95.9, price: null, bedrooms: null, bathrooms: null,
+                      { id: "107A02", unitTypeId: "107A02", displayName: "107A02", area: 95.9, price: null, bedrooms: 1, bathrooms: 1,
                         x: 0.635, y: 0.5, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/ground/107A02.png` } },
-                      { id: "107A03", unitTypeId: "107A03", displayName: "107A03", area: 128.3, price: null, bedrooms: null, bathrooms: null,
+                      { id: "107A03", unitTypeId: "107A03", displayName: "107A03", area: 128.3, price: null, bedrooms: 2, bathrooms: 2,
                         x: 0.48, y: 0.68, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/ground/107A03.png` } },
-                      { id: "107A04", unitTypeId: "107A04", displayName: "107A04", area: 120.9, price: null, bedrooms: null, bathrooms: null,
+                      { id: "107A04", unitTypeId: "107A04", displayName: "107A04", area: 120.9, price: null, bedrooms: 2, bathrooms: 2,
                         x: 0.32, y: 0.45, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/ground/107A04.png` } },
                     ],
                   },
@@ -197,7 +197,7 @@ export const DEVELOPER_SOMABAY = {
                         displayName: "107A11",
                         area: 113.9,
                         price: null,
-                        bedrooms: null, bathrooms: null,
+                        bedrooms: 2, bathrooms: 1,
                         x: 0.745, y: 0.35,
                         videos: {
                           forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`,
@@ -205,11 +205,11 @@ export const DEVELOPER_SOMABAY = {
                           idleVideo: `/${projectName}/units/7a/floor1/107A11.png`
                         }
                       },
-                      { id: "107A12", unitTypeId: "107A12", displayName: "107A12", area: 95.9, price: null, bedrooms: null, bathrooms: null,
+                      { id: "107A12", unitTypeId: "107A12", displayName: "107A12", area: 95.9, price: null, bedrooms: 1, bathrooms: 1,
                         x: 0.635, y: 0.5, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/floor1/107A12.png` } },
-                      { id: "107A13", unitTypeId: "107A13", displayName: "107A13", area: 128.3, price: null, bedrooms: null, bathrooms: null,
+                      { id: "107A13", unitTypeId: "107A13", displayName: "107A13", area: 128.3, price: null, bedrooms: 2, bathrooms: 2,
                         x: 0.48, y: 0.68, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/floor1/107A13.png` } },
-                      { id: "107A14", unitTypeId: "107A14", displayName: "107A14", area: 120.9, price: null, bedrooms: null, bathrooms: null,
+                      { id: "107A14", unitTypeId: "107A14", displayName: "107A14", area: 120.9, price: null, bedrooms: 2, bathrooms: 2,
                         x: 0.32, y: 0.45, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/floor1/107A14.png` } },
                     ],
                   },
@@ -232,7 +232,7 @@ export const DEVELOPER_SOMABAY = {
                         displayName: "107A21",
                         area: 116.5,
                         price: null,
-                        bedrooms: null, bathrooms: null,
+                        bedrooms: 2, bathrooms: 1,
                         x: 0.745, y: 0.35,
                         videos: {
                           forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`,
@@ -240,9 +240,9 @@ export const DEVELOPER_SOMABAY = {
                           idleVideo: `/${projectName}/units/7a/floor2/107A21.png`
                         }
                       },
-                      { id: "107A22", unitTypeId: "107A22", displayName: "107A22", area: 157, price: null, bedrooms: null, bathrooms: null,
+                      { id: "107A22", unitTypeId: "107A22", displayName: "107A22", area: 157, price: null, bedrooms: 2, bathrooms: 3,
                        x: 0.585, y: 0.5, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/floor2/107A22.png` } },
-                      { id: "107A23", unitTypeId: "107A23", displayName: "107A23", area: 160, price: null, bedrooms: null, bathrooms: null,
+                      { id: "107A23", unitTypeId: "107A23", displayName: "107A23", area: 160, price: null, bedrooms: 2, bathrooms: 2,
                         x: 0.325, y: 0.5, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7a/floor2/107A23.png` } },
                     ],
                   },
@@ -265,7 +265,7 @@ export const DEVELOPER_SOMABAY = {
                         displayName: "107A31",
                         area: 227.4,
                         price: null,
-                        bedrooms: null, bathrooms: null,
+                        bedrooms: 3, bathrooms: 3,
                         x: 0.37, y: 0.5,
                         videos: {
                           forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`,
@@ -1212,6 +1212,22 @@ export const DEVELOPER_SOMABAY = {
             }]
           }
         },
+        "107A01": { id: "107A01", bedrooms: 2, bathrooms: 1, area: 113.9, serviceRooms: [], gallery: [], cutSections: [], floorPlans: [], paymentPlans: [], interior: { levels: [] } },
+        "107A02": { id: "107A02", bedrooms: 1, bathrooms: 1, area: 95.9,  serviceRooms: [], gallery: [], cutSections: [], floorPlans: [], paymentPlans: [], interior: { levels: [] } },
+        "107A03": { id: "107A03", bedrooms: 2, bathrooms: 2, area: 128.3, serviceRooms: [], gallery: [], cutSections: [], floorPlans: [], paymentPlans: [], interior: { levels: [] } },
+        "107A04": { id: "107A04", bedrooms: 2, bathrooms: 2, area: 120.9, serviceRooms: [], gallery: [], cutSections: [], floorPlans: [], paymentPlans: [], interior: { levels: [] } },
+        "107A11": { id: "107A11", bedrooms: 2, bathrooms: 1, area: 113.9, serviceRooms: [], gallery: [], cutSections: [], floorPlans: [], paymentPlans: [], interior: { levels: [] } },
+        "107A12": { id: "107A12", bedrooms: 1, bathrooms: 1, area: 95.9,  serviceRooms: [], gallery: [], cutSections: [], floorPlans: [], paymentPlans: [], interior: { levels: [] } },
+        "107A13": { id: "107A13", bedrooms: 2, bathrooms: 2, area: 128.3, serviceRooms: [], gallery: [], cutSections: [], floorPlans: [], paymentPlans: [], interior: { levels: [] } },
+        "107A14": { id: "107A14", bedrooms: 2, bathrooms: 2, area: 120.9, serviceRooms: [], gallery: [], cutSections: [], floorPlans: [], paymentPlans: [], interior: { levels: [] } },
+        "107A21": { id: "107A21", bedrooms: 2, bathrooms: 1, area: 116.5, serviceRooms: [], gallery: [], cutSections: [], floorPlans: [], paymentPlans: [], interior: { levels: [] } },
+        "107A22": { id: "107A22", bedrooms: 2, bathrooms: 3, area: 157,   serviceRooms: [], gallery: [], cutSections: [], floorPlans: [], paymentPlans: [], interior: { levels: [] } },
+        "107A23": { id: "107A23", bedrooms: 2, bathrooms: 2, area: 160,   serviceRooms: [], gallery: [], cutSections: [], floorPlans: [], paymentPlans: [], interior: { levels: [] } },
+        "107A31": { id: "107A31", bedrooms: 3, bathrooms: 3, area: 227.4, serviceRooms: [], gallery: [], cutSections: [], floorPlans: [], paymentPlans: [], interior: { levels: [] } },
+        "107AC01": { id: "107AC01", bedrooms: 2, bathrooms: 1, area: 113.9, serviceRooms: [], gallery: [], cutSections: [], floorPlans: [], paymentPlans: [], interior: { levels: [] } },
+        "107AC02": { id: "107AC02", bedrooms: 1, bathrooms: 1, area: 95.9,  serviceRooms: [], gallery: [], cutSections: [], floorPlans: [], paymentPlans: [], interior: { levels: [] } },
+        "107AC03": { id: "107AC03", bedrooms: 2, bathrooms: 2, area: 128.3, serviceRooms: [], gallery: [], cutSections: [], floorPlans: [], paymentPlans: [], interior: { levels: [] } },
+        "107AC04": { id: "107AC04", bedrooms: 2, bathrooms: 2, area: 120.9, serviceRooms: [], gallery: [], cutSections: [], floorPlans: [], paymentPlans: [], interior: { levels: [] } },
       },
     },
   ],
