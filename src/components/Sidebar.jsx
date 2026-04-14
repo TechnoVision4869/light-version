@@ -3,12 +3,16 @@ import { SidebarContext } from "../store/SidebarContextProvider";
 import { TABS, LAYERS } from "../data/layers";
 
 import UnitPanel from "../components/UnitPanel";
+import { RoomList } from "./RoomList";
 import FilterPanel from "../components/FilterPanel";
 import SidebarButtons from "./SideBarButtons";
+import { MainContext } from "../store/MainContextProvider";
+
 export default function Sidebar() {
     const { activeTab, activeLayer, currentItem, sidebarOpen } = useContext(SidebarContext);
     const [isFilter, setIsFilter] = useState(false); // 'navigate' or 'filter'
-
+    const { overlay } = useContext(MainContext);
+    
     useEffect(() => {
         // console.log(activeLayer);
         if (activeLayer !== LAYERS.FLOOR) {
@@ -38,7 +42,11 @@ export default function Sidebar() {
                 }`}
         >
             {activeTab === TABS.ZONES && activeLayer === LAYERS.UNIT ? (
-                <UnitPanel />
+                overlay?.type === 'room-interior' ? (
+                    <RoomList />           
+                ) : (
+                    <UnitPanel />
+                )
             ) : (
                 <div className="h-full pr-1">
                     {activeLayer === LAYERS.FLOOR && (

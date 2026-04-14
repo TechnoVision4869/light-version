@@ -152,7 +152,7 @@ export default function BaseFloating({ mediaRef }) {
     }
 
     // Handle UNIT layer - show room buttons
-    if (activeLayer === LAYERS.UNIT) {
+    if (activeLayer === LAYERS.UNIT) {        
         return (
             itemsToRender.map((room) => {
                 const pos = itemIdToPosition.get(room.id);

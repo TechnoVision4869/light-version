@@ -395,6 +395,8 @@ export default function SidebarContextProvider({ children }) {
                     const unitType = currentProject.unitTypes?.[currentItem?.unitTypeId];
                     if (unitType?.interior?.levels) {
                         items = unitType.interior.levels.flatMap(level => level.rooms || []);
+                        console.log(items);
+                        
                     }
                 }
             }

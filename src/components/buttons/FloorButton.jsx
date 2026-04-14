@@ -8,7 +8,6 @@ export default function FloorButton({ floor, isDisabled, goToItem, }) {
   const handleClick = () => {
         
         if (isSelected) {
-            console.log(floor.units.length);
             goToItem();
             setHighlightedButton(null);
         }

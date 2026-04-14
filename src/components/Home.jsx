@@ -32,7 +32,7 @@ import { MainContext } from "../store/MainContextProvider";
 import TECHNO_LOGO from "../assets/techno.png";
 import Highlight from "./Highlight.jsx";
 import Test from "./Test.jsx";
-import { APP_CONFIG } from "../config/appConfig";
+import { APP_CONFIG, ASSET_TYPES } from "../config/appConfig";
 
 export default function Home() {
   //states
@@ -208,6 +208,13 @@ export default function Home() {
     }
   }, []);
 
+  // Close any overlay when navigating away from UNIT layer
+  useEffect(() => {
+    if (overlay && activeLayer !== LAYERS.UNIT) {
+      closeOverlay();
+    }
+  }, [activeLayer]);
+
   return (
     <>
       {/* Unified Overlay Management */}
@@ -279,46 +286,6 @@ export default function Home() {
         </div>
       )}
 
-      {overlay?.type === 'room-interior' && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center">
-          {/* Semi-transparent backdrop */}
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={closeOverlay} />
-          
-          {/* Modal popup */}
-          <div className="relative z-70 w-11/12 h-5/6 bg-[#2f2f2f] rounded-3xl shadow-2xl overflow-hidden">
-            {/* Back button inside modal */}
-            <button
-              onClick={closeOverlay}
-              className="absolute top-4 left-4 z-40 w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center
-                hover:bg-white/7 transition
-                disabled:opacity-50 disabled:cursor-not-allowed"
-              aria-label="Close room interior"
-            >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M31 12H2M2 12L9 6M2 12L9 18"
-                  stroke="black"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-            
-            {/* Room interior content */}
-            <div className="w-full h-full">
-              <Room room={overlay.data?.room} />
-            </div>
-          </div>
-        </div>
-      )}
-
       {overlay?.type === 'gallery' && (
         <div className="fixed inset-0 z-60">
           {/* Blurred Background */}
@@ -365,6 +332,7 @@ export default function Home() {
                       handleSidebarState(false);
 
                     viewerProps.StartReverse(false, () => { });
+                    if(overlay) closeOverlay();
                   }}
                   disabled={isDisabled || history.length <= 1}
                   className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
@@ -524,7 +492,7 @@ export default function Home() {
                     />
 
                     {/* Unit idle image (shown when IDLE_TYPE is image) */}
-                    {APP_CONFIG.IDLE_TYPE === "image" && activeLayer === LAYERS.UNIT && !viewerProps.isPlaying && currentVideosPaths?.idleVideo && (
+                    {APP_CONFIG.IDLE_TYPE === ASSET_TYPES.IMAGE && activeLayer === LAYERS.UNIT && !viewerProps.isPlaying && currentVideosPaths?.idleVideo && (
                       <img
                         src={currentVideosPaths.idleVideo}
                         className="w-full h-full object-cover object-center rounded-2xl absolute inset-0 z-[11]"
@@ -576,47 +544,6 @@ export default function Home() {
                       <BaseFloat mediaRef={mediaContainerRef} />
                     )}
 
-
-                  {/* left floating chevron to collapse sidebar */}
-                  {activeTab !== TABS.HOME &&
-                    activeLayer !== LAYERS.AMENITY_DETAIL &&
-                    activeLayer !== LAYERS.SURROUNDING_DETAIL && (
-                      <button
-                        onClick={() => handleSidebarState((s) => !s)}
-                        className="absolute left-[-16px] top-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow z-50"
-                        aria-label={
-                          sidebarOpen ? "close sidebar" : "open sidebar"
-                        }
-                      >
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                        >
-                          {sidebarOpen ? (
-                            // Chevron pointing left (close sidebar)
-                            <path
-                              d="M15 18L9 12L15 6"
-                              stroke="#111827"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          ) : (
-                            // Chevron pointing right (open sidebar)
-                            <path
-                              d="M9 18L15 12L9 6"
-                              stroke="#111827"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          )}
-                        </svg>
-                      </button>
-                    )}
-
                   {/* info re-open button */}
                   {showI && <button className={`absolute -bottom-1 -right-1 flex items-center justify-center z-25
                   ${activeTab === TABS.SURROUNDINGS ? "bg-[#94846D]/70 backdrop-blur" : 'bg-black/70 backdrop-blur-sm'}
@@ -639,6 +566,48 @@ export default function Home() {
                     />
                   )}
                 </div>
+
+                {/* left floating chevron — direct child of main so z-[70] beats the overlay's z-60 */}
+                {activeTab !== TABS.HOME &&
+                  activeLayer !== LAYERS.AMENITY_DETAIL &&
+                  activeLayer !== LAYERS.SURROUNDING_DETAIL && (
+                    <button
+                      onClick={() => handleSidebarState((s) => !s)}
+                      className="absolute left-[-16px] top-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow z-[70]"
+                      aria-label={sidebarOpen ? "close sidebar" : "open sidebar"}
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        {sidebarOpen ? (
+                          <path d="M15 18L9 12L15 6" stroke="#111827" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        ) : (
+                          <path d="M9 18L15 12L9 6" stroke="#111827" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        )}
+                      </svg>
+                    </button>
+                  )}
+
+                {/* Room interior overlay — scoped to video area */}
+                {overlay?.type === 'room-interior' && (
+                  <div className="absolute inset-0 z-60 flex items-center justify-center rounded-2xl overflow-hidden">
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={closeOverlay} />
+                    <div className="relative z-70 w-15/16 h-9/10 bg-[#2f2f2f] rounded-3xl shadow-2xl overflow-hidden">
+                      <button
+                        onClick={closeOverlay}
+                        className="absolute top-4 right-4 z-40 w-10 h-10 rounded-xl bg-[#8B3A3A] hover:bg-[#A24242] flex items-center justify-center
+                          transition
+                          disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label="Close room interior"
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-white">
+                          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </button>
+                      <div className="w-full h-full">
+                        <Room room={overlay.data?.room} />
+                      </div>
+                    </div>
+                  </div>
+                )}
               </main>
             </div>
           </FilterContextProvider>

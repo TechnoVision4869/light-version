@@ -1,5 +1,5 @@
 // Application configuration
-const ASSET_TYPES = {
+export const ASSET_TYPES = {
   IMAGE: "image",
   VIDEO: "video",
 };

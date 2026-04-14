@@ -2,9 +2,17 @@ import { useContext, useState, useRef, useEffect, useCallback } from "react";
 import { TABS, LAYERS } from "../../data/layers";
 
 import { SidebarContext } from "../../store/SidebarContextProvider";
+import { APP_CONFIG, ASSET_TYPES } from "../../config/appConfig";
 
 export function useVideoViewer() {
-  const { history, activeTab, activeLayer, currentViews, currentVideosPaths, goBack } = useContext(SidebarContext);
+  const {
+    history,
+    activeTab,
+    activeLayer,
+    currentViews,
+    currentVideosPaths,
+    goBack,
+  } = useContext(SidebarContext);
 
   const [isVideosLoaded, setIsVideosLoaded] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -175,6 +183,27 @@ export function useVideoViewer() {
       if (!videoPath) return;
       // console.log("playIdleVideo called with idleVideo:", videoPath);
 
+      if(activeLayer === LAYERS.UNIT) {
+        const isImage = /\.(png|jpe?g|webp|avif)$/i.test(videoPath);
+        if (isImage) {
+          setFloatingOpacity(1);
+          setIsPlaying(false);
+
+          if (APP_CONFIG.IDLE_TYPE === ASSET_TYPES.VIDEO) {
+            console.warn(
+              "Idle video path is an image but APP_CONFIG.IDLE_TYPE is not set to IMAGE. Please check your configuration.",
+            );
+          }
+          return;
+        }
+
+        if (APP_CONFIG.IDLE_TYPE === ASSET_TYPES.IMAGE) {
+          console.warn(
+            "Idle video path is a video but APP_CONFIG.IDLE_TYPE is not set to VIDEO. Please check your configuration.",
+          );
+        }
+      }
+
       const target = getHiddenRef(); // always load into the hidden ref — no flash
       const onloaded = () => {
         setFirstVideoOpacity(target === "first" ? 1 : 0);
@@ -236,9 +265,7 @@ export function useVideoViewer() {
 
     if (currentVideosPaths) {
       loadVideoAssets();
-    }
-    else setIsVideosLoaded(true);
-    
+    } else setIsVideosLoaded(true);
   }, [currentVideosPaths]); // Watch history
 
   useEffect(() => {
@@ -265,6 +292,8 @@ export function useVideoViewer() {
     StartReverse,
     currentViewIndex,
     changeView,
-    skipNextTransition: () => { skipNextTransitionRef.current = true; },
+    skipNextTransition: () => {
+      skipNextTransitionRef.current = true;
+    },
   };
 }
