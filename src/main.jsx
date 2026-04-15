@@ -10,7 +10,14 @@ import { AuthProvider, AuthConsumer } from "./store/jwt-context.jsx";
 import App from "./App.jsx";
 
 // Register Service Worker for offline caching and performance (only when using API, not static data)
-if (!APP_CONFIG.USE_STATIC && 'serviceWorker' in navigator) {
+if (APP_CONFIG.USE_STATIC && 'serviceWorker' in navigator) {
+  // Unregister any previously registered SW when running in static mode
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    for (const registration of registrations) {
+      registration.unregister();
+    }
+  });
+} else if (!APP_CONFIG.USE_STATIC && 'serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     try {
       const registration = await navigator.serviceWorker.register('/sw.js');

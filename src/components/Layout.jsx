@@ -159,12 +159,12 @@ export default function Layout({ children, backgroundImage, fullscreen = false, 
 
       {/* Sidebar Menu */}
       <div
-        className={`fixed left-0 ${showHeader ? 'top-14 h-[calc(100vh-3.5rem)]' : 'top-14 h-screen'} w-52 sm:w-64 bg-[#1C1C1C] shadow-2xl z-25 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed left-0 ${showHeader ? 'top-14 h-[calc(100vh-3.5rem)]' : 'top-0 h-screen'} w-52 sm:w-64 bg-[#1C1C1C] shadow-2xl z-25 transform transition-transform duration-300 ease-in-out ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="p-6 flex flex-col h-full">
-          <nav className="flex flex-col gap-2 flex-1 mt-4">
+          <nav className={`flex flex-col gap-2 flex-1 ${showHeader ? 'mt-4' : 'mt-18'}`}>
             {menuItems.map((item) => (
               <button
                 key={item.path}

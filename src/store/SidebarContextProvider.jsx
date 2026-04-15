@@ -392,11 +392,14 @@ export default function SidebarContextProvider({ children }) {
             else if (activeLayer === LAYERS.UNIT) {
                 // Get rooms from unit type interior for floating buttons (only in hotspot/panorama mode)
                 if (!APP_CONFIG.USE_HOTSPOTS) {
+                    console.log(currentItem.unitTypeId);
+                    
                     const unitType = currentProject.unitTypes?.[currentItem?.unitTypeId];
                     if (unitType?.interior?.levels) {
+                        console.log("get ");
+                        
                         items = unitType.interior.levels.flatMap(level => level.rooms || []);
                         console.log(items);
-                        
                     }
                 }
             }

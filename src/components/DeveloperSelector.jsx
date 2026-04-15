@@ -3,7 +3,7 @@ import { developerApi } from "../api/admin/developerApi";
 import Layout from "./Layout";
 import toast from "react-hot-toast";
 import { assetApi } from "../api/admin/assetApi";
-import DEFAULT_LOGO from "../../public/default-logo.png";
+const DEFAULT_LOGO = '/default-logo.png';
 
 export default function DeveloperSelector({ onDeveloperSelect }) {
   const [developers, setDevelopers] = useState([]);

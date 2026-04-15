@@ -42,15 +42,18 @@ self.addEventListener('fetch', (event) => {
           }
 
           // Not in cache, fetch from network
-          return fetch(request)
+          // Strip Range header to force a full 200 response that can be cached
+          // (videos are short 1-2s clips so fetching the full file upfront is fine)
+          const fullRequest = new Request(request.url, { headers: {} });
+          return fetch(fullRequest)
             .then((networkResponse) => {
               if (!networkResponse || !networkResponse.ok) {
                 return networkResponse;
               }
 
-              // Cache successful response
+              // Cache successful full response
               const responseToCache = networkResponse.clone();
-              cache.put(request, responseToCache);
+              cache.put(request.url, responseToCache);
               console.log('[SW] Cached video:', url.pathname);
 
               return networkResponse;

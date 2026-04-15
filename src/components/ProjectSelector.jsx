@@ -8,7 +8,7 @@ import { developerApi } from "@/api/admin/developerApi";
 import { assetApi } from "../api/admin/assetApi";
 import { DATA } from "../data/layers";
 import { fetchProjectById } from "../lib/projectFetcher";
-import PROJECT_HIGHLIGHT from "../../public/light-house/images/project-highlight.png";
+const PROJECT_HIGHLIGHT = '/light-house/images/project-highlight.png';
 
 export default function ProjectSelector({
   developerId,
