@@ -479,6 +479,9 @@ export default function Home() {
                       muted
                       playsInline
                       preload="auto"
+                      disableRemotePlayback
+                      controlsList="nodownload nofullscreen noremoteplayback"
+                      poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%23434343' width='1' height='1'/%3E%3C/svg%3E"
                     />
                     {/* Second Video (e.g., target idle after transition) */}
                     <video
@@ -489,6 +492,9 @@ export default function Home() {
                       muted
                       playsInline
                       preload="auto"
+                      disableRemotePlayback
+                      controlsList="nodownload nofullscreen noremoteplayback"
+                      poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%23434343' width='1' height='1'/%3E%3C/svg%3E"
                     />
 
                     {/* Unit idle image (shown when IDLE_TYPE is image) */}
@@ -503,6 +509,9 @@ export default function Home() {
                     {/* {activeLayer === LAYERS.SURROUNDING_DETAIL && (
                       <AnimatedPath path={currentItem.svgPath} />
                     )} */}
+
+                    {/* Transparent overlay to suppress Android WebView native video controls */}
+                    <div className="absolute inset-0 z-[12] pointer-events-none" />
                   </div>
 
                   {/* Floor switch blur overlay */}

@@ -19,7 +19,7 @@ export function useVideoViewer() {
 
   const [floatingOpacity, setFloatingOpacity] = useState(0);
   const [firstVideoOpacity, setFirstVideoOpacity] = useState(0);
-  const [secondVideoOpacity, setSecondVideoOpacity] = useState(1);
+  const [secondVideoOpacity, setSecondVideoOpacity] = useState(0);
 
   const firstVideoRef = useRef(null);
   const secondVideoRef = useRef(null);
