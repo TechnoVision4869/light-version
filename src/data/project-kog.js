@@ -3660,10 +3660,10 @@ export const DEVELOPER_TBK = {
                                         furnitureImgId: "/kog/panorama/family_midd/f/ground/entrance.jpg",
                                         unfurnitureImgId: "/kog/panorama/family_midd/unf/ground/entrance.jpg",
                                         hotspots: [
-                                            { id: "hp2", yaw: 162.69, pitch: -11.91, type: "scene", label: "Ground/Living02" },
+                                            { id: "hp2", yaw: 162.69, pitch: -11.91, type: "scene", label: "Ground/Living 2" },
                                             { id: "hp3", yaw: 67.19, pitch: -20.96, type: "scene", label: "Ground/Kitchen" },
                                             { id: "hp4", yaw: -78.18, pitch: -27.69, type: "scene", label: "Ground/Toilet" },
-                                            { id: "hp5", yaw: -171.43, pitch: -14.63, type: "scene", label: "Ground/Living01" },
+                                            { id: "hp5", yaw: -171.43, pitch: -14.63, type: "scene", label: "Ground/Living 1" },
                                             { id: "hp6", yaw: -105.42, pitch: -55.75, type: "scene", label: "First/Corridor" }
                                         ]
                                     },
@@ -3715,11 +3715,11 @@ export const DEVELOPER_TBK = {
                                         furnitureImgId: "/kog/panorama/family_midd/f/first/corridor.jpg",
                                         unfurnitureImgId: "/kog/panorama/family_midd/unf/first/corridor.jpg",
                                         hotspots: [
-                                            { id: "hp1", yaw: -39.07, pitch: -36.39, type: "scene", label: "First/M Bedroom02" },
-                                            { id: "hp2", yaw: 174.9, pitch: -12.66, type: "scene", label: "First/Bedroom01" },
-                                            { id: "hp3", yaw: 153.37, pitch: -22.72, type: "scene", label: "First/Bedroom02" },
+                                            { id: "hp1", yaw: -39.07, pitch: -36.39, type: "scene", label: "First/Master Bedroom 2" },
+                                            { id: "hp2", yaw: 174.9, pitch: -12.66, type: "scene", label: "First/Bedroom 1" },
+                                            { id: "hp3", yaw: 153.37, pitch: -22.72, type: "scene", label: "First/Bedroom 2" },
                                             { id: "hp4", yaw: 81.34, pitch: -21.88, type: "scene", label: "First/Toilet" },
-                                            { id: "hp5", yaw: 7.91, pitch: -22.32, type: "scene", label: "First/M Bedroom01" },
+                                            { id: "hp5", yaw: 7.91, pitch: -22.32, type: "scene", label: "First/Master Bedroom 1" },
                                             { id: "hp6", yaw: -72.51, pitch: -48.96, type: "scene", label: "Roof/Roof Room" },
                                             { id: "hp7", yaw: -111.93, pitch: -37.97, type: "scene", label: "Ground/Entrance" },
                                             { id: "hp8", yaw: -137.64, pitch: -18.63, type: "scene", label: "First/Living" }
@@ -3727,7 +3727,7 @@ export const DEVELOPER_TBK = {
                                     },
                                     {
                                         id: "f1-bedroom01",
-                                        displayName: "Bedroom01",
+                                        displayName: "Bedroom 1",
                                         furnitureImgId: "/kog/panorama/family_midd/f/first/bedroom01.jpg",
                                         unfurnitureImgId: "/kog/panorama/family_midd/unf/first/bedroom01.jpg",
                                         hotspots: [
@@ -3736,7 +3736,7 @@ export const DEVELOPER_TBK = {
                                     },
                                     {
                                         id: "f1-bedroom02",
-                                        displayName: "Bedroom02",
+                                        displayName: "Bedroom 2",
                                         furnitureImgId: "/kog/panorama/family_midd/f/first/bedroom02.jpg",
                                         unfurnitureImgId: "/kog/panorama/family_midd/unf/first/bedroom02.jpg",
                                         hotspots: [
@@ -3745,7 +3745,7 @@ export const DEVELOPER_TBK = {
                                     },
                                     {
                                         id: "f1-m_bedroom01",
-                                        displayName: "M Bedroom01",
+                                        displayName: "Master Bedroom 1",
                                         furnitureImgId: "/kog/panorama/family_midd/f/first/m.bedroom01.jpg",
                                         unfurnitureImgId: "/kog/panorama/family_midd/unf/first/m.bedroom01.jpg",
                                         hotspots: [
@@ -3754,7 +3754,7 @@ export const DEVELOPER_TBK = {
                                     },
                                     {
                                         id: "f1-m_bedroom02",
-                                        displayName: "M Bedroom02",
+                                        displayName: "Master Bedroom 2",
                                         furnitureImgId: "/kog/panorama/family_midd/f/first/m.bedroom02.jpg",
                                         unfurnitureImgId: "/kog/panorama/family_midd/unf/first/m.bedroom02.jpg",
                                         hotspots: [
@@ -3898,14 +3898,14 @@ export const DEVELOPER_TBK = {
                                             { id: "hp1", yaw: -65.43, pitch: -57.83, type: "scene", label: "Ground/Entrance" },
                                             { id: "hp2", yaw: -13.4, pitch: -44.34, type: "scene", label: "Roof/Roof Room" },
                                             { id: "hp3", yaw: -14.41, pitch: -24.7, type: "scene", label: "First/Toilet" },
-                                            { id: "hp4", yaw: -175.17, pitch: -26.72, type: "scene", label: "First/Bedroom02" },
-                                            { id: "hp5", yaw: -136.1, pitch: -40.3, type: "scene", label: "First/Bedroom01" },
-                                            { id: "hp6", yaw: -2.55, pitch: -19.38, type: "scene", label: "First/M Bedroom" }
+                                            { id: "hp4", yaw: -175.17, pitch: -26.72, type: "scene", label: "First/Bedroom 2" },
+                                            { id: "hp5", yaw: -136.1, pitch: -40.3, type: "scene", label: "First/Bedroom 1" },
+                                            { id: "hp6", yaw: -2.55, pitch: -19.38, type: "scene", label: "First/Master Bedroom" }
                                         ]
                                     },
                                     {
                                         id: "f1-bedroom01",
-                                        displayName: "Bedroom01",
+                                        displayName: "Bedroom 1",
                                         furnitureImgId: "/kog/panorama/Family_corner/f/first/bedroom01.jpg",
                                         unfurnitureImgId: "/kog/panorama/Family_corner/unf/first/bedroom01.jpg",
                                         hotspots: [
@@ -3914,7 +3914,7 @@ export const DEVELOPER_TBK = {
                                     },
                                     {
                                         id: "f1-bedroom02",
-                                        displayName: "Bedroom02",
+                                        displayName: "Bedroom 2",
                                         furnitureImgId: "/kog/panorama/Family_corner/f/first/bedroom02.jpg",
                                         unfurnitureImgId: "/kog/panorama/Family_corner/unf/first/bedroom02.jpg",
                                         hotspots: [
@@ -3923,31 +3923,31 @@ export const DEVELOPER_TBK = {
                                     },
                                     {
                                         id: "f1-m_bedroom",
-                                        displayName: "M Bedroom",
+                                        displayName: "Master Bedroom",
                                         furnitureImgId: "/kog/panorama/Family_corner/f/first/m.bedroom.jpg",
                                         unfurnitureImgId: "/kog/panorama/Family_corner/unf/first/m.bedroom.jpg",
                                         hotspots: [
                                             { id: "hp1", yaw: 154.82, pitch: -20.61, type: "scene", label: "First/Corridor" },
-                                            { id: "hp2", yaw: -101.78, pitch: -35.82, type: "scene", label: "First/M Bedroom Dressing" }
+                                            { id: "hp2", yaw: -101.78, pitch: -35.82, type: "scene", label: "First/Master Bedroom Dressing" }
                                         ]
                                     },
                                     {
                                         id: "f1-m_bedroom_dressing",
-                                        displayName: "M Bedroom Dressing",
+                                        displayName: "Master Bedroom Dressing",
                                         furnitureImgId: "/kog/panorama/Family_corner/f/first/m.bedroom_dressing.jpg",
                                         unfurnitureImgId: "/kog/panorama/Family_corner/unf/first/m.bedroom_dressing.jpg",
                                         hotspots: [
-                                            { id: "hp1", yaw: -169.41, pitch: -47.86, type: "scene", label: "First/M Bedroom Toilet" },
-                                            { id: "hp2", yaw: 97.08, pitch: -54.71, type: "scene", label: "First/M Bedroom" }
+                                            { id: "hp1", yaw: -169.41, pitch: -47.86, type: "scene", label: "First/Master Bedroom Toilet" },
+                                            { id: "hp2", yaw: 97.08, pitch: -54.71, type: "scene", label: "First/Master Bedroom" }
                                         ]
                                     },
                                     {
                                         id: "f1-m_bedroom_toilet",
-                                        displayName: "M Bedroom Toilet",
+                                        displayName: "Master Bedroom Toilet",
                                         furnitureImgId: "/kog/panorama/Family_corner/f/first/m.bed_toilet.jpg",
                                         unfurnitureImgId: "/kog/panorama/Family_corner/unf/first/m.bedroom_toilet.jpeg",
                                         hotspots: [
-                                            { id: "hp1", yaw: -90.09, pitch: -46.01, type: "scene", label: "First/M Bedroom Dressing" }
+                                            { id: "hp1", yaw: -90.09, pitch: -46.01, type: "scene", label: "First/Master Bedroom Dressing" }
                                         ]
                                     },
                                     {
@@ -4426,9 +4426,9 @@ export const DEVELOPER_TBK = {
                                 rooms: [
                                     {
                                         id: "g-entrance",
-                                        displayName: "Entrance",
-                                        furnitureImgId: "/kog/panorama/Meadows/f/ground/entrance.jpeg",
-                                        unfurnitureImgId: "/kog/panorama/Meadows/unf/ground/unf_entrance.jpeg",
+                                        displayName: "Living 12",
+                                        furnitureImgId: "/kog/panorama/test/Mono_12.CAM_L01.0000.jpeg",
+                                        unfurnitureImgId: null,
                                         hotspots: [
                                             { id: "hp1", yaw: 94.17, pitch: -13.89, type: "scene", label: "Ground/Living" },
                                             { id: "hp2", yaw: 50.8, pitch: -36.87, type: "scene", label: "Ground/Toilet" },
@@ -4439,9 +4439,9 @@ export const DEVELOPER_TBK = {
                                     },
                                     {
                                         id: "g-dining",
-                                        displayName: "Dining",
-                                        furnitureImgId: "/kog/panorama/Meadows/f/ground/dining.jpg",
-                                        unfurnitureImgId: "/kog/panorama/Meadows/unf/ground/dining.jpg",
+                                        displayName: "Living 30",
+                                        furnitureImgId: "/kog/panorama/test/Mono_30.CAM_L01.0000.jpeg",
+                                        unfurnitureImgId: null,
                                         hotspots: [
                                             { id: "hp1", yaw: 89.78, pitch: -26.19, type: "scene", label: "Ground/Living" },
                                             { id: "hp2", yaw: -45.18, pitch: -56.34, type: "scene", label: "First/Corridor" },
@@ -4450,9 +4450,9 @@ export const DEVELOPER_TBK = {
                                     },
                                     {
                                         id: "g-living",
-                                        displayName: "Living",
-                                        furnitureImgId: "/kog/panorama/Meadows/f/ground/living.jpg",
-                                        unfurnitureImgId: "/kog/panorama/Meadows/unf/ground/living.jpg",
+                                        displayName: "Living 50",
+                                        furnitureImgId: "/kog/panorama/test/Mono_50.CAM_L01.0000.jpeg",
+                                        unfurnitureImgId: null,
                                         hotspots: [
                                             { id: "hp1", yaw: -78.88, pitch: -36.34, type: "scene", label: "Ground/Dining" },
                                             { id: "hp2", yaw: -90.48, pitch: -16.79, type: "scene", label: "Ground/Entrance" }
@@ -4490,16 +4490,16 @@ export const DEVELOPER_TBK = {
                                         hotspots: [
                                             { id: "hp1", yaw: 21.49, pitch: -53.88, type: "scene", label: "Ground/Entrance" },
                                             { id: "hp2", yaw: -37.97, pitch: -48.52, type: "scene", label: "Roof/Roof Room" },
-                                            { id: "hp3", yaw: -78.93, pitch: -34.8, type: "scene", label: "First/Bedroom02" },
-                                            { id: "hp4", yaw: -129.2, pitch: -47.37, type: "scene", label: "First/Toilet01" },
-                                            { id: "hp5", yaw: -91.67, pitch: -18.41, type: "scene", label: "First/Bedroom01" },
-                                            { id: "hp6", yaw: 95.01, pitch: -27.07, type: "scene", label: "First/M Bedroom" },
-                                            { id: "hp7", yaw: 50.41, pitch: -22.24, type: "scene", label: "First/Living02" },
+                                            { id: "hp3", yaw: -78.93, pitch: -34.8, type: "scene", label: "First/Bedroom 2" },
+                                            { id: "hp4", yaw: -129.2, pitch: -47.37, type: "scene", label: "First/Toilet" },
+                                            { id: "hp5", yaw: -91.67, pitch: -18.41, type: "scene", label: "First/Bedroom 1" },
+                                            { id: "hp6", yaw: 95.01, pitch: -27.07, type: "scene", label: "First/Master Bedroom" },
+                                            { id: "hp7", yaw: 50.41, pitch: -22.24, type: "scene", label: "First/Living 2" },
                                         ]
                                     },
                                     {
                                         id: "f1-bedroom01",
-                                        displayName: "Bedroom01",
+                                        displayName: "Bedroom 1",
                                         furnitureImgId: "/kog/panorama/Meadows/f/first/bedroom01.jpg",
                                         unfurnitureImgId: "/kog/panorama/Meadows/unf/first/bedroom01.jpg",
                                         hotspots: [
@@ -4508,7 +4508,7 @@ export const DEVELOPER_TBK = {
                                     },
                                     {
                                         id: "f1-bedroom02",
-                                        displayName: "Bedroom02",
+                                        displayName: "Bedroom 2",
                                         furnitureImgId: "/kog/panorama/Meadows/f/first/bedroom02.jpg",
                                         unfurnitureImgId: "/kog/panorama/Meadows/unf/first/bedroom02.jpg",
                                         hotspots: [
@@ -4517,7 +4517,7 @@ export const DEVELOPER_TBK = {
                                     },
                                     {
                                         id: "f1-living02",
-                                        displayName: "Living02",
+                                        displayName: "Living 2",
                                         furnitureImgId: "/kog/panorama/Meadows/f/first/living02.jpg",
                                         unfurnitureImgId: "/kog/panorama/Meadows/unf/first/living02.jpg",
                                         hotspots: [
@@ -4526,36 +4526,36 @@ export const DEVELOPER_TBK = {
                                     },
                                     {
                                         id: "f1-m_bedroom",
-                                        displayName: "M Bedroom",
+                                        displayName: "Master Bedroom",
                                         furnitureImgId: "/kog/panorama/Meadows/f/first/m.bedroom.jpg",
                                         unfurnitureImgId: "/kog/panorama/Meadows/unf/first/m.bedroom.jpg",
                                         hotspots: [
                                             { id: "hp1", yaw: 3.16, pitch: -14.28, type: "scene", label: "First/Corridor" },
-                                            { id: "hp2", yaw: 4.83, pitch: -26.15, type: "scene", label: "First/M Bedroom Dressing" }
+                                            { id: "hp2", yaw: 4.83, pitch: -26.15, type: "scene", label: "First/Master Bedroom Dressing" }
                                         ]
                                     },
                                     {
                                         id: "f1-m_bedroom_dressing",
-                                        displayName: "M Bedroom Dressing",
+                                        displayName: "Master Bedroom Dressing",
                                         furnitureImgId: "/kog/panorama/Meadows/f/first/m.bedroom_dressing.jpg",
                                         unfurnitureImgId: "/kog/panorama/Meadows/unf/first/m.bedroom_dressing.jpg",
                                         hotspots: [
-                                            { id: "hp1", yaw: 158.03, pitch: -50.14, type: "scene", label: "First/M Bedroom" },
-                                            { id: "hp2", yaw: -83.06, pitch: -54.71, type: "scene", label: "First/M Bedroom Toilet" }
+                                            { id: "hp1", yaw: 158.03, pitch: -50.14, type: "scene", label: "First/Master Bedroom" },
+                                            { id: "hp2", yaw: -83.06, pitch: -54.71, type: "scene", label: "First/Master Bedroom Toilet" }
                                         ]
                                     },
                                     {
                                         id: "f1-m_bedroom_toilet",
-                                        displayName: "M Bedroom Toilet",
+                                        displayName: "Master Bedroom Toilet",
                                         furnitureImgId: "/kog/panorama/Meadows/f/first/m.bedroom_toilet.jpg",
                                         unfurnitureImgId: "/kog/panorama/Meadows/unf/first/m.bedroom_toilet.jpg",
                                         hotspots: [
-                                            { id: "hp1", yaw: 84.02, pitch: -51.72, type: "scene", label: "First/M Bedroom Dressing" }
+                                            { id: "hp1", yaw: 84.02, pitch: -51.72, type: "scene", label: "First/Master Bedroom Dressing" }
                                         ]
                                     },
                                     {
                                         id: "f1-toilet01",
-                                        displayName: "Toilet01",
+                                        displayName: "Toilet",
                                         furnitureImgId: "/kog/panorama/Meadows/f/first/toilet01.jpg",
                                         unfurnitureImgId: "/kog/panorama/Meadows/unf/first/toilet01.jpg",
                                         hotspots: [
@@ -4624,7 +4624,7 @@ export const DEVELOPER_TBK = {
                                         furnitureImgId: "/kog/panorama/camilia/f/ground/entrance_camilia.jpg",
                                         unfurnitureImgId: "/kog/panorama/camilia/unf/ground/entrance_camilia.jpg",
                                         hotspots: [
-                                            { id: "hp1", yaw: -146.43, pitch: -11.69, type: "scene", label: "Ground/Living02" },
+                                            { id: "hp1", yaw: -146.43, pitch: -11.69, type: "scene", label: "Ground/Living 2" },
                                             { id: "hp2", yaw: 171.21, pitch: -10.9, type: "scene", label: "Ground/Living01" },
                                             { id: "hp3", yaw: 40.08, pitch: -21.36, type: "scene", label: "Ground/Bedroom" },
                                             { id: "hp4", yaw: 160.62, pitch: -29.88, type: "scene", label: "First/Corridor" },
@@ -4639,7 +4639,7 @@ export const DEVELOPER_TBK = {
                                         unfurnitureImgId: "/kog/panorama/camilia/unf/ground/dining.jpg",
                                         hotspots: [
                                             { id: "hp1", yaw: 137.5, pitch: -18.06, type: "scene", label: "Ground/Living01" },
-                                            { id: "hp2", yaw: -135.22, pitch: -23.47, type: "scene", label: "Ground/Living02" },
+                                            { id: "hp2", yaw: -135.22, pitch: -23.47, type: "scene", label: "Ground/Living 2" },
                                             { id: "hp3", yaw: 74.62, pitch: -25.14, type: "scene", label: "First/Corridor" },
                                             { id: "hp4", yaw: 19.56, pitch: -25.62, type: "scene", label: "Ground/Entrance" }
                                         ]
@@ -4673,7 +4673,7 @@ export const DEVELOPER_TBK = {
                                     },
                                     {
                                         id: "living02",
-                                        displayName: "Living02",
+                                        displayName: "Living 2",
                                         furnitureImgId: "/kog/panorama/camilia/f/ground/living02.jpg",
                                         unfurnitureImgId: "/kog/panorama/camilia/unf/ground/living02.jpg",
                                         hotspots: [
@@ -4727,30 +4727,30 @@ export const DEVELOPER_TBK = {
                                     },
                                     {
                                         id: "bedroom02",
-                                        displayName: "Bedroom02",
+                                        displayName: "Bedroom 2",
                                         furnitureImgId: "/kog/panorama/camilia/f/first/bedroom02.jpg",
                                         unfurnitureImgId: "/kog/panorama/camilia/unf/first/bedroom02.jpg",
                                         hotspots: [
                                             { id: "hp1", yaw: -169.67, pitch: -21.67, type: "scene", label: "First/Corridor" },
-                                            { id: "hp2", yaw: -133.64, pitch: -25.4, type: "scene", label: "First/Bedroom02 Toilet" }
+                                            { id: "hp2", yaw: -133.64, pitch: -25.4, type: "scene", label: "First/Bedroom 2 Toilet" }
                                         ]
                                     },
                                     {
                                         id: "bedroom02_toilet",
-                                        displayName: "Bedroom02 Toilet",
+                                        displayName: "Bedroom 2 Toilet",
                                         furnitureImgId: "/kog/panorama/camilia/f/first/bedroom02_toilet.jpg",
                                         unfurnitureImgId: "/kog/panorama/camilia/unf/first/bedroom02_toilet.jpg",
                                         hotspots: [
-                                            { id: "hp1", yaw: 43.37, pitch: -26.02, type: "scene", label: "First/Bedroom02" }
+                                            { id: "hp1", yaw: 43.37, pitch: -26.2, type: "scene", label: "First/Bedroom 2" }
                                         ]
                                     },
                                     {
                                         id: "bedroom03",
-                                        displayName: "Bedroom03",
+                                        displayName: "Bedroom 3",
                                         furnitureImgId: "/kog/panorama/camilia/f/first/bedroom03.jpg",
                                         unfurnitureImgId: "/kog/panorama/camilia/unf/first/bedroom03.jpg",
                                         hotspots: [
-                                            { id: "hp1", yaw: 176.92, pitch: -29.49, type: "scene", label: "First/Bedroom02 Toilet" },
+                                            { id: "hp1", yaw: 176.92, pitch: -29.49, type: "scene", label: "First/Bedroom 2 Toilet" },
                                             { id: "hp2", yaw: -173.45, pitch: -17.93, type: "scene", label: "First/Corridor" }
                                         ]
                                     },
@@ -4760,18 +4760,18 @@ export const DEVELOPER_TBK = {
                                         furnitureImgId: "/kog/panorama/camilia/f/first/corridor_camilia.jpg",
                                         unfurnitureImgId: "/kog/panorama/camilia/unf/first/corridor_camilia.jpg",
                                         hotspots: [
-                                            { id: "hp1", yaw: -126.25, pitch: -21.88, type: "scene", label: "First/Living03" },
+                                            { id: "hp1", yaw: -126.25, pitch: -21.88, type: "scene", label: "First/Living 3" },
                                             { id: "hp2", yaw: 161.63, pitch: -41.84, type: "scene", label: "Ground/Entrance" },
                                             { id: "hp3", yaw: 36.61, pitch: -55.9, type: "scene", label: "Roof/Roof Room" },
-                                            { id: "hp4", yaw: -86.04, pitch: -15.91, type: "scene", label: "First/M Bedroom" },
-                                            { id: "hp5", yaw: -76.6, pitch: -16, type: "scene", label: "First/Bedroom02" },
-                                            { id: "hp6", yaw: -176.84, pitch: -19.07, type: "scene", label: "First/Bedroom01" },
-                                            { id: "hp7", yaw: 5.71, pitch: -18.06, type: "scene", label: "First/Bedroom03" }
+                                            { id: "hp4", yaw: -86.04, pitch: -15.91, type: "scene", label: "First/Master Bedroom" },
+                                            { id: "hp5", yaw: -76.6, pitch: -16, type: "scene", label: "First/Bedroom 2" },
+                                            { id: "hp6", yaw: -176.84, pitch: -19.07, type: "scene", label: "First/Bedroom 1" },
+                                            { id: "hp7", yaw: 5.71, pitch: -18.06, type: "scene", label: "First/Bedroom 3" }
                                         ]
                                     },
                                     {
                                         id: "living03",
-                                        displayName: "Living03",
+                                        displayName: "Living 3",
                                         furnitureImgId: "/kog/panorama/camilia/f/first/living03.jpg",
                                         unfurnitureImgId: "/kog/panorama/camilia/unf/first/living03.jpg",
                                         hotspots: [
@@ -4780,7 +4780,7 @@ export const DEVELOPER_TBK = {
                                     },
                                     {
                                         id: "m.bedroom",
-                                        displayName: "M Bedroom",
+                                        displayName: "Master Bedroom",
                                         furnitureImgId: "/kog/panorama/camilia/f/first/m.bedroom.jpg",
                                         unfurnitureImgId: "/kog/panorama/camilia/unf/first/m.bedroom.jpg",
                                         hotspots: [
@@ -4789,11 +4789,11 @@ export const DEVELOPER_TBK = {
                                     },
                                     {
                                         id: "m_bedroom_toilet",
-                                        displayName: "M Bedroom Toilet",
+                                        displayName: "Master Bedroom Toilet",
                                         furnitureImgId: "/kog/panorama/camilia/f/first/m_bedroom_toilet.jpg",
                                         unfurnitureImgId: "/kog/panorama/camilia/unf/first/m_bedroom_toilet.jpg",
                                         hotspots: [
-                                            { id: "hp1", yaw: 97.03, pitch: -50.1, type: "scene", label: "First/M Bedroom" }
+                                            { id: "hp1", yaw: 97.03, pitch: -50.1, type: "scene", label: "First/Master Bedroom" }
                                         ]
                                     }
                                 ]
@@ -4916,16 +4916,16 @@ export const DEVELOPER_TBK = {
                                         unfurnitureImgId: "/kog/panorama/Oak168/unf/first/corridor.jpg",
                                         hotspots: [
                                             { id: "hp1", yaw: 81.34, pitch: -25.14, type: "scene", label: "Ground/Entrance" },
-                                            { id: "hp2", yaw: 145.2, pitch: -30.81, type: "scene", label: "First/Bedroom01" },
-                                            { id: "hp3", yaw: 89.6, pitch: -11.29, type: "scene", label: "First/M Bedroom" },
+                                            { id: "hp2", yaw: 145.2, pitch: -30.81, type: "scene", label: "First/Bedroom 1" },
+                                            { id: "hp3", yaw: 89.6, pitch: -11.29, type: "scene", label: "First/Master Bedroom" },
                                             { id: "hp4", yaw: -89.56, pitch: -22.72, type: "scene", label: "First/Toilet" },
-                                            { id: "hp5", yaw: -133.24, pitch: -28.39, type: "scene", label: "First/Bedroom02" },
+                                            { id: "hp5", yaw: -133.24, pitch: -28.39, type: "scene", label: "First/Bedroom 2" },
                                             { id: "hp6", yaw: -79.41, pitch: -36.08, type: "scene", label: "Roof/Roof Room" }
                                         ]
                                     },
                                     {
                                         id: "f1-bedroom01",
-                                        displayName: "Bedroom01",
+                                        displayName: "Bedroom 1",
                                         furnitureImgId: "/kog/panorama/Oak168/f/first/bedroom01.jpg",
                                         unfurnitureImgId: "/kog/panorama/Oak168/unf/first/bedroom01.jpg",
                                         hotspots: [
@@ -4934,7 +4934,7 @@ export const DEVELOPER_TBK = {
                                     },
                                     {
                                         id: "f1-bedroom02",
-                                        displayName: "Bedroom02",
+                                        displayName: "Bedroom 2",
                                         furnitureImgId: "/kog/panorama/Oak168/f/first/bedroom02.jpg",
                                         unfurnitureImgId: "/kog/panorama/Oak168/unf/first/bedroom02.jpg",
                                         hotspots: [
@@ -4943,21 +4943,21 @@ export const DEVELOPER_TBK = {
                                     },
                                     {
                                         id: "f1-m_bedroom",
-                                        displayName: "M Bedroom",
+                                        displayName: "Master Bedroom",
                                         furnitureImgId: "/kog/panorama/Oak168/f/first/m.bedroom.jpg",
                                         unfurnitureImgId: "/kog/panorama/Oak168/unf/first/m.bedroom.jpg",
                                         hotspots: [
-                                            { id: "hp1", yaw: -71.72, pitch: -26.24, type: "scene", label: "First/M Bedroom Toilet" },
+                                            { id: "hp1", yaw: -71.72, pitch: -26.24, type: "scene", label: "First/Master Bedroom Toilet" },
                                             { id: "hp2", yaw: -80.24, pitch: -17.93, type: "scene", label: "First/Corridor" }
                                         ]
                                     },
                                     {
                                         id: "f1-m_bedroom_toilet",
-                                        displayName: "M Bedroom Toilet",
+                                        displayName: "Master Bedroom Toilet",
                                         furnitureImgId: "/kog/panorama/Oak168/f/first/m.bedroom_toilet.jpg",
                                         unfurnitureImgId: "/kog/panorama/Oak168/unf/first/m.bedroom_toilet.jpg",
                                         hotspots: [
-                                            { id: "hp1", yaw: 167.7, pitch: -50.67, type: "scene", label: "First/M Bedroom" }
+                                            { id: "hp1", yaw: 167.7, pitch: -50.67, type: "scene", label: "First/Master Bedroom" }
                                         ]
                                     },
                                     {

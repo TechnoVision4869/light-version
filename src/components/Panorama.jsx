@@ -71,9 +71,14 @@ export default function Panorama({ unit }) {
     return () => clearTimeout(refreshId);
   }, [hotspots, currentImage]);
 
-  // Find room by name
+  // Find room by composite key "FloorName/RoomDisplayName"
   const findRoomById = useCallback((roomLabel) => {
-    return levels.flatMap(floor => floor.rooms).find(room => room.displayName === roomLabel);
+    const slashIndex = roomLabel.indexOf("/");
+    if (slashIndex === -1) return undefined;
+    const floorName = roomLabel.slice(0, slashIndex);
+    const displayName = roomLabel.slice(slashIndex + 1);
+    const floor = levels.find(f => f.name === floorName);
+    return floor?.rooms.find(r => r.displayName === displayName);
   }, [levels]);
 
   // Find floor by room
@@ -201,6 +206,7 @@ export default function Panorama({ unit }) {
         isFurnished={isFurnished}
         currentRoom={room.displayName}
         currentFloor={findFloorByRoom(room)?.name}
+        hasUnfurnished={!!room.unfurnitureImgId}
         onFurnitureToggle={() => {
           zoomOnLoadRef.current = false; // no zoom on furniture toggle, just blur
           setIsFurnished(!isFurnished);

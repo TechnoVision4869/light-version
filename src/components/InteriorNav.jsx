@@ -42,7 +42,7 @@ const Dropdown = ({ label, options, value, onChange }) => {
     );
 };
 
-export default function InteriorNav({ levels, isFurnished = true, currentFloor, currentRoom, onFurnitureToggle, onRoomChange }) {
+export default function InteriorNav({ levels, isFurnished = true, currentFloor, currentRoom, hasUnfurnished = true, onFurnitureToggle, onRoomChange }) {
     const levelsOptions = levels.map(level => level.name);
     const [selectedFloor, setSelectedFloor] = useState(currentFloor || levels[0].name);
     const [roomsOptions, setRoomsOptions] = useState(levels[0].rooms.map(room => room.displayName));
@@ -56,15 +56,15 @@ export default function InteriorNav({ levels, isFurnished = true, currentFloor, 
             const newRoomsOptions = selectedLevel.rooms.map(room => room.displayName);
             setRoomsOptions(newRoomsOptions);
             setSelectedRoom(newRoomsOptions[0]);
-            // Call onRoomChange with first room of new floor
-            onRoomChange?.(newRoomsOptions[0]);
+            // Call onRoomChange with composite key
+            onRoomChange?.(`${floorName}/${newRoomsOptions[0]}`);
         }
     };
 
     // Handle room change
     const handleRoomChange = (roomName) => {
         setSelectedRoom(roomName);
-        onRoomChange?.(roomName);
+        onRoomChange?.(`${selectedFloor}/${roomName}`);
     };
 
     // Update dropdowns when current floor/room change (e.g., from hotspot click)
@@ -91,6 +91,7 @@ export default function InteriorNav({ levels, isFurnished = true, currentFloor, 
             <div className="flex items-center justify-around bg-[#53535380] backdrop-blur-md text-white rounded-2xl shadow-2xl px-2 md:px-2 py-3 md:py-3 relative">
                 <Dropdown label="Floor " options={levelsOptions} value={selectedFloor} onChange={handleFloorChange} />
                 <Dropdown label="Room " options={roomsOptions} value={selectedRoom} onChange={handleRoomChange} />
+                {hasUnfurnished && (
                 <div>
                     <button
                         className={`w-10 h-10 rounded-2xl p-2 bg-[#383838] flex items-center justify-center hover:bg-white/7 transition`}
@@ -102,6 +103,7 @@ export default function InteriorNav({ levels, isFurnished = true, currentFloor, 
                         />
                     </button>
                 </div>
+                )}
             </div>
         </div>
     );

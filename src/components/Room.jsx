@@ -66,7 +66,7 @@ export default function Room({ room }) {
       )}
 
       {/* Furniture toggle button — only shown when two distinct images exist */}
-      {room.furnitureImgId !== room.unfurnitureImgId && (
+      {room.unfurnitureImgId && room.furnitureImgId !== room.unfurnitureImgId && (
         <div className="absolute bottom-4 right-4 z-40">
           <button
             className="w-10 h-10 rounded-2xl p-2 bg-[#383838] flex items-center justify-center hover:bg-white/7 transition"

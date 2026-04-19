@@ -331,8 +331,11 @@ export default function Home() {
                     if ((activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS) && activeLayer === null)
                       handleSidebarState(false);
 
+                    if(overlay) {
+                      closeOverlay();
+                      return;
+                    }
                     viewerProps.StartReverse(false, () => { });
-                    if(overlay) closeOverlay();
                   }}
                   disabled={isDisabled || history.length <= 1}
                   className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
@@ -582,8 +585,7 @@ export default function Home() {
                   activeLayer !== LAYERS.SURROUNDING_DETAIL && (
                     <button
                       onClick={() => handleSidebarState((s) => !s)}
-                      className="absolute left-[-16px] top-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow z-[70]"
-                      aria-label={sidebarOpen ? "close sidebar" : "open sidebar"}
+                      className={`absolute left-[-16px] top-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow ${overlay?.type === 'room-interior' ? 'z-[70]' : 'z-[50]'}`}                      aria-label={sidebarOpen ? "close sidebar" : "open sidebar"}
                     >
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                         {sidebarOpen ? (
