@@ -116,77 +116,85 @@ export default function UnitPanel() {
                     </>
                 }
 
-                <hr className="h-divider" />
 
                 {/* Visuals Section */}
-                <div>
-                    <button
-                        onClick={() => setIsVisualsOpen(!isVisualsOpen)}
-                        className="flex justify-between w-full"
-                    >
-                        <span className='font-semibold'>Visuals</span>
-                        <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            className={`transition-transform ${isVisualsOpen ? 'rotate-180' : ''}`}
+                {gallery?.length > 0 &&
+                <>
+                    <hr className="h-divider" />
+                    <div>
+                        <button
+                            onClick={() => setIsVisualsOpen(!isVisualsOpen)}
+                            className="flex justify-between w-full"
                         >
-                            <path d="M6 10L12 18L18 10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </button>
-                    {isVisualsOpen && (
-                        <div className="grid grid-cols-2 gap-2 mt-2">
-                            {gallery?.map((img) => (
-                                <button className='hover:opacity-70' key={img.id} onClick={() => openGallery(currentItem, "gallery")}>
-                                    <img
-                                        src={img.src}
-                                        alt="Visual"
-                                        className="w-full h-20 object-cover rounded-lg"
-                                    />
-                                </button>
+                            <span className='font-semibold'>Visuals</span>
+                            <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="white"
+                                xmlns="http://www.w3.org/2000/svg"
+                                className={`transition-transform ${isVisualsOpen ? 'rotate-180' : ''}`}
+                            >
+                                <path d="M6 10L12 18L18 10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </button>
+                        {isVisualsOpen && (
+                            <div className="grid grid-cols-2 gap-2 mt-2">
+                                {gallery?.map((img) => (
+                                    <button className='hover:opacity-70' key={img.id} onClick={() => openGallery(currentItem, "gallery")}>
+                                        <img
+                                            src={img.src}
+                                            alt="Visual"
+                                            className="w-full h-20 object-cover rounded-lg"
+                                        />
+                                    </button>
 
-                            ))}
-                        </div>
-                    )}
-                </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </>
+                }
 
-                <hr className="h-divider" />
 
                 {/* Cut Sections */}
-                <div>
-                    <button
-                        onClick={() => setIsCutSectionsOpen(!isCutSectionsOpen)}
-                        className="flex justify-between w-full"
-                    >
-                        <span className='font-semibold'>Cut Sections</span>
-                        <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            className={`transition-transform ${isCutSectionsOpen ? 'rotate-180' : ''}`}
+                {cutSections?.length > 0 &&
+                <>
+                    <hr className="h-divider" />
+                    <div>
+                        <button
+                            onClick={() => setIsCutSectionsOpen(!isCutSectionsOpen)}
+                            className="flex justify-between w-full"
                         >
-                            <path d="M6 10L12 18L18 10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </button>
-                    {isCutSectionsOpen && (
-                        <div className="grid grid-cols-2 gap-2 mt-2">
-                            {cutSections?.map((img) => (
-                                <button className='hover:opacity-70' key={img.id} onClick={() => openGallery(currentItem, "cutSections")}>
-                                    <img
-                                        src={img.src}
-                                        alt="Visual"
-                                        className="w-full h-20 object-cover rounded-lg"
-                                    />
-                                </button>
+                            <span className='font-semibold'>Cut Sections</span>
+                            <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="white"
+                                xmlns="http://www.w3.org/2000/svg"
+                                className={`transition-transform ${isCutSectionsOpen ? 'rotate-180' : ''}`}
+                            >
+                                <path d="M6 10L12 18L18 10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </button>
+                        {isCutSectionsOpen && (
+                            <div className="grid grid-cols-2 gap-2 mt-2">
+                                {cutSections?.map((img) => (
+                                    <button className='hover:opacity-70' key={img.id} onClick={() => openGallery(currentItem, "cutSections")}>
+                                        <img
+                                            src={img.src}
+                                            alt="Visual"
+                                            className="w-full h-20 object-cover rounded-lg"
+                                        />
+                                    </button>
 
-                            ))}
-                        </div>
-                    )}
-                </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </>
+                }
 
                 {paymentPlans?.length > 0 &&
                 <>
