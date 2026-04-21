@@ -276,53 +276,7 @@ export const DEVELOPER_SOMABAY = {
                     ],
                   },
                 ],
-                features: {
-                  displayName: "7A Features",
-                  x: 0.7, y: 0.65,
-                  videos: {
-                    forwardVideo: `/${projectName}/videos/zones/7a/features/features_gen_trans.mp4`,
-                    reverseVideo: `/${projectName}/videos/zones/7a/features/features_gen_rev.mp4`,
-                    idleVideo: `/${projectName}/videos/zones/7a/features/features_gen_idle.mp4`,
-                  },
-                  items: [
-                  {
-                    id: "feature1",
-                    displayName: "Garage",
-                    subtitle: "7A Feature",
-                    description: "2-story garage...",
-                    x: 0.2, y: 0.67,
-                    videos: {
-                      forwardVideo: `/${projectName}/videos/zones/7a/features/feature1/feature1_trans.mp4`,
-                      reverseVideo: `/${projectName}/videos/zones/7a/features/feature1/feature1_rev.mp4`,
-                      idleVideo: `/${projectName}/videos/zones/7a/features/feature1/feature1_idle.mp4`,
-                    },
-                  },
-                  {
-                    id: "feature2",
-                    displayName: "Roof",
-                    subtitle: "7A Feature",
-                    description: "Spacious roof top suitable for family gatherings...",
-                    x: 0.62, y: 0.65,
-                    videos: {
-                      forwardVideo: `/${projectName}/videos/zones/7a/features/feature2/feature2_trans.mp4`,
-                      reverseVideo: `/${projectName}/videos/zones/7a/features/feature2/feature2_rev.mp4`,
-                      idleVideo: `/${projectName}/videos/zones/7a/features/feature2/feature2_idle.mp4`,
-                    },
-                  },
-                  {
-                    id: "feature3",
-                    displayName: "Room Service",
-                    subtitle: "7A Feature",
-                    description: "Exclusive room service for residents, offering a variety of dining options and amenities delivered directly to your apartment.",
-                    x: 0.5, y: 0.65,
-                    videos: {
-                      forwardVideo: null,
-                      reverseVideo: null,
-                      idleVideo: `/${projectName}/panorama/7a-features/feature3.jpg`,
-                    },
-                  },
-                ]
-                },
+                features: null,
                 views: [
                   {
                     name: "View 1",
@@ -556,7 +510,7 @@ export const DEVELOPER_SOMABAY = {
                     id: "basement",
                     type: "Residential",
                     displayName: "Basement",
-                    highlight: `/${projectName}/highlight/7B2/Basement.png`,
+                    highlight: `/${projectName}/highlight/7B2/7b2_basement.png`,
                     description: null,
                     x: 0.183, y: 0.872,
                     videos: {
@@ -565,9 +519,30 @@ export const DEVELOPER_SOMABAY = {
                       idleVideo: `/${projectName}/videos/zones/7b2/floors/basement/7b2_floors_basement_idle.mp4`,
                     },
                     units: [
-                      // 7B 2, Basement - Units
-                      { id: "apartment111", unitTypeId: "unit-type-g", displayName: "A111", area: 140, price: 260000, bedrooms: 2, bathrooms: 1, balconyView: "/mix/panorama/balcony.jpg", x: 0.4, y: 0.58, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
-                    ],
+                      // 7B 2, Basement Units
+                      {
+                        id: "107BC09",
+                        unitTypeId: "107BC09",
+                        displayName: "107BC09",
+                        area: 113.2,
+                        price: null,
+                        bedrooms: 2, bathrooms: 1,
+                        x: 0.272, y: 0.442,
+                        videos: {
+                          forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`,
+                          reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`,
+                          idleVideo: `/${projectName}/units/7b2/basement/107BC09.png`
+                        }
+                      },
+                      { id: "107BC10", unitTypeId: "107BC10", displayName: "107BC10", area: 100.5, price: null, bedrooms: 1, bathrooms: 1,
+                        x: 0.39, y: 0.52, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7b2/basement/107BC10.png` } },
+                      { id: "107BC11", unitTypeId: "107BC11", displayName: "107BC11", area: 78, price: null, bedrooms: 1, bathrooms: 1,
+                        x: 0.496, y: 0.55, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7b2/basement/107BC11.png` } },
+                      { id: "107BC12", unitTypeId: "107BC12", displayName: "107BC12", area: 115.5, price: null, bedrooms: 2, bathrooms: 2,
+                        x: 0.673, y: 0.63, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7b2/basement/107BC12.png` } },
+                      { id: "107BC13", unitTypeId: "107BC13", displayName: "107BC13", area: 88.9, price: null, bedrooms: 1, bathrooms: 1,
+                        x: 0.688, y: 0.314, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7b2/basement/107BC13.png` } },
+                      ],
                   },
                   {
                     id: "ground",
@@ -584,23 +559,24 @@ export const DEVELOPER_SOMABAY = {
                     units: [
                       // 7B 2, Ground - Units
                       {
-                        id: "apartment201",
-                        unitTypeId: "7b2-unit",
-                        displayName: "A201",
-                        area: 85,
-                        price: 250000,
-                        bedrooms: 2,
-                        bathrooms: 1,
-                        balconyView: "/mix/panorama/7b2_unit/balcony.jpg",
-                        x: 0.40, y: 0.60,
+                        id: "107B04",
+                        unitTypeId: "107B04",
+                        displayName: "107B04",
+                        area: 109.8,
+                        price: null,
+                        bedrooms: 2, bathrooms: 1,
+                        x: 0.279, y: 0.429,
                         videos: {
-                          forwardVideo: "/cutsection.mp4",
-                          reverseVideo: "/cutsection.mp4",
-                          idleVideo: "/cutsection.mp4",
+                          forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`,
+                          reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`,
+                          idleVideo: `/${projectName}/units/7b2/ground/107B04.png`
                         }
                       },
-                      { id: "apartment202", unitTypeId: "7b2-unit", displayName: "A202", area: 200, price: 400000, bedrooms: 4, bathrooms: 2, balconyView: "/mix/panorama/7b2_unit/balcony.jpg", x: 0.25, y: 0.4, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
-                    ],
+                      { id: "107B05", unitTypeId: "107B05", displayName: "107B05", area: 162.4, price: null, bedrooms: 1, bathrooms: 1,
+                        x: 0.436, y: 0.525, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7b2/ground/107B05.png` } },
+                      { id: "107B06", unitTypeId: "107B06", displayName: "107B06", area: 211.4, price: null, bedrooms: 1, bathrooms: 1,
+                        x: 0.665, y: 0.442, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7b2/ground/107B06.png` } },
+                      ],
                   },
                   {
                     id: "floor-1",
@@ -617,23 +593,24 @@ export const DEVELOPER_SOMABAY = {
                     units: [
                       // 7B 2, Floor 1 - Units
                       {
-                        id: "apartment301",
-                        unitTypeId: "7b2-unit",
-                        displayName: "A301",
-                        area: 85,
-                        price: 250000,
-                        bedrooms: 2,
-                        bathrooms: 1,
-                        balconyView: "/mix/panorama/7b2_unit/balcony.jpg",
-                        x: 0.40, y: 0.60,
+                        id: "107B14",
+                        unitTypeId: "107B14",
+                        displayName: "107B14",
+                        area: 109.8,
+                        price: null,
+                        bedrooms: 1, bathrooms: 1,
+                        x: 0.279, y: 0.429,
                         videos: {
-                          forwardVideo: "/cutsection.mp4",
-                          reverseVideo: "/cutsection.mp4",
-                          idleVideo: "/cutsection.mp4",
+                          forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`,
+                          reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`,
+                          idleVideo: `/${projectName}/units/7b2/floor1/107B14.png`
                         }
                       },
-                      { id: "apartment302", unitTypeId: "7b2-unit", displayName: "A302", area: 200, price: 400000, bedrooms: 4, bathrooms: 2, balconyView: "/mix/panorama/7b2_unit/balcony.jpg", x: 0.25, y: 0.4, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
-                    ],
+                      { id: "107B15", unitTypeId: "107B15", displayName: "107B15", area: 162.4, price: null, bedrooms: 2, bathrooms: 2,
+                        x: 0.436, y: 0.525, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7b2/floor1/107B15.png` } },
+                      { id: "107B16", unitTypeId: "107B16", displayName: "107B16", area: 212.1, price: null, bedrooms: 2, bathrooms: 3,
+                        x: 0.665, y: 0.442, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7b2/floor1/107B16.png` } },
+                      ],
                   },
                   {
                     id: "floor-2",
@@ -650,23 +627,22 @@ export const DEVELOPER_SOMABAY = {
                     units: [
                       // 7B 2, Floor 2 - Units
                       {
-                        id: "apartment401",
-                        unitTypeId: "7b2-unit",
-                        displayName: "A401",
-                        area: 85,
-                        price: 250000,
-                        bedrooms: 2,
-                        bathrooms: 1,
-                        balconyView: "/mix/panorama/7b2_unit/balcony.jpg",
-                        x: 0.40, y: 0.60,
+                        id: "107B24",
+                        unitTypeId: "107B24",
+                        displayName: "107B24",
+                        area: 208.5,
+                        price: null,
+                        bedrooms: 3, bathrooms: 3,
+                        x: 0.327, y: 0.448,
                         videos: {
-                          forwardVideo: "/cutsection.mp4",
-                          reverseVideo: "/cutsection.mp4",
-                          idleVideo: "/cutsection.mp4",
+                          forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`,
+                          reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`,
+                          idleVideo: `/${projectName}/units/7b2/floor2/107B24.png`
                         }
                       },
-                      { id: "apartment402", unitTypeId: "7b2-unit", displayName: "A402", area: 200, price: 400000, bedrooms: 4, bathrooms: 2, balconyView: "/mix/panorama/7b2_unit/balcony.jpg", x: 0.25, y: 0.4, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
-                    ],
+                      { id: "107B25", unitTypeId: "107B25", displayName: "107B25", area: 180.8, price: null, bedrooms: 2, bathrooms: 2,
+                        x: 0.635, y: 0.435, videos: { forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectName}/units/7b2/floor2/107B25.png` } },
+                      ],
                   },
                   {
                     id: "floor-3",
@@ -683,23 +659,20 @@ export const DEVELOPER_SOMABAY = {
                     units: [
                       // 7B 2, Floor 3 - Units
                       {
-                        id: "apartment501",
-                        unitTypeId: "7b2-unit",
-                        displayName: "A501",
-                        area: 85,
-                        price: 250000,
-                        bedrooms: 2,
-                        bathrooms: 1,
-                        balconyView: "/mix/panorama/7b2_unit/balcony.jpg",
-                        x: 0.40, y: 0.60,
+                        id: "107B33",
+                        unitTypeId: "107B33",
+                        displayName: "107B33",
+                        area: 173.8,
+                        price: null,
+                        bedrooms: 2, bathrooms: 3,
+                        x: 0.347, y: 0.435,
                         videos: {
-                          forwardVideo: "/cutsection.mp4",
-                          reverseVideo: "/cutsection.mp4",
-                          idleVideo: "/cutsection.mp4",
+                          forwardVideo: `/${projectName}/units/trans_from_floors_to_units.mp4`,
+                          reverseVideo: `/${projectName}/units/rev_from_units_to_floors.mp4`,
+                          idleVideo: `/${projectName}/units/7b2/floor3/107B33.png`
                         }
                       },
-                      { id: "apartment502", unitTypeId: "7b2-unit", displayName: "A502", area: 200, price: 400000, bedrooms: 4, bathrooms: 2, balconyView: "/mix/panorama/7b2_unit/balcony.jpg", x: 0.25, y: 0.4, videos: { forwardVideo: "/cutsection.mp4", reverseVideo: "/cutsection.mp4", idleVideo: "/cutsection.mp4" } },
-                    ],
+                      ],
                   },
                 ],
                 views: [
@@ -901,6 +874,53 @@ export const DEVELOPER_SOMABAY = {
                     ],
                   },
                 ],
+                features: {
+                  displayName: "7C Features",
+                  x: 0.7, y: 0.65,
+                  videos: {
+                    forwardVideo: null,
+                    reverseVideo: null,
+                    idleVideo: null,
+                  },
+                  items: [
+                  {
+                    id: "feature1",
+                    displayName: "Entrance",
+                    subtitle: "7C Feature",
+                    description: "Main entrance providing access to the building, designed for both aesthetics and functionality.",
+                    x: 0.2, y: 0.67,
+                    videos: {
+                      forwardVideo: null,
+                      reverseVideo: null,
+                      idleVideo: `/${projectName}/features/7C/`,
+                    },
+                  },
+                  {
+                    id: "feature2",
+                    displayName: "Public Toilets",
+                    subtitle: "7C Feature",
+                    description: "Well-maintained and conveniently located public restrooms for residents and visitors, ensuring comfort and accessibility throughout the community.",
+                    x: 0.62, y: 0.65,
+                    videos: {
+                      forwardVideo: null,
+                      reverseVideo: null,
+                      idleVideo: `/${projectName}/features/7C/`,
+                    },
+                  },
+                  {
+                    id: "feature3",
+                    displayName: "Storage",
+                    subtitle: "7C Feature",
+                    description: "Secure and convenient storage solutions for residents, providing ample space for personal belongings and seasonal items.",
+                    x: 0.5, y: 0.65,
+                    videos: {
+                      forwardVideo: null,
+                      reverseVideo: null,
+                      idleVideo: `/${projectName}/features/7C/`,
+                    },
+                  },
+                ]
+                },
                 views: [
                   {
                     name: "View 1",
@@ -1062,6 +1082,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room6", displayName: "Bedroom 1", furnitureImgId: `/${projectName}/panorama/b09_f.jpeg`, unfurnitureImgId: `/${projectName}/panorama/b09_unf.jpeg`, x: 0.652, y: 0.714, hotspots: [] },
           { id: "room7", displayName: "Bedroom 2", furnitureImgId: `/${projectName}/panorama/b17_f.jpeg`, unfurnitureImgId: `/${projectName}/panorama/b17_unf.jpeg`, x: 0.652, y: 0.259, hotspots: [] }
         ] }] } },
+        
       },
     },
   ],
