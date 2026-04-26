@@ -718,7 +718,6 @@ export const resourceConfigs = {
     api: unitApi,
     schema: yup.object().shape({
       unitCode: yup.string().required(),
-      visualTypeId: yup.string().nullable(),
       propertyId: yup.string().required(),
       floorId: yup.string().nullable(),
       blockId: yup.string().nullable(),
@@ -742,13 +741,6 @@ export const resourceConfigs = {
         label: "Unit Code",
         control: CONTROL_TYPES.TEXT,
         required: true,
-        disabled: false,
-      },
-      {
-        name: "visualTypeId",
-        label: "Visual Type",
-        control: CONTROL_TYPES.TEXT,
-        required: false,
         disabled: false,
       },
       idField("propertyId", "Property ID"),
@@ -779,7 +771,7 @@ export const resourceConfigs = {
         AssetType.VIDEO,
         AssetType.PANORAMA,
       ]),
-      assetField("sideAssetId", "Side", [AssetType.VIDEO, AssetType.PANORAMA]),
+      assetField("sideAssetId", "Side", [AssetType.VIDEO, AssetType.PANORAMA, AssetType.IMAGE]),
       {
         name: "displayName",
         label: "Display Name",
