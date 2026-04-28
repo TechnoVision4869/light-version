@@ -17,11 +17,22 @@ export default function Layout({ children, backgroundImage, fullscreen = false, 
   ];
 
   // Filter menu items based on user role
+  // const menuItems = allMenuItems.filter((item) => {
+  //   // Hide Users and Dashboard pages for developer_marketing and developer_sales roles
+  //   if (
+  //     (item.path === "/users" || item.path === "/dashboard") &&
+  //     (user?.role === "developer_marketing" || user?.role === "developer_sales")
+  //   ) {
+  //     return false;
+  //   }
+  //   return true;
+  // });
+
   const menuItems = allMenuItems.filter((item) => {
-    // Hide Users and Dashboard pages for developer_marketing and developer_sales roles
+    // Hide Dashboard page for developer_marketing, developer_sales and developer_admin roles
     if (
-      (item.path === "/users" || item.path === "/dashboard") &&
-      (user?.role === "developer_marketing" || user?.role === "developer_sales")
+      (item.path === "/dashboard") &&
+      (user?.role === "developer_marketing" || user?.role === "developer_sales" || user?.role === "developer_admin")
     ) {
       return false;
     }

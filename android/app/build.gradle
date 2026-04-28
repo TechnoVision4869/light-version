@@ -20,6 +20,18 @@ android {
     flavorDimensions "project"
 
     productFlavors {
+        sandbox {
+            dimension "project"
+            applicationId "com.technovision.sandbox"
+            // Overrides app_name string resource for this flavor
+            resValue "string", "app_name", "Sandbox"
+        }
+        demo {
+            dimension "project"
+            applicationId "com.technovision.demo"
+            // Overrides app_name string resource for this flavor
+            resValue "string", "app_name", "Light Demo"
+        }
         tbk {
             dimension "project"
             applicationId "com.technovision.tbk"

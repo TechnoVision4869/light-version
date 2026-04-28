@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect } from "react";
+import ExpiredDialog from "./components/ExpiredDialog";
 import { ScreenOrientation } from "@capacitor/screen-orientation";
 import { Capacitor } from "@capacitor/core";
 import { Routes, Route, useNavigate } from "react-router-dom";
@@ -11,12 +12,22 @@ import LoginPage from "./components/auth/login-page";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import UsersPage from "./components/user/UsersPage";
 
+
 export default function App() {
   const { currentProject, setCurrentProject } = useContext(SidebarContext);
   const [showSplash, setShowSplash] = useState(false);
+  const [expired, setExpired] = useState(false);
   const navigate = useNavigate();
 
+
   useEffect(() => {
+    // Expiry logic: set expiry date here (YYYY-MM-DD)
+    // const expiryDate = new Date("2026-05-01T12:00:00Z");
+    // const now = new Date();
+    // if (now > expiryDate) {
+    //   setExpired(true);
+    // }
+
     const lockOrientation = async () => {
       try {
         if (Capacitor.getPlatform() !== "web") {
@@ -39,6 +50,10 @@ export default function App() {
     if (!currentProject) return null;    
     return currentProject?.introVideoId || currentProject?.introVideo;
   };
+
+  if (expired) {
+    return <ExpiredDialog open={true} />;
+  }
 
   return (
     <Routes>
