@@ -20,7 +20,7 @@ import Panorama from "./Panorama";
 import Balcony from "./Balcony";
 import Room from "./Room";
 import Gallery from "./Gallery";
-// import AnimatedPath from "./AnimatedPath";
+import AnimatedPath from "./AnimatedPath";
 
 // Context
 import FilterContextProvider from "../store/FilterContextProvider";
@@ -108,9 +108,9 @@ export default function Home() {
       case TABS.ZONES:
         selectedItem = currentProject.zones;
         if(selectedItem.items.length === 1) {
-          selectedItem = selectedItem.items[0];
+          const zonesZoomoutVideo = selectedItem.zoomoutVideo;
+          selectedItem = { ...selectedItem.items[0], zoomoutVideo: zonesZoomoutVideo };
           layer = LAYERS.ZONE_DETAIL;
-          checkSwithingBetweenTabs(tab, layer, selectedItem);
         }
         checkSwithingBetweenTabs(tab, layer, selectedItem);
         break;
@@ -509,9 +509,9 @@ export default function Home() {
                       />
                     )}
 
-                    {/* {activeLayer === LAYERS.SURROUNDING_DETAIL && (
+                    {activeLayer === LAYERS.SURROUNDING_DETAIL && (
                       <AnimatedPath path={currentItem.svgPath} />
-                    )} */}
+                    )}
 
                     {/* Transparent overlay to suppress Android WebView native video controls */}
                     <div className="absolute inset-0 z-[12] pointer-events-none" />
@@ -614,7 +614,7 @@ export default function Home() {
                         </svg>
                       </button>
                       <div className="w-full h-full">
-                        <Room room={overlay.data?.room} />
+                        <Room key={overlay.data?.room?.id} room={overlay.data?.room} />
                       </div>
                     </div>
                   </div>

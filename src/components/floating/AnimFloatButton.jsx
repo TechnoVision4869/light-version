@@ -8,7 +8,7 @@ export default function AnimFloatButton({
 }) {
 
     return (
-        <button className={`flex items-center gap-0 transition-all duration-200
+        <button className={`flex items-center gap-0 transition-colors duration-200
             ${isSelected ? 'z-40' : 'z-30'}`}
             style={{
                 position: 'absolute',
@@ -22,20 +22,20 @@ export default function AnimFloatButton({
             {nameDirection === "left" && (
                 <div className={`px-[8px] py-[7px] rounded-l-full flex items-center transition-all duration-200
                     ${isSelected
-                        ? 'bg-[#40321E]'
-                        : 'bg-transparent'}`}>
-                    <span className={`whitespace-nowrap font-medium transition-all duration-200
+                        ? 'bg-[#1A5C55]'
+                        : 'bg-[#59A198]/85'}`}>
+                    <span className={`whitespace-nowrap font-medium transition-all duration-200 text-white
                         ${isSelected
-                            ? 'text-white text-sm'
-                            : 'text-black text-xs'}`}>{name}</span>
+                            ? 'text-sm'
+                            : 'text-xs'}`}>{name}</span>
                 </div>
             )}
 
-            {/* Icon Part - Brown Background */}
+            {/* Icon Part - Teal Background */}
             <div className={`px-[6px] py-[5px] flex items-center justify-center flex-shrink-0 transition-all duration-200
                 ${isSelected
-                    ? `bg-[#40321E] ${nameDirection === "left" ? 'rounded-r-full' : 'rounded-l-full'}`
-                    : `bg-[#94846D]/75 hover:bg-[#94846D]/85 rounded-full`}`}>
+                    ? `bg-[#1A5C55] ${nameDirection === "left" ? 'rounded-r-full' : 'rounded-l-full'}`
+                    : `bg-[#59A198]/85 rounded-l-full`}`}>
                 {icon && (
                     <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
                         <img src={icon} className="w-4 h-4 p-[1px]" />
@@ -48,12 +48,12 @@ export default function AnimFloatButton({
             {nameDirection === "right" && (
                 <div className={`px-[8px] py-[7px] rounded-r-full flex items-center gap-1 transition-all duration-200
                     ${isSelected
-                        ? 'bg-[#40321E]'
-                        : 'bg-transparent'}`}>
-                    <span className={`whitespace-nowrap font-medium transition-all duration-200
+                        ? 'bg-[#1A5C55]'
+                        : 'bg-[#59A198]/85'}`}>
+                    <span className={`whitespace-nowrap font-medium transition-all duration-200 text-white
                         ${isSelected
-                            ? 'text-white text-sm'
-                            : 'text-black text-xs'}`}>{name}</span>
+                            ? 'text-sm'
+                            : 'text-xs'}`}>{name}</span>
                 </div>
             )}
         </button>

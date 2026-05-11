@@ -129,7 +129,7 @@ export function useVideoViewer() {
         playIdleVideo(idleVideoPath);
         return;
       }
-      console.log("playTransitionVideo called with videoPath:", transitionVideoPath);
+      // console.log("playTransitionVideo called with videoPath:", transitionVideoPath);
       setFloatingOpacity(0);
 
       const target = getHiddenRef(); // load on the currently hidden ref — no flash

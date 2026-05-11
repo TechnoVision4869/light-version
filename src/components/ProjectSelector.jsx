@@ -6,11 +6,11 @@ import { useAuth } from "./hooks/use-auth";
 import toast from "react-hot-toast";
 import { developerApi } from "@/api/admin/developerApi";
 import { assetApi } from "../api/admin/assetApi";
-import { DATA } from "../data/layers";
+import { DATA, PATH } from "../data/layers";
 import { fetchProjectById } from "../lib/projectFetcher";
 
-const projectName = "light-house-test";
-const PROJECT_HIGHLIGHT = `/${projectName}/images/project-highlight.png`;
+const projectPath = PATH;
+const PROJECT_HIGHLIGHT = `/${projectPath}/images/project-highlight.png`;
 
 export default function ProjectSelector({
   developerId,

@@ -43,6 +43,7 @@ export default function AnimatedPath({ path }) {
           fill="none"
           stroke="#ffffff"
           strokeWidth="5"
+          strokeLinecap="round"
         />
       </g>
     </svg>
