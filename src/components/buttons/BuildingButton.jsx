@@ -43,15 +43,14 @@ export default function BuildingButton({ building, isDisabled, goToItem }) {
                 <div className="text-md font-bold leading-tight whitespace-nowrap">
                     {building.displayName ? building.displayName : building.name}
                 </div>
-                <div className="text-sm items-left flex flex-col space-x-0 space-y-2 text-white/60 leading-tight pt-1
-                                        md:items-center md:flex-row md:space-x-3 md:space-y-0">
-                    <div className="flex items-center space-x-1">
+                <div className="text-sm flex flex-row flex-wrap items-center space-x-3 text-white/60 leading-tight pt-1">
+                    <div className="flex items-center space-x-1 whitespace-nowrap">
                         <img src={BED_ICON} className="w-5 h-auto" />
-                        {minBedrooms === maxBedrooms ? <div>{minBedrooms}</div> : <div>{minBedrooms} - {maxBedrooms}</div>} <span>BR</span>
+                        {minBedrooms === maxBedrooms ? <span>{minBedrooms}</span> : <span>{minBedrooms} - {maxBedrooms}</span>} <span>BR</span>
                     </div>
-                    <div className="flex items-center space-x-1">
+                    <div className="flex items-center space-x-1 whitespace-nowrap">
                         <img src={AREA_ICON} className="w-4 h-auto" />
-                        {minArea === maxArea ? <div>{Math.round(minArea)}</div> : <div>{Math.round(minArea)} - {Math.round(maxArea)}</div>} <span>m²</span>
+                        {minArea === maxArea ? <span>{Math.round(minArea)}</span> : <span>{Math.round(minArea)} - {Math.round(maxArea)}</span>} <span>m²</span>
                     </div>
 
                 </div>
