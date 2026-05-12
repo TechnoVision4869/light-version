@@ -1,6 +1,6 @@
 import { useState, useMemo, useRef, useEffect, useCallback, useContext } from "react";
 import { SidebarContext } from '../store/SidebarContextProvider';
-import View360, { EquirectProjection } from "@egjs/react-view360";
+import View360, { EquirectProjection, EASING } from "@egjs/react-view360";
 import { APP_CONFIG } from "@/config/appConfig";
 
 import Pin from "./Pin";
@@ -57,7 +57,6 @@ export default function Panorama({ unit }) {
       setIsTransitioning(false);
     }, 500);
   }, [isFurnished, room]);
-
 
   // Projection (memoized)
   const projection = useMemo(() => new EquirectProjection({ src: currentImage }), [currentImage]);
@@ -140,6 +139,13 @@ export default function Panorama({ unit }) {
     }, ZOOM_DURATION);
   }, [findRoomById, isFurnished]);
 
+  const handleReady = useCallback(() => {
+    if (!viewerRef.current) return;
+    // configure rotate speed and easing
+    viewerRef.current.control.rotate.pointerScale = [2, 2];
+    viewerRef.current.control.rotate.duration = 1000;
+    viewerRef.current.control.rotate.easing = EASING.EASE_OUT_CUBIC;
+  }, []);
 
   // Handle new image load (v4's "imageLoaded" equivalent)
   const handleLoad = useCallback(() => {
@@ -147,9 +153,7 @@ export default function Panorama({ unit }) {
     // console.log("load");
 
     // Set to zoom out position instantly (no animation)
-    viewerRef.current.camera.lookAt({
-      zoom: ZOOM_OUT,
-    });
+    viewerRef.current.camera.lookAt({ zoom: ZOOM_OUT });
 
     if (zoomOnLoadRef.current) {
       // Animate back to normal with ease-out
@@ -179,6 +183,7 @@ export default function Panorama({ unit }) {
         className="view360-fullscreen"
         projection={projection}
         onLoad={handleLoad}
+        onReady={handleReady}
         zoomRange={{ min: 0.8, max: ZOOM_IN }}
         initialYaw={190}
         rotate={{ speed: 6 }}

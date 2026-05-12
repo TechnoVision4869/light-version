@@ -116,7 +116,7 @@ function normalizeUnitPayload(data) {
   const str = (v) => (v === "" || v == null ? null : String(v));
   return {
     unitCode: str(data.unitCode) ?? null,
-    visualTypeId: str(data.visualTypeId),
+    // visualTypeId: str(data.visualTypeId),
     propertyId: str(data.propertyId) ?? null,
     floorId: str(data.floorId) || null,
     blockId: str(data.blockId) || null,
@@ -2235,7 +2235,7 @@ export default function AdminDashboard() {
       focusedAssetField.includes("furnitureImgId") ||
       focusedAssetField.includes("unfurnitureImgId")
     ) {
-      return [AssetType.IMAGE, AssetType.THUMBNAIL];
+      return [AssetType.IMAGE, AssetType.PANORAMA];
     }
     const config = resourceConfigs[selectedNode.type];
     const fields = config?.fields;

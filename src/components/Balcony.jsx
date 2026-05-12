@@ -40,6 +40,7 @@ export default function Balcony({ view }) {
         initialZoom={ZOOM_NORMAL}
         zoomRange={{ min: ZOOM_OUT, max: ZOOM_IN }}
         pitchRange={{ min: 0, max: 25 }}
+        yawRange={ {min:-70, max:70 }}
         rotate={{ speed: 6 }}
         style={{ touchAction: "none" }}
         scrollable={false}

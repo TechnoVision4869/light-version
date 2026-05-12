@@ -122,7 +122,13 @@ export function useVideoViewer() {
       transitionVideoPath = currentVideosPaths?.forwardVideo,
       idleVideoPath = currentVideosPaths?.idleVideo,
     ) => {
-      if (!transitionVideoPath || !idleVideoPath) return;
+      if (!idleVideoPath) return;
+      if (!transitionVideoPath) {
+        // If no transition video, directly play idle video
+        console.log("No transition video, playing idle video:", idleVideoPath);
+        playIdleVideo(idleVideoPath);
+        return;
+      }
       // console.log("playTransitionVideo called with videoPath:", transitionVideoPath);
       setFloatingOpacity(0);
 
@@ -147,10 +153,12 @@ export function useVideoViewer() {
       videoPath = currentVideosPaths?.reverseVideo,
     ) => {
       if (!videoPath) {
+        console.warn("no video path");
+        justNavigatedBackRef.current = true;
+        goBack();
         return;
       }
       // console.log(navigatedBetweenTabs);
-
       // console.log("StartReverse called with reverse video:", currentVideosPaths.reverseVideo);
       setFloatingOpacity(0);
 
@@ -202,6 +210,10 @@ export function useVideoViewer() {
             "Idle video path is a video but APP_CONFIG.IDLE_TYPE is not set to VIDEO. Please check your configuration.",
           );
         }
+      }
+
+      if(activeLayer === LAYERS.AMENITY_DETAIL) {
+
       }
 
       const target = getHiddenRef(); // always load into the hidden ref — no flash

@@ -14,7 +14,7 @@ export default function InfoPopup({ showInfoPopup, onClose }) {
     if (activeLayer === LAYERS.SURROUNDING_DETAIL) {
         return (
             <div className="absolute bottom-3 md:bottom-6 lg:bottom-8 left-1/2 -translate-x-1/2 w-full max-w-[calc(100%-50px)] lg:max-w-[760px] px-3 lg:px-0 z-40 pointer-events-auto">
-                <div className="bg-[#94846D] text-white rounded-2xl shadow-2xl p-3 md:p-4 relative overflow-hidden">
+                <div className="bg-[#4A8E86] text-white rounded-2xl shadow-2xl p-3 md:p-4 relative overflow-hidden">
                     {/* Close */}
                     <button
                         onClick={onClose}
@@ -32,10 +32,11 @@ export default function InfoPopup({ showInfoPopup, onClose }) {
 
                     {/* Horizontal layout */}
                     <div className="flex items-center space-x-3 md:space-x-4">
-                        <img
+                        {currentItem.thumbnail && <img
                             src={currentItem.thumbnail}
                             alt={currentItem.displayName}
                             className="h-20 w-28 sm:h-24 sm:w-36 object-cover rounded-lg flex-shrink-0" />
+                        }
 
                         <div className="min-w-0">
                             <div className="flex flex-row space-x-2 items-center">
@@ -43,7 +44,7 @@ export default function InfoPopup({ showInfoPopup, onClose }) {
                                     {currentItem.displayName}
                                 </h3>
 
-                                <div className="mt-1 inline-flex items-center space-x-1 bg-[#40321EBD] px-2 py-1 rounded-xl">
+                                <div className="mt-1 inline-flex items-center space-x-1 bg-[#1A5C55BD] px-2 py-1 rounded-xl">
                                     <img src={CAR_ICON} className="w-6 h-4" />
                                     <span className=" text-sm md:text-base">
                                         {currentItem.distance}

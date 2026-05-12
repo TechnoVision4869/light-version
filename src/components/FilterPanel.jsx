@@ -148,7 +148,7 @@ export default function FilterPanel() {
         unit={BUDGET_RANGE.UNIT}
         min={BUDGET_RANGE.MIN}
         max={BUDGET_RANGE.MAX}
-        step={1000}
+        step={Math.max(1, Math.round((BUDGET_RANGE.MAX - BUDGET_RANGE.MIN) / 100))}
         value={price}
         onValueChange={setPrice}
       />
