@@ -28,6 +28,8 @@ export default function Panorama({ unit }) {
   const transitionTimeoutRef = useRef(null);
   const [isFurnished, setIsFurnished] = useState(true);
   const zoomOnLoadRef = useRef(true);
+  const maxTextureSizeRef = useRef(null);
+  const [textureError, setTextureError] = useState(null);
 
   // Get unit data
   const unitType = useStatic 
@@ -45,6 +47,24 @@ export default function Panorama({ unit }) {
     const allImages = levels.flatMap(l => l.rooms.map(r => r.furnitureImgId));
     allImages.forEach(src => new Image().src = src);
   }, [levels]);
+
+  // Check if current image exceeds device MAX_TEXTURE_SIZE
+  useEffect(() => {
+    if (!maxTextureSizeRef.current) {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+      maxTextureSizeRef.current = gl ? gl.getParameter(gl.MAX_TEXTURE_SIZE) : 4096;
+    }
+    const img = new Image();
+    img.onload = () => {
+      if (img.width > maxTextureSizeRef.current || img.height > maxTextureSizeRef.current) {
+        setTextureError({ maxSize: maxTextureSizeRef.current, width: img.width, height: img.height });
+      } else {
+        setTextureError(null);
+      }
+    };
+    img.src = currentImage;
+  }, [currentImage]);
 
   // Update image when furniture toggle changes
   useEffect(() => {
@@ -205,6 +225,18 @@ export default function Panorama({ unit }) {
           ))}
         </div>
       </View360>
+
+      {textureError && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/90 pointer-events-none">
+          <p className="text-white/60 text-sm text-center px-8 leading-relaxed">
+            360° view unavailable on this device.<br />
+            Image resolution exceeds the graphics limit.<br />
+            <span className="text-white/40 text-xs">
+              Image: {textureError.width}×{textureError.height}&nbsp;·&nbsp;Device limit: {textureError.maxSize}px
+            </span>
+          </p>
+        </div>
+      )}
 
       <InteriorNav
         levels={levels}

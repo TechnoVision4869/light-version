@@ -1,7 +1,8 @@
 // import { DEVELOPER_MIX as DEVELOPER } from "./project-mix";
 // import { DEVELOPER_TBK as DEVELOPER } from "./project-kog";
-import { DEVELOPER_SOMABAY as DEVELOPER, projectPath  } from "./project-lighthouse";
-// import { DEVELOPER_SOMABAY as DEVELOPER, projectPath } from "./project-lighthouse-test";
+// import { DEVELOPER_SOMABAY as DEVELOPER, projectPath  } from "./project-lighthouse";
+// import { DEVELOPER_SOMABAY as DEVELOPER, projectPath } from "./project-sandbox";
+import { DEVELOPER_SOMABAY as DEVELOPER, projectPath } from "./project-demo";
 // import { DEVELOPER_TECHNO as DEVELOPER } from "./kog-demo";
 
 export const PATH = projectPath;

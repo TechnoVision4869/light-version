@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import View360, { EquirectProjection, EASING } from "@egjs/react-view360";
 import "@egjs/react-view360/css/view360.min.css";
 
@@ -13,6 +13,27 @@ export default function Room({ room }) {
   const viewerRef = useRef(null);
   const initialProjection = useRef(new EquirectProjection({ src: room.furnitureImgId }));
   const [isFurnished, setIsFurnished] = useState(true);
+  const maxTextureSizeRef = useRef(null);
+  const [textureError, setTextureError] = useState(null);
+
+  // Check if current image exceeds device MAX_TEXTURE_SIZE
+  useEffect(() => {
+    if (!maxTextureSizeRef.current) {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+      maxTextureSizeRef.current = gl ? gl.getParameter(gl.MAX_TEXTURE_SIZE) : 4096;
+    }
+    const src = isFurnished ? room.furnitureImgId : (room.unfurnitureImgId || room.furnitureImgId);
+    const img = new Image();
+    img.onload = () => {
+      if (img.width > maxTextureSizeRef.current || img.height > maxTextureSizeRef.current) {
+        setTextureError({ maxSize: maxTextureSizeRef.current, width: img.width, height: img.height });
+      } else {
+        setTextureError(null);
+      }
+    };
+    img.src = src;
+  }, [isFurnished, room]);
 
   const handleReady = () => {
     viewerRef.current.camera.lookAt({ zoom: ZOOM_NORMAL });
@@ -44,6 +65,18 @@ export default function Room({ room }) {
         style={{ touchAction: "none" }}
         scrollable={false}
       />
+
+      {textureError && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/90 pointer-events-none">
+          <p className="text-white/60 text-sm text-center px-8 leading-relaxed">
+            360° view unavailable on this device.<br />
+            Image resolution exceeds the graphics limit.<br />
+            <span className="text-white/40 text-xs">
+              Image: {textureError.width}×{textureError.height}&nbsp;·&nbsp;Device limit: {textureError.maxSize}px
+            </span>
+          </p>
+        </div>
+      )}
 
       {/* Furniture toggle button — only shown when two distinct images exist */}
       {room.unfurnitureImgId && room.furnitureImgId !== room.unfurnitureImgId && (

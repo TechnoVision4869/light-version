@@ -1,11 +1,9 @@
 import SOMABAY_LOGO from '../assets/somabay-logo.svg';
 
-export const projectPath = "projects/light-house";
-const SOMABAY_BG = `/${projectPath}/images/background.jpeg`;
-
 import MALL_ICON from '../assets/icons/mall.svg';
-import SERVICE_SVG from '/projects/light-house/svgs/service.svg?raw';
+import SERVICE_SVG from '../assets/svgs/service.svg?raw';
 
+export const projectPath = "projects/light-house";
 
 const gallery_7A = [
   { id: "7A_gallery_1", src: `/${projectPath}/images/gallery/exterior/7A.jpg` }, 
