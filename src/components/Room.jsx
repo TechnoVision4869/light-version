@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import View360, { EquirectProjection, EASING } from "@egjs/react-view360";
 import "@egjs/react-view360/css/view360.min.css";
 
@@ -11,35 +11,41 @@ export default function Room({ room }) {
   const ZOOM_IN = 1.333;
 
   const viewerRef = useRef(null);
+  const containerRef = useRef(null);
   const initialProjection = useRef(new EquirectProjection({ src: room.furnitureImgId }));
   const [isFurnished, setIsFurnished] = useState(true);
-  const maxTextureSizeRef = useRef(null);
+  const currentSrcRef = useRef(room.furnitureImgId);
   const [textureError, setTextureError] = useState(null);
 
-  // Check if current image exceeds device MAX_TEXTURE_SIZE
-  useEffect(() => {
-    if (!maxTextureSizeRef.current) {
-      const canvas = document.createElement('canvas');
+  // Check gl.getError() on the actual View360 canvas after render
+  const checkGLError = (src) => {
+    requestAnimationFrame(() => {
+      const canvas = containerRef.current?.querySelector('.view360-canvas');
+      if (!canvas) return;
       const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
-      maxTextureSizeRef.current = gl ? gl.getParameter(gl.MAX_TEXTURE_SIZE) : 4096;
-    }
-    const src = isFurnished ? room.furnitureImgId : (room.unfurnitureImgId || room.furnitureImgId);
-    const img = new Image();
-    img.onload = () => {
-      if (img.width > maxTextureSizeRef.current || img.height > maxTextureSizeRef.current) {
-        setTextureError({ maxSize: maxTextureSizeRef.current, width: img.width, height: img.height });
+      if (!gl) return;
+      const error = gl.getError();
+      if (error !== gl.NO_ERROR) {
+        const maxSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+        const img = new Image();
+        img.onload = () => setTextureError({ maxSize, width: img.width, height: img.height });
+        img.src = src;
       } else {
         setTextureError(null);
       }
-    };
-    img.src = src;
-  }, [isFurnished, room]);
+    });
+  };
 
   const handleReady = () => {
     viewerRef.current.camera.lookAt({ zoom: ZOOM_NORMAL });
     viewerRef.current.control.rotate.pointerScale = [2, 2];
     viewerRef.current.control.rotate.duration = 1000;
     viewerRef.current.control.rotate.easing = EASING.EASE_OUT_CUBIC;
+    checkGLError(currentSrcRef.current);
+  };
+
+  const handleLoad = () => {
+    checkGLError(currentSrcRef.current);
   };
 
   const handleToggle = () => {
@@ -47,17 +53,19 @@ export default function Room({ room }) {
     const newFurnished = !isFurnished;
     setIsFurnished(newFurnished);
     const newView = newFurnished ? room.furnitureImgId : room.unfurnitureImgId;
+    currentSrcRef.current = newView;
     // load() swaps the image without remounting — camera position is preserved automatically
     viewerRef.current.load(new EquirectProjection({ src: newView }));
   };
 
   return (
-    <div className="relative w-full h-full">
+    <div ref={containerRef} className="relative w-full h-full">
       <View360
         ref={viewerRef}
         className="view360-fullscreen"
         projection={initialProjection.current}
         onReady={handleReady}
+        onLoad={handleLoad}
         initialZoom={ZOOM_NORMAL}
         zoomRange={{ min: ZOOM_OUT, max: ZOOM_IN }}
         pitchRange={{ min: -30, max: 15 }}

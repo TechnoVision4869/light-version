@@ -14,7 +14,27 @@ export default function Balcony({ view }) {
   const ZOOM_OUT_TIME = 600;
 
   const viewerRef = useRef(null);
+  const containerRef = useRef(null);
   const [textureError, setTextureError] = useState(null);
+
+  // Check gl.getError() on the actual View360 canvas after render
+  const checkGLError = () => {
+    requestAnimationFrame(() => {
+      const canvas = containerRef.current?.querySelector('.view360-canvas');
+      if (!canvas) return;
+      const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+      if (!gl) return;
+      const error = gl.getError();
+      if (error !== gl.NO_ERROR) {
+        const maxSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+        const img = new Image();
+        img.onload = () => setTextureError({ maxSize, width: img.width, height: img.height });
+        img.src = view;
+      } else {
+        setTextureError(null);
+      }
+    });
+  };
 
   // Check if image exceeds device MAX_TEXTURE_SIZE
   useEffect(() => {
@@ -46,10 +66,11 @@ export default function Balcony({ view }) {
       zoom: ZOOM_NORMAL,
       duration: ZOOM_OUT_TIME,
     });
+    checkGLError();
   };
 
   return (
-    <div className="relative w-screen h-screen">
+    <div ref={containerRef} className="relative w-screen h-screen">
       {textureError && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/90 pointer-events-none">
           <p className="text-white/60 text-sm text-center px-8 leading-relaxed">

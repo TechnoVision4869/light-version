@@ -24,12 +24,32 @@ export default function Panorama({ unit }) {
   };
 
   const viewerRef = useRef(null);
+  const containerRef = useRef(null);
   const [isTransitioning, setIsTransitioning] = useState(false); // blur overlay state
   const transitionTimeoutRef = useRef(null);
   const [isFurnished, setIsFurnished] = useState(true);
   const zoomOnLoadRef = useRef(true);
-  const maxTextureSizeRef = useRef(null);
+  const currentImageRef = useRef(null);
   const [textureError, setTextureError] = useState(null);
+
+  // Check gl.getError() on the actual View360 canvas after render
+  const checkGLError = useCallback((src) => {
+    requestAnimationFrame(() => {
+      const canvas = containerRef.current?.querySelector('.view360-canvas');
+      if (!canvas) return;
+      const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+      if (!gl) return;
+      const error = gl.getError();
+      if (error !== gl.NO_ERROR) {
+        const maxSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+        const img = new Image();
+        img.onload = () => setTextureError({ maxSize, width: img.width, height: img.height });
+        img.src = src;
+      } else {
+        setTextureError(null);
+      }
+    });
+  }, []);
 
   // Get unit data
   const unitType = useStatic 
@@ -42,29 +62,12 @@ export default function Panorama({ unit }) {
   const hotspots = room.hotspots;
   const hotspotsRef = useRef();
   hotspotsRef.current = hotspots; // Sync on every render
+  currentImageRef.current = currentImage; // Sync on every render
 
   useEffect(() => {
     const allImages = levels.flatMap(l => l.rooms.map(r => r.furnitureImgId));
     allImages.forEach(src => new Image().src = src);
   }, [levels]);
-
-  // Check if current image exceeds device MAX_TEXTURE_SIZE
-  useEffect(() => {
-    if (!maxTextureSizeRef.current) {
-      const canvas = document.createElement('canvas');
-      const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
-      maxTextureSizeRef.current = gl ? gl.getParameter(gl.MAX_TEXTURE_SIZE) : 4096;
-    }
-    const img = new Image();
-    img.onload = () => {
-      if (img.width > maxTextureSizeRef.current || img.height > maxTextureSizeRef.current) {
-        setTextureError({ maxSize: maxTextureSizeRef.current, width: img.width, height: img.height });
-      } else {
-        setTextureError(null);
-      }
-    };
-    img.src = currentImage;
-  }, [currentImage]);
 
   // Update image when furniture toggle changes
   useEffect(() => {
@@ -165,12 +168,12 @@ export default function Panorama({ unit }) {
     viewerRef.current.control.rotate.pointerScale = [2, 2];
     viewerRef.current.control.rotate.duration = 1000;
     viewerRef.current.control.rotate.easing = EASING.EASE_OUT_CUBIC;
-  }, []);
+    checkGLError(currentImageRef.current);
+  }, [checkGLError]);
 
   // Handle new image load (v4's "imageLoaded" equivalent)
   const handleLoad = useCallback(() => {
     if (!viewerRef.current) return;
-    // console.log("load");
 
     // Set to zoom out position instantly (no animation)
     viewerRef.current.camera.lookAt({ zoom: ZOOM_OUT });
@@ -190,10 +193,12 @@ export default function Panorama({ unit }) {
       setIsTransitioning(false);
     }, 500);
 
-  }, []);
+    checkGLError(currentImageRef.current);
+  }, [checkGLError]);
 
   return (
     <div
+      ref={containerRef}
       className="relative w-screen h-screen"
       style={{ touchAction: "none" }}
     >

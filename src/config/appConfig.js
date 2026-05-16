@@ -11,4 +11,6 @@ export const APP_CONFIG = {
   IDLE_TYPE: ASSET_TYPES.IMAGE,
   // Set to true to use panorama hotspots for unit interior, false for single room-interior popup
   USE_HOTSPOTS: false,
+  // Set to true to show a blur overlay during any transition or reverse video playback
+  USE_BLUR_OVERLAY: true,
 };

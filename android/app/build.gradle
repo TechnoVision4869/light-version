@@ -26,6 +26,12 @@ android {
             // Overrides app_name string resource for this flavor
             resValue "string", "app_name", "Sandbox"
         }
+        digital {
+            dimension "project"
+            applicationId "com.technovision.digital"
+            // Overrides app_name string resource for this flavor
+            resValue "string", "app_name", "Light Light"
+        }
         demo {
             dimension "project"
             applicationId "com.technovision.demo"
