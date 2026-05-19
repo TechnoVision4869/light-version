@@ -174,7 +174,7 @@ export const DEVELOPER_SOMABAY = {
                         area: 113.9,
                         price: 8,
                         bedrooms: 2, bathrooms: 1,
-                        balconyView: null,
+                        balconyView: `/${projectPath}/panorama/Balcony/7a/107A11.jpg`,
                         x: 0.745, y: 0.35,
                         videos: {
                           forwardVideo: `/${projectPath}/units/trans_from_floors_to_units.mp4`,
@@ -183,11 +183,11 @@ export const DEVELOPER_SOMABAY = {
                         }
                       },
                       { id: "107A12", unitTypeId: "107A12", displayName: "107A12", area: 95.9, price: 6, bedrooms: 1, bathrooms: 1,
-                        balconyView: null, x: 0.635, y: 0.5, videos: { forwardVideo: `/${projectPath}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectPath}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectPath}/units/7a/basement/107AC02.png` } },
+                        balconyView: `/${projectPath}/panorama/Balcony/7a/107A12.jpg`, x: 0.635, y: 0.5, videos: { forwardVideo: `/${projectPath}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectPath}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectPath}/units/7a/floor1/107A12.png` } },
                         { id: "107A13", unitTypeId: "107A13", displayName: "107A13", area: 128.3, price: 5, bedrooms: 2, bathrooms: 2,
-                        balconyView: null, x: 0.48, y: 0.68, videos: { forwardVideo: `/${projectPath}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectPath}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectPath}/units/7a/floor1/107A13.png` } },
+                        balconyView: `/${projectPath}/panorama/Balcony/7a/107A13.jpg`, x: 0.48, y: 0.68, videos: { forwardVideo: `/${projectPath}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectPath}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectPath}/units/7a/floor1/107A13.png` } },
                         { id: "107A14", unitTypeId: "107A14", displayName: "107A14", area: 120.9, price: 7, bedrooms: 2, bathrooms: 2,
-                        balconyView: null, x: 0.32, y: 0.45, videos: { forwardVideo: `/${projectPath}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectPath}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectPath}/units/7a/floor1/107A14.png` } },
+                        balconyView: `/${projectPath}/panorama/Balcony/7a/107A14.jpg`, x: 0.32, y: 0.45, videos: { forwardVideo: `/${projectPath}/units/trans_from_floors_to_units.mp4`, reverseVideo: `/${projectPath}/units/rev_from_units_to_floors.mp4`, idleVideo: `/${projectPath}/units/7a/floor1/107A14.png` } },
                     ],
                   },
                   {

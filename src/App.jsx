@@ -16,6 +16,7 @@ import UsersPage from "./components/user/UsersPage";
 export default function App() {
   const { currentProject, setCurrentProject } = useContext(SidebarContext);
   const [showSplash, setShowSplash] = useState(false);
+  const [splashVideoUrl, setSplashVideoUrl] = useState(null);
   const [expired, setExpired] = useState(false);
   const navigate = useNavigate();
 
@@ -40,15 +41,11 @@ export default function App() {
     lockOrientation();
   }, []);
 
-  const handleProjectSelect = (project) => {
+  const handleProjectSelect = (project, introVideoUrl) => {
     setCurrentProject(project);
+    setSplashVideoUrl(introVideoUrl ?? null);
     setShowSplash(true);
     navigate("/home");
-  };
-
-  const getIntroVideoUrl = () => {
-    if (!currentProject) return null;    
-    return currentProject?.introVideoId || currentProject?.introVideo;
   };
 
   if (expired) {
@@ -88,11 +85,11 @@ export default function App() {
           <AuthGuard>
             {showSplash ? (
               <SplashVideo
-                src={getIntroVideoUrl()}
+                src={splashVideoUrl}
                 onFinished={() => setShowSplash(false)}
               />
             ) : (
-              <Home />
+              <Home introVideoUrl={splashVideoUrl} />
             )}
           </AuthGuard>
         }

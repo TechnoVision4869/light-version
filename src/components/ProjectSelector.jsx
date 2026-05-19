@@ -191,7 +191,7 @@ export default function ProjectSelector({
     try {
       const project = await fetchProjectById(projectId, useStatic);
       if (project) {
-        onProjectSelect(project);
+        onProjectSelect(project, introVideoUrl);
       } else {
         toast.error("Failed to load project details.");
       }
@@ -244,7 +244,7 @@ export default function ProjectSelector({
             <img
               src={developerAssets.logoImage}
               alt="Developer Logo"
-              className="w-auto h-auto max-h-18 xl:max-h-22 xl:w-22 max-w-[90vw] xl:max-w-md"
+              className="w-auto h-auto max-h-22 xl:max-h-26 xl:w-26 max-w-[90vw] xl:max-w-md"
             />
           </div>
           {showBackButton && !useStatic && onBackButtonClick && (

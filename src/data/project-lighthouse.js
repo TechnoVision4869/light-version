@@ -70,7 +70,7 @@ export const DEVELOPER_SOMABAY = {
             thumbnail: "",
             distance: "6 min - 3 km",
             description: "Service area with restaurants, cafes, and shops.",
-            x: 0.39, y: 0.39,
+            x: 0.38, y: 0.3,
             svgPath: SERVICE_SVG,
           },
         ],
