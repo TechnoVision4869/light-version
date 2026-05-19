@@ -29,6 +29,15 @@ export function useVideoViewer() {
   const skipNextTransitionRef = useRef(false);
   const playSurroundingsIdleRef = useRef(false);
   const isInitPlayedRef = useRef(true); // Flag to indicate if we have played the initial video (Home idle)
+  const floorBlurShowTimerRef = useRef(null);
+  const floorBlurClearTimerRef = useRef(null);
+
+  const [isFloorTransitionBlur, setIsFloorTransitionBlur] = useState(false);
+
+  const activeLayerRef = useRef(activeLayer);
+  useEffect(() => {
+    activeLayerRef.current = activeLayer;
+  }, [activeLayer]);
 
   const [currentViewIndex, setCurrentViewIndex] = useState(0);
   const numViews = currentViews?.length || 0;
@@ -142,6 +151,13 @@ export function useVideoViewer() {
         setFirstVideoOpacity(target === "first" ? 1 : 0);
         setSecondVideoOpacity(target === "second" ? 1 : 0);
         visibleRefRef.current = target;
+        if (activeLayerRef.current === LAYERS.FLOOR) {
+          if (floorBlurClearTimerRef.current) clearTimeout(floorBlurClearTimerRef.current);
+          floorBlurShowTimerRef.current = setTimeout(() => {
+            setIsFloorTransitionBlur(true);
+            floorBlurShowTimerRef.current = null;
+          }, 900);
+        }
       };
       const onEnded = () => {
         playIdleVideo(idleVideoPath);
@@ -167,11 +183,23 @@ export function useVideoViewer() {
       // console.log("StartReverse called with reverse video:", currentVideosPaths.reverseVideo);
       setFloatingOpacity(0);
 
+      if (activeLayerRef.current === LAYERS.FLOOR) {
+        if (floorBlurShowTimerRef.current) clearTimeout(floorBlurShowTimerRef.current);
+        if (floorBlurClearTimerRef.current) clearTimeout(floorBlurClearTimerRef.current);
+        setIsFloorTransitionBlur(true);
+      }
+
       const target = getHiddenRef(); // load on the currently hidden ref — no flash
       const onloaded = () => {
         setFirstVideoOpacity(target === "first" ? 1 : 0);
         setSecondVideoOpacity(target === "second" ? 1 : 0);
         visibleRefRef.current = target;
+        if (activeLayerRef.current === LAYERS.FLOOR) {
+          floorBlurClearTimerRef.current = setTimeout(() => {
+            setIsFloorTransitionBlur(false);
+            floorBlurClearTimerRef.current = null;
+          }, 400);
+        }
       };
 
       const onEnded = () => {
@@ -228,6 +256,16 @@ export function useVideoViewer() {
         setFloatingOpacity(1);
         visibleRefRef.current = target;
         setIsPlaying(false);
+        // For forward BUILDING→FLOOR: cancel pending show timer, schedule blur clear
+        if (floorBlurShowTimerRef.current) {
+          clearTimeout(floorBlurShowTimerRef.current);
+          floorBlurShowTimerRef.current = null;
+        }
+        if (floorBlurClearTimerRef.current) clearTimeout(floorBlurClearTimerRef.current);
+        floorBlurClearTimerRef.current = setTimeout(() => {
+          setIsFloorTransitionBlur(false);
+          floorBlurClearTimerRef.current = null;
+        }, 200);
       };
 
       playVideo(videoPath, true, onloaded, null, target);
@@ -301,6 +339,8 @@ export function useVideoViewer() {
         secondVideoRef.current.pause();
         secondVideoRef.current.src = null;
       }
+      if (floorBlurShowTimerRef.current) clearTimeout(floorBlurShowTimerRef.current);
+      if (floorBlurClearTimerRef.current) clearTimeout(floorBlurClearTimerRef.current);
     };
   }, []);
 
@@ -315,6 +355,7 @@ export function useVideoViewer() {
     StartReverse,
     currentViewIndex,
     changeView,
+    isFloorTransitionBlur,
     skipNextTransition: () => {
       skipNextTransitionRef.current = true;
     },

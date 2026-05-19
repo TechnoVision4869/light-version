@@ -78,6 +78,7 @@ export default function Home() {
     StartReverse: videoViewer.StartReverse,
     currentViewIndex: videoViewer.currentViewIndex, // Now managed by the hook
     changeView: videoViewer.changeView, // Now managed by the hook
+    isFloorTransitionBlur: videoViewer.isFloorTransitionBlur,
   };
 
   const isDisabled = !viewerProps.isMediaLoaded || viewerProps.isPlaying;
@@ -533,7 +534,7 @@ export default function Home() {
                   {/* Floor switch blur overlay */}
                   <div
                     className="absolute inset-0 z-20 backdrop-blur-sm rounded-2xl pointer-events-none transition-opacity duration-300"
-                    style={{ opacity: floorSwitchBlur ? 1 : 0 }}
+                    style={{ opacity: (floorSwitchBlur || viewerProps.isFloorTransitionBlur) ? 1 : 0 }}
                   />
 
                   {/* Vertical floor buttons */}
