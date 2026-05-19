@@ -12,10 +12,11 @@ export function useVideoViewer() {
     currentViews,
     currentVideosPaths,
     goBack,
+    isPlaying,
+    setIsPlaying,
   } = useContext(SidebarContext);
 
   const [isVideosLoaded, setIsVideosLoaded] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   const [floatingOpacity, setFloatingOpacity] = useState(0);
   const [firstVideoOpacity, setFirstVideoOpacity] = useState(0);
@@ -91,7 +92,7 @@ export function useVideoViewer() {
         return;
       }
 
-      setIsPlaying(!loop);
+      if (!loop) setIsPlaying(true);
       const video =
         targetRef === "second" ? secondVideoRef.current : firstVideoRef.current;
       video.loop = loop;
@@ -106,6 +107,10 @@ export function useVideoViewer() {
           .catch((e) =>
             console.error("Video play failed:", e, "video src:", src),
           );
+      };
+      video.onerror = () => {
+        console.error("Video load error, src:", src);
+        setIsPlaying(false);
       };
 
       if (onEnded) {
@@ -222,6 +227,7 @@ export function useVideoViewer() {
         setSecondVideoOpacity(target === "second" ? 1 : 0);
         setFloatingOpacity(1);
         visibleRefRef.current = target;
+        setIsPlaying(false);
       };
 
       playVideo(videoPath, true, onloaded, null, target);
@@ -266,6 +272,11 @@ export function useVideoViewer() {
             }, 200);
           } else if (playSurroundingsIdleRef.current) {
             playSurroundingsIdleRef.current = false;
+            if (activeTab !== TABS.SURROUNDINGS || activeLayer !== null) {
+              // Flag was stale — effect didn't fire for the back navigation,
+              // so this is a completely different destination. Play normally.
+              playTransitionVideo();
+            }
           } else {
             playTransitionVideo();
           }

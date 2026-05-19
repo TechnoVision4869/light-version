@@ -323,6 +323,7 @@ export default function SidebarContextProvider({ children }) {
         setSidebarOpen(state);
     }, []);
 
+    const [isPlaying, setIsPlaying] = useState(false);
     const [currentItems, setCurrentItems] = useState([]);
     const [type, setType] = useState("");
 
@@ -443,7 +444,9 @@ export default function SidebarContextProvider({ children }) {
         goToTab,
         goBack: handleGoBack,
         goHome: handleGoHome,
-        switchToFloor: handleSwitchToFloor
+        switchToFloor: handleSwitchToFloor,
+        isPlaying,
+        setIsPlaying,
     };
 
     return <SidebarContext.Provider value={ctxValue}>{children}</SidebarContext.Provider>

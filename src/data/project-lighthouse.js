@@ -6,25 +6,6 @@ import SERVICE_SVG from '../assets/svgs/service.svg?raw';
 export const projectPath = "projects/light-house";
 const SOMABAY_BG = `/${projectPath}/images/background.jpeg`;
 
-const gallery_7A = [
-  { id: "7A_gallery_1", src: `/${projectPath}/images/gallery/exterior/7A.jpg` }, 
-  { id: "7A_gallery_2", src: `/${projectPath}/images/gallery/exterior/7A-2.jpg` }, 
-  { id: "7A_gallery_3", src: `/${projectPath}/images/gallery/exterior/7A-3.png` }, 
-  { id: "7A_gallery_4", src: `/${projectPath}/images/gallery/exterior/7A-4.png` }
-];
-const gallery_7B = [
-  { id: "7B_gallery_1", src: `/${projectPath}/images/gallery/exterior/7B-1.jpg` }, 
-  { id: "7B_gallery_2", src: `/${projectPath}/images/gallery/exterior/7B-2.jpg` }, 
-  { id: "7B_gallery_3", src: `/${projectPath}/images/gallery/exterior/7B-3.png` }, 
-  { id: "7B_gallery_4", src: `/${projectPath}/images/gallery/exterior/7B-4.png` }
-];
-const gallery_7C = [
-  { id: "7C_gallery_1", src: `/${projectPath}/images/gallery/exterior/7C-1.jpg` }, 
-  { id: "7C_gallery_2", src: `/${projectPath}/images/gallery/exterior/7C-2.jpg` }, 
-  { id: "7C_gallery_3", src: `/${projectPath}/images/gallery/exterior/7C-3.jpg` }, 
-  { id: "7C_gallery_4", src: `/${projectPath}/images/gallery/exterior/7C-4.png` },
-  { id: "7C_gallery_5", src: `/${projectPath}/images/gallery/exterior/7C-5.png` }
-];
 const gallery1 = [
   { id: "group1_1", src: `/${projectPath}/images/gallery/interior/1BR/01.jpg` },
   { id: "group1_2", src: `/${projectPath}/images/gallery/interior/1BR/02 copy.jpg` },
@@ -159,7 +140,7 @@ export const DEVELOPER_SOMABAY = {
         items: [
           {
             id: "zone1",
-            projectId: "mix",
+            projectId: "lighthouse",
             displayName: "Towers",
             subtitle: "Residential Area",
             thumbnail: null,
@@ -1043,7 +1024,7 @@ export const DEVELOPER_SOMABAY = {
 
       unitTypes: {
         // 7A, Basement
-        "107AC01": { id: "107AC01", bedrooms: 2, bathrooms: 1, area: 113.9, serviceRooms: [], gallery: [...gallery1, ...gallery_7A], cutSections: [], floorPlans: [{ id: "107AC01", src: `/${projectPath}/images/floorplans/107AC01.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107AC01": { id: "107AC01", bedrooms: 2, bathrooms: 1, area: 113.9, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107AC01", src: `/${projectPath}/images/floorplans/107AC01.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l12_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l12_unf.jpg`, x: 0.753, y: 0.579, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d12_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d12_unf.jpg`, x: 0.668, y: 0.619, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k12_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k12_unf.jpg`, x: 0.631, y: 0.445, hotspots: [] }, 
@@ -1052,7 +1033,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room6", displayName: "Bedroom 2", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b05_unf.jpg`, x: 0.258, y: 0.458, hotspots: [] }
         ] }] } },
 
-        "107AC02": { id: "107AC02", bedrooms: 1, bathrooms: 1, area: 95.9,  serviceRooms: [], gallery: [...gallery2, ...gallery_7A], cutSections: [], floorPlans: [{ id: "107AC02", src: `/${projectPath}/images/floorplans/107AC02.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107AC02": { id: "107AC02", bedrooms: 1, bathrooms: 1, area: 95.9,  serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107AC02", src: `/${projectPath}/images/floorplans/107AC02.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l14_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l14_unf.jpg`, x: 0.37, y: 0.653, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d14_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d14_unf.jpg`, x: 0.443, y: 0.722, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k14_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k14_unf.jpg`, x: 0.48, y: 0.432, hotspots: [] }, 
@@ -1060,7 +1041,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room5", displayName: "Bedroom", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b02_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b02_unf.jpg`, x: 0.731, y: 0.458, hotspots: [] }
         ] }] } },
 
-        "107AC03": { id: "107AC03", bedrooms: 2, bathrooms: 2, area: 128.3, serviceRooms: [], gallery: [...gallery3, ...gallery_7A], cutSections: [], floorPlans: [{ id: "107AC03", src: `/${projectPath}/images/floorplans/107AC03.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107AC03": { id: "107AC03", bedrooms: 2, bathrooms: 2, area: 128.3, serviceRooms: [], gallery: [...gallery3], cutSections: [], floorPlans: [{ id: "107AC03", src: `/${projectPath}/images/floorplans/107AC03.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l14_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l14_unf.jpg`, x: 0.384, y: 0.428, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d14_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d14_unf.jpg`, x: 0.464, y: 0.428, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k14_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k14_unf.jpg`, x: 0.485, y: 0.21, hotspots: [] }, 
@@ -1070,7 +1051,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room7", displayName: "Bedroom 2", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b01_unf.jpg`, x: 0.687, y: 0.65, hotspots: [] }
         ] }] } },
 
-        "107AC04": { id: "107AC04", bedrooms: 2, bathrooms: 2, area: 120.9, serviceRooms: [], gallery: [...gallery1, ...gallery_7A], cutSections: [], floorPlans: [{ id: "107AC04", src: `/${projectPath}/images/floorplans/107AC04.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107AC04": { id: "107AC04", bedrooms: 2, bathrooms: 2, area: 120.9, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107AC04", src: `/${projectPath}/images/floorplans/107AC04.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l14_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l14_unf.jpg`, x: 0.277, y: 0.487, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d14_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d14_unf.jpg`, x: 0.378, y: 0.487, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k14_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k14_unf.jpg`, x: 0.408, y: 0.271, hotspots: [] }, 
@@ -1081,7 +1062,7 @@ export const DEVELOPER_SOMABAY = {
         ] }] } },
 
         // 7A, Ground
-        "107A01": { id: "107A01", bedrooms: 2, bathrooms: 1, area: 113.9, serviceRooms: [], gallery: [...gallery2, ...gallery_7A], cutSections: [], floorPlans: [{ id: "107A01", src: `/${projectPath}/images/floorplans/107A01.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107A01": { id: "107A01", bedrooms: 2, bathrooms: 1, area: 113.9, serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107A01", src: `/${projectPath}/images/floorplans/107A01.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l19_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l19_unf.jpg`, x: 0.311, y: 0.46, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d19_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d19_unf.jpg`, x: 0.396, y: 0.42, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k19_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k19_unf.jpg`, x: 0.433, y: 0.555, hotspots: [] }, 
@@ -1090,7 +1071,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room6", displayName: "Bedroom 2", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b05_unf.jpg`, x: 0.757, y: 0.555, hotspots: [] }
         ] }] } },
 
-        "107A02": { id: "107A02", bedrooms: 1, bathrooms: 1, area: 95.9,  serviceRooms: [], gallery: [...gallery3, ...gallery_7A], cutSections: [], floorPlans: [{ id: "107A02", src: `/${projectPath}/images/floorplans/107A02.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107A02": { id: "107A02", bedrooms: 1, bathrooms: 1, area: 95.9,  serviceRooms: [], gallery: [...gallery3], cutSections: [], floorPlans: [{ id: "107A02", src: `/${projectPath}/images/floorplans/107A02.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l18_unf.jpg`, x: 0.37, y: 0.653, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d18_unf.jpg`, x: 0.443, y: 0.722, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k18_unf.jpg`, x: 0.48, y: 0.432, hotspots: [] }, 
@@ -1098,7 +1079,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room5", displayName: "Bedroom", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b02_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b02_unf.jpg`, x: 0.731, y: 0.458, hotspots: [] }
         ] }] } },
 
-        "107A03": { id: "107A03", bedrooms: 2, bathrooms: 2, area: 128.3, serviceRooms: [], gallery: [...gallery1, ...gallery_7A], cutSections: [], floorPlans: [{ id: "107A03", src: `/${projectPath}/images/floorplans/107A03.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107A03": { id: "107A03", bedrooms: 2, bathrooms: 2, area: 128.3, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107A03", src: `/${projectPath}/images/floorplans/107A03.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l18_unf.jpg`, x: 0.406, y: 0.487, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d18_unf.jpg`, x: 0.485, y: 0.487, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k18_unf.jpg`, x: 0.5, y: 0.205, hotspots: [] }, 
@@ -1108,7 +1089,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room7", displayName: "Bedroom 2", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b01_unf.jpg`, x: 0.728, y: 0.663, hotspots: [] }
         ] }] } },
 
-        "107A04": { id: "107A04", bedrooms: 2, bathrooms: 2, area: 120.9, serviceRooms: [], gallery: [...gallery2, ...gallery_7A], cutSections: [], floorPlans: [{ id: "107A04", src: `/${projectPath}/images/floorplans/107A04.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107A04": { id: "107A04", bedrooms: 2, bathrooms: 2, area: 120.9, serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107A04", src: `/${projectPath}/images/floorplans/107A04.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l18_unf.jpg`, x: 0.277, y: 0.487, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d18_unf.jpg`, x: 0.378, y: 0.487, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k18_unf.jpg`, x: 0.408, y: 0.271, hotspots: [] }, 
@@ -1119,7 +1100,7 @@ export const DEVELOPER_SOMABAY = {
         ] }] } },
 
         // 7A, Floor 1
-        "107A11": { id: "107A11", bedrooms: 2, bathrooms: 1, area: 113.9, serviceRooms: [], gallery: [...gallery3, ...gallery_7A], cutSections: [], floorPlans: [{ id: "107A11", src: `/${projectPath}/images/floorplans/107A11.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107A11": { id: "107A11", bedrooms: 2, bathrooms: 1, area: 113.9, serviceRooms: [], gallery: [...gallery3], cutSections: [], floorPlans: [{ id: "107A11", src: `/${projectPath}/images/floorplans/107A11.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l19_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l19_unf.jpg`, x: 0.313, y: 0.419, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d19_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d19_unf.jpg`, x: 0.399, y: 0.394, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k19_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k19_unf.jpg`, x: 0.435, y: 0.552, hotspots: [] }, 
@@ -1128,7 +1109,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room6", displayName: "Bedroom 2", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b05_unf.jpg`, x: 0.751, y: 0.526, hotspots: [] }
         ] }] } },
 
-        "107A12": { id: "107A12", bedrooms: 1, bathrooms: 1, area: 95.9,  serviceRooms: [], gallery: [...gallery1, ...gallery_7A], cutSections: [], floorPlans: [{ id: "107A12", src: `/${projectPath}/images/floorplans/107A12.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107A12": { id: "107A12", bedrooms: 1, bathrooms: 1, area: 95.9,  serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107A12", src: `/${projectPath}/images/floorplans/107A12.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l18_unf.jpg`, x: 0.361, y: 0.731, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d18_unf.jpg`, x: 0.444, y: 0.731, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k18_unf.jpg`, x: 0.474, y: 0.417, hotspots: [] }, 
@@ -1136,7 +1117,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room5", displayName: "Bedroom", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b02_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b02_unf.jpg`, x: 0.731, y: 0.456, hotspots: [] }
         ] }] } },
 
-        "107A13": { id: "107A13", bedrooms: 2, bathrooms: 2, area: 128.3, serviceRooms: [], gallery: [...gallery2, ...gallery_7A], cutSections: [], floorPlans: [{ id: "107A13", src: `/${projectPath}/images/floorplans/107A13.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107A13": { id: "107A13", bedrooms: 2, bathrooms: 2, area: 128.3, serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107A13", src: `/${projectPath}/images/floorplans/107A13.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l18_unf.jpg`, x: 0.399, y: 0.498, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d18_unf.jpg`, x: 0.478, y: 0.498, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k18_unf.jpg`, x: 0.507, y: 0.207, hotspots: [] }, 
@@ -1146,7 +1127,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room7", displayName: "Bedroom 2", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b01_unf.jpg`, x: 0.732, y: 0.674, hotspots: [] }
         ] }] } },
 
-        "107A14": { id: "107A14", bedrooms: 2, bathrooms: 2, area: 120.9, serviceRooms: [], gallery: [...gallery3, ...gallery_7A], cutSections: [], floorPlans: [{ id: "107A14", src: `/${projectPath}/images/floorplans/107A14.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107A14": { id: "107A14", bedrooms: 2, bathrooms: 2, area: 120.9, serviceRooms: [], gallery: [...gallery3], cutSections: [], floorPlans: [{ id: "107A14", src: `/${projectPath}/images/floorplans/107A14.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l18_unf.jpg`, x: 0.277, y: 0.487, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d18_unf.jpg`, x: 0.378, y: 0.487, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k18_unf.jpg`, x: 0.408, y: 0.271, hotspots: [] }, 
@@ -1157,7 +1138,7 @@ export const DEVELOPER_SOMABAY = {
         ] }] } },
 
         // 7A, Floor 2
-        "107A21": { id: "107A21", bedrooms: 2, bathrooms: 1, area: 116.5, serviceRooms: [], gallery: [...gallery1, ...gallery_7A], cutSections: [], floorPlans: [{ id: "107A21", src: `/${projectPath}/images/floorplans/107A21.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107A21": { id: "107A21", bedrooms: 2, bathrooms: 1, area: 116.5, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107A21", src: `/${projectPath}/images/floorplans/107A21.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l12_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l12_unf.jpg`, x: 0.334, y: 0.42, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d12_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d12_unf.jpg`, x: 0.407, y: 0.42, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k12_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k12_unf.jpg`, x: 0.432, y: 0.579, hotspots: [] }, 
@@ -1166,7 +1147,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room6", displayName: "Bedroom 2", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b05_unf.jpg`, x: 0.749, y: 0.553, hotspots: [] }
         ] }] } },
 
-        "107A22": { id: "107A22", bedrooms: 2, bathrooms: 3, area: 157,   serviceRooms: [], gallery: [...gallery2, ...gallery_7A], cutSections: [], floorPlans: [{ id: "107A22", src: `/${projectPath}/images/floorplans/107A22.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107A22": { id: "107A22", bedrooms: 2, bathrooms: 3, area: 157,   serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107A22", src: `/${projectPath}/images/floorplans/107A22.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l16_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l16_unf.jpg`, x: 0.361, y: 0.454, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d16_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d16_unf.jpg`, x: 0.451, y: 0.414, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k16_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k16_unf.jpg`, x: 0.586, y: 0.374, hotspots: [] }, 
@@ -1177,7 +1158,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room8", displayName: "Bedroom 2", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b24_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b24_unf.jpg`, x: 0.67, y: 0.619, hotspots: [] }
         ] }] } },
 
-        "107A23": { id: "107A23", bedrooms: 2, bathrooms: 2, area: 160,   serviceRooms: [], gallery: [...gallery3, ...gallery_7A], cutSections: [], floorPlans: [{ id: "107A23", src: `/${projectPath}/images/floorplans/107A23.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107A23": { id: "107A23", bedrooms: 2, bathrooms: 2, area: 160,   serviceRooms: [], gallery: [...gallery3], cutSections: [], floorPlans: [{ id: "107A23", src: `/${projectPath}/images/floorplans/107A23.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l15_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l15_unf.jpg`, x: 0.38, y: 0.634, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d15_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d15_unf.jpg`, x: 0.557, y: 0.679, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k15_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k15_unf.jpg`, x: 0.651, y: 0.608, hotspots: [] }, 
@@ -1188,7 +1169,7 @@ export const DEVELOPER_SOMABAY = {
         ] }] } },
 
         // 7A, Floor 3
-        "107A31": { id: "107A31", bedrooms: 3, bathrooms: 3, area: 227.4, serviceRooms: [], gallery: [...penta1, ...gallery_7A], cutSections: [], floorPlans: [{ id: "107A31", src: `/${projectPath}/images/floorplans/107A31.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107A31": { id: "107A31", bedrooms: 3, bathrooms: 3, area: 227.4, serviceRooms: [], gallery: [...penta1], cutSections: [], floorPlans: [{ id: "107A31", src: `/${projectPath}/images/floorplans/107A31.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l17_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l17_unf.jpg`, x: 0.284, y: 0.248, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d17_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d17_unf.jpg`, x: 0.277, y: 0.474, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k17_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k17_unf.jpg`, x: 0.299, y: 0.648, hotspots: [] }, 
@@ -1202,7 +1183,7 @@ export const DEVELOPER_SOMABAY = {
 
     
         // 7B 1, Basement
-        "107BC01": { id: "107BC01", bedrooms: 2, bathrooms: 1, area: 95.3, serviceRooms: [], gallery: [...gallery1, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107BC01", src: `/${projectPath}/images/floorplans/107BC01.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
+        "107BC01": { id: "107BC01", bedrooms: 2, bathrooms: 1, area: 95.3, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107BC01", src: `/${projectPath}/images/floorplans/107BC01.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l01_unf.jpg`, x: 0.233, y: 0.603, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d01_unf.jpg`, x: 0.337, y: 0.545, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k01_unf.jpg`, x: 0.434, y: 0.655, hotspots: [] }, 
@@ -1211,7 +1192,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room6", displayName: "Bedroom 2", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b01_unf.jpg`, x: 0.723, y: 0.587, hotspots: [] } 
         ] }] } },
 
-        "107BC02": { id: "107BC02", bedrooms: 1, bathrooms: 1, area: 81.4, serviceRooms: [], gallery: [...gallery2, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107BC02", src: `/${projectPath}/images/floorplans/107BC02.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
+        "107BC02": { id: "107BC02", bedrooms: 1, bathrooms: 1, area: 81.4, serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107BC02", src: `/${projectPath}/images/floorplans/107BC02.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l02_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l02_unf.jpg`, x: 0.23, y: 0.569, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d02_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d02_unf.jpg`, x: 0.334, y: 0.543, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k02_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k02_unf.jpg`, x: 0.465, y: 0.53, hotspots: [] }, 
@@ -1219,7 +1200,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room5", displayName: "Bedroom", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b02_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b02_unf.jpg`, x: 0.762, y: 0.369, hotspots: [] } 
         ] }] } },
 
-        "107BC03": { id: "107BC03", bedrooms: 1, bathrooms: 1, area: 77.4, serviceRooms: [], gallery: [...gallery3, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107BC03", src: `/${projectPath}/images/floorplans/107BC03.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
+        "107BC03": { id: "107BC03", bedrooms: 1, bathrooms: 1, area: 77.4, serviceRooms: [], gallery: [...gallery3], cutSections: [], floorPlans: [{ id: "107BC03", src: `/${projectPath}/images/floorplans/107BC03.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l03_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l03_unf.jpg`, x: 0.288, y: 0.315, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d03_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d03_unf.jpg`, x: 0.517, y: 0.315, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k03_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k03_unf.jpg`, x: 0.56, y: 0.532, hotspots: [] }, 
@@ -1227,7 +1208,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room5", displayName: "Bedroom", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b02_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b02_unf.jpg`, x: 0.736, y: 0.372, hotspots: [] } 
         ] }] } },
 
-        "107BC04": { id: "107BC04", bedrooms: 1, bathrooms: 1, area: 97, serviceRooms: [], gallery: [...gallery1, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107BC04", src: `/${projectPath}/images/floorplans/107BC04.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
+        "107BC04": { id: "107BC04", bedrooms: 1, bathrooms: 1, area: 97, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107BC04", src: `/${projectPath}/images/floorplans/107BC04.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l04_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l04_unf.jpg`, x: 0.253, y: 0.581, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d04_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d04_unf.jpg`, x: 0.435, y: 0.607, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k04_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k04_unf.jpg`, x: 0.481, y: 0.369, hotspots: [] }, 
@@ -1235,7 +1216,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room5", displayName: "Bedroom", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b02_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b02_unf.jpg`, x: 0.753, y: 0.466, hotspots: [] } 
         ] }] } },
 
-        "107BC05": { id: "107BC05", bedrooms: 1, bathrooms: 1, area: 105.1, serviceRooms: [], gallery: [...gallery2, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107BC05", src: `/${projectPath}/images/floorplans/107BC05.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
+        "107BC05": { id: "107BC05", bedrooms: 1, bathrooms: 1, area: 105.1, serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107BC05", src: `/${projectPath}/images/floorplans/107BC05.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l05_unf.jpg`, x: 0.372, y: 0.401, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d05_unf.jpg`, x: 0.507, y: 0.388, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k05_unf.jpg`, x: 0.516, y: 0.543, hotspots: [] }, 
@@ -1243,7 +1224,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room5", displayName: "Bedroom", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b04_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b04_unf.jpg`, x: 0.738, y: 0.5, hotspots: [] } 
         ] }] } },
 
-        "107BC06": { id: "107BC06", bedrooms: 1, bathrooms: 1, area: 68.1, serviceRooms: [], gallery: [...gallery3, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107BC06", src: `/${projectPath}/images/floorplans/107BC06.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
+        "107BC06": { id: "107BC06", bedrooms: 1, bathrooms: 1, area: 68.1, serviceRooms: [], gallery: [...gallery3], cutSections: [], floorPlans: [{ id: "107BC06", src: `/${projectPath}/images/floorplans/107BC06.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l01_unf.jpg`, x: 0.285, y: 0.704, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d01_unf.jpg`, x: 0.523, y: 0.704, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k01_unf.jpg`, x: 0.523, y: 0.487, hotspots: [] }, 
@@ -1251,7 +1232,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room5", displayName: "Bedroom", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b01_unf.jpg`, x: 0.745, y: 0.613, hotspots: [] } 
         ] }] } },
 
-        "107BC07": { id: "107BC07", bedrooms: 1, bathrooms: 1, area: 88.4, serviceRooms: [], gallery: [...gallery1, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107BC07", src: `/${projectPath}/images/floorplans/107BC07.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
+        "107BC07": { id: "107BC07", bedrooms: 1, bathrooms: 1, area: 88.4, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107BC07", src: `/${projectPath}/images/floorplans/107BC07.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l07_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l07_unf.jpg`, x: 0.27, y: 0.428, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d07_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d07_unf.jpg`, x: 0.37, y: 0.454, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k07_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k07_unf.jpg`, x: 0.457, y: 0.37, hotspots: [] }, 
@@ -1259,7 +1240,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room5", displayName: "Bedroom", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b02_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b02_unf.jpg`, x: 0.745, y: 0.639, hotspots: [] } 
         ] }] } },
 
-        "107BC08": { id: "107BC08", bedrooms: 1, bathrooms: 1, area: 90.7, serviceRooms: [], gallery: [...gallery2, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107BC08", src: `/${projectPath}/images/floorplans/107BC08.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
+        "107BC08": { id: "107BC08", bedrooms: 1, bathrooms: 1, area: 90.7, serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107BC08", src: `/${projectPath}/images/floorplans/107BC08.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l04_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l04_unf.jpg`, x: 0.255, y: 0.626, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d04_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d04_unf.jpg`, x: 0.37, y: 0.53, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k04_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k04_unf.jpg`, x: 0.482, y: 0.556, hotspots: [] }, 
@@ -1268,7 +1249,7 @@ export const DEVELOPER_SOMABAY = {
         ] }] } },
 
         // 7B 1, Ground
-        "107B01": { id: "107B01", bedrooms: 3, bathrooms: 3, area: 249.9, serviceRooms: [], gallery: [...gallery3, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B01", src: `/${projectPath}/images/floorplans/107B01.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
+        "107B01": { id: "107B01", bedrooms: 3, bathrooms: 3, area: 249.9, serviceRooms: [], gallery: [...gallery3], cutSections: [], floorPlans: [{ id: "107B01", src: `/${projectPath}/images/floorplans/107B01.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l06_unf.jpg`, x: 0.536, y: 0.439, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d06_unf.jpg`, x: 0.536, y: 0.727, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k06_unf.jpg`, x: 0.46, y: 0.766, hotspots: [] }, 
@@ -1280,7 +1261,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room9", displayName: "Bedroom 3", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b07_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b07_unf.jpg`, x: 0.336, y: 0.779, hotspots: [] } 
         ] }] } },
 
-        "107B02": { id: "107B02", bedrooms: 3, bathrooms: 3, area: 207.2, serviceRooms: [], gallery: [...gallery1, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B02", src: `/${projectPath}/images/floorplans/107B02.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
+        "107B02": { id: "107B02", bedrooms: 3, bathrooms: 3, area: 207.2, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107B02", src: `/${projectPath}/images/floorplans/107B02.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l05_unf.jpg`, x: 0.367, y: 0.548, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d05_unf.jpg`, x: 0.534, y: 0.548, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k05_unf.jpg`, x: 0.534, y: 0.743, hotspots: [] }, 
@@ -1291,7 +1272,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room8", displayName: "Bedroom 2", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b10_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b10_unf.jpg`, x: 0.765, y: 0.288, hotspots: [] } 
         ] }] } },
 
-        "107B03": { id: "107B03", bedrooms: 3, bathrooms: 3, area: 249, serviceRooms: [], gallery: [...gallery2, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B03", src: `/${projectPath}/images/floorplans/107B03.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
+        "107B03": { id: "107B03", bedrooms: 3, bathrooms: 3, area: 249, serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107B03", src: `/${projectPath}/images/floorplans/107B03.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [ 
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l06_unf.jpg`, x: 0.465, y: 0.405, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d06_unf.jpg`, x: 0.457, y: 0.666, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k06_unf.jpg`, x: 0.527, y: 0.705, hotspots: [] }, 
@@ -1304,7 +1285,7 @@ export const DEVELOPER_SOMABAY = {
         ] }] } },
 
         // 7B 1, Floor 1
-        "107B11": { id: "107B11", bedrooms: 3, bathrooms: 3, area: 249.9, serviceRooms: [], gallery: [...gallery3, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B11", src: `/${projectPath}/images/floorplans/107B11.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107B11": { id: "107B11", bedrooms: 3, bathrooms: 3, area: 249.9, serviceRooms: [], gallery: [...gallery3], cutSections: [], floorPlans: [{ id: "107B11", src: `/${projectPath}/images/floorplans/107B11.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l06_unf.jpg`, x: 0.536, y: 0.426, hotspots: [] },
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d06_unf.jpg`, x: 0.544, y: 0.727, hotspots: [] },
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k06_unf.jpg`, x: 0.46, y: 0.727, hotspots: [] },
@@ -1315,7 +1296,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room8", displayName: "Bedroom 2", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b08_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b08_unf.jpg`, x: 0.63, y: 0.439, hotspots: [] },
           { id: "room9", displayName: "Bedroom 3", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b07_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b07_unf.jpg`, x: 0.336, y: 0.753, hotspots: [] }
         ] }] } },
-        "107B12": { id: "107B12", bedrooms: 3, bathrooms: 3, area: 207.2, serviceRooms: [], gallery: [...gallery1, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B12", src: `/${projectPath}/images/floorplans/107B12.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107B12": { id: "107B12", bedrooms: 3, bathrooms: 3, area: 207.2, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107B12", src: `/${projectPath}/images/floorplans/107B12.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l05_unf.jpg`, x: 0.36, y: 0.548, hotspots: [] },
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d05_unf.jpg`, x: 0.527, y: 0.548, hotspots: [] },
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k05_unf.jpg`, x: 0.527, y: 0.731, hotspots: [] },
@@ -1325,7 +1306,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room7", displayName: "Bedroom 1", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b09_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b09_unf.jpg`, x: 0.421, y: 0.361, hotspots: [] },
           { id: "room8", displayName: "Bedroom 2", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b10_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b10_unf.jpg`, x: 0.758, y: 0.288, hotspots: [] }
         ] }] } },
-        "107B13": { id: "107B13", bedrooms: 3, bathrooms: 3, area: 249, serviceRooms: [], gallery: [...gallery2, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B13", src: `/${projectPath}/images/floorplans/107B13.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107B13": { id: "107B13", bedrooms: 3, bathrooms: 3, area: 249, serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107B13", src: `/${projectPath}/images/floorplans/107B13.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l06_unf.jpg`, x: 0.468, y: 0.406, hotspots: [] },
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d06_unf.jpg`, x: 0.454, y: 0.649, hotspots: [] },
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k06_unf.jpg`, x: 0.539, y: 0.719, hotspots: [] },
@@ -1337,7 +1318,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room9", displayName: "Bedroom 3", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b12_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b12_unf.jpg`, x: 0.638, y: 0.754, hotspots: [] }
         ] }] } },
         // 7B 1, Floor 2
-        "107B21": { id: "107B21", bedrooms: 3, bathrooms: 3, area: 213, serviceRooms: [], gallery: [...gallery3, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B21", src: `/${projectPath}/images/floorplans/107B21.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107B21": { id: "107B21", bedrooms: 3, bathrooms: 3, area: 213, serviceRooms: [], gallery: [...gallery3], cutSections: [], floorPlans: [{ id: "107B21", src: `/${projectPath}/images/floorplans/107B21.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l06_unf.jpg`, x: 0.534, y: 0.419, hotspots: [] },
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d06_unf.jpg`, x: 0.548, y: 0.681, hotspots: [] },
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k06_unf.jpg`, x: 0.466, y: 0.719, hotspots: [] },
@@ -1348,7 +1329,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room8", displayName: "Bedroom 2", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b08_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b08_unf.jpg`, x: 0.638, y: 0.432, hotspots: [] },
           { id: "room9", displayName: "Bedroom 3", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b07_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b07_unf.jpg`, x: 0.328, y: 0.732, hotspots: [] }
         ] }] } },
-        "107B22": { id: "107B22", bedrooms: 3, bathrooms: 3, area: 180.6, serviceRooms: [], gallery: [...gallery1, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B22", src: `/${projectPath}/images/floorplans/107B22.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107B22": { id: "107B22", bedrooms: 3, bathrooms: 3, area: 180.6, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107B22", src: `/${projectPath}/images/floorplans/107B22.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l06_unf.jpg`, x: 0.371, y: 0.57, hotspots: [] },
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d06_unf.jpg`, x: 0.515, y: 0.557, hotspots: [] },
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k06_unf.jpg`, x: 0.547, y: 0.739, hotspots: [] },
@@ -1358,7 +1339,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room7", displayName: "Bedroom 1", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b09_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b09_unf.jpg`, x: 0.378, y: 0.366, hotspots: [] },
           { id: "room8", displayName: "Bedroom 2", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b10_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b10_unf.jpg`, x: 0.727, y: 0.283, hotspots: [] }
         ] }] } },
-        "107B23": { id: "107B23", bedrooms: 3, bathrooms: 3, area: 211.9, serviceRooms: [], gallery: [...gallery2, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B23", src: `/${projectPath}/images/floorplans/107B23.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107B23": { id: "107B23", bedrooms: 3, bathrooms: 3, area: 211.9, serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107B23", src: `/${projectPath}/images/floorplans/107B23.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l06_unf.jpg`, x: 0.468, y: 0.406, hotspots: [] },
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d06_unf.jpg`, x: 0.454, y: 0.649, hotspots: [] },
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k06_unf.jpg`, x: 0.539, y: 0.719, hotspots: [] },
@@ -1370,7 +1351,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room9", displayName: "Bedroom 3", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b12_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b12_unf.jpg`, x: 0.638, y: 0.754, hotspots: [] }
         ] }] } },
         // 7B 1, Floor 3
-        "107B31": { id: "107B31", bedrooms: 2, bathrooms: 3, area: 173.7, serviceRooms: [], gallery: [...penta2, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B31", src: `/${projectPath}/images/floorplans/107B31.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107B31": { id: "107B31", bedrooms: 2, bathrooms: 3, area: 173.7, serviceRooms: [], gallery: [...penta2], cutSections: [], floorPlans: [{ id: "107B31", src: `/${projectPath}/images/floorplans/107B31.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l13_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l13_unf.jpg`, x: 0.564, y: 0.326, hotspots: [] },
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d13_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d13_unf.jpg`, x: 0.64, y: 0.565, hotspots: [] },
           { id: "room3", displayName: "Toilet 1", furnitureImgId: `/${projectPath}/panorama/Toilet/f/t04_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Toilet/unf/t04_unf.jpg`, x: 0.308, y: 0.469, hotspots: [] },
@@ -1379,7 +1360,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room6", displayName: "Bedroom 1", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b17_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b17_unf.jpg`, x: 0.355, y: 0.259, hotspots: [] },
           { id: "room7", displayName: "Bedroom 2", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b01_unf.jpg`, x: 0.316, y: 0.644, hotspots: [] }
         ] }] } },
-        "107B32": { id: "107B32", bedrooms: 2, bathrooms: 3, area: 173.7, serviceRooms: [], gallery: [...penta1, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B32", src: `/${projectPath}/images/floorplans/107B32.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107B32": { id: "107B32", bedrooms: 2, bathrooms: 3, area: 173.7, serviceRooms: [], gallery: [...penta1], cutSections: [], floorPlans: [{ id: "107B32", src: `/${projectPath}/images/floorplans/107B32.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l05_unf.jpg`, x: 0.439, y: 0.298, hotspots: [] },
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d05_unf.jpg`, x: 0.37, y: 0.569, hotspots: [] },
           { id: "room3", displayName: "Toilet 1", furnitureImgId: `/${projectPath}/panorama/Toilet/f/t04_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Toilet/unf/t04_unf.jpg`, x: 0.702, y: 0.487, hotspots: [] },
@@ -1390,7 +1371,7 @@ export const DEVELOPER_SOMABAY = {
         ] }] } },
 
         // 7B 2, Basement
-        "107BC09": { id: "107BC09", bedrooms: 2, bathrooms: 1, area: 113.2, serviceRooms: [], gallery: [...gallery1, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107BC09", src: `/${projectPath}/images/floorplans/107BC09.jpg` }], paymentPlans: [], interior: { levels: [{ id: "basement", rooms: [
+        "107BC09": { id: "107BC09", bedrooms: 2, bathrooms: 1, area: 113.2, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107BC09", src: `/${projectPath}/images/floorplans/107BC09.jpg` }], paymentPlans: [], interior: { levels: [{ id: "basement", rooms: [
           { id: "room1", displayName: "Living", x: 0.773, y: 0.444, furnitureImgId: `/${projectPath}/panorama/Living/f/l12_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l12_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.597, y: 0.444, furnitureImgId: `/${projectPath}/panorama/Dining/f/d12_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d12_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.544, y: 0.581, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k12_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k12_unf.jpg`, hotspots: [] },
@@ -1398,21 +1379,21 @@ export const DEVELOPER_SOMABAY = {
           { id: "room5", displayName: "Bedroom 1", x: 0.327, y: 0.581, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b03_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b03_unf.jpg`, hotspots: [] },
           { id: "room6", displayName: "Bedroom 2", x: 0.247, y: 0.543, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b05_unf.jpg`, hotspots: [] }
         ] }] } },
-        "107BC10": { id: "107BC10", bedrooms: 2, bathrooms: 1, area: 100.5, serviceRooms: [], gallery: [...gallery2, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107BC10", src: `/${projectPath}/images/floorplans/107BC10.jpg` }], paymentPlans: [], interior: { levels: [{ id: "basement", rooms: [
+        "107BC10": { id: "107BC10", bedrooms: 2, bathrooms: 1, area: 100.5, serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107BC10", src: `/${projectPath}/images/floorplans/107BC10.jpg` }], paymentPlans: [], interior: { levels: [{ id: "basement", rooms: [
           { id: "room1", displayName: "Living", x: 0.736, y: 0.569, furnitureImgId: `/${projectPath}/panorama/Living/f/l01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l01_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.651, y: 0.665, furnitureImgId: `/${projectPath}/panorama/Dining/f/d01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d01_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.521, y: 0.569, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k01_unf.jpg`, hotspots: [] },
           { id: "room4", displayName: "Toilet", x: 0.398, y: 0.384, furnitureImgId: `/${projectPath}/panorama/Toilet/f/t01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Toilet/unf/t01_unf.jpg`, hotspots: [] },
           { id: "room5", displayName: "Bedroom", x: 0.255, y: 0.41, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b02_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b02_unf.jpg`, hotspots: [] }
         ] }] } },
-        "107BC11": { id: "107BC11", bedrooms: 2, bathrooms: 1, area: 78, serviceRooms: [], gallery: [...gallery3, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107BC11", src: `/${projectPath}/images/floorplans/107BC11.jpg` }], paymentPlans: [], interior: { levels: [{ id: "basement", rooms: [
+        "107BC11": { id: "107BC11", bedrooms: 2, bathrooms: 1, area: 78, serviceRooms: [], gallery: [...gallery3], cutSections: [], floorPlans: [{ id: "107BC11", src: `/${projectPath}/images/floorplans/107BC11.jpg` }], paymentPlans: [], interior: { levels: [{ id: "basement", rooms: [
           { id: "room1", displayName: "Living", x: 0.697, y: 0.401, furnitureImgId: `/${projectPath}/panorama/Living/f/l03_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l03_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.5, y: 0.344, furnitureImgId: `/${projectPath}/panorama/Dining/f/d03_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d03_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.433, y: 0.601, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k03_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k03_unf.jpg`, hotspots: [] },
           { id: "room4", displayName: "Toilet", x: 0.532, y: 0.785, furnitureImgId: `/${projectPath}/panorama/Toilet/f/t01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Toilet/unf/t01_unf.jpg`, hotspots: [] },
           { id: "room5", displayName: "Bedroom", x: 0.285, y: 0.453, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b02_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b02_unf.jpg`, hotspots: [] }
         ] }] } },
-        "107BC12": { id: "107BC12", bedrooms: 2, bathrooms: 2, area: 115.5, serviceRooms: [], gallery: [...gallery1, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107BC12", src: `/${projectPath}/images/floorplans/107BC12.jpg` }], paymentPlans: [], interior: { levels: [{ id: "basement", rooms: [
+        "107BC12": { id: "107BC12", bedrooms: 2, bathrooms: 2, area: 115.5, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107BC12", src: `/${projectPath}/images/floorplans/107BC12.jpg` }], paymentPlans: [], interior: { levels: [{ id: "basement", rooms: [
           { id: "room1", displayName: "Living", x: 0.605, y: 0.535, furnitureImgId: `/${projectPath}/panorama/Living/f/l11_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l11_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.456, y: 0.548, furnitureImgId: `/${projectPath}/panorama/Dining/f/d11_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d11_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.464, y: 0.762, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k11_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k11_unf.jpg`, hotspots: [] },
@@ -1421,7 +1402,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room6", displayName: "Bedroom 1", x: 0.415, y: 0.232, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b03_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b03_unf.jpg`, hotspots: [] },
           { id: "room7", displayName: "Bedroom 2", x: 0.574, y: 0.394, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b01_unf.jpg`, hotspots: [] }
         ] }] } },
-        "107BC13": { id: "107BC13", bedrooms: 2, bathrooms: 1, area: 88.9, serviceRooms: [], gallery: [...gallery2, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107BC13", src: `/${projectPath}/images/floorplans/107BC13.jpg` }], paymentPlans: [], interior: { levels: [{ id: "basement", rooms: [
+        "107BC13": { id: "107BC13", bedrooms: 2, bathrooms: 1, area: 88.9, serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107BC13", src: `/${projectPath}/images/floorplans/107BC13.jpg` }], paymentPlans: [], interior: { levels: [{ id: "basement", rooms: [
           { id: "room1", displayName: "Living", x: 0.583, y: 0.372, furnitureImgId: `/${projectPath}/panorama/Living/f/l10_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l10_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.549, y: 0.569, furnitureImgId: `/${projectPath}/panorama/Dining/f/d10_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d10_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.683, y: 0.702, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k10_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k10_unf.jpg`, hotspots: [] },
@@ -1430,14 +1411,14 @@ export const DEVELOPER_SOMABAY = {
         ] }] } },
 
         // 7B 2, Ground
-        "107B04": { id: "107B04", bedrooms: 1, bathrooms: 1, area: 109.8, serviceRooms: [], gallery: [...gallery3, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B04", src: `/${projectPath}/images/floorplans/107B04.jpg` }], paymentPlans: [], interior: { levels: [{ id: "ground", rooms: [
+        "107B04": { id: "107B04", bedrooms: 1, bathrooms: 1, area: 109.8, serviceRooms: [], gallery: [...gallery3], cutSections: [], floorPlans: [{ id: "107B04", src: `/${projectPath}/images/floorplans/107B04.jpg` }], paymentPlans: [], interior: { levels: [{ id: "ground", rooms: [
           { id: "room1", displayName: "Living", x: 0.599, y: 0.422, furnitureImgId: `/${projectPath}/panorama/Living/f/l12_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l12_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.426, y: 0.422, furnitureImgId: `/${projectPath}/panorama/Dining/f/d12_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d12_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.426, y: 0.559, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k12_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k12_unf.jpg`, hotspots: [] },
           { id: "room4", displayName: "Toilet", x: 0.345, y: 0.533, furnitureImgId: `/${projectPath}/panorama/Toilet/f/t04_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Toilet/unf/t04_unf.jpg`, hotspots: [] },
           { id: "room5", displayName: "Bedroom", x: 0.247, y: 0.533, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b05_unf.jpg`, hotspots: [] }
         ] }] } },
-        "107B05": { id: "107B05", bedrooms: 2, bathrooms: 2, area: 162.4, serviceRooms: [], gallery: [...gallery1, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B05", src: `/${projectPath}/images/floorplans/107B05.jpg` }], paymentPlans: [], interior: { levels: [{ id: "ground", rooms: [
+        "107B05": { id: "107B05", bedrooms: 2, bathrooms: 2, area: 162.4, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107B05", src: `/${projectPath}/images/floorplans/107B05.jpg` }], paymentPlans: [], interior: { levels: [{ id: "ground", rooms: [
           { id: "room1", displayName: "Living", x: 0.554, y: 0.575, furnitureImgId: `/${projectPath}/panorama/Living/f/l06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l06_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.364, y: 0.575, furnitureImgId: `/${projectPath}/panorama/Dining/f/d06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d06_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.349, y: 0.802, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k06_unf.jpg`, hotspots: [] },
@@ -1446,7 +1427,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room6", displayName: "Bedroom 1", x: 0.311, y: 0.353, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b15_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b15_unf.jpg`, hotspots: [] },
           { id: "room7", displayName: "Bedroom 2", x: 0.58, y: 0.366, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b06_unf.jpg`, hotspots: [] }
         ] }] } },
-        "107B06": { id: "107B06", bedrooms: 2, bathrooms: 3, area: 211.4, serviceRooms: [], gallery: [...gallery2, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B06", src: `/${projectPath}/images/floorplans/107B06.jpg` }], paymentPlans: [], interior: { levels: [{ id: "ground", rooms: [
+        "107B06": { id: "107B06", bedrooms: 2, bathrooms: 3, area: 211.4, serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107B06", src: `/${projectPath}/images/floorplans/107B06.jpg` }], paymentPlans: [], interior: { levels: [{ id: "ground", rooms: [
           { id: "room1", displayName: "Living", x: 0.612, y: 0.584, furnitureImgId: `/${projectPath}/panorama/Living/f/l05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l05_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.475, y: 0.584, furnitureImgId: `/${projectPath}/panorama/Dining/f/d05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d05_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.475, y: 0.77, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k05_unf.jpg`, hotspots: [] },
@@ -1458,14 +1439,14 @@ export const DEVELOPER_SOMABAY = {
         ] }] } },
 
         // 7B 2, Floor1
-        "107B14": { id: "107B14", bedrooms: 1, bathrooms: 1, area: 109.8, serviceRooms: [], gallery: [...gallery3, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B14", src: `/${projectPath}/images/floorplans/107B14.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor1", rooms: [
+        "107B14": { id: "107B14", bedrooms: 1, bathrooms: 1, area: 109.8, serviceRooms: [], gallery: [...gallery3], cutSections: [], floorPlans: [{ id: "107B14", src: `/${projectPath}/images/floorplans/107B14.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor1", rooms: [
           { id: "room1", displayName: "Living", x: 0.599, y: 0.422, furnitureImgId: `/${projectPath}/panorama/Living/f/l12_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l12_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.426, y: 0.422, furnitureImgId: `/${projectPath}/panorama/Dining/f/d12_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d12_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.426, y: 0.559, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k12_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k12_unf.jpg`, hotspots: [] },
           { id: "room4", displayName: "Toilet", x: 0.345, y: 0.533, furnitureImgId: `/${projectPath}/panorama/Toilet/f/t04_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Toilet/unf/t04_unf.jpg`, hotspots: [] },
           { id: "room5", displayName: "Bedroom", x: 0.247, y: 0.533, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b05_unf.jpg`, hotspots: [] }
         ] }] } },
-        "107B15": { id: "107B15", bedrooms: 2, bathrooms: 2, area: 162.4, serviceRooms: [], gallery: [...gallery1, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B15", src: `/${projectPath}/images/floorplans/107B15.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor1", rooms: [
+        "107B15": { id: "107B15", bedrooms: 2, bathrooms: 2, area: 162.4, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107B15", src: `/${projectPath}/images/floorplans/107B15.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor1", rooms: [
           { id: "room1", displayName: "Living", x: 0.554, y: 0.575, furnitureImgId: `/${projectPath}/panorama/Living/f/l06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l06_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.364, y: 0.575, furnitureImgId: `/${projectPath}/panorama/Dining/f/d06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d06_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.349, y: 0.802, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k06_unf.jpg`, hotspots: [] },
@@ -1474,7 +1455,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room6", displayName: "Bedroom 1", x: 0.311, y: 0.353, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b15_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b15_unf.jpg`, hotspots: [] },
           { id: "room7", displayName: "Bedroom 2", x: 0.58, y: 0.366, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b06_unf.jpg`, hotspots: [] }
         ] }] } },
-        "107B16": { id: "107B16", bedrooms: 2, bathrooms: 3, area: 212.1, serviceRooms: [], gallery: [...gallery2, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B16", src: `/${projectPath}/images/floorplans/107B16.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor1", rooms: [
+        "107B16": { id: "107B16", bedrooms: 2, bathrooms: 3, area: 212.1, serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107B16", src: `/${projectPath}/images/floorplans/107B16.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor1", rooms: [
           { id: "room1", displayName: "Living", x: 0.614, y: 0.596, furnitureImgId: `/${projectPath}/panorama/Living/f/l05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l05_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.482, y: 0.57, furnitureImgId: `/${projectPath}/panorama/Dining/f/d05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d05_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.475, y: 0.742, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k05_unf.jpg`, hotspots: [] },
@@ -1486,7 +1467,7 @@ export const DEVELOPER_SOMABAY = {
         ] }] } },
 
         // 7B 2 - Floor2
-        "107B24": { id: "107B24", bedrooms: 3, bathrooms: 3, area: 208.5, serviceRooms: [], gallery: [...gallery3, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B24", src: `/${projectPath}/images/floorplans/107B24.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor2", rooms: [
+        "107B24": { id: "107B24", bedrooms: 3, bathrooms: 3, area: 208.5, serviceRooms: [], gallery: [...gallery3], cutSections: [], floorPlans: [{ id: "107B24", src: `/${projectPath}/images/floorplans/107B24.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor2", rooms: [
           { id: "room1", displayName: "Living", x: 0.528, y: 0.394, furnitureImgId: `/${projectPath}/panorama/Living/f/l06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l06_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.415, y: 0.394, furnitureImgId: `/${projectPath}/panorama/Dining/f/d06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d06_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.4, y: 0.572, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k06_unf.jpg`, hotspots: [] },
@@ -1497,7 +1478,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room8", displayName: "Bedroom 2", x: 0.557, y: 0.248, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b08_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b08_unf.jpg`, hotspots: [] },
           { id: "room9", displayName: "Bedroom 3", x: 0.542, y: 0.761, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b01_unf.jpg`, hotspots: [] }
         ] }] } },
-        "107B25": { id: "107B25", bedrooms: 2, bathrooms: 2, area: 180.8, serviceRooms: [], gallery: [...gallery1, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B25", src: `/${projectPath}/images/floorplans/107B25.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor2", rooms: [
+        "107B25": { id: "107B25", bedrooms: 2, bathrooms: 2, area: 180.8, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107B25", src: `/${projectPath}/images/floorplans/107B25.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor2", rooms: [
           { id: "room1", displayName: "Living", x: 0.586, y: 0.559, furnitureImgId: `/${projectPath}/panorama/Living/f/l06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l06_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.454, y: 0.546, furnitureImgId: `/${projectPath}/panorama/Dining/f/d06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d06_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.442, y: 0.705, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k06_unf.jpg`, hotspots: [] },
@@ -1508,7 +1489,7 @@ export const DEVELOPER_SOMABAY = {
         ] }] } },
 
         // 7B 2 - Floor 3 
-        "107B33": { id: "107B33", bedrooms: 2, bathrooms: 3, area: 173.8, serviceRooms: [], gallery: [...penta2, ...gallery_7B], cutSections: [], floorPlans: [{ id: "107B33", src: `/${projectPath}/images/floorplans/107B33.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor3", rooms: [
+        "107B33": { id: "107B33", bedrooms: 2, bathrooms: 3, area: 173.8, serviceRooms: [], gallery: [...penta2], cutSections: [], floorPlans: [{ id: "107B33", src: `/${projectPath}/images/floorplans/107B33.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor3", rooms: [
           { id: "room1", displayName: "Living", x: 0.619, y: 0.357, furnitureImgId: `/${projectPath}/panorama/Living/f/l13_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l13_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.57, y: 0.53, furnitureImgId: `/${projectPath}/panorama/Dining/f/d13_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d13_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.513, y: 0.543, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k13_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k13_unf.jpg`, hotspots: [] },
@@ -1520,7 +1501,7 @@ export const DEVELOPER_SOMABAY = {
         ] }] } },
 
         // 7C - Ground
-        "107C01": { id: "107C01", bedrooms: 2, bathrooms: 3, area: 192.4, serviceRooms: [], gallery: [...gallery2, ...gallery_7C], cutSections: [], floorPlans: [{ id: "107C01", src: `/${projectPath}/images/floorplans/107C01.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107C01": { id: "107C01", bedrooms: 2, bathrooms: 3, area: 192.4, serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107C01", src: `/${projectPath}/images/floorplans/107C01.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", x: 0.553, y: 0.259, furnitureImgId: `/${projectPath}/panorama/Living/f/l08_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l08_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.426, y: 0.259, furnitureImgId: `/${projectPath}/panorama/Dining/f/d08_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d08_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.36, y: 0.461, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k08_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k08_unf.jpg`, hotspots: [] },
@@ -1530,14 +1511,14 @@ export const DEVELOPER_SOMABAY = {
           { id: "room7", displayName: "Bedroom 1", x: 0.531, y: 0.666, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b20_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b20_unf.jpg`, hotspots: [] },
           { id: "room8", displayName: "Bedroom 2", x: 0.319, y: 0.744, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b21_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b21_unf.jpg`, hotspots: [] }
         ] }] } },
-        "107C02": { id: "107C02", bedrooms: 1, bathrooms: 1, area: 107.4, serviceRooms: [], gallery: [...gallery3, ...gallery_7C], cutSections: [], floorPlans: [{ id: "107C02", src: `/${projectPath}/images/floorplans/107C02.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107C02": { id: "107C02", bedrooms: 1, bathrooms: 1, area: 107.4, serviceRooms: [], gallery: [...gallery3], cutSections: [], floorPlans: [{ id: "107C02", src: `/${projectPath}/images/floorplans/107C02.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", x: 0.616, y: 0.439, furnitureImgId: `/${projectPath}/panorama/Living/f/l05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l05_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.539, y: 0.439, furnitureImgId: `/${projectPath}/panorama/Dining/f/d08_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d08_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.481, y: 0.596, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k05_unf.jpg`, hotspots: [] },
           { id: "room4", displayName: "Toilet", x: 0.384, y: 0.556, furnitureImgId: `/${projectPath}/panorama/Toilet/f/t01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Toilet/unf/t01_unf.jpg`, hotspots: [] },
           { id: "room5", displayName: "Bedroom", x: 0.26, y: 0.5, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b05_unf.jpg`, hotspots: [] }
         ] }] } },
-        "107C03": { id: "107C03", bedrooms: 2, bathrooms: 3, area: 158.8, serviceRooms: [], gallery: [...gallery1, ...gallery_7C], cutSections: [], floorPlans: [{ id: "107C03", src: `/${projectPath}/images/floorplans/107C03.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107C03": { id: "107C03", bedrooms: 2, bathrooms: 3, area: 158.8, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107C03", src: `/${projectPath}/images/floorplans/107C03.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", x: 0.593, y: 0.739, furnitureImgId: `/${projectPath}/panorama/Living/f/l06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l06_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.46, y: 0.803, furnitureImgId: `/${projectPath}/panorama/Dining/f/d06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d06_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.373, y: 0.564, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k06_unf.jpg`, hotspots: [] },
@@ -1547,7 +1528,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room7", displayName: "Bedroom 1", x: 0.303, y: 0.308, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b21_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b21_unf.jpg`, hotspots: [] },
           { id: "room8", displayName: "Bedroom 2", x: 0.622, y: 0.362, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b20_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b20_unf.jpg`, hotspots: [] }
         ] }] } },
-        "107C04": { id: "107C04", bedrooms: 2, bathrooms: 3, area: 193.6, serviceRooms: [], gallery: [...gallery2, ...gallery_7C], cutSections: [], floorPlans: [{ id: "107C04", src: `/${projectPath}/images/floorplans/107C04.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107C04": { id: "107C04", bedrooms: 2, bathrooms: 3, area: 193.6, serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107C04", src: `/${projectPath}/images/floorplans/107C04.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", x: 0.557, y: 0.739, furnitureImgId: `/${projectPath}/panorama/Living/f/l06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l06_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.391, y: 0.752, furnitureImgId: `/${projectPath}/panorama/Dining/f/d06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d06_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.365, y: 0.563, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k06_unf.jpg`, hotspots: [] },
@@ -1558,7 +1539,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room8", displayName: "Bedroom 2", x: 0.53, y: 0.363, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b20_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b20_unf.jpg`, hotspots: [] }
         ] }] } },
         // 7A - Floor 1
-        "107C11": { id: "107C11", bedrooms: 2, bathrooms: 3, area: 192.4, serviceRooms: [], gallery: [...gallery3, ...gallery_7C], cutSections: [], floorPlans: [{ id: "107C11", src: `/${projectPath}/images/floorplans/107C11.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107C11": { id: "107C11", bedrooms: 2, bathrooms: 3, area: 192.4, serviceRooms: [], gallery: [...gallery3], cutSections: [], floorPlans: [{ id: "107C11", src: `/${projectPath}/images/floorplans/107C11.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", x: 0.553, y: 0.259, furnitureImgId: `/${projectPath}/panorama/Living/f/l08_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l08_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.426, y: 0.259, furnitureImgId: `/${projectPath}/panorama/Dining/f/d08_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d08_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.36, y: 0.461, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k08_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k08_unf.jpg`, hotspots: [] },
@@ -1568,14 +1549,14 @@ export const DEVELOPER_SOMABAY = {
           { id: "room7", displayName: "Bedroom 1", x: 0.531, y: 0.656, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b20_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b20_unf.jpg`, hotspots: [] },
           { id: "room8", displayName: "Bedroom 2", x: 0.319, y: 0.744, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b21_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b21_unf.jpg`, hotspots: [] }
         ] }] } },
-        "107C12": { id: "107C12", bedrooms: 1, bathrooms: 1, area: 107.4, serviceRooms: [], gallery: [...gallery1, ...gallery_7C], cutSections: [], floorPlans: [{ id: "107C12", src: `/${projectPath}/images/floorplans/107C12.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107C12": { id: "107C12", bedrooms: 1, bathrooms: 1, area: 107.4, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107C12", src: `/${projectPath}/images/floorplans/107C12.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", x: 0.616, y: 0.439, furnitureImgId: `/${projectPath}/panorama/Living/f/l05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l05_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.539, y: 0.439, furnitureImgId: `/${projectPath}/panorama/Dining/f/d08_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d08_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.481, y: 0.596, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k05_unf.jpg`, hotspots: [] },
           { id: "room4", displayName: "Toilet", x: 0.384, y: 0.556, furnitureImgId: `/${projectPath}/panorama/Toilet/f/t01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Toilet/unf/t01_unf.jpg`, hotspots: [] },
           { id: "room5", displayName: "Bedroom", x: 0.254, y: 0.487, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b05_unf.jpg`, hotspots: [] }
         ] }] } },
-        "107C13": { id: "107C13", bedrooms: 2, bathrooms: 3, area: 158.8, serviceRooms: [], gallery: [...gallery2, ...gallery_7C], cutSections: [], floorPlans: [{ id: "107C13", src: `/${projectPath}/images/floorplans/107C13.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107C13": { id: "107C13", bedrooms: 2, bathrooms: 3, area: 158.8, serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107C13", src: `/${projectPath}/images/floorplans/107C13.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", x: 0.593, y: 0.739, furnitureImgId: `/${projectPath}/panorama/Living/f/l06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l06_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.46, y: 0.803, furnitureImgId: `/${projectPath}/panorama/Dining/f/d06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d06_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.373, y: 0.564, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k06_unf.jpg`, hotspots: [] },
@@ -1585,7 +1566,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room7", displayName: "Bedroom 1", x: 0.303, y: 0.308, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b21_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b21_unf.jpg`, hotspots: [] },
           { id: "room8", displayName: "Bedroom 2", x: 0.622, y: 0.362, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b20_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b20_unf.jpg`, hotspots: [] }
         ] }] } },
-        "107C14": { id: "107C14", bedrooms: 2, bathrooms: 3, area: 193.6, serviceRooms: [], gallery: [...gallery3, ...gallery_7C], cutSections: [], floorPlans: [{ id: "107C14", src: `/${projectPath}/images/floorplans/107C14.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107C14": { id: "107C14", bedrooms: 2, bathrooms: 3, area: 193.6, serviceRooms: [], gallery: [...gallery3], cutSections: [], floorPlans: [{ id: "107C14", src: `/${projectPath}/images/floorplans/107C14.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", x: 0.557, y: 0.739, furnitureImgId: `/${projectPath}/panorama/Living/f/l06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l06_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.391, y: 0.752, furnitureImgId: `/${projectPath}/panorama/Dining/f/d06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d06_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.365, y: 0.563, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k06_unf.jpg`, hotspots: [] },
@@ -1596,7 +1577,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room8", displayName: "Bedroom 2", x: 0.53, y: 0.363, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b20_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b20_unf.jpg`, hotspots: [] }
         ] }] } },
         // 7A - Floor 2
-        "107C21": { id: "107C21", bedrooms: 2, bathrooms: 3, area: 158.2, serviceRooms: [], gallery: [...gallery1, ...gallery_7C], cutSections: [], floorPlans: [{ id: "107C21", src: `/${projectPath}/images/floorplans/107C21.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107C21": { id: "107C21", bedrooms: 2, bathrooms: 3, area: 158.2, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107C21", src: `/${projectPath}/images/floorplans/107C21.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", x: 0.557, y: 0.289, furnitureImgId: `/${projectPath}/panorama/Living/f/l06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l06_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.381, y: 0.263, furnitureImgId: `/${projectPath}/panorama/Dining/f/d06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d06_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.358, y: 0.45, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k06_unf.jpg`, hotspots: [] },
@@ -1606,7 +1587,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room7", displayName: "Bedroom 1", x: 0.334, y: 0.743, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b21_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b21_unf.jpg`, hotspots: [] },
           { id: "room8", displayName: "Bedroom 2", x: 0.53, y: 0.645, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b20_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b20_unf.jpg`, hotspots: [] }
         ] }] } },
-        "107C22": { id: "107C22", bedrooms: 2, bathrooms: 2, area: 168.1, serviceRooms: [], gallery: [...gallery2, ...gallery_7C], cutSections: [], floorPlans: [{ id: "107C22", src: `/${projectPath}/images/floorplans/107C22.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107C22": { id: "107C22", bedrooms: 2, bathrooms: 2, area: 168.1, serviceRooms: [], gallery: [...gallery2], cutSections: [], floorPlans: [{ id: "107C22", src: `/${projectPath}/images/floorplans/107C22.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", x: 0.681, y: 0.411, furnitureImgId: `/${projectPath}/panorama/Living/f/l07_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l07_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.508, y: 0.487, furnitureImgId: `/${projectPath}/panorama/Dining/f/d07_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d07_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.406, y: 0.424, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k07_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k07_unf.jpg`, hotspots: [] },
@@ -1615,14 +1596,14 @@ export const DEVELOPER_SOMABAY = {
           { id: "room6", displayName: "Bedroom 1", x: 0.381, y: 0.743, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b01_unf.jpg`, hotspots: [] },
           { id: "room7", displayName: "Bedroom 2", x: 0.655, y: 0.641, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b22_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b22_unf.jpg`, hotspots: [] }
         ] }] } },
-        "107C23": { id: "107C23", bedrooms: 1, bathrooms: 1, area: 79.7, serviceRooms: [], gallery: [...gallery3, ...gallery_7C], cutSections: [], floorPlans: [{ id: "107C23", src: `/${projectPath}/images/floorplans/107C23.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107C23": { id: "107C23", bedrooms: 1, bathrooms: 1, area: 79.7, serviceRooms: [], gallery: [...gallery3], cutSections: [], floorPlans: [{ id: "107C23", src: `/${projectPath}/images/floorplans/107C23.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", x: 0.62, y: 0.291, furnitureImgId: `/${projectPath}/panorama/Living/f/l08_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l08_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.47, y: 0.513, furnitureImgId: `/${projectPath}/panorama/Dining/f/d08_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d08_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.456, y: 0.25, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k08_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k08_unf.jpg`, hotspots: [] },
           { id: "room4", displayName: "Toilet", x: 0.236, y: 0.608, furnitureImgId: `/${projectPath}/panorama/Toilet/f/t04_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Toilet/unf/t04_unf.jpg`, hotspots: [] },
           { id: "room5", displayName: "Bedroom", x: 0.25, y: 0.437, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b01_unf.jpg`, hotspots: [] }
         ] }] } },
-        "107C24": { id: "107C24", bedrooms: 2, bathrooms: 3, area: 158.9, serviceRooms: [], gallery: [...gallery1, ...gallery_7C], cutSections: [], floorPlans: [{ id: "107C24", src: `/${projectPath}/images/floorplans/107C24.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107C24": { id: "107C24", bedrooms: 2, bathrooms: 3, area: 158.9, serviceRooms: [], gallery: [...gallery1], cutSections: [], floorPlans: [{ id: "107C24", src: `/${projectPath}/images/floorplans/107C24.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", x: 0.554, y: 0.55, furnitureImgId: `/${projectPath}/panorama/Living/f/l06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l06_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.443, y: 0.754, furnitureImgId: `/${projectPath}/panorama/Dining/f/d06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d06_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.398, y: 0.55, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k06_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k06_unf.jpg`, hotspots: [] },
@@ -1633,7 +1614,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room8", displayName: "Bedroom 2", x: 0.577, y: 0.357, furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b20_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b20_unf.jpg`, hotspots: [] }
         ] }] } },
         // 7A - Floor 3
-        "107C31": { id: "107C31", bedrooms: 3, bathrooms: 4, area: 221.8, serviceRooms: [], gallery: [...penta1, ...gallery_7C], cutSections: [], floorPlans: [{ id: "107C31", src: `/${projectPath}/images/floorplans/107C31.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107C31": { id: "107C31", bedrooms: 3, bathrooms: 4, area: 221.8, serviceRooms: [], gallery: [...penta1], cutSections: [], floorPlans: [{ id: "107C31", src: `/${projectPath}/images/floorplans/107C31.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", x: 0.72, y: 0.669, furnitureImgId: `/${projectPath}/panorama/Living/f/l09_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l09_unf.jpg`, hotspots: [] },
           { id: "room2", displayName: "Dining", x: 0.652, y: 0.5, furnitureImgId: `/${projectPath}/panorama/Dining/f/d09_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d09_unf.jpg`, hotspots: [] },
           { id: "room3", displayName: "Kitchen", x: 0.705, y: 0.344, furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k09_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k09_unf.jpg`, hotspots: [] },

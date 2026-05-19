@@ -97,11 +97,20 @@ export default function Home() {
   }, [currentItem, switchToFloor, videoViewer]);
 
   const handleActiveTab = useCallback((tab) => {
+    if (tab === activeTab) {
+      if (tab === TABS.HOME) return;
+      if (activeLayer === null) return;
+      if (tab === TABS.ZONES && activeLayer === LAYERS.ZONE_DETAIL) return;
+      if (tab === TABS.SURROUNDINGS && activeLayer === LAYERS.SURROUNDING_DETAIL) {
+       viewerProps.StartReverse(false, () => { });
+       return;
+      }     
+    }
+
     let selectedItem = null;
     let layer = null;
+
     switch (tab) {
-      case activeTab:
-        break;
       case TABS.HOME:
         goHome();
         break;
@@ -112,21 +121,21 @@ export default function Home() {
           selectedItem = { ...selectedItem.items[0], zoomoutVideo: zonesZoomoutVideo };
           layer = LAYERS.ZONE_DETAIL;
         }
-        checkSwithingBetweenTabs(tab, layer, selectedItem);
+        checkSwithingBetweenTabs();
         break;
       case TABS.AMENITIES:
         selectedItem = currentProject.amenities;
-        checkSwithingBetweenTabs(tab, layer, selectedItem);
+        checkSwithingBetweenTabs();
         break;
       case TABS.SURROUNDINGS:
         selectedItem = currentProject.surroundings;
-        checkSwithingBetweenTabs(tab, layer, selectedItem);
+        checkSwithingBetweenTabs();
         break;
       default:
         break;
     }
 
-    function checkSwithingBetweenTabs(tab, layer, item) {
+    function checkSwithingBetweenTabs() {
       const isFromHome = activeTab === TABS.HOME;
 
       // uncomment to play reverse then forward when switching between non-home tabs
@@ -134,13 +143,13 @@ export default function Home() {
       //     viewerProps.StartReverse(true, () => goToTab(tab, item, true));
       //     return;
       //   }
-      goToTab(tab, layer, item, isFromHome);
+      goToTab(tab, layer, selectedItem, isFromHome);
     }
 
     setTimeout(() => {
       handleSidebarState(true);
     }, 750);
-  }, [activeTab, goToTab, videoViewer.StartReverse]);
+  }, [activeTab, activeLayer, goToTab, videoViewer.StartReverse]);
 
   useEffect(() => {
     setHighlightedButton(null);
@@ -407,7 +416,8 @@ export default function Home() {
                 }
                 goHome();
               }}
-                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition ${activeTab === TABS.HOME
+                disabled={isDisabled}
+                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed ${activeTab === TABS.HOME
                   ? "bg-white/85 text-black"
                   : "text-white"
                   }`}
@@ -417,7 +427,8 @@ export default function Home() {
               </button>
               <button
                 onClick={() => handleActiveTab(TABS.SURROUNDINGS)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition ${activeTab === TABS.SURROUNDINGS
+                disabled={isDisabled}
+                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed ${activeTab === TABS.SURROUNDINGS
                   ? "bg-white/85 text-black"
                   : "text-white"
                   }`}
@@ -426,16 +437,18 @@ export default function Home() {
               </button>
               <button
                 onClick={() => handleActiveTab(TABS.ZONES)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition ${activeTab === TABS.ZONES
+                disabled={isDisabled}
+                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed ${activeTab === TABS.ZONES
                   ? "bg-white/85 text-black"
                   : "text-white"
                   }`}
               >
-                ZONES
+                TOWERS
               </button>
               <button
                 onClick={() => handleActiveTab(TABS.AMENITIES)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition ${activeTab === TABS.AMENITIES
+                disabled={isDisabled}
+                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed ${activeTab === TABS.AMENITIES
                   ? "bg-white/85 text-black"
                   : "text-white"
                   }`}
@@ -601,7 +614,7 @@ export default function Home() {
                 {overlay?.type === 'room-interior' && (
                   <div className="absolute inset-0 z-60 flex items-center justify-center rounded-2xl overflow-hidden">
                     <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={closeOverlay} />
-                    <div className="relative z-70 w-15/16 h-9/10 bg-[#2f2f2f] rounded-3xl shadow-2xl overflow-hidden">
+                    <div className="relative z-70 w-full h-full bg-[#2f2f2f] rounded-3xl shadow-2xl overflow-hidden">
                       <button
                         onClick={closeOverlay}
                         className="absolute top-4 right-4 z-40 w-10 h-10 rounded-xl bg-[#8B3A3A] hover:bg-[#A24242] flex items-center justify-center
