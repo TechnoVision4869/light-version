@@ -8,7 +8,7 @@ import FilterPanel from "../components/FilterPanel";
 import SidebarButtons from "./SideBarButtons";
 import { MainContext } from "../store/MainContextProvider";
 
-export default function Sidebar() {
+export default function Sidebar({ onNavigate }) {
     const { activeTab, activeLayer, currentItem, sidebarOpen } = useContext(SidebarContext);
     const [isFilter, setIsFilter] = useState(false); // 'navigate' or 'filter'
     const { overlay } = useContext(MainContext);
@@ -88,7 +88,7 @@ export default function Sidebar() {
                             <div className="h-0.5 bg-white/50 mx-3 mb-4"></div>
 
                             {/* Render different content based on active tab and active layer */}
-                           <SidebarButtons />
+                           <SidebarButtons onNavigate={onNavigate} />
                         </>
                     )}
                 </div>

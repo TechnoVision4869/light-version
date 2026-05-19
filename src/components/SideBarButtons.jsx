@@ -12,7 +12,7 @@ import BuildingButton from "./buttons/BuildingButton";
 import FloorButton from "./buttons/FloorButton";
 import ApartmentButton from "./buttons/ApartmentButton";
 
-export default function SidebarButtons() {
+export default function SidebarButtons({ onNavigate = (action) => action() }) {
   const { currentProject, activeTab, activeLayer, currentItem, currentItems, goToItem, isPlaying } = useContext(SidebarContext);
   const { openRoomInterior } = useContext(MainContext);
   
@@ -117,7 +117,7 @@ export default function SidebarButtons() {
     <div className="max-h-[calc(100vh-205px)] scrollbar-custom overflow-y-auto overflow-x-hidden space-y-3 px-2 py-2">
       {towerFeatures && (
         <button
-          onClick={() => goToItem(towerFeatures, LAYERS.BUILDING_FEATURE)}
+          onClick={() => onNavigate(() => goToItem(towerFeatures, LAYERS.BUILDING_FEATURE))}
           disabled={isPlaying}
           className="w-full text-left px-3 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-colors border border-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
         >
@@ -130,7 +130,7 @@ export default function SidebarButtons() {
           && item.videos?.idleVideo;
         const itemGoToItem = isImageOnly
           ? () => openRoomInterior({ furnitureImg: item.videos.idleVideo, unfurnitureImg: item.videos.idleVideo })
-          : () => goToItem(item, layerKey);
+          : () => onNavigate(() => goToItem(item, layerKey));
         return (
           <Component
             key={item.id}

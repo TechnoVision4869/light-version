@@ -78,6 +78,7 @@ export default function Home() {
     StartReverse: videoViewer.StartReverse,
     currentViewIndex: videoViewer.currentViewIndex, // Now managed by the hook
     changeView: videoViewer.changeView, // Now managed by the hook
+    changeViewToIndex: videoViewer.changeViewToIndex,
     isFloorTransitionBlur: videoViewer.isFloorTransitionBlur,
   };
 
@@ -89,13 +90,48 @@ export default function Home() {
 
   const handleFloorSwitch = useCallback((floor) => {
     if (floor.id === currentItem?.id) return;
-    setFloorSwitchBlur(true);
-    setTimeout(() => {
-      videoViewer.skipNextTransition();
-      switchToFloor(floor);
-      setTimeout(() => setFloorSwitchBlur(false), 600);
-    }, 250);
+    const doSwitch = () => {
+      setFloorSwitchBlur(true);
+      setTimeout(() => {
+        videoViewer.skipNextTransition();
+        switchToFloor(floor);
+        setTimeout(() => setFloorSwitchBlur(false), 600);
+      }, 250);
+    };
+    if (videoViewer.currentViewIndex !== 0) {
+      videoViewer.changeViewToIndex(0, doSwitch);
+    } else {
+      doSwitch();
+    }
   }, [currentItem, switchToFloor, videoViewer]);
+
+  const handleBack = useCallback(() => {
+    if (
+      (activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS) &&
+      activeLayer === null
+    ) {
+      handleSidebarState(false);
+    }
+    if (overlay) {
+      closeOverlay();
+      return;
+    }
+    const doBack = () => videoViewer.StartReverse(false, () => {});
+    if (videoViewer.currentViewIndex !== 0) {
+      videoViewer.changeViewToIndex(0, doBack);
+      return;
+    }
+    doBack();
+  }, [activeTab, activeLayer, overlay, videoViewer, handleSidebarState, closeOverlay]);
+
+  const { currentViewIndex: viewerViewIndex, changeViewToIndex } = videoViewer;
+  const onNavigate = useCallback((action) => {
+    if (viewerViewIndex !== 0) {
+      changeViewToIndex(0, action);
+    } else {
+      action();
+    }
+  }, [viewerViewIndex, changeViewToIndex]);
 
   const handleActiveTab = useCallback((tab) => {
     if (tab === activeTab) {
@@ -335,72 +371,27 @@ export default function Home() {
           {/* Top Tabs */}
           <div className="flex items-center justify-between mb-2 xl:mb-4 px-4">
             <div className="flex items-center space-x-3">
-              {viewerProps.currentViewIndex === 0 ? (
-                <button
-                  onClick={() => {
-                    if ((activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS) && activeLayer === null)
-                      handleSidebarState(false);
-
-                    if(overlay) {
-                      closeOverlay();
-                      return;
-                    }
-                    viewerProps.StartReverse(false, () => { });
-                  }}
-                  disabled={isDisabled || history.length <= 1}
-                  className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
-              hover:bg-white/7 transition
-              disabled:opacity-50 disabled:cursor-not-allowed"
+              <button
+                onClick={handleBack}
+                disabled={isDisabled || history.length <= 1}
+                className={`w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/70 transition disabled:opacity-50 disabled:cursor-not-allowed ${videoViewer.currentViewIndex !== 0 ? 'bg-white/95' : 'bg-white/85'}`}
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  {/* back chev icon */}
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M31 12H2M2 12L9 6M2 12L9 18"
-                      stroke="black"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-              ) : (
-                <button
-                  onClick={() => {
-                    if (viewerProps.currentViewIndex >= 3) {
-                      viewerProps.changeView("next");
-                      return;
-                    }
-                    viewerProps.changeView("prev");
-                  }}
-                  disabled={isDisabled || history.length <= 1}
-                  className="w-10 h-10 rounded-xl bg-white/95 flex items-center justify-center 
-              hover:bg-white/7 transition
-              disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {/* back chev icon */}
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M31 12H2M2 12L9 6M2 12L9 18"
-                      stroke="black"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-              )}
+                  <path
+                    d="M31 12H2M2 12L9 6M2 12L9 18"
+                    stroke="black"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
             </div>
             <div className="flex items-center space-x-6">
               <button
@@ -419,7 +410,7 @@ export default function Home() {
               }}
                 disabled={isDisabled}
                 className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed ${activeTab === TABS.HOME
-                  ? "bg-white/85 text-black"
+                  ? "bg-white/85 text-black hover:bg-white/95"
                   : "text-white"
                   }`}
                 aria-label="Go to Home"
@@ -430,7 +421,7 @@ export default function Home() {
                 onClick={() => handleActiveTab(TABS.SURROUNDINGS)}
                 disabled={isDisabled}
                 className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed ${activeTab === TABS.SURROUNDINGS
-                  ? "bg-white/85 text-black"
+                  ? "bg-white/85 text-black hover:bg-white/95"
                   : "text-white"
                   }`}
               >
@@ -440,7 +431,7 @@ export default function Home() {
                 onClick={() => handleActiveTab(TABS.ZONES)}
                 disabled={isDisabled}
                 className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed ${activeTab === TABS.ZONES
-                  ? "bg-white/85 text-black"
+                  ? "bg-white/85 text-black hover:bg-white/95"
                   : "text-white"
                   }`}
               >
@@ -450,7 +441,7 @@ export default function Home() {
                 onClick={() => handleActiveTab(TABS.AMENITIES)}
                 disabled={isDisabled}
                 className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed ${activeTab === TABS.AMENITIES
-                  ? "bg-white/85 text-black"
+                  ? "bg-white/85 text-black hover:bg-white/95"
                   : "text-white"
                   }`}
               >
@@ -470,7 +461,7 @@ export default function Home() {
               className={`flex ${sidebarOpen ? "space-x-3" : "space-x-0"} flex-1 min-h-0 overflow-hidden`}
             >
               {/* Sidebar */}
-              <Sidebar />
+              <Sidebar onNavigate={onNavigate} />
 
               {/* Main content area */}
               <main className="flex-1 relative">
@@ -486,7 +477,7 @@ export default function Home() {
                   {/* video element */}
                   <div className="absolute inset-0">
                     {/* <Test /> */}
-                    {!viewerProps.isPlaying && <Highlight />}
+                    {!viewerProps.isPlaying && viewerProps.currentViewIndex === 0 && <Highlight />}
                     {/* First Video (e.g., transition, or initial idle) */}
                     <video
                       ref={viewerProps.firstMediaRef}

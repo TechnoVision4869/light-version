@@ -40,21 +40,26 @@ export function useVideoViewer() {
   }, [activeLayer]);
 
   const [currentViewIndex, setCurrentViewIndex] = useState(0);
+  const currentViewIndexRef = useRef(0);
   const numViews = currentViews?.length || 0;
+  const numViewsRef = useRef(numViews);
+  numViewsRef.current = numViews;
 
   // Function to handle view changes (uses activeTab and currentViews derived above)
   const changeView = useCallback(
-    (direction) => {
+    (direction, onComplete = null) => {
       // console.log(
       //   "useVideoViewer: changeView called with direction:",
       //   direction,
       // );
       // Use the locally derived activeTab and currentViews
 
-      let newIndex = currentViewIndex + (direction === "next" ? 1 : -1);
+      const idx = currentViewIndexRef.current;
+      const total = numViewsRef.current;
+      let newIndex = idx + (direction === "next" ? 1 : -1);
       // Handle wrap-around
-      if (newIndex >= numViews) newIndex = 0;
-      if (newIndex < 0) newIndex = numViews - 1;
+      if (newIndex >= total) newIndex = 0;
+      if (newIndex < 0) newIndex = total - 1;
 
       const newViewVideos = currentViews?.[newIndex]?.videos;
       if (!newViewVideos) {
@@ -62,18 +67,23 @@ export function useVideoViewer() {
         return;
       }
 
+      // Update both state (for UI) and ref (for chained callbacks) synchronously
+      setCurrentViewIndex(newIndex);
+      currentViewIndexRef.current = newIndex;
+
       if (direction === "next") {
         // console.log("Starting view transition from:", newViewVideos.forwardVideo, "to idle:", newViewVideos.idleVideo);
         playTransitionVideo(
           newViewVideos.forwardVideo,
           newViewVideos.idleVideo,
+          onComplete,
         );
       } else {
-        const buildingViewVideos = currentViews?.[currentViewIndex]?.videos;
+        const buildingViewVideos = currentViews?.[idx]?.videos;
         if (!buildingViewVideos?.reverseVideo) {
           console.error(
             "Could not get reverse video path for current view index:",
-            currentViewIndex,
+            idx,
           );
           return;
         }
@@ -81,11 +91,29 @@ export function useVideoViewer() {
         playTransitionVideo(
           buildingViewVideos.reverseVideo,
           newViewVideos.idleVideo,
+          onComplete,
         );
       }
-      setCurrentViewIndex(newIndex);
     },
-    [currentViewIndex, currentViews, numViews],
+    [currentViews],
+  );
+
+  // Navigate to a specific view index by playing videos one step at a time
+  // (shortest path), then fires onDone when the target view's idle is playing.
+  const changeViewToIndex = useCallback(
+    (targetIndex, onDone) => {
+      const idx = currentViewIndexRef.current;
+      if (idx === targetIndex) {
+        onDone?.();
+        return;
+      }
+      const total = numViewsRef.current;
+      const stepsForward = (targetIndex - idx + total) % total;
+      const stepsBack = (idx - targetIndex + total) % total;
+      const direction = stepsForward <= stepsBack ? "next" : "prev";
+      changeView(direction, () => changeViewToIndex(targetIndex, onDone));
+    },
+    [changeView],
   );
 
   // Always returns the name of the ref that is currently hidden (safe to load into)
@@ -135,12 +163,13 @@ export function useVideoViewer() {
     (
       transitionVideoPath = currentVideosPaths?.forwardVideo,
       idleVideoPath = currentVideosPaths?.idleVideo,
+      onComplete = null,
     ) => {
       if (!idleVideoPath) return;
       if (!transitionVideoPath) {
         // If no transition video, directly play idle video
         console.log("No transition video, playing idle video:", idleVideoPath);
-        playIdleVideo(idleVideoPath);
+        playIdleVideo(idleVideoPath, onComplete);
         return;
       }
       // console.log("playTransitionVideo called with videoPath:", transitionVideoPath);
@@ -160,7 +189,7 @@ export function useVideoViewer() {
         }
       };
       const onEnded = () => {
-        playIdleVideo(idleVideoPath);
+        playIdleVideo(idleVideoPath, onComplete);
       };
       playVideo(transitionVideoPath, false, onloaded, onEnded, target);
     },
@@ -220,7 +249,7 @@ export function useVideoViewer() {
   );
 
   const playIdleVideo = useCallback(
-    (videoPath = currentVideosPaths?.idleVideo) => {
+    (videoPath = currentVideosPaths?.idleVideo, onComplete = null) => {
       if (!videoPath) return;
       // console.log("playIdleVideo called with idleVideo:", videoPath);
 
@@ -266,6 +295,7 @@ export function useVideoViewer() {
           setIsFloorTransitionBlur(false);
           floorBlurClearTimerRef.current = null;
         }, 200);
+        if (onComplete) onComplete();
       };
 
       playVideo(videoPath, true, onloaded, null, target);
@@ -355,6 +385,7 @@ export function useVideoViewer() {
     StartReverse,
     currentViewIndex,
     changeView,
+    changeViewToIndex,
     isFloorTransitionBlur,
     skipNextTransition: () => {
       skipNextTransitionRef.current = true;

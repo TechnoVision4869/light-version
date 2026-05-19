@@ -1,11 +1,11 @@
-import TECHNO_LOGO from '/default-logo.png';
-// import SOMABAY_BG from '../assets/images/somabay-background.jpg';
+// import TECHNO_LOGO from '/default-logo.png';
+import SOMABAY_LOGO from '../assets/somabay-logo.svg';
 
 import MALL_ICON from '../assets/icons/mall.svg';
 import SERVICE_SVG from '../assets/svgs/service.svg?raw';
 
 export const projectPath = "projects/light-house-sandbox";
-const SOMABAY_BG = `/${projectPath}/images/background-demo.jpeg`;
+const SOMABAY_BG = `/${projectPath}/images/background.jpeg`;
 
 const gallery1 = [
   { id: "group1_1", src: `/${projectPath}/images/gallery/interior/1BR/01.jpg` },
@@ -28,7 +28,7 @@ const gallery3 = [
 
 export const DEVELOPER_SOMABAY = {
   developerId: "somabay",
-  developerLogo: TECHNO_LOGO,
+  developerLogo: SOMABAY_LOGO,
   backgroundImage: SOMABAY_BG,
   developerProjects: [
     {
@@ -226,7 +226,40 @@ export const DEVELOPER_SOMABAY = {
                   },
                 ],
                 features: null,
-                views: null,
+                views: [
+                  {
+                    name: "View 1",
+                    videos: {
+                      forwardVideo: `/${projectPath}/videos/zones/7a/views/view1/7a_view1_trans.mp4`,
+                      reverseVideo: `/${projectPath}/videos/zones/7a/views/view1/7a_view1_rev.mp4`,
+                      idleVideo: `/${projectPath}/videos/zones/7a/views/view1/7a_view1_idle.mp4`,
+                    }
+                  },
+                  {
+                    name: "View 2",
+                    videos: {
+                      forwardVideo: `/${projectPath}/videos/zones/7a/views/view2/7a_view2_trans.mp4`,
+                      reverseVideo: `/${projectPath}/videos/zones/7a/views/view2/7a_view2_rev.mp4`,
+                      idleVideo: `/${projectPath}/videos/zones/7a/views/view2/7a_view2_idle.mp4`,
+                    }
+                  },
+                  {
+                    name: "View 3",
+                    videos: {
+                      forwardVideo: `/${projectPath}/videos/zones/7a/views/view3/7a_view3_trans.mp4`,
+                      reverseVideo: `/${projectPath}/videos/zones/7a/views/view3/7a_view3_rev.mp4`,
+                      idleVideo: `/${projectPath}/videos/zones/7a/views/view3/7a_view3_idle.mp4`,
+                    }
+                  },
+                  {
+                    name: "View 4",
+                    videos: {
+                      forwardVideo: `/${projectPath}/videos/zones/7a/views/view4/7a_view4_trans.mp4`,
+                      reverseVideo: `/${projectPath}/videos/zones/7a/views/view4/7a_view4_rev.mp4`,
+                      idleVideo: `/${projectPath}/videos/zones/7a/views/view4/7a_view4_idle.mp4`,
+                    }
+                  },
+                ],
               },
             ],
           },
