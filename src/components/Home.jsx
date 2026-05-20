@@ -521,14 +521,17 @@ export default function Home({ introVideoUrl = null }) {
                       poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%23434343' width='1' height='1'/%3E%3C/svg%3E"
                     />
 
-                    {/* Unit idle image (shown when IDLE_TYPE is image) */}
-                    {APP_CONFIG.IDLE_TYPE === ASSET_TYPES.IMAGE && activeLayer === LAYERS.UNIT && !viewerProps.isPlaying && currentVideosPaths?.idleVideo && (
-                      <img
-                        src={currentVideosPaths.idleVideo}
-                        className="w-full h-full object-cover object-center rounded-2xl absolute inset-0 z-[11]"
-                        alt="Unit view"
-                      />
-                    )}
+                    {/* Idle image (shown when IDLE_TYPE is IMAGE and idleVideo is an image path) */}
+                    {(() => {
+                      const idleImagePath = currentViews?.[viewerProps.currentViewIndex]?.videos?.idleVideo ?? currentVideosPaths?.idleVideo;
+                      return APP_CONFIG.IDLE_TYPE === ASSET_TYPES.IMAGE && !viewerProps.isPlaying && idleImagePath && /\.(png|jpe?g|webp|avif)$/i.test(idleImagePath) && (
+                        <img
+                          src={idleImagePath}
+                          className="w-full h-full object-cover object-center rounded-2xl absolute inset-0 z-[11]"
+                          alt="idle view"
+                        />
+                      );
+                    })()}
 
                     {activeLayer === LAYERS.SURROUNDING_DETAIL && (
                       <AnimatedPath path={currentItem.svgPath} />

@@ -253,29 +253,32 @@ export function useVideoViewer() {
       if (!videoPath) return;
       // console.log("playIdleVideo called with idleVideo:", videoPath);
 
-      if(activeLayer === LAYERS.UNIT) {
-        const isImage = /\.(png|jpe?g|webp|avif)$/i.test(videoPath);
-        if (isImage) {
-          setFloatingOpacity(1);
-          setIsPlaying(false);
-
-          if (APP_CONFIG.IDLE_TYPE === ASSET_TYPES.VIDEO) {
-            console.warn(
-              "Idle video path is an image but APP_CONFIG.IDLE_TYPE is not set to IMAGE. Please check your configuration.",
-            );
-          }
-          return;
+      const isImage = /\.(png|jpe?g|webp|avif)$/i.test(videoPath);
+      if (isImage) {
+        setFloatingOpacity(1);
+        setIsPlaying(false);
+        if (floorBlurShowTimerRef.current) {
+          clearTimeout(floorBlurShowTimerRef.current);
+          floorBlurShowTimerRef.current = null;
         }
-
-        if (APP_CONFIG.IDLE_TYPE === ASSET_TYPES.IMAGE) {
+        if (floorBlurClearTimerRef.current) clearTimeout(floorBlurClearTimerRef.current);
+        floorBlurClearTimerRef.current = setTimeout(() => {
+          setIsFloorTransitionBlur(false);
+          floorBlurClearTimerRef.current = null;
+        }, 200);
+        if (APP_CONFIG.IDLE_TYPE === ASSET_TYPES.VIDEO) {
           console.warn(
-            "Idle video path is a video but APP_CONFIG.IDLE_TYPE is not set to VIDEO. Please check your configuration.",
+            "Idle path is an image but APP_CONFIG.IDLE_TYPE is VIDEO. Check your configuration.",
           );
         }
+        if (onComplete) onComplete();
+        return;
       }
 
-      if(activeLayer === LAYERS.AMENITY_DETAIL) {
-
+      if (APP_CONFIG.IDLE_TYPE === ASSET_TYPES.IMAGE) {
+        console.warn(
+          "Idle path is a video but APP_CONFIG.IDLE_TYPE is IMAGE. Check your configuration.",
+        );
       }
 
       const target = getHiddenRef(); // always load into the hidden ref — no flash
