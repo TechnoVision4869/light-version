@@ -114,7 +114,7 @@ export default function SidebarButtons({ onNavigate = (action) => action() }) {
   }
 
   return (
-    <div className="max-h-[calc(100vh-205px)] scrollbar-custom overflow-y-auto overflow-x-hidden space-y-3 px-2 py-2">
+    <div className="flex-1 min-h-0 scrollbar-custom overflow-y-auto overflow-x-hidden space-y-3 px-2 py-2">
       {towerFeatures && (
         <button
           onClick={() => onNavigate(() => goToItem(towerFeatures, LAYERS.BUILDING_FEATURE))}

@@ -25,6 +25,7 @@ export default function Panorama({ unit }) {
 
   const viewerRef = useRef(null);
   const containerRef = useRef(null);
+  const glRef = useRef(null);
   const [isTransitioning, setIsTransitioning] = useState(false); // blur overlay state
   const transitionTimeoutRef = useRef(null);
   const [isFurnished, setIsFurnished] = useState(true);
@@ -32,12 +33,15 @@ export default function Panorama({ unit }) {
   const currentImageRef = useRef(null);
   const [textureError, setTextureError] = useState(null);
 
-  // Check gl.getError() on the actual View360 canvas after render
+  // Check gl.getError() off the render timeline — setTimeout avoids a GPU pipeline stall on the current frame
   const checkGLError = useCallback((src) => {
-    requestAnimationFrame(() => {
-      const canvas = containerRef.current?.querySelector('.view360-canvas');
-      if (!canvas) return;
-      const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+    setTimeout(() => {
+      if (!glRef.current) {
+        const canvas = containerRef.current?.querySelector('.view360-canvas');
+        if (!canvas) return;
+        glRef.current = canvas.getContext('webgl2') || canvas.getContext('webgl');
+      }
+      const gl = glRef.current;
       if (!gl) return;
       const error = gl.getError();
       if (error !== gl.NO_ERROR) {
@@ -48,7 +52,7 @@ export default function Panorama({ unit }) {
       } else {
         setTextureError(null);
       }
-    });
+    }, 0);
   }, []);
 
   // Get unit data
@@ -165,8 +169,8 @@ export default function Panorama({ unit }) {
   const handleReady = useCallback(() => {
     if (!viewerRef.current) return;
     // configure rotate speed and easing
-    viewerRef.current.control.rotate.pointerScale = [2, 2];
-    viewerRef.current.control.rotate.duration = 1000;
+    viewerRef.current.control.rotate.pointerScale = [1.7, 1.7];
+    viewerRef.current.control.rotate.duration = 750;
     viewerRef.current.control.rotate.easing = EASING.EASE_OUT_CUBIC;
     checkGLError(currentImageRef.current);
   }, [checkGLError]);

@@ -15,14 +15,18 @@ export default function Balcony({ view }) {
 
   const viewerRef = useRef(null);
   const containerRef = useRef(null);
+  const glRef = useRef(null);
   const [textureError, setTextureError] = useState(null);
 
-  // Check gl.getError() on the actual View360 canvas after render
+  // Check gl.getError() off the render timeline — setTimeout avoids a GPU pipeline stall on the current frame
   const checkGLError = () => {
-    requestAnimationFrame(() => {
-      const canvas = containerRef.current?.querySelector('.view360-canvas');
-      if (!canvas) return;
-      const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+    setTimeout(() => {
+      if (!glRef.current) {
+        const canvas = containerRef.current?.querySelector('.view360-canvas');
+        if (!canvas) return;
+        glRef.current = canvas.getContext('webgl2') || canvas.getContext('webgl');
+      }
+      const gl = glRef.current;
       if (!gl) return;
       const error = gl.getError();
       if (error !== gl.NO_ERROR) {
@@ -33,7 +37,7 @@ export default function Balcony({ view }) {
       } else {
         setTextureError(null);
       }
-    });
+    }, 0);
   };
 
   // Check if image exceeds device MAX_TEXTURE_SIZE

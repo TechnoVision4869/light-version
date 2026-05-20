@@ -48,7 +48,7 @@ export default function Sidebar({ onNavigate }) {
                     <UnitPanel />
                 )
             ) : (
-                <div className="h-full pr-1">
+                <div className="h-full pr-1 flex flex-col">
                     {activeLayer === LAYERS.FLOOR && (
                         <div className="flex rounded-md overflow-hidden mb-4">
                             {/* Navigate Button */}

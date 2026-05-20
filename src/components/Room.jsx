@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import View360, { EquirectProjection, EASING } from "@egjs/react-view360";
 import "@egjs/react-view360/css/view360.min.css";
 
@@ -12,17 +12,31 @@ export default function Room({ room }) {
 
   const viewerRef = useRef(null);
   const containerRef = useRef(null);
+  const glRef = useRef(null);
   const initialProjection = useRef(new EquirectProjection({ src: room.furnitureImgId }));
   const [isFurnished, setIsFurnished] = useState(true);
   const currentSrcRef = useRef(room.furnitureImgId);
   const [textureError, setTextureError] = useState(null);
 
-  // Check gl.getError() on the actual View360 canvas after render
+  // DEV: tunable values — remove before shipping
+  const [testPointerScale, setTestPointerScale] = useState(1.7);
+  const [testDuration, setTestDuration] = useState(750);
+
+  useEffect(() => {
+    if (!viewerRef.current) return;
+    viewerRef.current.control.rotate.pointerScale = [testPointerScale, testPointerScale];
+    viewerRef.current.control.rotate.duration = testDuration;
+  }, [testPointerScale, testDuration]);
+
+  // Check gl.getError() off the render timeline — setTimeout avoids a GPU pipeline stall on the current frame
   const checkGLError = (src) => {
-    requestAnimationFrame(() => {
-      const canvas = containerRef.current?.querySelector('.view360-canvas');
-      if (!canvas) return;
-      const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+    setTimeout(() => {
+      if (!glRef.current) {
+        const canvas = containerRef.current?.querySelector('.view360-canvas');
+        if (!canvas) return;
+        glRef.current = canvas.getContext('webgl2') || canvas.getContext('webgl');
+      }
+      const gl = glRef.current;
       if (!gl) return;
       const error = gl.getError();
       if (error !== gl.NO_ERROR) {
@@ -33,15 +47,14 @@ export default function Room({ room }) {
       } else {
         setTextureError(null);
       }
-    });
+    }, 0);
   };
 
   const handleReady = () => {
     viewerRef.current.camera.lookAt({ zoom: ZOOM_NORMAL });
-    viewerRef.current.control.rotate.pointerScale = [2, 2];
-    viewerRef.current.control.rotate.duration = 1000;
+    viewerRef.current.control.rotate.pointerScale = [testPointerScale, testPointerScale];
+    viewerRef.current.control.rotate.duration = testDuration;
     viewerRef.current.control.rotate.easing = EASING.EASE_OUT_CUBIC;
-    checkGLError(currentSrcRef.current);
   };
 
   const handleLoad = () => {
@@ -73,6 +86,34 @@ export default function Room({ room }) {
         style={{ touchAction: "none" }}
         scrollable={false}
       />
+
+      {/* DEV: drag tuner — remove before shipping */}
+      <div className="absolute top-4 left-4 z-50 bg-black/40 rounded-2xl px-5 py-4 text-white text-sm space-y-5 pointer-events-auto">
+        <div className="flex flex-col gap-1">
+          <div className="flex justify-between opacity-60">
+            <span>pointerScale</span>
+            <span className="font-mono">{testPointerScale}</span>
+          </div>
+          <input
+            type="range" min="1" max="3" step="0.1"
+            value={testPointerScale}
+            onChange={e => setTestPointerScale(Number(e.target.value))}
+            className="w-64 h-8 accent-white opacity-50 cursor-pointer"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <div className="flex justify-between opacity-60">
+            <span>duration</span>
+            <span className="font-mono">{testDuration}ms</span>
+          </div>
+          <input
+            type="range" min="100" max="2000" step="50"
+            value={testDuration}
+            onChange={e => setTestDuration(Number(e.target.value))}
+            className="w-64 h-8 accent-white opacity-50 cursor-pointer"
+          />
+        </div>
+      </div>
 
       {textureError && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/90 pointer-events-none">
