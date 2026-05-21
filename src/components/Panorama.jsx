@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useEffect, useCallback, useContext } from "r
 import { SidebarContext } from '../store/SidebarContextProvider';
 import View360, { EquirectProjection, EASING } from "@egjs/react-view360";
 import { APP_CONFIG } from "@/config/appConfig";
+import { CONFIG } from "../data/layers";
 
 import Pin from "./Pin";
 import "@egjs/react-view360/css/view360.min.css";
@@ -12,7 +13,6 @@ export default function Panorama({ unit }) {
   const useStatic = APP_CONFIG.USE_STATIC;
 
   const ZOOM_OUT = 0.8; // zoomed out view (match FOV ≈ 118.07°)
-  const ZOOM_NORMAL = 1; // default zoom (match FOV = 90°)
   const ZOOM_IN = 1.333; // zoomed in view (match FOV ≈ 61.93°)
 
   const ZOOM_DURATION = 750;
@@ -185,7 +185,7 @@ export default function Panorama({ unit }) {
     if (zoomOnLoadRef.current) {
       // Animate back to normal with ease-out
       viewerRef.current.camera.animateTo({
-        zoom: ZOOM_NORMAL,
+        zoom: 1,
         duration: ZOOM_DURATION,
         easing: easing.easeOut,
       });
@@ -213,12 +213,11 @@ export default function Panorama({ unit }) {
         projection={projection}
         onLoad={handleLoad}
         onReady={handleReady}
-        zoomRange={{ min: 0.8, max: ZOOM_IN }}
-        initialYaw={190}
-        rotate={{ speed: 6 }}
+        zoomRange={CONFIG.ZOOM_RANGE}
+        pitchRange={CONFIG.PITCH_RANGE}
+        initialYaw={CONFIG.INITIAL_YAW}
         style={{ touchAction: "none" }}
         scrollable={false}
-        pitchRange={{ min: -30, max: 15 }}
       >
         <div className="view360-hotspots">
           {hotspots.map((spot) => (

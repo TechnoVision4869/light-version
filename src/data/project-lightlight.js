@@ -6,6 +6,25 @@ import SERVICE_SVG from '../assets/svgs/service.svg?raw';
 export const projectPath = "projects/light-light";
 const SOMABAY_BG = `/${projectPath}/images/somabay.jpg`;
 
+export const config = {
+  // General
+    USE_PREDEFINED_POS: true,
+    USE_HOTSPOTS: false,
+
+  // 360 Settings
+  // Interior
+    INTERIOR_ZOOM_RANGE: { min: 0.8, max: 1.333 },
+    INTERIOR_PITCH_RANGE: { min: -30, max: 15 },
+
+  // Balcony/Location
+    BALCONY_ZOOM_RANGE: { min: 1, max: 1.333 },
+    BALCONY_PITCH_RANGE: { min: 0, max: 25 },
+    BALCONY_YAW_RANGE: { min: -70, max: 70 },
+
+  // ZONES Tab Title
+    ZONES_TAB_TITLE: "PROPERTIES",
+    BALCONY_TITLE: "Balcony View",
+}
 
 export const DEVELOPER_SOMABAY = {
   developerId: "somabay",
@@ -64,7 +83,7 @@ export const DEVELOPER_SOMABAY = {
             videos: {
               forwardVideo: `/${projectPath}/videos/amenities/amenity1/amenity1_trans.mp4`,
               reverseVideo: `/${projectPath}/videos/amenities/amenity1/amenity1_rev.mp4`,
-              idleVideo: `/${projectPath}/videos/amenities/amenity1/amenity1.jpg`,
+              idleVideo: `/${projectPath}/videos/amenities/amenity1/amenity1_idle.jpg`,
             },
           },
           {
@@ -77,7 +96,7 @@ export const DEVELOPER_SOMABAY = {
             videos: {
               forwardVideo: `/${projectPath}/videos/amenities/amenity2/amenity2_trans.mp4`,
               reverseVideo: `/${projectPath}/videos/amenities/amenity2/amenity2_rev.mp4`,
-              idleVideo: `/${projectPath}/videos/amenities/amenity2/amenity2.jpg`,
+              idleVideo: `/${projectPath}/videos/amenities/amenity2/amenity2_idle.jpg`,
             },
           },
           {
@@ -90,7 +109,7 @@ export const DEVELOPER_SOMABAY = {
             videos: {
               forwardVideo: `/${projectPath}/videos/amenities/amenity3/amenity3_trans.mp4`,
               reverseVideo: `/${projectPath}/videos/amenities/amenity3/amenity3_rev.mp4`,
-              idleVideo: `/${projectPath}/videos/amenities/amenity3/amenity3.jpg`,
+              idleVideo: `/${projectPath}/videos/amenities/amenity3/amenity3_idle.jpg`,
             },
           },
         ]

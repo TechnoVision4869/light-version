@@ -1,16 +1,13 @@
 import { useRef, useState, useEffect } from "react";
 import View360, { EquirectProjection } from "@egjs/react-view360";
 import "@egjs/react-view360/css/view360.min.css";
+import { CONFIG } from "../data/layers";
 
 /**
  * Generic Balcony/360 View Component
  * @param {string} imageSource - The image URL/path to display (360° equirectangular image)
  */
 export default function Balcony({ view }) {
-  const ZOOM_OUT = 1; // zoomed out view (match FOV ≈ 118.07°)
-  const ZOOM_NORMAL = 1; // default zoom (match FOV = 90°)
-  const ZOOM_IN = 1.33; // zoomed in view (match FOV ≈ 61.93°)
-
   const ZOOM_OUT_TIME = 600;
 
   const viewerRef = useRef(null);
@@ -67,7 +64,7 @@ export default function Balcony({ view }) {
   // Handle initial load
   const handleReady = () => {
     viewerRef.current.camera.animateTo({
-      zoom: ZOOM_NORMAL,
+      zoom: 1,
       duration: ZOOM_OUT_TIME,
     });
     checkGLError();
@@ -91,11 +88,9 @@ export default function Balcony({ view }) {
         className="view360-fullscreen"
         projection={projection}
         onReady={handleReady}
-        initialZoom={ZOOM_NORMAL}
-        zoomRange={{ min: ZOOM_OUT, max: ZOOM_IN }}
-        pitchRange={{ min: 0, max: 25 }}
-        yawRange={ {min:-70, max:70 }}
-        rotate={{ speed: 6 }}
+        zoomRange={CONFIG.BALCONY_ZOOM_RANGE}
+        pitchRange={CONFIG.BALCONY_PITCH_RANGE}
+        yawRange={CONFIG.BALCONY_YAW_RANGE}
         style={{ touchAction: "none" }}
         scrollable={false}
       />

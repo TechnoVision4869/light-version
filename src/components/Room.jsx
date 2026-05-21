@@ -1,15 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import View360, { EquirectProjection, EASING } from "@egjs/react-view360";
 import "@egjs/react-view360/css/view360.min.css";
+import { CONFIG } from "../data/layers";
 
 import FURNITURE from "../assets/icons/furniture.svg";
 import UNFURNITURE from "../assets/icons/un-furniture.svg";
 
 export default function Room({ room }) {
-  const ZOOM_OUT = 0.8;
-  const ZOOM_NORMAL = 1;
-  const ZOOM_IN = 1.333;
-
   const viewerRef = useRef(null);
   const containerRef = useRef(null);
   const glRef = useRef(null);
@@ -51,7 +48,7 @@ export default function Room({ room }) {
   };
 
   const handleReady = () => {
-    viewerRef.current.camera.lookAt({ zoom: ZOOM_NORMAL });
+    viewerRef.current.camera.lookAt({ zoom: 1 });
     viewerRef.current.control.rotate.pointerScale = [testPointerScale, testPointerScale];
     viewerRef.current.control.rotate.duration = testDuration;
     viewerRef.current.control.rotate.easing = EASING.EASE_OUT_CUBIC;
@@ -79,16 +76,14 @@ export default function Room({ room }) {
         projection={initialProjection.current}
         onReady={handleReady}
         onLoad={handleLoad}
-        initialZoom={ZOOM_NORMAL}
-        zoomRange={{ min: ZOOM_OUT, max: ZOOM_IN }}
-        pitchRange={{ min: -30, max: 15 }}
-        // rotate={rotateConfig.current}
+        zoomRange={CONFIG.INTERIOR_ZOOM_RANGE}
+        pitchRange={CONFIG.INTERIOR_PITCH_RANGE}
         style={{ touchAction: "none" }}
         scrollable={false}
       />
 
       {/* DEV: drag tuner — remove before shipping */}
-      <div className="absolute top-4 left-4 z-50 bg-black/40 rounded-2xl px-5 py-4 text-white text-sm space-y-5 pointer-events-auto">
+      {/* <div className="absolute top-4 left-4 z-50 bg-black/40 rounded-2xl px-5 py-4 text-white text-sm space-y-5 pointer-events-auto">
         <div className="flex flex-col gap-1">
           <div className="flex justify-between opacity-60">
             <span>pointerScale</span>
@@ -113,7 +108,7 @@ export default function Room({ room }) {
             className="w-64 h-8 accent-white opacity-50 cursor-pointer"
           />
         </div>
-      </div>
+      </div> */}
 
       {textureError && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/90 pointer-events-none">

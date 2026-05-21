@@ -6,6 +6,26 @@ import SERVICE_SVG from '../assets/svgs/service.svg?raw';
 export const projectPath = "projects/light-house";
 const SOMABAY_BG = `/${projectPath}/images/background.jpeg`;
 
+export const config = {
+  // General
+    USE_PREDEFINED_POS: true,
+    USE_HOTSPOTS: false,
+
+  // 360 Settings
+  // Interior
+    INTERIOR_ZOOM_RANGE: { min: 0.8, max: 1.333 },
+    INTERIOR_PITCH_RANGE: { min: -50, max: 40 },
+
+  // Balcony/Location
+    BALCONY_ZOOM_RANGE: { min: 1, max: 1.333 },
+    BALCONY_PITCH_RANGE: { min: -40, max: 40 },
+    BALCONY_YAW_RANGE: { min: -70, max: 70 },
+
+  // ZONES Tab Title
+    ZONES_TAB_TITLE: "PROPERTIES",
+    BALCONY_TITLE: "Balcony View",
+}
+
 const gallery1 = [
   { id: "group1_1", src: `/${projectPath}/images/gallery/interior/1BR/01.jpg` },
   { id: "group1_2", src: `/${projectPath}/images/gallery/interior/1BR/02 copy.jpg` },
@@ -94,9 +114,9 @@ export const DEVELOPER_SOMABAY = {
             description: "Azure Lagoons is a unique water park that offers a variety of pools, slides, and water activities for all ages. It is designed to provide a fun and refreshing experience for residents and visitors alike.",
             x: 0.535, y: 0.57,
             videos: {
-              forwardVideo: null,
-              reverseVideo: null,
-              idleVideo: `/${projectPath}/videos/amenities/amenity1/1.mp4`,
+              forwardVideo: `/${projectPath}/videos/amenities/amenity1/amenity1_trans.mp4`,
+              reverseVideo: `/${projectPath}/videos/amenities/amenity1/amenity1_rev.mp4`,
+              idleVideo: `/${projectPath}/videos/amenities/amenity1/amenity1_idle.mp4`,
             },
           },
           {
@@ -107,22 +127,22 @@ export const DEVELOPER_SOMABAY = {
             description: "A scenic walking path surrounded by lush greenery, perfect for a leisurely stroll or morning jog.",
             x: 0.24, y: 0.81,
             videos: {
-              forwardVideo: null,
-              reverseVideo: null,
-              idleVideo: `/${projectPath}/videos/amenities/amenity2/2.mp4`,
+              forwardVideo: `/${projectPath}/videos/amenities/amenity2/amenity2_trans.mp4`,
+              reverseVideo: `/${projectPath}/videos/amenities/amenity2/amenity2_rev.mp4`,
+              idleVideo: `/${projectPath}/videos/amenities/amenity2/amenity2_idle.mp4`,
             },
           },
           {
             id: "amenity3",
             displayName: "Breezy Retreat",
             subtitle: "Amenity",
-            thumbnail: `/${projectPath}/thumbnails/amenities/amenity4.jpeg`,
+            thumbnail: `/${projectPath}/thumbnails/amenities/amenity3.jpeg`,
             description: "A breezy retreat area with comfortable seating and stunning views, perfect for relaxation and socializing.",
             x: 0.36, y: 0.88,
             videos: {
-              forwardVideo: null,
-              reverseVideo: null,
-              idleVideo: `/${projectPath}/videos/amenities/amenity4/4.mp4`,
+              forwardVideo: `/${projectPath}/videos/amenities/amenity3/amenity3_trans.mp4`,
+              reverseVideo: `/${projectPath}/videos/amenities/amenity3/amenity3_rev.mp4`,
+              idleVideo: `/${projectPath}/videos/amenities/amenity3/amenity3_idle.mp4`,
             },
           },
         ]
@@ -909,7 +929,7 @@ export const DEVELOPER_SOMABAY = {
                     displayName: "Floor 3",
                     highlight: `/${projectPath}/highlight/7C/7c_floor3.png`,
                     description: null,
-                    x: 0.293, y: 0.572,
+                    x: 0.156, y: 0.572,
                     videos: {
                       forwardVideo: `/${projectPath}/videos/zones/7c/floors/7c_floors_gen_trans_to_floor3.mp4`,
                       reverseVideo: `/${projectPath}/videos/zones/7c/floors/7c_floors_gen_rev_from_floor3.mp4`,

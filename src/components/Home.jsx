@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { StatusBar } from "@capacitor/status-bar";
 import { Capacitor } from '@capacitor/core';
 import { App as CapApp } from "@capacitor/app"
-import { TABS, LAYERS } from "../data/layers.js";
+import { TABS, LAYERS, CONFIG } from "../data/layers.js";
 // Hooks
 import { useVideoViewer } from "./hooks/useVideoViewer.jsx";
 
@@ -32,7 +32,7 @@ import { MainContext } from "../store/MainContextProvider";
 import TECHNO_LOGO from "../assets/techno.png";
 import Highlight from "./Highlight.jsx";
 import Test from "./Test.jsx";
-import { APP_CONFIG, ASSET_TYPES } from "../config/appConfig";
+import { APP_CONFIG } from "../config/appConfig";
 import SplashVideo from "./SplashVideo.jsx";
 
 export default function Home({ introVideoUrl = null }) {
@@ -447,7 +447,7 @@ export default function Home({ introVideoUrl = null }) {
                   : "text-white"
                   }`}
               >
-                TOWERS
+                {CONFIG.ZONES_TAB_TITLE || "ZONES"}
               </button>
               <button
                 onClick={() => handleActiveTab(TABS.AMENITIES)}
@@ -524,7 +524,7 @@ export default function Home({ introVideoUrl = null }) {
                     {/* Idle image (shown when IDLE_TYPE is IMAGE and idleVideo is an image path) */}
                     {(() => {
                       const idleImagePath = currentViews?.[viewerProps.currentViewIndex]?.videos?.idleVideo ?? currentVideosPaths?.idleVideo;
-                      return APP_CONFIG.IDLE_TYPE === ASSET_TYPES.IMAGE && !viewerProps.isPlaying && idleImagePath && /\.(png|jpe?g|webp|avif)$/i.test(idleImagePath) && (
+                      return !viewerProps.isPlaying && idleImagePath && /\.(png|jpe?g|webp|avif)$/i.test(idleImagePath) && (
                         <img
                           src={idleImagePath}
                           className="w-full h-full object-cover object-center rounded-2xl absolute inset-0 z-[11]"

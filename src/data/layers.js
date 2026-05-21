@@ -1,13 +1,14 @@
 // import { DEVELOPER_MIX as DEVELOPER } from "./project-mix";
-// import { DEVELOPER_TBK as DEVELOPER } from "./project-kog";
-// import { DEVELOPER_SOMABAY as DEVELOPER, projectPath  } from "./project-lighthouse";
-import { DEVELOPER_SOMABAY as DEVELOPER, projectPath  } from "./project-lightlight";
-// import { DEVELOPER_SOMABAY as DEVELOPER, projectPath } from "./project-sandbox";
-// import { DEVELOPER_SOMABAY as DEVELOPER, projectPath } from "./project-demo";
-// import { DEVELOPER_TECHNO as DEVELOPER } from "./kog-demo";
+// import { DEVELOPER_TBK as DEVELOPER, projectPath, config } from "./project-kog";
+import { DEVELOPER_SOMABAY as DEVELOPER, projectPath, config  } from "./project-lighthouse";
+// import { DEVELOPER_SOMABAY as DEVELOPER, projectPath, config  } from "./project-lightlight";
+// import { DEVELOPER_SOMABAY as DEVELOPER, projectPath, config } from "./project-sandbox";
+// import { DEVELOPER_SOMABAY as DEVELOPER, projectPath, config } from "./project-demo";
+// import { DEVELOPER_TECHNO as DEVELOPER, projectPath, config } from "./kog-demo";
 
 export const PATH = projectPath;
 export const DATA = DEVELOPER;
+export const CONFIG = config;
 
 // Navigation Tabs (top-level categories)
 export const TABS = {

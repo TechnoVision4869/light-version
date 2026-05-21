@@ -2,7 +2,7 @@ import { useContext, useState, useRef, useEffect, useCallback } from "react";
 import { TABS, LAYERS } from "../../data/layers";
 
 import { SidebarContext } from "../../store/SidebarContextProvider";
-import { APP_CONFIG, ASSET_TYPES } from "../../config/appConfig";
+import { APP_CONFIG } from "../../config/appConfig";
 
 export function useVideoViewer() {
   const {
@@ -266,19 +266,9 @@ export function useVideoViewer() {
           setIsFloorTransitionBlur(false);
           floorBlurClearTimerRef.current = null;
         }, 200);
-        if (APP_CONFIG.IDLE_TYPE === ASSET_TYPES.VIDEO) {
-          console.warn(
-            "Idle path is an image but APP_CONFIG.IDLE_TYPE is VIDEO. Check your configuration.",
-          );
-        }
+
         if (onComplete) onComplete();
         return;
-      }
-
-      if (APP_CONFIG.IDLE_TYPE === ASSET_TYPES.IMAGE) {
-        console.warn(
-          "Idle path is a video but APP_CONFIG.IDLE_TYPE is IMAGE. Check your configuration.",
-        );
       }
 
       const target = getHiddenRef(); // always load into the hidden ref — no flash
