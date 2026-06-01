@@ -39,6 +39,20 @@ video::-webkit-media-controls-panel {
   background: transparent;
 }
 
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Ping ring that plays exactly 3 times then stops */
+@keyframes ping-finite {
+  75%, 100% { transform: scale(2); opacity: 0; }
+}
+.ping-3 {
+  animation: ping-finite 1s cubic-bezier(0, 0, 0.2, 1) 3;
+  animation-fill-mode: forwards;
+}
+
 html {
   /* Scale the entire UI proportionally with viewport.
      min(1.25vw, 2vh) = 16px at 1280×800; ~13px at 1024×600 */

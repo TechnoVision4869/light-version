@@ -581,18 +581,22 @@ export default function Home({ introVideoUrl = null }) {
                     )}
 
                   {/* info re-open button */}
-                  {showI && <button className={`absolute -bottom-1 -right-1 flex items-center justify-center z-25
-                  ${activeTab === TABS.SURROUNDINGS ? "bg-[#94846D]/70 backdrop-blur" : 'bg-black/70 backdrop-blur-sm'}
-                  w-8 h-8 hover:w-9 hover:h-9 
-                  transition-all duration-500 ease-in-out
-                  rounded-tl-xl rounded-bl-xl rounded-tr-xl`}
-                    onClick={() => setShowInfoPopup(true)}
-                  >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <circle cx="11" cy="5" r="1.5" fill="white" />
-                      <path d="M11 9 C11.8 11, 10.2 13, 11 15" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
-                    </svg>
-                  </button>}
+                  {showI && (
+                    <button
+                      className={`absolute -bottom-1 -right-1 flex items-center justify-center z-25
+                        ${activeTab === TABS.SURROUNDINGS ? "bg-[#59A198]/60 backdrop-blur" : 'bg-black/60 backdrop-blur-sm'}
+                        w-10 h-10 hover:w-11 hover:h-11
+                        transition-all duration-500 ease-in-out
+                        rounded-tl-xl rounded-bl-2xl rounded-tr-2xl`}
+                      onClick={() => setShowInfoPopup(true)}
+                    >
+                      <span className="absolute inset-0 rounded-tl-xl rounded-bl-2xl rounded-tr-2xl border-2 border-white/70 ping-3 pointer-events-none" />
+                      <svg width="30" height="30" viewBox="0 0 23 23" fill="none">
+                        <circle cx="11" cy="5" r="1.5" fill="white" />
+                        <path d="M11 9 C11.8 11, 10.2 13, 11 15" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+                      </svg>
+                    </button>
+                  )}
 
                   {/* bottom info popup */}
                   {showInfoPopup && currentItem?.id && (

@@ -32,11 +32,11 @@ export const DEVELOPER_SOMABAY = {
   backgroundImage: SOMABAY_BG,
   developerProjects: [
     {
-      id: "light-house",
+      id: "light-light",
       name: "The Lighthouse",
       thumbnail: null,
       description: "Located at the tip of the peninsula, The Lighthouse Somabay gives you a unique panoramic view of the reef and the bay at once.",
-      introVideo: `/${projectPath}/videos/loading.mp4`,
+      introVideo: `/${projectPath}/videos/intro.mp4`,
       idleVideo: `/${projectPath}/videos/home/home_idle.jpg`,
       zoomoutVideo: `/${projectPath}/videos/home/home_out.mp4`,
 
@@ -77,7 +77,7 @@ export const DEVELOPER_SOMABAY = {
             id: "amenity1",
             displayName: "Azure Lagoons",
             subtitle: "Amenity",
-            thumbnail: `/${projectPath}/thumbnails/amenities/amenity1.jpeg`,
+            thumbnail: `/${projectPath}/thumbnails/amenities/amenity1.jpg`,
             description: "Azure Lagoons is a unique water park that offers a variety of pools, slides, and water activities for all ages. It is designed to provide a fun and refreshing experience for residents and visitors alike.",
             x: 0.535, y: 0.57,
             videos: {
@@ -90,7 +90,7 @@ export const DEVELOPER_SOMABAY = {
             id: "amenity2",
             displayName: "Verde Walks",
             subtitle: "Amenity",
-            thumbnail: `/${projectPath}/thumbnails/amenities/amenity2.jpeg`,
+            thumbnail: `/${projectPath}/thumbnails/amenities/amenity2.jpg`,
             description: "A scenic walking path surrounded by lush greenery, perfect for a leisurely stroll or morning jog.",
             x: 0.24, y: 0.81,
             videos: {
@@ -103,7 +103,7 @@ export const DEVELOPER_SOMABAY = {
             id: "amenity3",
             displayName: "Breezy Retreat",
             subtitle: "Amenity",
-            thumbnail: `/${projectPath}/thumbnails/amenities/amenity3.jpeg`,
+            thumbnail: `/${projectPath}/thumbnails/amenities/amenity3.jpg`,
             description: "A breezy retreat area with comfortable seating and stunning views, perfect for relaxation and socializing.",
             x: 0.36, y: 0.88,
             videos: {
@@ -127,12 +127,12 @@ export const DEVELOPER_SOMABAY = {
         items: [
           {
             id: "zone1",
-            projectId: "lighthouse",
+            projectId: "lightlight",
             displayName: "Towers",
             subtitle: "Residential Area",
             thumbnail: null,
             highlight: null,
-            description: "Our towers hold different apartments options. They are at the center of the city.",
+            description: null,
             x: 0.93, y: 0.53,
             videos: {
               forwardVideo: `/${projectPath}/videos/zones/zones_gen_trans_from_home.mp4`,
@@ -159,7 +159,7 @@ export const DEVELOPER_SOMABAY = {
                     displayName: "Floor 1",
                     highlight: `/${projectPath}/highlight/7A/7a_floor1.png`,
                     description: null,
-                    x: 0.24, y: 0.705,
+                    x: 0.2, y: 0.59,
                     videos: {
                       forwardVideo: `/${projectPath}/videos/zones/7a/floors/7a_floors_gen_trans_to_floor3.mp4`,
                       reverseVideo: `/${projectPath}/videos/zones/7a/floors/7a_floors_gen_rev_from_floor3.mp4`,

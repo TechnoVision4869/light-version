@@ -69,7 +69,7 @@ export const DEVELOPER_SOMABAY = {
       name: "The Lighthouse",
       thumbnail: null,
       description: "Located at the tip of the peninsula, The Lighthouse Somabay gives you a unique panoramic view of the reef and the bay at once.",
-      introVideo: `/${projectPath}/videos/loading.mp4`,
+      introVideo: `/${projectPath}/videos/intro.mp4`,
       idleVideo: `/${projectPath}/videos/home/home_idle.mp4`,
       zoomoutVideo: `/${projectPath}/videos/home/home_out.mp4`,
 
@@ -165,7 +165,7 @@ export const DEVELOPER_SOMABAY = {
             subtitle: "Residential Area",
             thumbnail: null,
             highlight: null,
-            description: "Our towers hold different apartments options. They are at the center of the city.",
+            description: null,
             x: 0.93, y: 0.53,
             videos: {
               forwardVideo: `/${projectPath}/videos/zones/zones_gen_trans_from_home.mp4`,
