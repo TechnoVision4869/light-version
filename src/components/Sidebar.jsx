@@ -7,9 +7,11 @@ import { RoomList } from "./RoomList";
 import FilterPanel from "../components/FilterPanel";
 import SidebarButtons from "./SideBarButtons";
 import { MainContext } from "../store/MainContextProvider";
+import { FilterContext } from "../store/FilterContextProvider";
 
 export default function Sidebar({ onNavigate }) {
     const { activeTab, activeLayer, currentItem, sidebarOpen } = useContext(SidebarContext);
+    const { resetFilters } = useContext(FilterContext);
     const [isFilter, setIsFilter] = useState(false); // 'navigate' or 'filter'
     const { overlay } = useContext(MainContext);
     
@@ -17,8 +19,9 @@ export default function Sidebar({ onNavigate }) {
         // console.log(activeLayer);
         if (activeLayer !== LAYERS.FLOOR) {
             setIsFilter(false);
+          resetFilters();
         }
-    }, [activeLayer]);
+    }, [activeLayer, resetFilters]);
 
     const renderTitle = () => {
         if(activeLayer === null) {
@@ -33,12 +36,12 @@ export default function Sidebar({ onNavigate }) {
 
     return (
         <aside
-            className={`bg-white/9 rounded-2xl p-2 py-3 md:py-4 flex-shrink-0 transition-all duration-700 overflow-hidden
+            className={`bg-white/9 rounded-2xl flex-shrink-0 transition-all duration-700 overflow-hidden
                      ${activeTab === TABS.HOME || activeLayer === LAYERS.AMENITY_DETAIL || activeLayer === LAYERS.SURROUNDING_DETAIL
-                    ? "w-0 opacity-0 pointer-events-none"
+                    ? "w-0 p-0 opacity-0 pointer-events-none"
                     : sidebarOpen
-                        ? "w-44 md:w-68 opacity-100"
-                        : "w-0 opacity-0 pointer-events-none"
+                        ? "w-44 md:w-68 p-2 py-3 md:py-4 opacity-100"
+                        : "w-0 p-0 opacity-0 pointer-events-none"
                 }`}
         >
             {activeTab === TABS.ZONES && activeLayer === LAYERS.UNIT ? (
@@ -53,7 +56,10 @@ export default function Sidebar({ onNavigate }) {
                         <div className="flex rounded-md overflow-hidden mb-4">
                             {/* Navigate Button */}
                             <button
-                                onClick={() => setIsFilter(false)}
+                                onClick={() => {
+                                    resetFilters();
+                                    setIsFilter(false);
+                                }}
                                 className={`flex-1 px-4 py-2 font-semibold transition rounded-l-md 
                             ${!isFilter
                                         ? "bg-white text-black"

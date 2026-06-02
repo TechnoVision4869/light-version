@@ -27,7 +27,6 @@ export function useVideoViewer() {
   const visibleRefRef = useRef("second"); // tracks which video element is currently visible/opaque
   const justNavigatedBackRef = useRef(false);
   const skipNextTransitionRef = useRef(false);
-  const playSurroundingsIdleRef = useRef(false);
   const isInitPlayedRef = useRef(true); // Flag to indicate if we have played the initial video (Home idle)
   const floorBlurShowTimerRef = useRef(null);
   const floorBlurClearTimerRef = useRef(null);
@@ -300,13 +299,13 @@ export function useVideoViewer() {
     (isFromAnotherTab, onReverseEnded) => {
       if (history.length <= 1) return;
       if (activeLayer === LAYERS.SURROUNDING_DETAIL) {
-        playSurroundingsIdleRef.current = true;
+        justNavigatedBackRef.current = true;
         goBack();
         return;
       }
       playReverseVideo(isFromAnotherTab, onReverseEnded);
     },
-    [history.length, playReverseVideo],
+    [activeLayer, history.length, playReverseVideo, goBack],
   );
 
   useEffect(() => {
@@ -331,13 +330,6 @@ export function useVideoViewer() {
               playIdleVideo();
               isInitPlayedRef.current = false;
             }, 200);
-          } else if (playSurroundingsIdleRef.current) {
-            playSurroundingsIdleRef.current = false;
-            if (activeTab !== TABS.SURROUNDINGS || activeLayer !== null) {
-              // Flag was stale — effect didn't fire for the back navigation,
-              // so this is a completely different destination. Play normally.
-              playTransitionVideo();
-            }
           } else {
             playTransitionVideo();
           }

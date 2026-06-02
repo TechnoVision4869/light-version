@@ -4,10 +4,23 @@ import { SidebarContext } from "../store/SidebarContextProvider";
 // import helper functions
 import { FILTER_ENUM, getMinMaxRange, getDiscreteValues } from "./helpers/filterHelper";
 
+const AREA_STEP = 5;
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function getStepAlignedMax(min, actualMax, step) {
+  if (step <= 0) return actualMax;
+  const stepsNeeded = Math.ceil((actualMax - min) / step);
+  return min + stepsNeeded * step;
+}
+
 function Slider({ name, unit, min, max, step = 1, value, onValueChange }) {
   const fillColor = "white";
   const trackColor = "#7f7f7f";
-  const sliderPercent = ((value - min) / (max - min)) * 100;
+  const safeValue = clamp(value, min, max);
+  const sliderPercent = max === min ? 100 : ((safeValue - min) / (max - min)) * 100;
 
   return (
     <div className="flex flex-col gap-2 pb-2">
@@ -22,7 +35,7 @@ function Slider({ name, unit, min, max, step = 1, value, onValueChange }) {
           type="range"
           min={min}
           max={max}
-          value={value}
+          value={safeValue}
           step={step}
           onChange={(e) => onValueChange(Number(e.target.value))}
           className="w-full h-1 cursor-pointer slider"
@@ -84,17 +97,24 @@ export default function FilterPanel() {
 
   const UNIT_TYPES = getDiscreteValues(currentApartments, FILTER_ENUM.TYPE);
 
+  const areaMinMax = getMinMaxRange(currentApartments, FILTER_ENUM.AREA);
+  const priceMinMax = getMinMaxRange(currentApartments, FILTER_ENUM.PRICE);
+  const areaMin = Math.floor(areaMinMax.min);
+  const areaActualMax = Math.ceil(areaMinMax.max);
+  const areaSliderMax = getStepAlignedMax(areaMin, areaActualMax, AREA_STEP);
+
   // Surface area range (in square meters)
   const AREA_RANGE = {
-    MIN: getMinMaxRange(currentApartments, FILTER_ENUM.AREA).min,
-    MAX: getMinMaxRange(currentApartments, FILTER_ENUM.AREA).max,
+    MIN: areaMin,
+    MAX: areaSliderMax,
+    ACTUAL_MAX: areaActualMax,
     UNIT: "m²",
   };
 
   // Budget range (in local currency)
   const BUDGET_RANGE = {
-    MIN: getMinMaxRange(currentApartments, FILTER_ENUM.PRICE).min,
-    MAX: getMinMaxRange(currentApartments, FILTER_ENUM.PRICE).max,
+    MIN: priceMinMax.min,
+    MAX: priceMinMax.max,
     UNIT: "L.E",
   };
 
@@ -107,6 +127,14 @@ export default function FilterPanel() {
   const [bathrooms, setBathrooms] = useState([]);
   const [area, setArea] = useState(AREA_RANGE.MAX);
   const [price, setPrice] = useState(BUDGET_RANGE.MAX);
+
+  useEffect(() => {
+    setArea(AREA_RANGE.MAX);
+    setPrice(BUDGET_RANGE.MAX);
+    setUnitType([]);
+    setBedrooms([]);
+    setBathrooms([]);
+  }, [AREA_RANGE.MAX, BUDGET_RANGE.MAX, currentItem?.id]);
 
   useEffect(() => {
     onFilterChange({
@@ -136,7 +164,7 @@ export default function FilterPanel() {
         unit={AREA_RANGE.UNIT}
         min={AREA_RANGE.MIN}
         max={AREA_RANGE.MAX}
-        step={5}
+        step={AREA_STEP}
         value={area}
         onValueChange={setArea}
       />

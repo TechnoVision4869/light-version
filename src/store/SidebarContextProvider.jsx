@@ -319,8 +319,8 @@ export default function SidebarContextProvider({ children }) {
     }, [currentProject, getInitHistory]);
 
     const handleSidebarState = useCallback((state) => {
-        // console.log(state);
-        setSidebarOpen(state);
+        // Support both direct boolean and functional state updates.
+        setSidebarOpen((prev) => (typeof state === "function" ? state(prev) : state));
     }, []);
 
     const [isPlaying, setIsPlaying] = useState(false);

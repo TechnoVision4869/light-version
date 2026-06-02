@@ -85,6 +85,11 @@ export default function Home({ introVideoUrl = null }) {
   };
 
   const isDisabled = !viewerProps.isMediaLoaded || viewerProps.isPlaying;
+  const isSidebarSupportedLayer =
+    activeTab !== TABS.HOME &&
+    activeLayer !== LAYERS.AMENITY_DETAIL &&
+    activeLayer !== LAYERS.SURROUNDING_DETAIL;
+  const shouldApplySidebarGap = isSidebarSupportedLayer && sidebarOpen;
 
   // Floors available when at FLOOR layer — pulled from the parent BUILDING entry
   const parentBuilding = activeLayer === LAYERS.FLOOR ? history[history.length - 2]?.item : null;
@@ -474,7 +479,7 @@ export default function Home({ introVideoUrl = null }) {
 
           <FilterContextProvider>
             <div
-              className={`flex ${sidebarOpen ? "space-x-3" : "space-x-0"} flex-1 min-h-0 overflow-hidden`}
+              className={`flex ${shouldApplySidebarGap ? "space-x-3" : "space-x-0"} flex-1 min-h-0 overflow-hidden`}
             >
               {/* Sidebar */}
               <Sidebar onNavigate={onNavigate} />
@@ -608,12 +613,10 @@ export default function Home({ introVideoUrl = null }) {
                 </div>
 
                 {/* left floating chevron — direct child of main so z-[70] beats the overlay's z-60 */}
-                {activeTab !== TABS.HOME &&
-                  activeLayer !== LAYERS.AMENITY_DETAIL &&
-                  activeLayer !== LAYERS.SURROUNDING_DETAIL && (
+                {isSidebarSupportedLayer && (
                     <button
                       onClick={() => handleSidebarState((s) => !s)}
-                      className={`absolute left-[-16px] top-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow ${overlay?.type === 'room-interior' ? 'z-[70]' : 'z-[50]'}`}                      aria-label={sidebarOpen ? "close sidebar" : "open sidebar"}
+                      className={`absolute top-1/2 w-9 h-9 rounded-full bg-white/60 backdrop-blur-sm flex items-center justify-center shadow-lg transition-all duration-300 ${sidebarOpen ? 'left-[-16px]' : 'left-2'} ${overlay?.type === 'room-interior' ? 'z-[70]' : 'z-[50]'}`}                      aria-label={sidebarOpen ? "close sidebar" : "open sidebar"}
                     >
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                         {sidebarOpen ? (
@@ -660,7 +663,7 @@ export default function Home({ introVideoUrl = null }) {
             {/* Views visuals */}
             {currentViews?.length ?
               <div className="flex-1 flex items-center justify-center text-white space-x-3 px-4 py-2 text-sm">
-                <div className=" flex space-x-2">
+                <div className="flex space-x-2">
                   <div className=""> Views </div>
                   {/* prev button */}
                   <button

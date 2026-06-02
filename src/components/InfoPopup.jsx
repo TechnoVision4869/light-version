@@ -41,7 +41,7 @@ export default function InfoPopup({ showInfoPopup, onClose }) {
     // Shared wrapper: positions the popup, owns the expand/collapse animation.
     // origin-bottom-right makes it scale toward/from the info button corner.
     // `transition` (built-in utility) includes transform + opacity; duration-300 overrides timing.
-    const wrapperClass = `absolute bottom-3 md:bottom-6 left-1/2 -translate-x-1/2 w-3/4 z-40 pointer-events-auto
+    const wrapperClass = `absolute bottom-3 md:bottom-6 left-1/2 -translate-x-1/2 w-[70%] z-40 pointer-events-auto
         transition duration-300 origin-bottom-right
         ${isActive ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`;
 
