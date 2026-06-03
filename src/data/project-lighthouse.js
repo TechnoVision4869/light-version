@@ -3,7 +3,7 @@ import SOMABAY_LOGO from '../assets/somabay-logo.svg';
 import MALL_ICON from '../assets/icons/mall.svg';
 import SERVICE_SVG from '../assets/svgs/service.svg?raw';
 
-export const projectPath = "projects/light-house";
+export const projectPath = "projects/lastest-light-house";
 const SOMABAY_BG = `/${projectPath}/images/background.jpeg`;
 
 export const config = {

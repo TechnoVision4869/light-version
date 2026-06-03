@@ -14,8 +14,9 @@ import UsersPage from "./components/user/UsersPage";
 
 
 export default function App() {
-  const { currentProject, setCurrentProject } = useContext(SidebarContext);
+  const { currentProject, setCurrentProject, clearSelectedProject } = useContext(SidebarContext);
   const [showSplash, setShowSplash] = useState(false);
+  const [showExitSplash, setShowExitSplash] = useState(false);
   const [splashVideoUrl, setSplashVideoUrl] = useState(null);
   const [expired, setExpired] = useState(false);
   const navigate = useNavigate();
@@ -41,6 +42,16 @@ export default function App() {
     lockOrientation();
   }, []);
 
+  useEffect(() => {
+    if (!splashVideoUrl) return;
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "video";
+    link.href = splashVideoUrl;
+    document.head.appendChild(link);
+    return () => document.head.removeChild(link);
+  }, [splashVideoUrl]);
+
   const handleProjectSelect = (project, introVideoUrl) => {
     setCurrentProject(project);
     setSplashVideoUrl(introVideoUrl ?? null);
@@ -48,12 +59,17 @@ export default function App() {
     navigate("/home");
   };
 
+  const handleExitRequest = () => {
+    setShowExitSplash(true);
+  };
+
   if (expired) {
     return <ExpiredDialog open={true} />;
   }
 
   return (
-    <Routes>
+    <>
+      <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route
         path="/"
@@ -83,17 +99,29 @@ export default function App() {
         path="/home"
         element={
           <AuthGuard>
-            {showSplash ? (
-              <SplashVideo
-                src={splashVideoUrl}
-                onFinished={() => setShowSplash(false)}
-              />
-            ) : (
-              <Home introVideoUrl={splashVideoUrl} />
-            )}
+            <>
+              <Home introVideoUrl={splashVideoUrl} onExitRequest={handleExitRequest} />
+              {showSplash && (
+                <SplashVideo
+                  src={splashVideoUrl}
+                  onFinished={() => setShowSplash(false)}
+                />
+              )}
+            </>
           </AuthGuard>
         }
       />
     </Routes>
+    {showExitSplash && (
+      <SplashVideo
+        src={splashVideoUrl}
+        onFadeStart={() => navigate("/")}
+        onFinished={() => {
+          setShowExitSplash(false);
+          clearSelectedProject();
+        }}
+      />
+    )}
+    </>
   );
 }

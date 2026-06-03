@@ -1,10 +1,24 @@
-export default function SplashVideo({ src, onFinished }) {
+import { useState } from "react";
+
+export default function SplashVideo({ src, onFinished, onFadeStart }) {
+  const [fading, setFading] = useState(false);
+
   const handleDone = () => {
+    setFading(true);
+    if (onFadeStart) onFadeStart();
+  };
+
+  const handleTransitionEnd = () => {
     if (onFinished) onFinished();
   };
 
   return (
-    <div className="fixed inset-0 z-70 bg-black">
+    <div
+      className={`fixed inset-0 z-70 bg-black transition-opacity duration-500 ${
+        fading ? "opacity-0" : "opacity-100"
+      }`}
+      onTransitionEnd={handleTransitionEnd}
+    >
       <video
         className="w-full h-full object-cover"
         src={src}

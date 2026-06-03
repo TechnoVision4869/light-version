@@ -33,15 +33,11 @@ import TECHNO_LOGO from "../assets/techno.png";
 import Highlight from "./Highlight.jsx";
 import Test from "./Test.jsx";
 import { APP_CONFIG } from "../config/appConfig";
-import SplashVideo from "./SplashVideo.jsx";
-
-export default function Home({ introVideoUrl = null }) {
+export default function Home({ introVideoUrl = null, onExitRequest }) {
   //states
   const [showInfoPopup, setShowInfoPopup] = useState(false);
   const [showI, setShowI] = useState(false);
   const [floorSwitchBlur, setFloorSwitchBlur] = useState(false);
-  const [showExitSplash, setShowExitSplash] = useState(false);
-
   // Ref
   const mediaContainerRef = useRef(null);
 
@@ -270,16 +266,6 @@ export default function Home({ introVideoUrl = null }) {
 
   return (
     <>
-      {showExitSplash && (
-        <SplashVideo
-          src={introVideoUrl}
-          onFinished={() => {
-            setShowExitSplash(false);
-            clearSelectedProject();
-            navigate("/");
-          }}
-        />
-      )}
       {/* Unified Overlay Management */}
       {overlay?.type === 'panorama' && (
         <div className="absolute inset-0 z-60">
@@ -468,7 +454,7 @@ export default function Home({ introVideoUrl = null }) {
             <HomeButton
               onHomeClick={() => {
                 if (introVideoUrl) {
-                  setShowExitSplash(true);
+                  onExitRequest?.();
                 } else {
                   clearSelectedProject();
                   navigate("/");
