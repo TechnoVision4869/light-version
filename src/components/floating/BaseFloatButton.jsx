@@ -4,8 +4,7 @@ export default function BaseFloatButton({ name, layerType = null, style = {}, is
     const isFloor = layerType === LAYERS.BUILDING;
 
     return (
-        <button className={`base-float-btn backdrop-blur-md ${isSelected ? "bg-[#418AFF]" : "bg-[#5F5646B3]"}
-         hover:bg-[#357AEE] text-sm text-white px-[8px] py-1 ${triClass ? "rounded-lg" : "rounded-xl"} flex items-center gap-2 z-20`}
+        <button className={`blur-backdrop-button ${isSelected ? "selected" : ""} text-sm text-white px-[8px] py-1 ${triClass ? "rounded-lg" : "rounded-xl"} flex items-center gap-2 z-20 hover:bg-[#4a6082] transition-colors`}
             style={{
                 position: 'absolute',
                 transform: 'translate(-50%, -50%)',

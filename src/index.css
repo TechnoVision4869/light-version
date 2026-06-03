@@ -224,6 +224,16 @@ body {
   z-index: 30;
 }
 
+.blur-backdrop-button {
+  background: rgba(52, 47, 38, 0.8);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.blur-backdrop-button.selected {
+  background: rgba(74, 96, 130, 0.9);
+}
+
 @keyframes fadeInOut {
   0% { opacity: 0; }
   15% { opacity: 1; }

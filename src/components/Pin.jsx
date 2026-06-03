@@ -13,7 +13,7 @@ export default function Pin({ type, label, className = "" }) {
         </div>
       ) : (
         MAP_PIN ? (
-          <div className="opacity-70 hover:opacity-100 transition-opacity border">
+          <div className="opacity-70 hover:opacity-100 transition-opacity">
             <img src={MAP_PIN} className="w-16 m-5 h-auto" />
           </div>
         ) : (
