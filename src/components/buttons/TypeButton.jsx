@@ -29,12 +29,12 @@ export default function TypeButton({ type, isDisabled, goToItem }) {
                 }`}
         >
             <div className="flex items-center justify-between whitespace-nowrap min-w-0">
-                {/* Floor Name */}
+                {/* Type Name */}
                 <div className="text-md font-semibold text-white leading-tight flex-shrink-0">
                     {type.displayName}
                 </div>
 
-                {/* Vertical Divider + Floor Type */}
+                {/* Vertical Divider + Type Area */}
                 <div className="flex items-center flex-shrink-0">
                     <div className="w-0.5 h-5 bg-white mx-3"></div>
                     <div>

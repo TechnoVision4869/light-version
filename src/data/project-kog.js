@@ -9,6 +9,28 @@ import AIRPORT_ICON from '../assets/icons/airport.svg';
 import MALL_ICON from '../assets/icons/mall.svg';
 import CITY_ICON from '../assets/icons/city.svg';
 
+export const projectPath = "projects/kog";
+
+export const config = {
+  // General
+    USE_PREDEFINED_POS: false,
+    USE_HOTSPOTS: true,
+  
+  // 360 Settings
+  // Interior
+    INTERIOR_ZOOM_RANGE: { min: 0.8, max: 1.333 },
+    INTERIOR_PITCH_RANGE: { min: -30, max: 15 },
+    INTERIOR_INITIAL_YAW: 190,
+
+  // Balcony/Location
+    BALCONY_ZOOM_RANGE: { min: 1, max: 1.333 },
+    BALCONY_PITCH_RANGE: { min: 0, max: 25 },
+    BALCONY_YAW_RANGE: { min: -70, max: 70 },
+
+  // Titles
+    BALCONY_TITLE: "Location View",
+}
+
 // villas videos & views
 // IRIS
 const iris_1_videos = {

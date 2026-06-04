@@ -2,7 +2,7 @@ import { useContext, useState, useRef, useEffect, useCallback } from "react";
 import { TABS, LAYERS } from "../../data/layers";
 
 import { SidebarContext } from "../../store/SidebarContextProvider";
-import { APP_CONFIG, ASSET_TYPES } from "../../config/appConfig";
+import { APP_CONFIG } from "../../config/appConfig";
 
 export function useVideoViewer() {
   const {
@@ -12,10 +12,11 @@ export function useVideoViewer() {
     currentViews,
     currentVideosPaths,
     goBack,
+    isPlaying,
+    setIsPlaying,
   } = useContext(SidebarContext);
 
   const [isVideosLoaded, setIsVideosLoaded] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   const [floatingOpacity, setFloatingOpacity] = useState(0);
   const [firstVideoOpacity, setFirstVideoOpacity] = useState(0);
@@ -26,25 +27,38 @@ export function useVideoViewer() {
   const visibleRefRef = useRef("second"); // tracks which video element is currently visible/opaque
   const justNavigatedBackRef = useRef(false);
   const skipNextTransitionRef = useRef(false);
-  const playSurroundingsIdleRef = useRef(false);
   const isInitPlayedRef = useRef(true); // Flag to indicate if we have played the initial video (Home idle)
+  const floorBlurShowTimerRef = useRef(null);
+  const floorBlurClearTimerRef = useRef(null);
+
+  const [isFloorTransitionBlur, setIsFloorTransitionBlur] = useState(false);
+
+  const activeLayerRef = useRef(activeLayer);
+  useEffect(() => {
+    activeLayerRef.current = activeLayer;
+  }, [activeLayer]);
 
   const [currentViewIndex, setCurrentViewIndex] = useState(0);
+  const currentViewIndexRef = useRef(0);
   const numViews = currentViews?.length || 0;
+  const numViewsRef = useRef(numViews);
+  numViewsRef.current = numViews;
 
   // Function to handle view changes (uses activeTab and currentViews derived above)
   const changeView = useCallback(
-    (direction) => {
+    (direction, onComplete = null) => {
       // console.log(
       //   "useVideoViewer: changeView called with direction:",
       //   direction,
       // );
       // Use the locally derived activeTab and currentViews
 
-      let newIndex = currentViewIndex + (direction === "next" ? 1 : -1);
+      const idx = currentViewIndexRef.current;
+      const total = numViewsRef.current;
+      let newIndex = idx + (direction === "next" ? 1 : -1);
       // Handle wrap-around
-      if (newIndex >= numViews) newIndex = 0;
-      if (newIndex < 0) newIndex = numViews - 1;
+      if (newIndex >= total) newIndex = 0;
+      if (newIndex < 0) newIndex = total - 1;
 
       const newViewVideos = currentViews?.[newIndex]?.videos;
       if (!newViewVideos) {
@@ -52,18 +66,23 @@ export function useVideoViewer() {
         return;
       }
 
+      // Update both state (for UI) and ref (for chained callbacks) synchronously
+      setCurrentViewIndex(newIndex);
+      currentViewIndexRef.current = newIndex;
+
       if (direction === "next") {
         // console.log("Starting view transition from:", newViewVideos.forwardVideo, "to idle:", newViewVideos.idleVideo);
         playTransitionVideo(
           newViewVideos.forwardVideo,
           newViewVideos.idleVideo,
+          onComplete,
         );
       } else {
-        const buildingViewVideos = currentViews?.[currentViewIndex]?.videos;
+        const buildingViewVideos = currentViews?.[idx]?.videos;
         if (!buildingViewVideos?.reverseVideo) {
           console.error(
             "Could not get reverse video path for current view index:",
-            currentViewIndex,
+            idx,
           );
           return;
         }
@@ -71,11 +90,29 @@ export function useVideoViewer() {
         playTransitionVideo(
           buildingViewVideos.reverseVideo,
           newViewVideos.idleVideo,
+          onComplete,
         );
       }
-      setCurrentViewIndex(newIndex);
     },
-    [currentViewIndex, currentViews, numViews],
+    [currentViews],
+  );
+
+  // Navigate to a specific view index by playing videos one step at a time
+  // (shortest path), then fires onDone when the target view's idle is playing.
+  const changeViewToIndex = useCallback(
+    (targetIndex, onDone) => {
+      const idx = currentViewIndexRef.current;
+      if (idx === targetIndex) {
+        onDone?.();
+        return;
+      }
+      const total = numViewsRef.current;
+      const stepsForward = (targetIndex - idx + total) % total;
+      const stepsBack = (idx - targetIndex + total) % total;
+      const direction = stepsForward <= stepsBack ? "next" : "prev";
+      changeView(direction, () => changeViewToIndex(targetIndex, onDone));
+    },
+    [changeView],
   );
 
   // Always returns the name of the ref that is currently hidden (safe to load into)
@@ -91,7 +128,7 @@ export function useVideoViewer() {
         return;
       }
 
-      setIsPlaying(!loop);
+      if (!loop) setIsPlaying(true);
       const video =
         targetRef === "second" ? secondVideoRef.current : firstVideoRef.current;
       video.loop = loop;
@@ -107,6 +144,10 @@ export function useVideoViewer() {
             console.error("Video play failed:", e, "video src:", src),
           );
       };
+      video.onerror = () => {
+        console.error("Video load error, src:", src);
+        setIsPlaying(false);
+      };
 
       if (onEnded) {
         video.onended = onEnded;
@@ -121,12 +162,13 @@ export function useVideoViewer() {
     (
       transitionVideoPath = currentVideosPaths?.forwardVideo,
       idleVideoPath = currentVideosPaths?.idleVideo,
+      onComplete = null,
     ) => {
       if (!idleVideoPath) return;
       if (!transitionVideoPath) {
         // If no transition video, directly play idle video
         console.log("No transition video, playing idle video:", idleVideoPath);
-        playIdleVideo(idleVideoPath);
+        playIdleVideo(idleVideoPath, onComplete);
         return;
       }
       // console.log("playTransitionVideo called with videoPath:", transitionVideoPath);
@@ -137,9 +179,16 @@ export function useVideoViewer() {
         setFirstVideoOpacity(target === "first" ? 1 : 0);
         setSecondVideoOpacity(target === "second" ? 1 : 0);
         visibleRefRef.current = target;
+        if (activeLayerRef.current === LAYERS.FLOOR) {
+          if (floorBlurClearTimerRef.current) clearTimeout(floorBlurClearTimerRef.current);
+          floorBlurShowTimerRef.current = setTimeout(() => {
+            setIsFloorTransitionBlur(true);
+            floorBlurShowTimerRef.current = null;
+          }, 900);
+        }
       };
       const onEnded = () => {
-        playIdleVideo(idleVideoPath);
+        playIdleVideo(idleVideoPath, onComplete);
       };
       playVideo(transitionVideoPath, false, onloaded, onEnded, target);
     },
@@ -162,11 +211,23 @@ export function useVideoViewer() {
       // console.log("StartReverse called with reverse video:", currentVideosPaths.reverseVideo);
       setFloatingOpacity(0);
 
+      if (activeLayerRef.current === LAYERS.FLOOR) {
+        if (floorBlurShowTimerRef.current) clearTimeout(floorBlurShowTimerRef.current);
+        if (floorBlurClearTimerRef.current) clearTimeout(floorBlurClearTimerRef.current);
+        setIsFloorTransitionBlur(true);
+      }
+
       const target = getHiddenRef(); // load on the currently hidden ref — no flash
       const onloaded = () => {
         setFirstVideoOpacity(target === "first" ? 1 : 0);
         setSecondVideoOpacity(target === "second" ? 1 : 0);
         visibleRefRef.current = target;
+        if (activeLayerRef.current === LAYERS.FLOOR) {
+          floorBlurClearTimerRef.current = setTimeout(() => {
+            setIsFloorTransitionBlur(false);
+            floorBlurClearTimerRef.current = null;
+          }, 400);
+        }
       };
 
       const onEnded = () => {
@@ -187,33 +248,26 @@ export function useVideoViewer() {
   );
 
   const playIdleVideo = useCallback(
-    (videoPath = currentVideosPaths?.idleVideo) => {
+    (videoPath = currentVideosPaths?.idleVideo, onComplete = null) => {
       if (!videoPath) return;
       // console.log("playIdleVideo called with idleVideo:", videoPath);
 
-      if(activeLayer === LAYERS.UNIT) {
-        const isImage = /\.(png|jpe?g|webp|avif)$/i.test(videoPath);
-        if (isImage) {
-          setFloatingOpacity(1);
-          setIsPlaying(false);
-
-          if (APP_CONFIG.IDLE_TYPE === ASSET_TYPES.VIDEO) {
-            console.warn(
-              "Idle video path is an image but APP_CONFIG.IDLE_TYPE is not set to IMAGE. Please check your configuration.",
-            );
-          }
-          return;
+      const isImage = /\.(png|jpe?g|webp|avif)$/i.test(videoPath);
+      if (isImage) {
+        setFloatingOpacity(1);
+        setIsPlaying(false);
+        if (floorBlurShowTimerRef.current) {
+          clearTimeout(floorBlurShowTimerRef.current);
+          floorBlurShowTimerRef.current = null;
         }
+        if (floorBlurClearTimerRef.current) clearTimeout(floorBlurClearTimerRef.current);
+        floorBlurClearTimerRef.current = setTimeout(() => {
+          setIsFloorTransitionBlur(false);
+          floorBlurClearTimerRef.current = null;
+        }, 200);
 
-        if (APP_CONFIG.IDLE_TYPE === ASSET_TYPES.IMAGE) {
-          console.warn(
-            "Idle video path is a video but APP_CONFIG.IDLE_TYPE is not set to VIDEO. Please check your configuration.",
-          );
-        }
-      }
-
-      if(activeLayer === LAYERS.AMENITY_DETAIL) {
-
+        if (onComplete) onComplete();
+        return;
       }
 
       const target = getHiddenRef(); // always load into the hidden ref — no flash
@@ -222,6 +276,18 @@ export function useVideoViewer() {
         setSecondVideoOpacity(target === "second" ? 1 : 0);
         setFloatingOpacity(1);
         visibleRefRef.current = target;
+        setIsPlaying(false);
+        // For forward BUILDING→FLOOR: cancel pending show timer, schedule blur clear
+        if (floorBlurShowTimerRef.current) {
+          clearTimeout(floorBlurShowTimerRef.current);
+          floorBlurShowTimerRef.current = null;
+        }
+        if (floorBlurClearTimerRef.current) clearTimeout(floorBlurClearTimerRef.current);
+        floorBlurClearTimerRef.current = setTimeout(() => {
+          setIsFloorTransitionBlur(false);
+          floorBlurClearTimerRef.current = null;
+        }, 200);
+        if (onComplete) onComplete();
       };
 
       playVideo(videoPath, true, onloaded, null, target);
@@ -233,13 +299,13 @@ export function useVideoViewer() {
     (isFromAnotherTab, onReverseEnded) => {
       if (history.length <= 1) return;
       if (activeLayer === LAYERS.SURROUNDING_DETAIL) {
-        playSurroundingsIdleRef.current = true;
+        justNavigatedBackRef.current = true;
         goBack();
         return;
       }
       playReverseVideo(isFromAnotherTab, onReverseEnded);
     },
-    [history.length, playReverseVideo],
+    [activeLayer, history.length, playReverseVideo, goBack],
   );
 
   useEffect(() => {
@@ -264,8 +330,6 @@ export function useVideoViewer() {
               playIdleVideo();
               isInitPlayedRef.current = false;
             }, 200);
-          } else if (playSurroundingsIdleRef.current) {
-            playSurroundingsIdleRef.current = false;
           } else {
             playTransitionVideo();
           }
@@ -290,6 +354,8 @@ export function useVideoViewer() {
         secondVideoRef.current.pause();
         secondVideoRef.current.src = null;
       }
+      if (floorBlurShowTimerRef.current) clearTimeout(floorBlurShowTimerRef.current);
+      if (floorBlurClearTimerRef.current) clearTimeout(floorBlurClearTimerRef.current);
     };
   }, []);
 
@@ -304,6 +370,8 @@ export function useVideoViewer() {
     StartReverse,
     currentViewIndex,
     changeView,
+    changeViewToIndex,
+    isFloorTransitionBlur,
     skipNextTransition: () => {
       skipNextTransitionRef.current = true;
     },

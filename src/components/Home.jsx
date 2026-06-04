@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { StatusBar } from "@capacitor/status-bar";
 import { Capacitor } from '@capacitor/core';
 import { App as CapApp } from "@capacitor/app"
-import { TABS, LAYERS } from "../data/layers.js";
+import { TABS, LAYERS, CONFIG } from "../data/layers.js";
 // Hooks
 import { useVideoViewer } from "./hooks/useVideoViewer.jsx";
 
@@ -32,14 +32,12 @@ import { MainContext } from "../store/MainContextProvider";
 import TECHNO_LOGO from "../assets/techno.png";
 import Highlight from "./Highlight.jsx";
 import Test from "./Test.jsx";
-import { APP_CONFIG, ASSET_TYPES } from "../config/appConfig";
-
-export default function Home() {
+import { APP_CONFIG } from "../config/appConfig";
+export default function Home({ introVideoUrl = null, onExitRequest }) {
   //states
   const [showInfoPopup, setShowInfoPopup] = useState(false);
   const [showI, setShowI] = useState(false);
   const [floorSwitchBlur, setFloorSwitchBlur] = useState(false);
-
   // Ref
   const mediaContainerRef = useRef(null);
 
@@ -78,9 +76,16 @@ export default function Home() {
     StartReverse: videoViewer.StartReverse,
     currentViewIndex: videoViewer.currentViewIndex, // Now managed by the hook
     changeView: videoViewer.changeView, // Now managed by the hook
+    changeViewToIndex: videoViewer.changeViewToIndex,
+    isFloorTransitionBlur: videoViewer.isFloorTransitionBlur,
   };
 
   const isDisabled = !viewerProps.isMediaLoaded || viewerProps.isPlaying;
+  const isSidebarSupportedLayer =
+    activeTab !== TABS.HOME &&
+    activeLayer !== LAYERS.AMENITY_DETAIL &&
+    activeLayer !== LAYERS.SURROUNDING_DETAIL;
+  const shouldApplySidebarGap = isSidebarSupportedLayer && sidebarOpen;
 
   // Floors available when at FLOOR layer — pulled from the parent BUILDING entry
   const parentBuilding = activeLayer === LAYERS.FLOOR ? history[history.length - 2]?.item : null;
@@ -88,20 +93,64 @@ export default function Home() {
 
   const handleFloorSwitch = useCallback((floor) => {
     if (floor.id === currentItem?.id) return;
-    setFloorSwitchBlur(true);
-    setTimeout(() => {
-      videoViewer.skipNextTransition();
-      switchToFloor(floor);
-      setTimeout(() => setFloorSwitchBlur(false), 600);
-    }, 250);
+    const doSwitch = () => {
+      setFloorSwitchBlur(true);
+      setTimeout(() => {
+        videoViewer.skipNextTransition();
+        switchToFloor(floor);
+        setTimeout(() => setFloorSwitchBlur(false), 600);
+      }, 250);
+    };
+    if (videoViewer.currentViewIndex !== 0) {
+      videoViewer.changeViewToIndex(0, doSwitch);
+    } else {
+      doSwitch();
+    }
   }, [currentItem, switchToFloor, videoViewer]);
 
+  const handleBack = useCallback(() => {
+    if (
+      (activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS) &&
+      activeLayer === null
+    ) {
+      handleSidebarState(false);
+    }
+    if (overlay) {
+      closeOverlay();
+      return;
+    }
+    const doBack = () => videoViewer.StartReverse(false, () => {});
+    if (videoViewer.currentViewIndex !== 0) {
+      videoViewer.changeViewToIndex(0, doBack);
+      return;
+    }
+    doBack();
+  }, [activeTab, activeLayer, overlay, videoViewer, handleSidebarState, closeOverlay]);
+
+  const { currentViewIndex: viewerViewIndex, changeViewToIndex } = videoViewer;
+  const onNavigate = useCallback((action) => {
+    if (viewerViewIndex !== 0) {
+      changeViewToIndex(0, action);
+    } else {
+      action();
+    }
+  }, [viewerViewIndex, changeViewToIndex]);
+
   const handleActiveTab = useCallback((tab) => {
+    if (tab === activeTab) {
+      if (tab === TABS.HOME) return;
+      if (activeLayer === null) return;
+      if (tab === TABS.ZONES && activeLayer === LAYERS.ZONE_DETAIL) return;
+      if (tab === TABS.SURROUNDINGS && activeLayer === LAYERS.SURROUNDING_DETAIL) {
+       viewerProps.StartReverse(false, () => { });
+       return;
+      }     
+    }
+
     let selectedItem = null;
     let layer = null;
+
     switch (tab) {
-      case activeTab:
-        break;
       case TABS.HOME:
         goHome();
         break;
@@ -112,21 +161,21 @@ export default function Home() {
           selectedItem = { ...selectedItem.items[0], zoomoutVideo: zonesZoomoutVideo };
           layer = LAYERS.ZONE_DETAIL;
         }
-        checkSwithingBetweenTabs(tab, layer, selectedItem);
+        checkSwithingBetweenTabs();
         break;
       case TABS.AMENITIES:
         selectedItem = currentProject.amenities;
-        checkSwithingBetweenTabs(tab, layer, selectedItem);
+        checkSwithingBetweenTabs();
         break;
       case TABS.SURROUNDINGS:
         selectedItem = currentProject.surroundings;
-        checkSwithingBetweenTabs(tab, layer, selectedItem);
+        checkSwithingBetweenTabs();
         break;
       default:
         break;
     }
 
-    function checkSwithingBetweenTabs(tab, layer, item) {
+    function checkSwithingBetweenTabs() {
       const isFromHome = activeTab === TABS.HOME;
 
       // uncomment to play reverse then forward when switching between non-home tabs
@@ -134,13 +183,13 @@ export default function Home() {
       //     viewerProps.StartReverse(true, () => goToTab(tab, item, true));
       //     return;
       //   }
-      goToTab(tab, layer, item, isFromHome);
+      goToTab(tab, layer, selectedItem, isFromHome);
     }
 
     setTimeout(() => {
       handleSidebarState(true);
     }, 750);
-  }, [activeTab, goToTab, videoViewer.StartReverse]);
+  }, [activeTab, activeLayer, goToTab, videoViewer.StartReverse]);
 
   useEffect(() => {
     setHighlightedButton(null);
@@ -323,74 +372,29 @@ export default function Home() {
       <div className="w-full h-screen bg-[#2f2f2f] py-2 px-3 xl:p-4 overflow-hidden">
         <div className="w-full h-full flex flex-col">
           {/* Top Tabs */}
-          <div className="flex items-center justify-between mb-2 xl:mb-4 px-4">
+          <div className="flex items-center justify-between mb-1 xl:mb-3 px-4">
             <div className="flex items-center space-x-3">
-              {viewerProps.currentViewIndex === 0 ? (
-                <button
-                  onClick={() => {
-                    if ((activeTab === TABS.ZONES || activeTab === TABS.AMENITIES || activeTab === TABS.SURROUNDINGS) && activeLayer === null)
-                      handleSidebarState(false);
-
-                    if(overlay) {
-                      closeOverlay();
-                      return;
-                    }
-                    viewerProps.StartReverse(false, () => { });
-                  }}
-                  disabled={isDisabled || history.length <= 1}
-                  className="w-10 h-10 rounded-xl bg-white/85 flex items-center justify-center 
-              hover:bg-white/7 transition
-              disabled:opacity-50 disabled:cursor-not-allowed"
+              <button
+                onClick={handleBack}
+                disabled={isDisabled || history.length <= 1}
+                className={`w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/70 transition disabled:opacity-50 disabled:cursor-not-allowed ${videoViewer.currentViewIndex !== 0 ? 'bg-white/95' : 'bg-white/85'}`}
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  {/* back chev icon */}
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M31 12H2M2 12L9 6M2 12L9 18"
-                      stroke="black"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-              ) : (
-                <button
-                  onClick={() => {
-                    if (viewerProps.currentViewIndex >= 3) {
-                      viewerProps.changeView("next");
-                      return;
-                    }
-                    viewerProps.changeView("prev");
-                  }}
-                  disabled={isDisabled || history.length <= 1}
-                  className="w-10 h-10 rounded-xl bg-white/95 flex items-center justify-center 
-              hover:bg-white/7 transition
-              disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {/* back chev icon */}
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M31 12H2M2 12L9 6M2 12L9 18"
-                      stroke="black"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-              )}
+                  <path
+                    d="M31 12H2M2 12L9 6M2 12L9 18"
+                    stroke="black"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
             </div>
             <div className="flex items-center space-x-6">
               <button
@@ -407,8 +411,9 @@ export default function Home() {
                 }
                 goHome();
               }}
-                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition ${activeTab === TABS.HOME
-                  ? "bg-white/85 text-black"
+                disabled={isDisabled}
+                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed ${activeTab === TABS.HOME
+                  ? "bg-white/85 text-black hover:bg-white/95"
                   : "text-white"
                   }`}
                 aria-label="Go to Home"
@@ -417,8 +422,9 @@ export default function Home() {
               </button>
               <button
                 onClick={() => handleActiveTab(TABS.SURROUNDINGS)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition ${activeTab === TABS.SURROUNDINGS
-                  ? "bg-white/85 text-black"
+                disabled={isDisabled}
+                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed ${activeTab === TABS.SURROUNDINGS
+                  ? "bg-white/85 text-black hover:bg-white/95"
                   : "text-white"
                   }`}
               >
@@ -426,17 +432,19 @@ export default function Home() {
               </button>
               <button
                 onClick={() => handleActiveTab(TABS.ZONES)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition ${activeTab === TABS.ZONES
-                  ? "bg-white/85 text-black"
+                disabled={isDisabled}
+                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed ${activeTab === TABS.ZONES
+                  ? "bg-white/85 text-black hover:bg-white/95"
                   : "text-white"
                   }`}
               >
-                ZONES
+                {CONFIG.ZONES_TAB_TITLE || "ZONES"}
               </button>
               <button
                 onClick={() => handleActiveTab(TABS.AMENITIES)}
-                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition ${activeTab === TABS.AMENITIES
-                  ? "bg-white/85 text-black"
+                disabled={isDisabled}
+                className={`px-4 py-2 rounded-full text-sm font-semibold hover:bg-white/10 transition disabled:opacity-50 disabled:cursor-not-allowed ${activeTab === TABS.AMENITIES
+                  ? "bg-white/85 text-black hover:bg-white/95"
                   : "text-white"
                   }`}
               >
@@ -445,18 +453,22 @@ export default function Home() {
             </div>
             <HomeButton
               onHomeClick={() => {
+                if (introVideoUrl) {
+                  onExitRequest?.();
+                } else {
                   clearSelectedProject();
                   navigate("/");
-                }}
+                }
+              }}
             />
           </div>
 
           <FilterContextProvider>
             <div
-              className={`flex ${sidebarOpen ? "space-x-3" : "space-x-0"} flex-1 min-h-0 overflow-hidden`}
+              className={`flex ${shouldApplySidebarGap ? "space-x-3" : "space-x-0"} flex-1 min-h-0 overflow-hidden`}
             >
               {/* Sidebar */}
-              <Sidebar />
+              <Sidebar onNavigate={onNavigate} />
 
               {/* Main content area */}
               <main className="flex-1 relative">
@@ -472,7 +484,7 @@ export default function Home() {
                   {/* video element */}
                   <div className="absolute inset-0">
                     {/* <Test /> */}
-                    {!viewerProps.isPlaying && <Highlight />}
+                    {!viewerProps.isPlaying && viewerProps.currentViewIndex === 0 && <Highlight />}
                     {/* First Video (e.g., transition, or initial idle) */}
                     <video
                       ref={viewerProps.firstMediaRef}
@@ -500,14 +512,17 @@ export default function Home() {
                       poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%23434343' width='1' height='1'/%3E%3C/svg%3E"
                     />
 
-                    {/* Unit idle image (shown when IDLE_TYPE is image) */}
-                    {APP_CONFIG.IDLE_TYPE === ASSET_TYPES.IMAGE && activeLayer === LAYERS.UNIT && !viewerProps.isPlaying && currentVideosPaths?.idleVideo && (
-                      <img
-                        src={currentVideosPaths.idleVideo}
-                        className="w-full h-full object-cover object-center rounded-2xl absolute inset-0 z-[11]"
-                        alt="Unit view"
-                      />
-                    )}
+                    {/* Idle image (shown when IDLE_TYPE is IMAGE and idleVideo is an image path) */}
+                    {(() => {
+                      const idleImagePath = currentViews?.[viewerProps.currentViewIndex]?.videos?.idleVideo ?? currentVideosPaths?.idleVideo;
+                      return !viewerProps.isPlaying && idleImagePath && /\.(png|jpe?g|webp|avif)$/i.test(idleImagePath) && (
+                        <img
+                          src={idleImagePath}
+                          className="w-full h-full object-cover object-center rounded-2xl absolute inset-0 z-[11]"
+                          alt="idle view"
+                        />
+                      );
+                    })()}
 
                     {activeLayer === LAYERS.SURROUNDING_DETAIL && (
                       <AnimatedPath path={currentItem.svgPath} />
@@ -520,7 +535,7 @@ export default function Home() {
                   {/* Floor switch blur overlay */}
                   <div
                     className="absolute inset-0 z-20 backdrop-blur-sm rounded-2xl pointer-events-none transition-opacity duration-300"
-                    style={{ opacity: floorSwitchBlur ? 1 : 0 }}
+                    style={{ opacity: (floorSwitchBlur || viewerProps.isFloorTransitionBlur) ? 1 : 0 }}
                   />
 
                   {/* Vertical floor buttons */}
@@ -557,18 +572,22 @@ export default function Home() {
                     )}
 
                   {/* info re-open button */}
-                  {showI && <button className={`absolute -bottom-1 -right-1 flex items-center justify-center z-25
-                  ${activeTab === TABS.SURROUNDINGS ? "bg-[#94846D]/70 backdrop-blur" : 'bg-black/70 backdrop-blur-sm'}
-                  w-8 h-8 hover:w-9 hover:h-9 
-                  transition-all duration-500 ease-in-out
-                  rounded-tl-xl rounded-bl-xl rounded-tr-xl`}
-                    onClick={() => setShowInfoPopup(true)}
-                  >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <circle cx="11" cy="5" r="1.5" fill="white" />
-                      <path d="M11 9 C11.8 11, 10.2 13, 11 15" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
-                    </svg>
-                  </button>}
+                  {showI && (
+                    <button
+                      className={`absolute -bottom-1 -right-1 flex items-center justify-center z-25
+                        ${activeTab === TABS.SURROUNDINGS ? "bg-[#59A198]/60 backdrop-blur" : 'bg-black/60 backdrop-blur-sm'}
+                        w-10 h-10 hover:w-11 hover:h-11
+                        transition-all duration-500 ease-in-out
+                        rounded-tl-xl rounded-bl-2xl rounded-tr-2xl`}
+                      onClick={() => setShowInfoPopup(true)}
+                    >
+                      <span className="absolute inset-0 rounded-tl-xl rounded-bl-2xl rounded-tr-2xl border-2 border-white/70 ping-3 pointer-events-none" />
+                      <svg width="30" height="30" viewBox="0 0 23 23" fill="none">
+                        <circle cx="11" cy="5" r="1.5" fill="white" />
+                        <path d="M11 9 C11.8 11, 10.2 13, 11 15" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+                      </svg>
+                    </button>
+                  )}
 
                   {/* bottom info popup */}
                   {showInfoPopup && currentItem?.id && (
@@ -580,12 +599,10 @@ export default function Home() {
                 </div>
 
                 {/* left floating chevron — direct child of main so z-[70] beats the overlay's z-60 */}
-                {activeTab !== TABS.HOME &&
-                  activeLayer !== LAYERS.AMENITY_DETAIL &&
-                  activeLayer !== LAYERS.SURROUNDING_DETAIL && (
+                {isSidebarSupportedLayer && (
                     <button
                       onClick={() => handleSidebarState((s) => !s)}
-                      className={`absolute left-[-16px] top-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow ${overlay?.type === 'room-interior' ? 'z-[70]' : 'z-[50]'}`}                      aria-label={sidebarOpen ? "close sidebar" : "open sidebar"}
+                      className={`absolute top-1/2 w-9 h-9 rounded-full bg-white/60 backdrop-blur-sm flex items-center justify-center shadow-lg transition-all duration-300 ${sidebarOpen ? 'left-[-16px]' : 'left-2'} ${overlay?.type === 'room-interior' ? 'z-[70]' : 'z-[50]'}`}                      aria-label={sidebarOpen ? "close sidebar" : "open sidebar"}
                     >
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                         {sidebarOpen ? (
@@ -601,7 +618,7 @@ export default function Home() {
                 {overlay?.type === 'room-interior' && (
                   <div className="absolute inset-0 z-60 flex items-center justify-center rounded-2xl overflow-hidden">
                     <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={closeOverlay} />
-                    <div className="relative z-70 w-15/16 h-9/10 bg-[#2f2f2f] rounded-3xl shadow-2xl overflow-hidden">
+                    <div className="relative z-70 w-full h-full bg-[#2f2f2f] rounded-3xl shadow-2xl overflow-hidden">
                       <button
                         onClick={closeOverlay}
                         className="absolute top-4 right-4 z-40 w-10 h-10 rounded-xl bg-[#8B3A3A] hover:bg-[#A24242] flex items-center justify-center
@@ -632,7 +649,7 @@ export default function Home() {
             {/* Views visuals */}
             {currentViews?.length ?
               <div className="flex-1 flex items-center justify-center text-white space-x-3 px-4 py-2 text-sm">
-                <div className=" flex space-x-2">
+                <div className="flex space-x-2">
                   <div className=""> Views </div>
                   {/* prev button */}
                   <button

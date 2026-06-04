@@ -319,10 +319,11 @@ export default function SidebarContextProvider({ children }) {
     }, [currentProject, getInitHistory]);
 
     const handleSidebarState = useCallback((state) => {
-        // console.log(state);
-        setSidebarOpen(state);
+        // Support both direct boolean and functional state updates.
+        setSidebarOpen((prev) => (typeof state === "function" ? state(prev) : state));
     }, []);
 
+    const [isPlaying, setIsPlaying] = useState(false);
     const [currentItems, setCurrentItems] = useState([]);
     const [type, setType] = useState("");
 
@@ -443,7 +444,9 @@ export default function SidebarContextProvider({ children }) {
         goToTab,
         goBack: handleGoBack,
         goHome: handleGoHome,
-        switchToFloor: handleSwitchToFloor
+        switchToFloor: handleSwitchToFloor,
+        isPlaying,
+        setIsPlaying,
     };
 
     return <SidebarContext.Provider value={ctxValue}>{children}</SidebarContext.Provider>

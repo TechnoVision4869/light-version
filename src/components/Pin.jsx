@@ -12,9 +12,9 @@ export default function Pin({ type, label, className = "" }) {
           <div className="absolute w-0.5 h-2 bg-white top-3.5 left-3.5 transform rotate-[-45deg]"></div>
         </div>
       ) : (
-        !ICON_PIN ? (
-          <div className="opacity-0 hover:opacity-0 transition-opacity">
-            <img src={MAP_PIN} className="w-36 opacity-70 h-auto" />
+        MAP_PIN ? (
+          <div className="opacity-70 hover:opacity-100 transition-opacity">
+            <img src={MAP_PIN} className="w-16 m-5 h-auto" />
           </div>
         ) : (
           <div className="text-white opacity-0 w-46 h-46 text-2xl font-bold text-center whitespace-pre-line px-2 py-1 bg-black/50 rounded">

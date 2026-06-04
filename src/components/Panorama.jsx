@@ -2,6 +2,7 @@ import { useState, useMemo, useRef, useEffect, useCallback, useContext } from "r
 import { SidebarContext } from '../store/SidebarContextProvider';
 import View360, { EquirectProjection, EASING } from "@egjs/react-view360";
 import { APP_CONFIG } from "@/config/appConfig";
+import { CONFIG } from "../data/layers";
 
 import Pin from "./Pin";
 import "@egjs/react-view360/css/view360.min.css";
@@ -12,7 +13,6 @@ export default function Panorama({ unit }) {
   const useStatic = APP_CONFIG.USE_STATIC;
 
   const ZOOM_OUT = 0.8; // zoomed out view (match FOV ≈ 118.07°)
-  const ZOOM_NORMAL = 1; // default zoom (match FOV = 90°)
   const ZOOM_IN = 1.333; // zoomed in view (match FOV ≈ 61.93°)
 
   const ZOOM_DURATION = 750;
@@ -24,10 +24,36 @@ export default function Panorama({ unit }) {
   };
 
   const viewerRef = useRef(null);
+  const containerRef = useRef(null);
+  const glRef = useRef(null);
   const [isTransitioning, setIsTransitioning] = useState(false); // blur overlay state
   const transitionTimeoutRef = useRef(null);
   const [isFurnished, setIsFurnished] = useState(true);
   const zoomOnLoadRef = useRef(true);
+  const currentImageRef = useRef(null);
+  const [textureError, setTextureError] = useState(null);
+
+  // Check gl.getError() off the render timeline — setTimeout avoids a GPU pipeline stall on the current frame
+  const checkGLError = useCallback((src) => {
+    setTimeout(() => {
+      if (!glRef.current) {
+        const canvas = containerRef.current?.querySelector('.view360-canvas');
+        if (!canvas) return;
+        glRef.current = canvas.getContext('webgl2') || canvas.getContext('webgl');
+      }
+      const gl = glRef.current;
+      if (!gl) return;
+      const error = gl.getError();
+      if (error !== gl.NO_ERROR) {
+        const maxSize = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+        const img = new Image();
+        img.onload = () => setTextureError({ maxSize, width: img.width, height: img.height });
+        img.src = src;
+      } else {
+        setTextureError(null);
+      }
+    }, 0);
+  }, []);
 
   // Get unit data
   const unitType = useStatic 
@@ -40,6 +66,7 @@ export default function Panorama({ unit }) {
   const hotspots = room.hotspots;
   const hotspotsRef = useRef();
   hotspotsRef.current = hotspots; // Sync on every render
+  currentImageRef.current = currentImage; // Sync on every render
 
   useEffect(() => {
     const allImages = levels.flatMap(l => l.rooms.map(r => r.furnitureImgId));
@@ -142,15 +169,15 @@ export default function Panorama({ unit }) {
   const handleReady = useCallback(() => {
     if (!viewerRef.current) return;
     // configure rotate speed and easing
-    viewerRef.current.control.rotate.pointerScale = [2, 2];
-    viewerRef.current.control.rotate.duration = 1000;
+    viewerRef.current.control.rotate.pointerScale = [1.7, 1.7];
+    viewerRef.current.control.rotate.duration = 750;
     viewerRef.current.control.rotate.easing = EASING.EASE_OUT_CUBIC;
-  }, []);
+    checkGLError(currentImageRef.current);
+  }, [checkGLError]);
 
   // Handle new image load (v4's "imageLoaded" equivalent)
   const handleLoad = useCallback(() => {
     if (!viewerRef.current) return;
-    // console.log("load");
 
     // Set to zoom out position instantly (no animation)
     viewerRef.current.camera.lookAt({ zoom: ZOOM_OUT });
@@ -158,7 +185,7 @@ export default function Panorama({ unit }) {
     if (zoomOnLoadRef.current) {
       // Animate back to normal with ease-out
       viewerRef.current.camera.animateTo({
-        zoom: ZOOM_NORMAL,
+        zoom: 1,
         duration: ZOOM_DURATION,
         easing: easing.easeOut,
       });
@@ -170,10 +197,12 @@ export default function Panorama({ unit }) {
       setIsTransitioning(false);
     }, 500);
 
-  }, []);
+    checkGLError(currentImageRef.current);
+  }, [checkGLError]);
 
   return (
     <div
+      ref={containerRef}
       className="relative w-screen h-screen"
       style={{ touchAction: "none" }}
     >
@@ -184,12 +213,11 @@ export default function Panorama({ unit }) {
         projection={projection}
         onLoad={handleLoad}
         onReady={handleReady}
-        zoomRange={{ min: 0.8, max: ZOOM_IN }}
-        initialYaw={190}
-        rotate={{ speed: 6 }}
+        zoomRange={CONFIG.ZOOM_RANGE}
+        pitchRange={CONFIG.PITCH_RANGE}
+        initialYaw={CONFIG.INITIAL_YAW}
         style={{ touchAction: "none" }}
         scrollable={false}
-        pitchRange={{ min: -30, max: 15 }}
       >
         <div className="view360-hotspots">
           {hotspots.map((spot) => (
@@ -205,6 +233,18 @@ export default function Panorama({ unit }) {
           ))}
         </div>
       </View360>
+
+      {textureError && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/90 pointer-events-none">
+          <p className="text-white/60 text-sm text-center px-8 leading-relaxed">
+            360° view unavailable on this device.<br />
+            Image resolution exceeds the graphics limit.<br />
+            <span className="text-white/40 text-xs">
+              Image: {textureError.width}×{textureError.height}&nbsp;·&nbsp;Device limit: {textureError.maxSize}px
+            </span>
+          </p>
+        </div>
+      )}
 
       <InteriorNav
         levels={levels}

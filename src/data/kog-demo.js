@@ -9,71 +9,93 @@ import AIRPORT_ICON from '../assets/icons/airport.svg';
 import MALL_ICON from '../assets/icons/mall.svg';
 import CITY_ICON from '../assets/icons/city.svg';
 
+export const projectPath = "projects/demo-kog";
+
+export const config = {
+  // General
+  USE_PREDEFINED_POS: false,
+  USE_HOTSPOTS: true,
+
+  // 360 Settings
+  // Interior
+    INTERIOR_ZOOM_RANGE: { min: 0.8, max: 1.333 },
+    INTERIOR_PITCH_RANGE: { min: -30, max: 15 },
+    INTERIOR_INITIAL_YAW: 190,
+
+  // Balcony/Location
+    BALCONY_ZOOM_RANGE: { min: 1, max: 1.333 },
+    BALCONY_PITCH_RANGE: { min: 0, max: 25 },
+    BALCONY_YAW_RANGE: { min: -70, max: 70 },
+
+  // Titles
+    BALCONY_TITLE: "Location View",
+}
+
 // Townhouse views
 // SAGE FAMILY
 const sage_family_videos = {
-    forwardVideo: "/kog/videos/zones/zone1/sagefamily/zone1_sagefamily_gen_trans.mp4",
-    reverseVideo: "/kog/videos/zones/zone1/sagefamily/zone1_sagefamily_gen_rev.mp4",
-    idleVideo: "kog/videos/zones/zone1/sagefamily/views/view1/zone1_sagefamily_view1_idle.mp4",
+    forwardVideo: `/${projectPath}/videos/zones/zone1/sagefamily/zone1_sagefamily_gen_trans.mp4`,
+    reverseVideo: `/${projectPath}/videos/zones/zone1/sagefamily/zone1_sagefamily_gen_rev.mp4`,
+    idleVideo: `/${projectPath}/videos/zones/zone1/sagefamily/views/view1/zone1_sagefamily_view1_idle.mp4`,
 };
 const sage_family_views = [
     {
         name: "view 1",
         videos: {
-            forwardVideo: "kog/videos/zones/zone1/sagefamily/views/view1/zone1_sagefamily_view1_trans.mp4",
-            reverseVideo: "kog/videos/zones/zone1/sagefamily/views/view1/zone1_sagefamily_view1_rev.mp4",
-            idleVideo: "kog/videos/zones/zone1/sagefamily/views/view1/zone1_sagefamily_view1_idle.mp4",
+            forwardVideo: `/${projectPath}/videos/zones/zone1/sagefamily/views/view1/zone1_sagefamily_view1_trans.mp4`,
+            reverseVideo: `/${projectPath}/videos/zones/zone1/sagefamily/views/view1/zone1_sagefamily_view1_rev.mp4`,
+            idleVideo: `/${projectPath}/videos/zones/zone1/sagefamily/views/view1/zone1_sagefamily_view1_idle.mp4`,
         }
     },
     {
         name: "view 2",
         videos: {
-            forwardVideo: "kog/videos/zones/zone1/sagefamily/views/view2/zone1_sagefamily_view2_trans.mp4",
-            reverseVideo: "kog/videos/zones/zone1/sagefamily/views/view2/zone1_sagefamily_view2_rev.mp4",
-            idleVideo: "kog/videos/zones/zone1/sagefamily/views/view2/zone1_sagefamily_view2_idle.mp4",
+            forwardVideo: `/${projectPath}/videos/zones/zone1/sagefamily/views/view2/zone1_sagefamily_view2_trans.mp4`,
+            reverseVideo: `/${projectPath}/videos/zones/zone1/sagefamily/views/view2/zone1_sagefamily_view2_rev.mp4`,
+            idleVideo: `/${projectPath}/videos/zones/zone1/sagefamily/views/view2/zone1_sagefamily_view2_idle.mp4`,
         }
     },
     {
         name: "view 3",
         videos: {
-            forwardVideo: "kog/videos/zones/zone1/sagefamily/views/view3/zone1_sagefamily_view3_trans.mp4",
-            reverseVideo: "kog/videos/zones/zone1/sagefamily/views/view3/zone1_sagefamily_view3_rev.mp4",
-            idleVideo: "kog/videos/zones/zone1/sagefamily/views/view3/zone1_sagefamily_view3_idle.mp4",
+            forwardVideo: `/${projectPath}/videos/zones/zone1/sagefamily/views/view3/zone1_sagefamily_view3_trans.mp4`,
+            reverseVideo: `/${projectPath}/videos/zones/zone1/sagefamily/views/view3/zone1_sagefamily_view3_rev.mp4`,
+            idleVideo: `/${projectPath}/videos/zones/zone1/sagefamily/views/view3/zone1_sagefamily_view3_idle.mp4`,
         }
     },
     {
         name: "view 4",
         videos: {
-            forwardVideo: "kog/videos/zones/zone1/sagefamily/views/view4/zone1_sagefamily_view4_trans.mp4",
-            reverseVideo: "kog/videos/zones/zone1/sagefamily/views/view4/zone1_sagefamily_view4_rev.mp4",
-            idleVideo: "kog/videos/zones/zone1/sagefamily/views/view4/zone1_sagefamily_view4_idle.mp4",
+            forwardVideo: `/${projectPath}/videos/zones/zone1/sagefamily/views/view4/zone1_sagefamily_view4_trans.mp4`,
+            reverseVideo: `/${projectPath}/videos/zones/zone1/sagefamily/views/view4/zone1_sagefamily_view4_rev.mp4`,
+            idleVideo: `/${projectPath}/videos/zones/zone1/sagefamily/views/view4/zone1_sagefamily_view4_idle.mp4`,
         }
     },
     {
         name: "view 5",
         videos: {
-            forwardVideo: "kog/videos/zones/zone1/sagefamily/views/view5/zone1_sagefamily_view5_trans.mp4",
-            reverseVideo: "kog/videos/zones/zone1/sagefamily/views/view5/zone1_sagefamily_view5_rev.mp4",
-            idleVideo: "kog/videos/zones/zone1/sagefamily/views/view5/zone1_sagefamily_view5_idle.mp4",
+            forwardVideo: `/${projectPath}/videos/zones/zone1/sagefamily/views/view5/zone1_sagefamily_view5_trans.mp4`,
+            reverseVideo: `/${projectPath}/videos/zones/zone1/sagefamily/views/view5/zone1_sagefamily_view5_rev.mp4`,
+            idleVideo: `/${projectPath}/videos/zones/zone1/sagefamily/views/view5/zone1_sagefamily_view5_idle.mp4`,
         }
     },
 ];
-const sagefamily_location = "kog/panorama/location/SageFamily.jpg"
+const sagefamily_location = `/${projectPath}/panorama/location/SageFamily.jpg`
 const sage_family_units_videos = [
     {
-        forwardVideo: "kog/videos/zones/zone1/sagefamily/1/zone1_sagefamily_1_gen_trans.mp4",
-        reverseVideo: "kog/videos/zones/zone1/sagefamily/1/zone1_sagefamily_1_gen_rev.mp4",
-        idleVideo: "kog/videos/zones/zone1/sagefamily/1/zone1_sagefamily_1_gen_idle.mp4",
+        forwardVideo: `/${projectPath}/videos/zones/zone1/sagefamily/1/zone1_sagefamily_1_gen_trans.mp4`,
+        reverseVideo: `/${projectPath}/videos/zones/zone1/sagefamily/1/zone1_sagefamily_1_gen_rev.mp4`,
+        idleVideo: `/${projectPath}/videos/zones/zone1/sagefamily/1/zone1_sagefamily_1_gen_idle.mp4`,
     },
     {
-        forwardVideo: "kog/videos/zones/zone1/sagefamily/2/zone1_sagefamily_2_gen_trans.mp4",
-        reverseVideo: "kog/videos/zones/zone1/sagefamily/2/zone1_sagefamily_2_gen_rev.mp4",
-        idleVideo: "kog/videos/zones/zone1/sagefamily/2/zone1_sagefamily_2_gen_idle.mp4",
+        forwardVideo: `/${projectPath}/videos/zones/zone1/sagefamily/2/zone1_sagefamily_2_gen_trans.mp4`,
+        reverseVideo: `/${projectPath}/videos/zones/zone1/sagefamily/2/zone1_sagefamily_2_gen_rev.mp4`,
+        idleVideo: `/${projectPath}/videos/zones/zone1/sagefamily/2/zone1_sagefamily_2_gen_idle.mp4`,
     },
     {
-        forwardVideo: "kog/videos/zones/zone1/sagefamily/3/zone1_sagefamily_3_gen_trans.mp4",
-        reverseVideo: "kog/videos/zones/zone1/sagefamily/3/zone1_sagefamily_3_gen_rev.mp4",
-        idleVideo: "kog/videos/zones/zone1/sagefamily/3/zone1_sagefamily_3_gen_idle.mp4",
+        forwardVideo: `/${projectPath}/videos/zones/zone1/sagefamily/3/zone1_sagefamily_3_gen_trans.mp4`,
+        reverseVideo: `/${projectPath}/videos/zones/zone1/sagefamily/3/zone1_sagefamily_3_gen_rev.mp4`,
+        idleVideo: `/${projectPath}/videos/zones/zone1/sagefamily/3/zone1_sagefamily_3_gen_idle.mp4`,
     },
 ];
 const sage_family_units = [
@@ -114,65 +136,65 @@ const sage_family_units = [
 
 // MEADOWS
 const meadows_2_videos = {
-    forwardVideo: "/kog/videos/zones/zone5/meadows/zone5_meadows_gen_trans.mp4",
-    reverseVideo: "/kog/videos/zones/zone5/meadows/zone5_meadows_gen_rev.mp4",
-    idleVideo: "kog/videos/zones/zone4/meadows/views/view1/zone4_meadows_view1_idle.mp4",
+    forwardVideo: `/${projectPath}/videos/zones/zone5/meadows/zone5_meadows_gen_trans.mp4`,
+    reverseVideo: `/${projectPath}/videos/zones/zone5/meadows/zone5_meadows_gen_rev.mp4`,
+    idleVideo: `/${projectPath}/videos/zones/zone4/meadows/views/view1/zone4_meadows_view1_idle.mp4`,
 };
 const meadows_views = [
     {
         name: "view 1",
         videos: {
-            forwardVideo: "kog/videos/zones/zone4/meadows/views/view1/zone4_meadows_view1_trans.mp4",
-            reverseVideo: "kog/videos/zones/zone4/meadows/views/view1/zone4_meadows_view1_rev.mp4",
-            idleVideo: "kog/videos/zones/zone4/meadows/views/view1/zone4_meadows_view1_idle.mp4",
+            forwardVideo: `/${projectPath}/videos/zones/zone4/meadows/views/view1/zone4_meadows_view1_trans.mp4`,
+            reverseVideo: `/${projectPath}/videos/zones/zone4/meadows/views/view1/zone4_meadows_view1_rev.mp4`,
+            idleVideo: `/${projectPath}/videos/zones/zone4/meadows/views/view1/zone4_meadows_view1_idle.mp4`,
         }
     },
     {
         name: "view 2",
         videos: {
-            forwardVideo: "kog/videos/zones/zone4/meadows/views/view2/zone4_meadows_view2_trans.mp4",
-            reverseVideo: "kog/videos/zones/zone4/meadows/views/view2/zone4_meadows_view2_rev.mp4",
-            idleVideo: "kog/videos/zones/zone4/meadows/views/view2/zone4_meadows_view2_idle.mp4",
+            forwardVideo: `/${projectPath}/videos/zones/zone4/meadows/views/view2/zone4_meadows_view2_trans.mp4`,
+            reverseVideo: `/${projectPath}/videos/zones/zone4/meadows/views/view2/zone4_meadows_view2_rev.mp4`,
+            idleVideo: `/${projectPath}/videos/zones/zone4/meadows/views/view2/zone4_meadows_view2_idle.mp4`,
         }
     },
     {
         name: "view 3",
         videos: {
-            forwardVideo: "kog/videos/zones/zone4/meadows/views/view3/zone4_meadows_view3_trans.mp4",
-            reverseVideo: "kog/videos/zones/zone4/meadows/views/view3/zone4_meadows_view3_rev.mp4",
-            idleVideo: "kog/videos/zones/zone4/meadows/views/view3/zone4_meadows_view3_idle.mp4",
+            forwardVideo: `/${projectPath}/videos/zones/zone4/meadows/views/view3/zone4_meadows_view3_trans.mp4`,
+            reverseVideo: `/${projectPath}/videos/zones/zone4/meadows/views/view3/zone4_meadows_view3_rev.mp4`,
+            idleVideo: `/${projectPath}/videos/zones/zone4/meadows/views/view3/zone4_meadows_view3_idle.mp4`,
         }
     },
     {
         name: "view 4",
         videos: {
-            forwardVideo: "kog/videos/zones/zone4/meadows/views/view4/zone4_meadows_view4_trans.mp4",
-            reverseVideo: "kog/videos/zones/zone4/meadows/views/view4/zone4_meadows_view4_rev.mp4",
-            idleVideo: "kog/videos/zones/zone4/meadows/views/view4/zone4_meadows_view4_idle.mp4",
+            forwardVideo: `/${projectPath}/videos/zones/zone4/meadows/views/view4/zone4_meadows_view4_trans.mp4`,
+            reverseVideo: `/${projectPath}/videos/zones/zone4/meadows/views/view4/zone4_meadows_view4_rev.mp4`,
+            idleVideo: `/${projectPath}/videos/zones/zone4/meadows/views/view4/zone4_meadows_view4_idle.mp4`,
         }
     },
     {
         name: "view 5",
         videos: {
-            forwardVideo: "kog/videos/zones/zone4/meadows/views/view5/zone4_meadows_view5_trans.mp4",
-            reverseVideo: "kog/videos/zones/zone4/meadows/views/view5/zone4_meadows_view5_rev.mp4",
-            idleVideo: "kog/videos/zones/zone4/meadows/views/view5/zone4_meadows_view5_idle.mp4",
+            forwardVideo: `/${projectPath}/videos/zones/zone4/meadows/views/view5/zone4_meadows_view5_trans.mp4`,
+            reverseVideo: `/${projectPath}/videos/zones/zone4/meadows/views/view5/zone4_meadows_view5_rev.mp4`,
+            idleVideo: `/${projectPath}/videos/zones/zone4/meadows/views/view5/zone4_meadows_view5_idle.mp4`,
         }
     },
 ];
 const meadows_units_videos = [
     {
-        forwardVideo: "kog/videos/zones/zone4/meadows/1/zone4_meadows_1_gen_trans.mp4",
-        reverseVideo: "kog/videos/zones/zone4/meadows/1/zone4_meadows_1_gen_rev.mp4",
-        idleVideo: "kog/videos/zones/zone4/meadows/1/zone4_meadows_1_gen_idle.mp4"
+        forwardVideo: `/${projectPath}/videos/zones/zone4/meadows/1/zone4_meadows_1_gen_trans.mp4`,
+        reverseVideo: `/${projectPath}/videos/zones/zone4/meadows/1/zone4_meadows_1_gen_rev.mp4`,
+        idleVideo: `/${projectPath}/videos/zones/zone4/meadows/1/zone4_meadows_1_gen_idle.mp4`
     },
     {
-        forwardVideo: "kog/videos/zones/zone4/meadows/2/zone4_meadows_2_gen_trans.mp4",
-        reverseVideo: "kog/videos/zones/zone4/meadows/2/zone4_meadows_2_gen_rev.mp4",
-        idleVideo: "kog/videos/zones/zone4/meadows/2/zone4_meadows_2_gen_idle.mp4"
+        forwardVideo: `/${projectPath}/videos/zones/zone4/meadows/2/zone4_meadows_2_gen_trans.mp4`,
+        reverseVideo: `/${projectPath}/videos/zones/zone4/meadows/2/zone4_meadows_2_gen_rev.mp4`,
+        idleVideo: `/${projectPath}/videos/zones/zone4/meadows/2/zone4_meadows_2_gen_idle.mp4`
     }
 ];
-const meadows2_location = "kog/panorama/location/Meadows2.jpg"
+const meadows2_location = `/${projectPath}/panorama/location/Meadows2.jpg`
 
 export const DEVELOPER_TECHNO = {
     developerId: "TECHNO",
@@ -194,18 +216,18 @@ export const DEVELOPER_TECHNO = {
             name: "Palm Oasis",
             thumbnail: KOG_THUMBNAIL,
             description: "Palm Oasis is a residential compound located in New Giza, featuring a variety of luxurious villas and townhouses. The project is designed to offer residents a tranquil and refined living environment, set amidst verdant greenery and modern facilities.",
-            introVideo: "/kog/videos/home/intro.mp4",
-            idleVideo: "/kog/videos/home/home_idle.mp4",
-            zoomoutVideo: "/kog/videos/home/home_out.mp4",
+            introVideo: `/${projectPath}/videos/home/intro.mp4`,
+            idleVideo: `/${projectPath}/videos/home/home_idle.mp4`,
+            zoomoutVideo: `/${projectPath}/videos/home/home_out.mp4`,
 
             surroundings: {
                 id: "surroundings",
                 displayName: "Surroundings",
-                zoomoutVideo: "/kog/videos/surroundings/surr_out.mp4",
+                zoomoutVideo: `/${projectPath}/videos/surroundings/surr_out.mp4`,
                 videos: {
-                    forwardVideo: "/kog/videos/surroundings/surr_gen_trans_from_home.mp4",
-                    reverseVideo: "/kog/videos/surroundings/surr_gen_rev_trans_to_home.mp4",
-                    idleVideo: "/kog/videos/surroundings/surr_gen_idle.mp4",
+                    forwardVideo: `/${projectPath}/videos/surroundings/surr_gen_trans_from_home.mp4`,
+                    reverseVideo: `/${projectPath}/videos/surroundings/surr_gen_rev_trans_to_home.mp4`,
+                    idleVideo: `/${projectPath}/videos/surroundings/surr_gen_idle.mp4`,
                 },
                 items: [
                     {
@@ -269,50 +291,50 @@ export const DEVELOPER_TECHNO = {
             amenities: {
                 id: "amenities",
                 displayName: "Amenities",
-                zoomoutVideo: "/kog/videos/amenities/amenities_out.mp4",
+                zoomoutVideo: `/${projectPath}/videos/amenities/amenities_out.mp4`,
                 videos: {
-                    forwardVideo: "/kog/videos/amenities/amenities_gen_trans_from_home.mp4",
-                    reverseVideo: "/kog/videos/amenities/amenities_gen_rev_trans_to_home.mp4",
-                    idleVideo: "/kog/videos/amenities/amenities_gen_idle.mp4",
+                    forwardVideo: `/${projectPath}/videos/amenities/amenities_gen_trans_from_home.mp4`,
+                    reverseVideo: `/${projectPath}/videos/amenities/amenities_gen_rev_trans_to_home.mp4`,
+                    idleVideo: `/${projectPath}/videos/amenities/amenities_gen_idle.mp4`,
                 },
                 items: [
                     {
                         id: "amenity1",
                         displayName: "Fitness",
                         subtitle: "Gym & Training",
-                        thumbnail: "kog/thumbnails/amenities/amenity1.jpg",
+                        thumbnail: `/${projectPath}/thumbnails/amenities/amenity1.jpg`,
                         description: "A luxurious clubhouse with a lounge, restaurant, and dedicated kids' area.",
                         x: 0.47, y: 0.55,
                         videos: {
-                            forwardVideo: "/kog/videos/amenities/amenity1/amenity1_trans.mp4",
-                            reverseVideo: "/kog/videos/amenities/amenity1/amenity1_rev.mp4",
-                            idleVideo: "/kog/videos/amenities/amenity1/amenity1_idle.mp4",
+                            forwardVideo: `/${projectPath}/videos/amenities/amenity1/amenity1_trans.mp4`,
+                            reverseVideo: `/${projectPath}/videos/amenities/amenity1/amenity1_rev.mp4`,
+                            idleVideo: `/${projectPath}/videos/amenities/amenity1/amenity1_idle.mp4`,
                         },
                     },
                     {
                         id: "amenity2",
                         displayName: "1 KM Lake",
                         subtitle: "Waterfront Promenade",
-                        thumbnail: "kog/thumbnails/amenities/amenity2.jpg",
+                        thumbnail: `/${projectPath}/thumbnails/amenities/amenity2.jpg`,
                         description: "A tranquil 1-kilometer lake surrounded by walking paths, native landscaping, and serene seating areas perfect for relaxation and nature immersion.",
                         x: 0.24, y: 0.52,
                         videos: {
-                            forwardVideo: "/kog/videos/amenities/amenity2/amenity2_trans.mp4",
-                            reverseVideo: "/kog/videos/amenities/amenity2/amenity2_rev.mp4",
-                            idleVideo: "/kog/videos/amenities/amenity2/amenity2_idle.mp4",
+                            forwardVideo: `/${projectPath}/videos/amenities/amenity2/amenity2_trans.mp4`,
+                            reverseVideo: `/${projectPath}/videos/amenities/amenity2/amenity2_rev.mp4`,
+                            idleVideo: `/${projectPath}/videos/amenities/amenity2/amenity2_idle.mp4`,
                         },
                     },
                     {
                         id: "amenity5",
                         displayName: "Clubhouse",
                         subtitle: "Lounge, Restaurant & Kids Area",
-                        thumbnail: "kog/thumbnails/amenities/amenity5.jpg",
+                        thumbnail: `/${projectPath}/thumbnails/amenities/amenity5.jpg`,
                         description: "A luxurious clubhouse with a lounge, restaurant, and dedicated kids' area.",
                         x: 0.4, y: 0.53,
                         videos: {
-                            forwardVideo: "/kog/videos/amenities/amenity5/amenity5_trans.mp4",
-                            reverseVideo: "/kog/videos/amenities/amenity5/amenity5_rev.mp4",
-                            idleVideo: "/kog/videos/amenities/amenity5/amenity5_idle.mp4",
+                            forwardVideo: `/${projectPath}/videos/amenities/amenity5/amenity5_trans.mp4`,
+                            reverseVideo: `/${projectPath}/videos/amenities/amenity5/amenity5_rev.mp4`,
+                            idleVideo: `/${projectPath}/videos/amenities/amenity5/amenity5_idle.mp4`,
                         },
                     },
                 ],
@@ -321,11 +343,11 @@ export const DEVELOPER_TECHNO = {
             zones: {
                 id: "zones",
                 displayName: "Zones",
-                zoomoutVideo: "/kog/videos/zones/zones_out.mp4",
+                zoomoutVideo: `/${projectPath}/videos/zones/zones_out.mp4`,
                 videos: {
-                    forwardVideo: "/kog/videos/zones/zones_gen_trans_from_home.mp4",
-                    reverseVideo: "/kog/videos/zones/zones_gen_rev_to_home.mp4",
-                    idleVideo: "/kog/videos/zones/zones_gen_idle.mp4",
+                    forwardVideo: `/${projectPath}/videos/zones/zones_gen_trans_from_home.mp4`,
+                    reverseVideo: `/${projectPath}/videos/zones/zones_gen_rev_to_home.mp4`,
+                    idleVideo: `/${projectPath}/videos/zones/zones_gen_idle.mp4`,
                 },
                 items: [
                     // ZONE 1 SAGEFAMILY
@@ -333,14 +355,14 @@ export const DEVELOPER_TECHNO = {
                         id: "zone1",
                         displayName: "Sage Family",
                         subtitle: "Residential Zone",
-                        thumbnail: "kog/thumbnails/zones/zone1.png",
-                        highlight: "kog/highlight/zones/zone1.png",
+                        thumbnail: `/${projectPath}/thumbnails/zones/zone1.png`,
+                        highlight: `/${projectPath}/highlight/zones/zone1.png`,
                         description: "A tranquil enclave of elegant contemporary townhouses surrounded by lush greenery.",
                         x: 0.85, y: 0.43,
                         videos: {
-                            forwardVideo: "/kog/videos/zones/zone1/zone1_gen_trans.mp4",
-                            reverseVideo: "/kog/videos/zones/zone1/zone1_gen_rev.mp4",
-                            idleVideo: "/kog/videos/zones/zone1/zone1_gen_idle.mp4",
+                            forwardVideo: `/${projectPath}/videos/zones/zone1/zone1_gen_trans.mp4`,
+                            reverseVideo: `/${projectPath}/videos/zones/zone1/zone1_gen_rev.mp4`,
+                            idleVideo: `/${projectPath}/videos/zones/zone1/zone1_gen_idle.mp4`,
                         },
                         properties: [
                             {
@@ -372,14 +394,14 @@ export const DEVELOPER_TECHNO = {
                         id: "zone5",
                         displayName: "Meadows 2",
                         subtitle: "Residential Zone",
-                        thumbnail: "kog/thumbnails/zones/zone5.png",
-                        highlight: "kog/highlight/zones/zone5.png",
+                        thumbnail: `/${projectPath}/thumbnails/zones/zone5.png`,
+                        highlight: `/${projectPath}/highlight/zones/zone5.png`,
                         description: "A charming community of townhouses in a verdant setting.",
                         x: 0.19, y: 0.56,
                         videos: {
-                            forwardVideo: "/kog/videos/zones/zone5/zone5_gen_trans.mp4",
-                            reverseVideo: "/kog/videos/zones/zone5/zone5_gen_rev.mp4",
-                            idleVideo: "/kog/videos/zones/zone5/zone5_gen_idle.mp4",
+                            forwardVideo: `/${projectPath}/videos/zones/zone5/zone5_gen_trans.mp4`,
+                            reverseVideo: `/${projectPath}/videos/zones/zone5/zone5_gen_rev.mp4`,
+                            idleVideo: `/${projectPath}/videos/zones/zone5/zone5_gen_idle.mp4`,
                         },
                         properties: [
                             {
@@ -1130,13 +1152,13 @@ export const DEVELOPER_TECHNO = {
                     area: 325,
                     roofarea: 126,
                     gallery: [
-                        { id: "f1", src: "/kog/images/family/01-FAMILY HOUSE FRONT.jpg" },
-                        { id: "f2", src: "/kog/images/family/02-FAMILY HOUSE BACK.jpg" },
+                        { id: "f1", src: `/${projectPath}/images/family/01-FAMILY HOUSE FRONT.jpg` },
+                        { id: "f2", src: `/${projectPath}/images/family/02-FAMILY HOUSE BACK.jpg` },
                     ],
                     cutSections: [
-                        { id: "c1", src: "/kog/cut_section/family_midd/g.png" },
-                        { id: "c2", src: "/kog/cut_section/family_midd/1.png" },
-                        { id: "c3", src: "/kog/cut_section/family_midd/r.png" },
+                        { id: "c1", src: `/${projectPath}/cut_section/family_midd/g.png` },
+                        { id: "c2", src: `/${projectPath}/cut_section/family_midd/1.png` },
+                        { id: "c3", src: `/${projectPath}/cut_section/family_midd/r.png` },
                     ],
                     floorPlans: null,
                     paymentPlans: null,
@@ -1149,8 +1171,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "g-entrance",
                                         displayName: "Entrance",
-                                        furnitureImgId: "/kog/panorama/family_midd/f/ground/entrance.jpg",
-                                        unfurnitureImgId: "/kog/panorama/family_midd/unf/ground/entrance.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/family_midd/f/ground/entrance.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/family_midd/unf/ground/entrance.jpg`,
                                         hotspots: [
                                             { id: "hp2", yaw: 162.69, pitch: -11.91, type: "scene", label: "Ground/Living 2" },
                                             { id: "hp3", yaw: 67.19, pitch: -20.96, type: "scene", label: "Ground/Kitchen" },
@@ -1162,8 +1184,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "g-living01",
                                         displayName: "Living01",
-                                        furnitureImgId: "/kog/panorama/family_midd/f/ground/living01.jpg",
-                                        unfurnitureImgId: "/kog/panorama/family_midd/unf/ground/living01.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/family_midd/f/ground/living01.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/family_midd/unf/ground/living01.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: -17.89, pitch: -13.36, type: "scene", label: "Ground/Entrance" }
                                         ]
@@ -1171,8 +1193,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "g-living02",
                                         displayName: "Living02",
-                                        furnitureImgId: "/kog/panorama/family_midd/f/ground/living02.jpg",
-                                        unfurnitureImgId: "/kog/panorama/family_midd/unf/ground/living02.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/family_midd/f/ground/living02.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/family_midd/unf/ground/living02.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: 28.26, pitch: -14.24, type: "scene", label: "Ground/Entrance" },
                                         ]
@@ -1180,8 +1202,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "g-kitchen",
                                         displayName: "Kitchen",
-                                        furnitureImgId: "/kog/panorama/family_midd/f/ground/kitchen.jpg",
-                                        unfurnitureImgId: "/kog/panorama/family_midd/unf/ground/kitchen.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/family_midd/f/ground/kitchen.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/family_midd/unf/ground/kitchen.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: 140.1, pitch: -16.52, type: "scene", label: "Ground/Entrance" }
                                         ]
@@ -1189,8 +1211,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "g-toilet",
                                         displayName: "Toilet",
-                                        furnitureImgId: "/kog/panorama/family_midd/f/ground/g.toilet.jpg",
-                                        unfurnitureImgId: "/kog/panorama/family_midd/unf/ground/g.toilet.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/family_midd/f/ground/g.toilet.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/family_midd/unf/ground/g.toilet.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: -167.96, pitch: -38.63, type: "scene", label: "Ground/Entrance" }
                                         ]
@@ -1204,8 +1226,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "f1-corridor",
                                         displayName: "Corridor",
-                                        furnitureImgId: "/kog/panorama/family_midd/f/first/corridor.jpg",
-                                        unfurnitureImgId: "/kog/panorama/family_midd/unf/first/corridor.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/family_midd/f/first/corridor.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/family_midd/unf/first/corridor.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: -39.07, pitch: -36.39, type: "scene", label: "First/Master Bedroom 2" },
                                             { id: "hp2", yaw: 174.9, pitch: -12.66, type: "scene", label: "First/Bedroom 1" },
@@ -1220,8 +1242,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "f1-bedroom01",
                                         displayName: "Bedroom 1",
-                                        furnitureImgId: "/kog/panorama/family_midd/f/first/bedroom01.jpg",
-                                        unfurnitureImgId: "/kog/panorama/family_midd/unf/first/bedroom01.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/family_midd/f/first/bedroom01.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/family_midd/unf/first/bedroom01.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: -2.15, pitch: -17.75, type: "scene", label: "First/Corridor" }
                                         ]
@@ -1229,8 +1251,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "f1-bedroom02",
                                         displayName: "Bedroom 2",
-                                        furnitureImgId: "/kog/panorama/family_midd/f/first/bedroom02.jpg",
-                                        unfurnitureImgId: "/kog/panorama/family_midd/unf/first/bedroom02.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/family_midd/f/first/bedroom02.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/family_midd/unf/first/bedroom02.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: 29.31, pitch: -26.1, type: "scene", label: "First/Corridor" }
                                         ]
@@ -1238,8 +1260,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "f1-m_bedroom01",
                                         displayName: "Master Bedroom 1",
-                                        furnitureImgId: "/kog/panorama/family_midd/f/first/m.bedroom01.jpg",
-                                        unfurnitureImgId: "/kog/panorama/family_midd/unf/first/m.bedroom01.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/family_midd/f/first/m.bedroom01.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/family_midd/unf/first/m.bedroom01.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: -7, pitch: -12, type: "scene", label: "First/Corridor" },
                                         ]
@@ -1247,8 +1269,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "f1-m_bedroom02",
                                         displayName: "Master Bedroom 2",
-                                        furnitureImgId: "/kog/panorama/family_midd/f/first/m.bedroom02.jpg",
-                                        unfurnitureImgId: "/kog/panorama/family_midd/unf/first/m.bedroom02.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/family_midd/f/first/m.bedroom02.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/family_midd/unf/first/m.bedroom02.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: -7, pitch: -12, type: "scene", label: "First/Corridor" },
                                         ]
@@ -1256,8 +1278,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "f1-toilet",
                                         displayName: "Toilet",
-                                        furnitureImgId: "/kog/panorama/family_midd/f/first/toilet.jpg",
-                                        unfurnitureImgId: "/kog/panorama/family_midd/unf/first/toilet.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/family_midd/f/first/toilet.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/family_midd/unf/first/toilet.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: 169.63, pitch: -44.25, type: "scene", label: "First/Corridor" }
                                         ]
@@ -1265,8 +1287,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "f1-living",
                                         displayName: "Living",
-                                        furnitureImgId: "/kog/panorama/family_midd/f/first/living.jpg",
-                                        unfurnitureImgId: "/kog/panorama/family_midd/unf/first/living.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/family_midd/f/first/living.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/family_midd/unf/first/living.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: 16.39, pitch: -17.23, type: "scene", label: "First/Corridor" }
                                         ]
@@ -1280,8 +1302,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "r-roof_room",
                                         displayName: "Roof Room",
-                                        furnitureImgId: "/kog/panorama/family_midd/f/roof/roof_room.jpg",
-                                        unfurnitureImgId: "/kog/panorama/family_midd/unf/roof/roof_room.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/family_midd/f/roof/roof_room.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/family_midd/unf/roof/roof_room.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: 144.71, pitch: -38.36, type: "scene", label: "First/Corridor" },
                                             { id: "hp2", yaw: 71.02, pitch: -34.67, type: "scene", label: "Roof/Roof Toilet" }
@@ -1290,8 +1312,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "r-roof_toilet",
                                         displayName: "Roof Toilet",
-                                        furnitureImgId: "/kog/panorama/family_midd/f/roof/roof_toilet.jpg",
-                                        unfurnitureImgId: "/kog/panorama/family_midd/unf/roof/roof_toilet.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/family_midd/f/roof/roof_toilet.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/family_midd/unf/roof/roof_toilet.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: -101.6, pitch: -35.77, type: "scene", label: "Roof/Roof Room" }
                                         ]
@@ -1309,13 +1331,13 @@ export const DEVELOPER_TECHNO = {
                     area: 167,
                     roofarea: 57,
                     gallery: [
-                        { id: "fc1", src: "/kog/images/family/01-FAMILY HOUSE FRONT.jpg" },
-                        { id: "fc2", src: "/kog/images/family/02-FAMILY HOUSE BACK.jpg" },
+                        { id: "fc1", src: `/${projectPath}/images/family/01-FAMILY HOUSE FRONT.jpg` },
+                        { id: "fc2", src: `/${projectPath}/images/family/02-FAMILY HOUSE BACK.jpg` },
                     ],
                     cutSections: [
-                        { id: "c1", src: "/kog/cut_section/family Corner/g.png" },
-                        { id: "c2", src: "/kog/cut_section/family Corner/1.png" },
-                        { id: "c3", src: "/kog/cut_section/family Corner/r.png" },
+                        { id: "c1", src: `/${projectPath}/cut_section/family Corner/g.png` },
+                        { id: "c2", src: `/${projectPath}/cut_section/family Corner/1.png` },
+                        { id: "c3", src: `/${projectPath}/cut_section/family Corner/r.png` },
                     ],
                     floorPlans: null,
                     paymentPlans: null,
@@ -1328,8 +1350,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "g-entrance",
                                         displayName: "Entrance",
-                                        furnitureImgId: "/kog/panorama/Family_corner/f/ground/entrance_corner.jpeg",
-                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/ground/entrance_corner.jpeg",
+                                        furnitureImgId: `/${projectPath}/panorama/Family_corner/f/ground/entrance_corner.jpeg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Family_corner/unf/ground/entrance_corner.jpeg`,
                                         hotspots: [
                                             { id: "hp1", yaw: 174.59, pitch: -44.91, type: "scene", label: "First/Corridor" },
                                             { id: "hp2", yaw: -87.67, pitch: -28.3, type: "scene", label: "Ground/Toilet" },
@@ -1341,8 +1363,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "g-dining",
                                         displayName: "Dining",
-                                        furnitureImgId: "/kog/panorama/Family_corner/f/ground/dining.jpg",
-                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/ground/dining.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/Family_corner/f/ground/dining.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Family_corner/unf/ground/dining.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: -3.52, pitch: -33.4, type: "scene", label: "Ground/Entrance" },
                                             { id: "hp2", yaw: -176.18, pitch: -14.68, type: "scene", label: "Ground/Living" }
@@ -1351,8 +1373,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "g-living",
                                         displayName: "Living",
-                                        furnitureImgId: "/kog/panorama/Family_corner/f/ground/living.jpg",
-                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/ground/living.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/Family_corner/f/ground/living.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Family_corner/unf/ground/living.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: 14.72, pitch: -17.23, type: "scene", label: "Ground/Entrance" }
                                         ]
@@ -1360,8 +1382,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "g-kitchen",
                                         displayName: "Kitchen",
-                                        furnitureImgId: "/kog/panorama/Family_corner/f/ground/kitchen.jpg",
-                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/ground/kitchen.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/Family_corner/f/ground/kitchen.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Family_corner/unf/ground/kitchen.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: 136.36, pitch: -41.31, type: "scene", label: "Ground/Entrance" }
                                         ]
@@ -1369,8 +1391,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "g-toilet",
                                         displayName: "Toilet",
-                                        furnitureImgId: "/kog/panorama/Family_corner/f/ground/g.toilet.jpg",
-                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/ground/g.toilet.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/Family_corner/f/ground/g.toilet.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Family_corner/unf/ground/g.toilet.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: -167.96, pitch: -38.63, type: "scene", label: "Ground/Entrance" }
                                         ]
@@ -1384,8 +1406,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "f1-corridor",
                                         displayName: "Corridor",
-                                        furnitureImgId: "/kog/panorama/Family_corner/f/first/corridor.jpg",
-                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/first/corridor.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/Family_corner/f/first/corridor.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Family_corner/unf/first/corridor.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: -65.43, pitch: -57.83, type: "scene", label: "Ground/Entrance" },
                                             { id: "hp2", yaw: -13.4, pitch: -44.34, type: "scene", label: "Roof/Roof Room" },
@@ -1398,8 +1420,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "f1-bedroom01",
                                         displayName: "Bedroom 1",
-                                        furnitureImgId: "/kog/panorama/Family_corner/f/first/bedroom01.jpg",
-                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/first/bedroom01.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/Family_corner/f/first/bedroom01.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Family_corner/unf/first/bedroom01.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: 29.31, pitch: -26.1, type: "scene", label: "First/Corridor" }
                                         ]
@@ -1407,8 +1429,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "f1-bedroom02",
                                         displayName: "Bedroom 2",
-                                        furnitureImgId: "/kog/panorama/Family_corner/f/first/bedroom02.jpg",
-                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/first/bedroom02.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/Family_corner/f/first/bedroom02.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Family_corner/unf/first/bedroom02.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: -2.15, pitch: -17.75, type: "scene", label: "First/Corridor" }
                                         ]
@@ -1416,8 +1438,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "f1-m_bedroom",
                                         displayName: "Master Bedroom",
-                                        furnitureImgId: "/kog/panorama/Family_corner/f/first/m.bedroom.jpg",
-                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/first/m.bedroom.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/Family_corner/f/first/m.bedroom.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Family_corner/unf/first/m.bedroom.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: 154.82, pitch: -20.61, type: "scene", label: "First/Corridor" },
                                             { id: "hp2", yaw: -101.78, pitch: -35.82, type: "scene", label: "First/Master Bedroom Dressing" }
@@ -1426,8 +1448,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "f1-m_bedroom_dressing",
                                         displayName: "Master Bedroom Dressing",
-                                        furnitureImgId: "/kog/panorama/Family_corner/f/first/m.bedroom_dressing.jpg",
-                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/first/m.bedroom_dressing.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/Family_corner/f/first/m.bedroom_dressing.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Family_corner/unf/first/m.bedroom_dressing.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: -169.41, pitch: -47.86, type: "scene", label: "First/Master Bedroom Toilet" },
                                             { id: "hp2", yaw: 97.08, pitch: -54.71, type: "scene", label: "First/Master Bedroom" }
@@ -1436,8 +1458,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "f1-m_bedroom_toilet",
                                         displayName: "Master Bedroom Toilet",
-                                        furnitureImgId: "/kog/panorama/Family_corner/f/first/m.bed_toilet.jpg",
-                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/first/m.bedroom_toilet.jpeg",
+                                        furnitureImgId: `/${projectPath}/panorama/Family_corner/f/first/m.bed_toilet.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Family_corner/unf/first/m.bedroom_toilet.jpeg`,
                                         hotspots: [
                                             { id: "hp1", yaw: -90.09, pitch: -46.01, type: "scene", label: "First/Master Bedroom Dressing" }
                                         ]
@@ -1445,8 +1467,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "f1-toilet",
                                         displayName: "Toilet",
-                                        furnitureImgId: "/kog/panorama/Family_corner/f/first/toilet.jpeg",
-                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/first/toilet.jpeg",
+                                        furnitureImgId: `/${projectPath}/panorama/Family_corner/f/first/toilet.jpeg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Family_corner/unf/first/toilet.jpeg`,
                                         hotspots: [
                                             { id: "hp1", yaw: 169.63, pitch: -44.25, type: "scene", label: "First/Corridor" }
                                         ]
@@ -1460,8 +1482,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "r-roof_room",
                                         displayName: "Roof Room",
-                                        furnitureImgId: "/kog/panorama/Family_corner/f/roof/roof_room.jpg",
-                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/roof/roof_room.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/Family_corner/f/roof/roof_room.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Family_corner/unf/roof/roof_room.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: 144.71, pitch: -38.36, type: "scene", label: "First/Corridor" },
                                             { id: "hp2", yaw: 71.02, pitch: -34.67, type: "scene", label: "Roof/Roof Toilet" }
@@ -1470,8 +1492,8 @@ export const DEVELOPER_TECHNO = {
                                     {
                                         id: "r-roof_toilet",
                                         displayName: "Roof Toilet",
-                                        furnitureImgId: "/kog/panorama/Family_corner/f/roof/roof_toilet.jpg",
-                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/roof/roof_toilet.jpg",
+                                        furnitureImgId: `/${projectPath}/panorama/Family_corner/f/roof/roof_toilet.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Family_corner/unf/roof/roof_toilet.jpg`,
                                         hotspots: [
                                             { id: "hp1", yaw: -101.6, pitch: -35.77, type: "scene", label: "Roof/Roof Room" }
                                         ]
@@ -1481,6 +1503,201 @@ export const DEVELOPER_TECHNO = {
                         ]
                     }
                 },
+
+                "meadows": {
+                    id: "meadows",
+                    bedrooms: 3, bathrooms: 5,
+                    serviceRooms: null,
+                    area: 233,
+                    roofarea: 76,
+                    gallery: [
+                        { id: "m1", src: `/${projectPath}/images/meadows/01-FRONT TWIN P3.jpg` },
+                        { id: "m2", src: `/${projectPath}/images/meadows/02-TWIN BACK.jpg` },
+                        { id: "m3", src: `/${projectPath}/images/meadows/03-TWIN BACK.jpg` },
+                    ],
+                    cutSections: [
+                        { id: "c1", src: `/${projectPath}/cut_section/meadows/g.png` },
+                        { id: "c2", src: `/${projectPath}/cut_section/meadows/1.png` },
+                        { id: "c3", src: `/${projectPath}/cut_section/meadows/r.png` },
+                    ],
+                    floorPlans: null,
+                    paymentPlans: null,
+                    interior: {
+                        levels: [
+                            {
+                                id: "ground",
+                                name: "Ground",
+                                rooms: [
+                                    {
+                                        id: "g-entrance",
+                                        displayName: "Entrance",
+                                        furnitureImgId: `/${projectPath}/panorama/Meadows/f/ground/entrance.jpeg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Meadows/unf/ground/unf_entrance.jpeg`,
+                                        hotspots: [
+                                            { id: "hp1", yaw: 94.17, pitch: -13.89, type: "scene", label: "Ground/Living" },
+                                            { id: "hp2", yaw: 50.8, pitch: -36.87, type: "scene", label: "Ground/Toilet" },
+                                            { id: "hp3", yaw: 83.01, pitch: -27.42, type: "scene", label: "First/Corridor" },
+                                            { id: "hp4", yaw: 105.25, pitch: -21.23, type: "scene", label: "Ground/Dining" },
+                                            { id: "hp5", yaw: 164.71, pitch: -35.51, type: "scene", label: "Ground/Kitchen" }
+                                        ]
+                                    },
+                                    {
+                                        displayName: "Dining",
+                                        furnitureImgId: `/${projectPath}/panorama/Meadows/f/ground/dining.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Meadows/unf/ground/dining.jpg`,
+                                        hotspots: [
+                                            { id: "hp1", yaw: 89.78, pitch: -26.19, type: "scene", label: "Ground/Living" },
+                                            { id: "hp2", yaw: -45.18, pitch: -56.34, type: "scene", label: "First/Corridor" },
+                                            { id: "hp3", yaw: -86.62, pitch: -27.07, type: "scene", label: "Ground/Entrance" }
+                                        ]
+                                    },
+                                    {
+                                        id: "g-living",
+                                        displayName: "Living",
+                                        furnitureImgId: `/${projectPath}/panorama/Meadows/f/ground/living.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Meadows/unf/ground/living.jpg`,
+                                        hotspots: [
+                                            { id: "hp1", yaw: -78.88, pitch: -36.34, type: "scene", label: "Ground/Dining" },
+                                            { id: "hp2", yaw: -90.48, pitch: -16.79, type: "scene", label: "Ground/Entrance" }
+                                        ]
+                                    },
+                                    {
+                                        id: "g-kitchen",
+                                        displayName: "Kitchen",
+                                        furnitureImgId: `/${projectPath}/panorama/Meadows/f/ground/kitchen.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Meadows/unf/ground/kitchen.jpg`,
+                                        hotspots: [
+                                            { id: "hp1", yaw: 162.2, pitch: -32.3, type: "scene", label: "Ground/Entrance" }
+                                        ]
+                                    },
+                                    {
+                                        id: "g-toilet",
+                                        displayName: "Toilet",
+                                        furnitureImgId: `/${projectPath}/panorama/Meadows/f/ground/g.toilet.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Meadows/unf/ground/g.toilet.jpg`,
+                                        hotspots: [
+                                            { id: "hp1", yaw: -0.31, pitch: -37.05, type: "scene", label: "Ground/Entrance" }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                id: "first",
+                                name: "First",
+                                rooms: [
+                                    {
+                                        id: "f1-corridor",
+                                        displayName: "Corridor",
+                                        furnitureImgId: `/${projectPath}/panorama/Meadows/f/first/corridor.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Meadows/unf/first/corridor.jpg`,
+                                        hotspots: [
+                                            { id: "hp1", yaw: 21.49, pitch: -53.88, type: "scene", label: "Ground/Entrance" },
+                                            { id: "hp2", yaw: -37.97, pitch: -48.52, type: "scene", label: "Roof/Roof Room" },
+                                            { id: "hp3", yaw: -78.93, pitch: -34.8, type: "scene", label: "First/Bedroom 2" },
+                                            { id: "hp4", yaw: -129.2, pitch: -47.37, type: "scene", label: "First/Toilet" },
+                                            { id: "hp5", yaw: -91.67, pitch: -18.41, type: "scene", label: "First/Bedroom 1" },
+                                            { id: "hp6", yaw: 95.01, pitch: -27.07, type: "scene", label: "First/Master Bedroom" },
+                                            { id: "hp7", yaw: 50.41, pitch: -22.24, type: "scene", label: "First/Living 2" },
+                                        ]
+                                    },
+                                    {
+                                        id: "f1-bedroom01",
+                                        displayName: "Bedroom 1",
+                                        furnitureImgId: `/${projectPath}/panorama/Meadows/f/first/bedroom01.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Meadows/unf/first/bedroom01.jpg`,
+                                        hotspots: [
+                                            { id: "hp1", yaw: 108.24, pitch: -25.8, type: "scene", label: "First/Corridor" }
+                                        ]
+                                    },
+                                    {
+                                        id: "f1-bedroom02",
+                                        displayName: "Bedroom 2",
+                                        furnitureImgId: `/${projectPath}/panorama/Meadows/f/first/bedroom02.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Meadows/unf/first/bedroom02.jpg`,
+                                        hotspots: [
+                                            { id: "hp1", yaw: 46.58, pitch: -29.49, type: "scene", label: "First/Corridor" }
+                                        ]
+                                    },
+                                    {
+                                        id: "f1-living02",
+                                        displayName: "Living 2",
+                                        furnitureImgId: `/${projectPath}/panorama/Meadows/f/first/living02.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Meadows/unf/first/living02.jpg`,
+                                        hotspots: [
+                                            { id: "hp1", yaw: -58.49, pitch: -17.67, type: "scene", label: "First/Corridor" }
+                                        ]
+                                    },
+                                    {
+                                        id: "f1-m_bedroom",
+                                        displayName: "Master Bedroom",
+                                        furnitureImgId: `/${projectPath}/panorama/Meadows/f/first/m.bedroom.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Meadows/unf/first/m.bedroom.jpg`,
+                                        hotspots: [
+                                            { id: "hp1", yaw: 3.16, pitch: -14.28, type: "scene", label: "First/Corridor" },
+                                            { id: "hp2", yaw: 4.83, pitch: -26.15, type: "scene", label: "First/Master Bedroom Dressing" }
+                                        ]
+                                    },
+                                    {
+                                        id: "f1-m_bedroom_dressing",
+                                        displayName: "Master Bedroom Dressing",
+                                        furnitureImgId: `/${projectPath}/panorama/Meadows/f/first/m.bedroom_dressing.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Meadows/unf/first/m.bedroom_dressing.jpg`,
+                                        hotspots: [
+                                            { id: "hp1", yaw: 158.03, pitch: -50.14, type: "scene", label: "First/Master Bedroom" },
+                                            { id: "hp2", yaw: -83.06, pitch: -54.71, type: "scene", label: "First/Master Bedroom Toilet" }
+                                        ]
+                                    },
+                                    {
+                                        id: "f1-m_bedroom_toilet",
+                                        displayName: "Master Bedroom Toilet",
+                                        furnitureImgId: `/${projectPath}/panorama/Meadows/f/first/m.bedroom_toilet.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Meadows/unf/first/m.bedroom_toilet.jpg`,
+                                        hotspots: [
+                                            { id: "hp1", yaw: 84.02, pitch: -51.72, type: "scene", label: "First/Master Bedroom Dressing" }
+                                        ]
+                                    },
+                                    {
+                                        id: "f1-toilet01",
+                                        displayName: "Toilet",
+                                        furnitureImgId: `/${projectPath}/panorama/Meadows/f/first/toilet01.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Meadows/unf/first/toilet01.jpg`,
+                                        hotspots: [
+                                            { id: "hp1", yaw: 169.63, pitch: -44.25, type: "scene", label: "First/Corridor" }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                id: "roof",
+                                name: "Roof",
+                                rooms: [
+                                    {
+                                        id: "r-roof_room",
+                                        displayName: "Roof Room",
+                                        furnitureImgId: `/${projectPath}/panorama/Meadows/f/roof/roof_room.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Meadows/unf/roof/roof_room.jpg`,
+                                        hotspots: [
+                                            { id: "hp1", yaw: 96.59, pitch: -17.8, type: "scene", label: "First/Corridor" },
+                                            { id: "hp2", yaw: 110.52, pitch: -17.01, type: "scene", label: "Roof/Roof Toilet" }
+                                        ]
+                                    },
+                                    {
+                                        id: "r-roof_toilet",
+                                        displayName: "Roof Toilet",
+                                        furnitureImgId: `/${projectPath}/panorama/Meadows/f/roof/roof_toilet.jpg`,
+                                        unfurnitureImgId: `/${projectPath}/panorama/Meadows/unf/roof/roof_toilet.jpg`,
+                                        hotspots: [
+                                            { id: "hp1", yaw: 13.8, pitch: -31.11, type: "scene", label: "Roof/Roof Room" },
+                                            { id: "hp2", yaw: 21.14, pitch: -23.29, type: "scene", label: "First/Corridor" }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+
+                },
+
             },
         },
 

@@ -3,6 +3,7 @@ import { useState, useContext } from 'react';
 import { SidebarContext } from '../store/SidebarContextProvider';
 import { MainContext } from '../store/MainContextProvider';
 import { APP_CONFIG } from "../config/appConfig";
+import { CONFIG } from "../data/layers";
 
 import AREA_ICON from "../assets/icons/area.svg"
 import DOOR_ICON from "../assets/icons/door.svg"
@@ -111,7 +112,7 @@ export default function UnitPanel() {
                         <hr className="h-divider" />
                         <button className="w-full border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition"
                             onClick={() => openBalconyView(currentItem)}
-                        > Location View
+                        > { CONFIG.BALCONY_TITLE }
                         </button>
                     </>
                 }

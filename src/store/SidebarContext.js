@@ -29,4 +29,6 @@ export const SidebarContext = createContext({
     goToTab: () => { },
     goBack: () => { },
     goHome: () => { },
+    isPlaying: false,
+    setIsPlaying: () => { },
 });

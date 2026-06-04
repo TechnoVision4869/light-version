@@ -29,8 +29,10 @@ export default function ProjectSelector({
   const [thumbnailUrls, setThumbnailUrls] = useState({});
   const [introVideoUrls, setIntroVideoUrls] = useState({});
   const [loading, setLoading] = useState(true);
+  const [pressedProjectId, setPressedProjectId] = useState(null);
 
   const containerRef = useRef(null);
+  const projectPressTimeoutRef = useRef(null);
   const [predefinedPixelPos, setPredefinedPixelPos] = useState({ left: 0, top: 0 });
   const [isProjectHovered, setIsProjectHovered] = useState(false);
 
@@ -191,7 +193,7 @@ export default function ProjectSelector({
     try {
       const project = await fetchProjectById(projectId, useStatic);
       if (project) {
-        onProjectSelect(project);
+        onProjectSelect(project, introVideoUrl);
       } else {
         toast.error("Failed to load project details.");
       }
@@ -201,12 +203,37 @@ export default function ProjectSelector({
     }
   };
 
+  const handleProjectPress = (projectId, introVideoUrl) => {
+    if (projectPressTimeoutRef.current) {
+      clearTimeout(projectPressTimeoutRef.current);
+      projectPressTimeoutRef.current = null;
+    }
+
+    setPressedProjectId(projectId);
+    setIsProjectHovered(true);
+
+    projectPressTimeoutRef.current = setTimeout(() => {
+      fetchSelectedProject(projectId, introVideoUrl);
+      // Keep button pressed while splash loads and plays
+      // Will unmount naturally when navigating to /home
+      projectPressTimeoutRef.current = null;
+    }, 200);
+  };
+
   useEffect(() => {
     if (useStatic || developerId) {
       fetchProjects();
       fetchDeveloperAssets();
     }
   }, [developerId, useStatic]);
+
+  useEffect(() => {
+    return () => {
+      if (projectPressTimeoutRef.current) {
+        clearTimeout(projectPressTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const showBackButton = [
     "admin",
@@ -244,7 +271,7 @@ export default function ProjectSelector({
             <img
               src={developerAssets.logoImage}
               alt="Developer Logo"
-              className="w-auto h-auto max-h-18 xl:max-h-22 xl:w-22 max-w-[90vw] xl:max-w-md"
+              className="w-auto h-auto max-h-22 xl:max-h-26 xl:w-26 max-w-[90vw] xl:max-w-md"
             />
           </div>
           {showBackButton && !useStatic && onBackButtonClick && (
@@ -273,20 +300,30 @@ export default function ProjectSelector({
               <>
                 {projects.map((project) => {
                   const disabled = !introVideoUrls[project.id];
+                  const isPressed = pressedProjectId === project.id;
                   return (
                     <button
                       key={project.id}
                       disabled={disabled}
                       className="absolute rounded-2xl overflow-hidden backdrop-blur-sm bg-[#00000066]
-                       text-white p-2 text-xl
-                       hover:bg-[#000000aa] disabled:bg-[00000044] disabled:text-white/50 disabled:cursor-not-allowed transition-colors duration-300"
-                      onClick={() => fetchSelectedProject(project.id, introVideoUrls[project.id])}
+                       text-white py-2 px-4 text-xl
+                       hover:bg-[#4a6082] hover:scale-105 disabled:bg-[00000044] disabled:text-white/50 disabled:cursor-not-allowed transition-all duration-200"
+                      onClick={() => handleProjectPress(project.id, introVideoUrls[project.id])}
                       onMouseEnter={() => !disabled && setIsProjectHovered(true)}
                       onMouseLeave={() => setIsProjectHovered(false)}
-                      style={{
-                        left: `${predefinedPixelPos.left}px`,
-                        top: `${predefinedPixelPos.top}px`,
-                      }}
+                      style={
+                        isPressed
+                          ? {
+                              left: `${predefinedPixelPos.left}px`,
+                              top: `${predefinedPixelPos.top}px`,
+                              backgroundColor: "#4a6082",
+                              transform: "scale(1.05)",
+                            }
+                          : {
+                              left: `${predefinedPixelPos.left}px`,
+                              top: `${predefinedPixelPos.top}px`,
+                            }
+                      }
                       >
                          {<span className='whitespace-nowrap'>{disabled ? "Coming Soon" : project.name}</span>}
                     </button>
