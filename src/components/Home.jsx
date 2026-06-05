@@ -372,7 +372,7 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
       <div className="w-full h-screen bg-[#2f2f2f] py-2 px-3 xl:p-4 overflow-hidden">
         <div className="w-full h-full flex flex-col">
           {/* Top Tabs */}
-          <div className="flex items-center justify-between mb-1 xl:mb-3 px-4">
+          <div className="flex items-center justify-between mb-2 xl:mb-3 px-4">
             <div className="flex items-center space-x-3">
               <button
                 onClick={handleBack}

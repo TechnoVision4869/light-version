@@ -99,11 +99,10 @@ export default function BaseFloating({ mediaRef }) {
                 if (!pos) return null;
 
                 const isSelected = highlightedButton === item;
-
                 return (
                     <BaseFloatButton
                         key={item.id}
-                        name={item.displayName}
+                        name={item.displayName || item.name}
                         tabType={activeTab}
                         layerType={activeLayer}
                         style={{
@@ -135,7 +134,7 @@ export default function BaseFloating({ mediaRef }) {
                 return (
                     <AnimFloatButton
                         key={item.id}
-                        name={item.displayName}
+                        name={item.displayName || item.name}
                         icon={item.iconSrc ? item.iconSrc : item.iconAssetId}
                         style={{
                             left: `${pos.left}px`,
@@ -223,10 +222,9 @@ export default function BaseFloating({ mediaRef }) {
             return (
                 <BaseFloatButton
                     key={item.id}
-                    name={item.displayName}
+                    name={item.displayName || item.name}
                     tabType={activeTab}
                     layerType={activeLayer}
-                    showName={false}
                     triClass="triangle-small-down"
                     style={{
                         left: `${pos.left}px`,

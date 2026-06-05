@@ -320,7 +320,6 @@ async function transformAssetIds(obj) {
     if (
       (key.endsWith("AssetId") ||
         key.endsWith("VideoId") ||
-        key.endsWith("ImgId") ||
         key.includes("highlight") ||
         key.includes("zoomOutVideo") ||
         key.includes("balconyView")) &&

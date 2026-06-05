@@ -7,7 +7,7 @@ import { CONFIG } from "../data/layers";
 
 import AREA_ICON from "../assets/icons/area.svg"
 import DOOR_ICON from "../assets/icons/door.svg"
-import TOILET_ICON from "../assets/icons/bathroom.png"
+import TOILET_ICON from "../assets/icons/bathroom.svg"
 
 export default function UnitPanel() {
     const { currentProject, currentItem } = useContext(SidebarContext);
@@ -31,12 +31,15 @@ export default function UnitPanel() {
     // console.log("visualTypeId:", currentItem?.visualTypeId);
 
     const levels = useStatic ? unitType?.interior?.levels : unitType?.levels;
-
     const serviceRooms = unitType?.serviceRooms;
     const gallery = unitType?.gallery;
+    // console.log(gallery);
+    
     const cutSections = unitType?.cutSections;
     const paymentPlans = unitType?.paymentPlans;
     const floorPlans = unitType?.floorPlans;
+    // console.log(floorPlans);
+    
     const balconyView = currentItem.balconyView;
 
     return (

@@ -28,6 +28,11 @@ export const config = {
     BALCONY_TITLE: "Balcony View",
 }
 
+const gallery = [
+  { id: "g1", src: `/${projectPath}/images/gallery/interior/1BR/03.jpg` },
+  { id: "g2", src: `/${projectPath}/images/gallery/interior/1BR/bedroom 01.jpg` },
+];
+
 export const DEVELOPER_SOMABAY = {
   developerId: "somabay",
   developerLogo: SOMABAY_LOGO,
@@ -219,7 +224,7 @@ export const DEVELOPER_SOMABAY = {
 
       unitTypes: {
         // 7A, Floor 1
-        "107A11": { id: "107A11", bedrooms: 2, bathrooms: 1, area: 113.9, serviceRooms: [], gallery: [], cutSections: [], floorPlans: [{ id: "107A11", src: `/${projectPath}/images/floorplans/107A11.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107A11": { id: "107A11", bedrooms: 2, bathrooms: 1, area: 113.9, serviceRooms: [], gallery: [...gallery], cutSections: [], floorPlans: [{ id: "107A11", src: `/${projectPath}/images/floorplans/107A11.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l19_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l19_unf.jpg`, x: 0.313, y: 0.419, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d19_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d19_unf.jpg`, x: 0.399, y: 0.394, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k19_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k19_unf.jpg`, x: 0.435, y: 0.552, hotspots: [] }, 
@@ -228,7 +233,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room6", displayName: "Bedroom 2", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b05_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b05_unf.jpg`, x: 0.751, y: 0.526, hotspots: [] }
         ] }] } },
 
-        "107A12": { id: "107A12", bedrooms: 1, bathrooms: 1, area: 95.9,  serviceRooms: [], gallery: [], cutSections: [], floorPlans: [{ id: "107A12", src: `/${projectPath}/images/floorplans/107A12.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107A12": { id: "107A12", bedrooms: 1, bathrooms: 1, area: 95.9,  serviceRooms: [], gallery: [...gallery], cutSections: [], floorPlans: [{ id: "107A12", src: `/${projectPath}/images/floorplans/107A12.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l18_unf.jpg`, x: 0.361, y: 0.731, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d18_unf.jpg`, x: 0.444, y: 0.731, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k18_unf.jpg`, x: 0.474, y: 0.417, hotspots: [] }, 
@@ -236,7 +241,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room5", displayName: "Bedroom", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b02_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b02_unf.jpg`, x: 0.731, y: 0.456, hotspots: [] }
         ] }] } },
 
-        "107A13": { id: "107A13", bedrooms: 2, bathrooms: 2, area: 128.3, serviceRooms: [], gallery: [], cutSections: [], floorPlans: [{ id: "107A13", src: `/${projectPath}/images/floorplans/107A13.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107A13": { id: "107A13", bedrooms: 2, bathrooms: 2, area: 128.3, serviceRooms: [], gallery: [...gallery], cutSections: [], floorPlans: [{ id: "107A13", src: `/${projectPath}/images/floorplans/107A13.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l18_unf.jpg`, x: 0.399, y: 0.498, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d18_unf.jpg`, x: 0.478, y: 0.498, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k18_unf.jpg`, x: 0.507, y: 0.207, hotspots: [] }, 
@@ -246,7 +251,7 @@ export const DEVELOPER_SOMABAY = {
           { id: "room7", displayName: "Bedroom 2", furnitureImgId: `/${projectPath}/panorama/Bedroom/f/b01_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Bedroom/unf/b01_unf.jpg`, x: 0.732, y: 0.674, hotspots: [] }
         ] }] } },
 
-        "107A14": { id: "107A14", bedrooms: 2, bathrooms: 2, area: 120.9, serviceRooms: [], gallery: [], cutSections: [], floorPlans: [{ id: "107A14", src: `/${projectPath}/images/floorplans/107A14.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
+        "107A14": { id: "107A14", bedrooms: 2, bathrooms: 2, area: 120.9, serviceRooms: [], gallery: [...gallery], cutSections: [], floorPlans: [{ id: "107A14", src: `/${projectPath}/images/floorplans/107A14.jpg` }], paymentPlans: [], interior: { levels: [{ id: "floor", rooms: [
           { id: "room1", displayName: "Living", furnitureImgId: `/${projectPath}/panorama/Living/f/l18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Living/unf/l18_unf.jpg`, x: 0.277, y: 0.487, hotspots: [] }, 
           { id: "room2", displayName: "Dining", furnitureImgId: `/${projectPath}/panorama/Dining/f/d18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Dining/unf/d18_unf.jpg`, x: 0.378, y: 0.487, hotspots: [] }, 
           { id: "room3", displayName: "Kitchen", furnitureImgId: `/${projectPath}/panorama/Kitchen/f/k18_f.jpg`, unfurnitureImgId: `/${projectPath}/panorama/Kitchen/unf/k18_unf.jpg`, x: 0.408, y: 0.271, hotspots: [] }, 

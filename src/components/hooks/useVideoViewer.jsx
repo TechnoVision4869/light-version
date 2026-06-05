@@ -5,6 +5,8 @@ import { SidebarContext } from "../../store/SidebarContextProvider";
 import { APP_CONFIG } from "../../config/appConfig";
 
 export function useVideoViewer() {
+  const useStatic = APP_CONFIG.USE_STATIC;
+
   const {
     history,
     activeTab,
@@ -251,8 +253,9 @@ export function useVideoViewer() {
     (videoPath = currentVideosPaths?.idleVideo, onComplete = null) => {
       if (!videoPath) return;
       // console.log("playIdleVideo called with idleVideo:", videoPath);
+      // this needs to be changed later and add the condition that check asset type when using APIs
+      const isImage = useStatic ? /\.(png|jpe?g|webp|avif)$/i.test(videoPath) : false;
 
-      const isImage = /\.(png|jpe?g|webp|avif)$/i.test(videoPath);
       if (isImage) {
         setFloatingOpacity(1);
         setIsPlaying(false);
