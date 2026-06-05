@@ -15,7 +15,9 @@ export default function SurroundingButton({ surrounding, isDisabled, isSelected,
                     {surrounding.displayName}
                 </div>
                 <div className="text-xs text-white/60 leading-tight py-1 whitespace-nowrap">
-                    {surrounding.distance}
+                    {typeof surrounding.distance === 'number'
+                        ? `${surrounding.distance * 2} min - ${surrounding.distance} km`
+                        : surrounding.distance}
                 </div>
             </div>
         </button>

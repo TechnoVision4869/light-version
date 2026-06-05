@@ -4,9 +4,9 @@
  * NO IMPORTS - plain JavaScript for Service Worker compatibility
  */
 
-const CACHE_VIDEO = 'techno-vision-videos-v1';
-const CACHE_API = 'techno-vision-api-v1';
-const CACHE_IMAGE = 'techno-vision-images-v1';
+const CACHE_VIDEO = 'techno-vision-videos-v2';
+const CACHE_API = 'techno-vision-api-v2';
+const CACHE_IMAGE = 'techno-vision-images-v2';
 
 // Install event
 self.addEventListener('install', (event) => {
@@ -14,10 +14,18 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Activate event
+// Activate event — delete all old caches on version bump
 self.addEventListener('activate', (event) => {
   console.log('[SW] Activate event');
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches.keys().then((cacheNames) =>
+      Promise.all(
+        cacheNames
+          .filter((name) => ![CACHE_VIDEO, CACHE_API, CACHE_IMAGE].includes(name))
+          .map((name) => caches.delete(name))
+      )
+    ).then(() => self.clients.claim())
+  );
 });
 
 // Fetch event - main caching logic
@@ -60,8 +68,8 @@ self.addEventListener('fetch', (event) => {
             })
             .catch((error) => {
               console.error('[SW] Fetch failed for video:', url.pathname, error);
-              // Return cached version if available
-              return cache.match(request);
+              // Return cached version if available, or a network error response
+              return cache.match(request).then((cached) => cached || Response.error());
             });
         });
       })

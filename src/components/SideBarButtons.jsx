@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { SidebarContext } from "../store/SidebarContextProvider";
 import { MainContext } from "../store/MainContextProvider";
 import { TABS, LAYERS} from "../data/layers";
+import { PROPERTY_TYPE } from "../constants/roles";
 
 import ZoneButton from "./buttons/ZoneButton";
 import AmenityButton from "./buttons/AmenityButton";
@@ -55,12 +56,12 @@ export default function SidebarButtons({ onNavigate = (action) => action() }) {
       const properties = currentItem?.properties || [];
       if (properties.length === 1) {
         const property = properties[0];        
-        if (property.type === "villa" || property.type === "VILLA") {
+        if (property.type === PROPERTY_TYPE.VILLA) {
           Component = ApartmentButton;
           propName = "apartment";
           layerKey = LAYERS.UNIT;
         }
-        else if (property.type === "town" || property.type === "TOWNHOUSE") {
+        else if (property.type === PROPERTY_TYPE.TOWNHOUSE) {
           Component = BuildingButton;
           propName = "building";
           layerKey = LAYERS.BUILDING;
@@ -78,7 +79,7 @@ export default function SidebarButtons({ onNavigate = (action) => action() }) {
       }
     }
     else if (activeLayer === LAYERS.BUILDING) {
-      if (currentItem?.type === "tower" || currentItem?.type === "TOWER") {
+      if (currentItem?.type === PROPERTY_TYPE.TOWER) {
         Component = FloorButton;
         propName = "floor";
         layerKey = LAYERS.FLOOR;
@@ -106,7 +107,7 @@ export default function SidebarButtons({ onNavigate = (action) => action() }) {
     }
   }
 
-  const isTower = currentItem?.type === "tower" || currentItem?.type === "TOWER";
+  const isTower = currentItem?.type === PROPERTY_TYPE.TOWER;
   const towerFeatures = activeLayer === LAYERS.BUILDING && isTower ? currentItem?.features : null;
 
   if (!currentItems || currentItems.length === 0 || Component === null) {
@@ -115,7 +116,7 @@ export default function SidebarButtons({ onNavigate = (action) => action() }) {
 
   return (
     <div className="flex-1 min-h-0 scrollbar-custom overflow-y-auto overflow-x-hidden space-y-3 px-2 py-2">
-      {towerFeatures && (
+      {towerFeatures?.length > 0 && (
         <button
           onClick={() => onNavigate(() => goToItem(towerFeatures, LAYERS.BUILDING_FEATURE))}
           disabled={isPlaying}

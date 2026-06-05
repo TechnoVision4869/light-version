@@ -3,6 +3,7 @@ import { useCallback, useState, useEffect, useContext } from "react";
 import { SidebarContext } from "./SidebarContext";
 import { AuthContext } from "./jwt-context";
 import { TABS, LAYERS, DATA } from "../data/layers";
+import { PROPERTY_TYPE } from "../constants/roles";
 import { enrichProjectData } from "../lib/enrichProjectData";
 import { APP_CONFIG } from "../config/appConfig";
 import { fetchProjectById } from "../lib/projectFetcher";
@@ -236,10 +237,10 @@ export default function SidebarContextProvider({ children }) {
             views = null; // explicitly no views for floors or building features
         }
         else if (targetLayer === LAYERS.UNIT) {
-            if (property?.type === "villa" || property?.type === "VILLA") {
+            if (property?.type === PROPERTY_TYPE.VILLA) {
                 if (views === undefined) views = property?.views; // allow views for villa units
             } else {
-                views = null; // explicitly no views for town/tower units
+                views = null; // explicitly no views for townhouse/tower units
             }
         } else {
             if (views === undefined) views = property?.views; // use property's views for building layers
@@ -360,18 +361,18 @@ export default function SidebarContextProvider({ children }) {
                 items = currentItem?.properties || [];
                 if (items.length === 1) {
                     const property = items[0];
-                    if (property.type === "villa" || property.type === "VILLA") {
+                    if (property.type === PROPERTY_TYPE.VILLA) {
                         items = property.units || [];
                         if (items.length > 8) itemType = "small";
                     }
-                    else if (property.type === "town" || property.type === "TOWNHOUSE") {
+                    else if (property.type === PROPERTY_TYPE.TOWNHOUSE) {
                         items = property.blocks || [];
                         if (items.length > 9) itemType = "small";
                     }
                 }
             }
             else if (activeLayer === LAYERS.BUILDING) {
-                if (currentItem?.type === "tower" || currentItem?.type === "TOWER") {
+                if (currentItem?.type === PROPERTY_TYPE.TOWER) {
                     items = currentItem.floors || [];
                 }
                 else {

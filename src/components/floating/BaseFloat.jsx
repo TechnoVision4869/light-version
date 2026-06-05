@@ -5,6 +5,7 @@ import { useFloatingPositions } from "../../hooks/useFloatingPositions";
 import BaseFloatButton from "./BaseFloatButton";
 import AnimFloatButton from "./AnimFloatButton";
 import { TABS, LAYERS } from '../../data/layers';
+import { PROPERTY_TYPE } from '../../constants/roles';
 import { MainContext } from "@/store/MainContextProvider";
 
 export default function BaseFloating({ mediaRef }) {
@@ -59,11 +60,11 @@ export default function BaseFloating({ mediaRef }) {
     if (activeLayer !== null) {
         switch (activeLayer) {
             case LAYERS.ZONE_DETAIL:
-                if (currentItem.properties[0].type === "villa") layerKey = LAYERS.UNIT;
+                if (currentItem.properties[0]?.type === PROPERTY_TYPE.VILLA) layerKey = LAYERS.UNIT;
                 else layerKey = LAYERS.BUILDING;
                 break;
             case LAYERS.BUILDING:
-                if (currentItem.type === "tower") layerKey = LAYERS.FLOOR;
+                if (currentItem.type === PROPERTY_TYPE.TOWER) layerKey = LAYERS.FLOOR;
                 else layerKey = LAYERS.UNIT;
                 break;
             case LAYERS.FLOOR:

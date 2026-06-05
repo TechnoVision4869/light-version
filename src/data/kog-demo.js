@@ -1,3 +1,4 @@
+import { PROPERTY_TYPE } from "../constants/roles";
 import TECHNO_LOGO from '/default-logo.png';
 import DEMO_BACKGROUND from '../assets/images/background.jpg';
 import KS_THUMBNAIL from '../assets/images/ks-thumbnail.png';
@@ -367,7 +368,7 @@ export const DEVELOPER_TECHNO = {
                         properties: [
                             {
                                 id: "town",
-                                type: "town",
+                                type: PROPERTY_TYPE.TOWNHOUSE,
                                 videos: sage_family_videos,
                                 views: sage_family_views,
                                 blocks: [
@@ -406,7 +407,7 @@ export const DEVELOPER_TECHNO = {
                         properties: [
                             {
                                 id: "meadows1",
-                                type: "town",
+                                type: PROPERTY_TYPE.TOWNHOUSE,
                                 videos: meadows_2_videos,
                                 views: meadows_views,
                                 blocks: [

@@ -29,7 +29,8 @@ export default function Sidebar({ onNavigate }) {
             if (activeTab === TABS.AMENITIES) return "Amenities";
             if (activeTab === TABS.SURROUNDINGS) return "Surroundings";
         } else {
-            return String(currentItem?.zoneName || currentItem?.displayName).charAt(0).toUpperCase() + String(currentItem?.zoneName || currentItem?.displayName).slice(1);
+            return String(currentItem?.zoneName || currentItem?.displayName || currentItem?.name).charAt(0).toUpperCase()
+            + String(currentItem?.zoneName || currentItem?.displayName || currentItem?.name).slice(1);
         }
         return "";
     }

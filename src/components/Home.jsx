@@ -525,7 +525,7 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
                     })()}
 
                     {activeLayer === LAYERS.SURROUNDING_DETAIL && (
-                      <AnimatedPath path={currentItem.svgPath} />
+                      <AnimatedPath path={currentItem.svgPath || currentItem?.svg} />
                     )}
 
                     {/* Transparent overlay to suppress Android WebView native video controls */}
@@ -641,7 +641,7 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
           </FilterContextProvider>
 
           {/* Breadcrumbs */}
-          <div className="flex px-4 pt-2 xl:pt-3">
+          <div className="flex px-4 pt-1 xl:pt-2">
             <div className="flex-shrink-0">
               <HistoryBreadcrumbs />
             </div>

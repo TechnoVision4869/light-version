@@ -11,7 +11,7 @@ export default function AmenityButton({ amenity, isDisabled, isSelected, goToIte
         >
             <div className="text-left">
                 <div className="text-md font-bold text-white leading-tight">
-                    {amenity.displayName}
+                    {amenity.displayName || amenity.name}
                 </div>
                 <div className="text-xs text-white/60 leading-tight py-1">
                     {amenity.subtitle}
@@ -20,7 +20,7 @@ export default function AmenityButton({ amenity, isDisabled, isSelected, goToIte
             {(amenity.thumbnail || amenity.thumbnailAssetId) && <div className="w-full rounded-lg overflow-hidden bg-black/10">
                 <img
                     src={amenity.thumbnail || amenity.thumbnailAssetId}
-                    alt={amenity.displayName}
+                    alt={amenity.displayName || amenity.name}
                     className="w-full h-full object-cover"
                 />
             </div>}

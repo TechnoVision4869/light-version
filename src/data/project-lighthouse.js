@@ -1,3 +1,5 @@
+import { PROPERTY_TYPE } from "../constants/roles";
+
 import SOMABAY_LOGO from '../assets/somabay-logo.svg';
 
 import MALL_ICON from '../assets/icons/mall.svg';
@@ -67,7 +69,7 @@ export const DEVELOPER_SOMABAY = {
     {
       id: "light-house",
       name: "The Lighthouse",
-      thumbnail: null,
+      thumbnail: `/${projectPath}/images/project-highlight.png`,
       description: "Located at the tip of the peninsula, The Lighthouse Somabay gives you a unique panoramic view of the reef and the bay at once.",
       introVideo: `/${projectPath}/videos/intro.mp4`,
       idleVideo: `/${projectPath}/videos/home/home_idle.mp4`,
@@ -175,7 +177,7 @@ export const DEVELOPER_SOMABAY = {
             properties: [
               {
                 id: "7a",
-                type: "tower",
+                type: PROPERTY_TYPE.TOWER,
                 displayName: "7A",
                 highlight: `/${projectPath}/highlight/7A Tower.png`,
                 description: null,
@@ -397,7 +399,7 @@ export const DEVELOPER_SOMABAY = {
               },
               {
                 id: "7b1",
-                type: "tower",
+                type: PROPERTY_TYPE.TOWER,
                 displayName: "7B 1",
                 highlight: `/${projectPath}/highlight/7B1 Tower.png`,
                 description: null,
@@ -579,7 +581,7 @@ export const DEVELOPER_SOMABAY = {
               },
               {
                 id: "7b2",
-                type: "tower",
+                type: PROPERTY_TYPE.TOWER,
                 displayName: "7B 2",
                 highlight: `/${projectPath}/highlight/7B2 Tower.png`,
                 description: null,
@@ -801,7 +803,7 @@ export const DEVELOPER_SOMABAY = {
               },
               {
                 id: "7c",
-                type: "tower",
+                type: PROPERTY_TYPE.TOWER,
                 displayName: "7C",
                 highlight: `/${projectPath}/highlight/7C Tower.png`,
                 description: null,

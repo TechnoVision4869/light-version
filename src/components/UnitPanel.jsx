@@ -22,7 +22,15 @@ export default function UnitPanel() {
 
     const unitType = useStatic 
         ? currentProject?.unitTypes?.[currentItem?.unitTypeId]
-        : currentProject?.unitTypes?.find(type => type.name === currentItem?.visualTypeId);
+        : currentProject?.unitTypes?.find(type => type.id === currentItem?.unitTypeId);
+
+    // console.log("type id:", currentProject?.unitTypes?.find(type => type.id));
+    // console.log("unitTypeId:", currentItem?.unitTypeId);
+
+    // console.log("type name:", unitType?.namecurrentProject?.unitTypes?.find(type => type.name));
+    // console.log("visualTypeId:", currentItem?.visualTypeId);
+
+    const levels = useStatic ? unitType?.interior?.levels : unitType?.levels;
 
     const serviceRooms = unitType?.serviceRooms;
     const gallery = unitType?.gallery;
@@ -92,7 +100,7 @@ export default function UnitPanel() {
                                     if (useHotspots) {
                                         openPanorama(currentItem);
                                     } else {
-                                        const firstRoom = unitType?.interior?.levels?.[0]?.rooms?.[0];
+                                        const firstRoom = levels?.[0]?.rooms?.[0];
                                         if (firstRoom) openRoomInterior(firstRoom);
                                     }
                                 }}

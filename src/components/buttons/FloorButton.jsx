@@ -40,7 +40,7 @@ export default function FloorButton({ floor, isDisabled, goToItem, }) {
         {/* Vertical Divider + Floor Type */}
         {/* {<div className="flex items-center">
           <div className="w-0.5 h-5 bg-white mx-3"></div>
-          <div className="font-bold text-white">{floor.type}</div>
+          <div className="font-bold text-white">{floor.type || floor.subtitle}</div>
         </div>} */}
       </div>
     </button>

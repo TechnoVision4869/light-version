@@ -265,7 +265,7 @@ export const resourceConfigs = {
         AssetType.VIDEO,
         AssetType.PANORAMA,
       ]),
-      assetField("sideAssetId", "Side", [AssetType.VIDEO, AssetType.PANORAMA]),
+      assetField("sideAssetId", "Side", [AssetType.VIDEO, AssetType.IMAGE]),
       assetField("zoomoutAssetId", "Zoom-out", [AssetType.VIDEO]),
     ],
     childTypes: [ENTITY_TYPES.PROPERTY],
@@ -332,7 +332,7 @@ export const resourceConfigs = {
       ]),
       assetField("idleAssetId", "Idle", [
         AssetType.VIDEO,
-        AssetType.PANORAMA,
+        AssetType.IMAGE,
       ]),
       {
         name: "positionPicker",
@@ -410,7 +410,7 @@ export const resourceConfigs = {
         AssetType.VIDEO,
         AssetType.PANORAMA,
       ]),
-      assetField("sideAssetId", "Side", [AssetType.VIDEO, AssetType.PANORAMA]),
+      assetField("sideAssetId", "Side", [AssetType.VIDEO, AssetType.IMAGE]),
     ],
     childTypes: [],
   },
@@ -492,7 +492,7 @@ export const resourceConfigs = {
         AssetType.VIDEO,
         AssetType.PANORAMA,
       ]),
-      assetField("sideAssetId", "Side", [AssetType.VIDEO, AssetType.PANORAMA]),
+      assetField("sideAssetId", "Side", [AssetType.VIDEO, AssetType.IMAGE]),
       assetField("highlightAssetId", "Highlight", [
         AssetType.IMAGE,
       ]),
@@ -771,7 +771,7 @@ export const resourceConfigs = {
         AssetType.VIDEO,
         AssetType.PANORAMA,
       ]),
-      assetField("sideAssetId", "Side", [AssetType.VIDEO, AssetType.PANORAMA, AssetType.IMAGE]),
+      assetField("sideAssetId", "Side", [AssetType.VIDEO, AssetType.IMAGE]),
       {
         name: "displayName",
         label: "Display Name",
@@ -970,7 +970,7 @@ export const resourceConfigs = {
         AssetType.VIDEO,
         AssetType.PANORAMA,
       ]),
-      assetField("sideAssetId", "Side", [AssetType.VIDEO, AssetType.PANORAMA]),
+      assetField("sideAssetId", "Side", [AssetType.VIDEO, AssetType.IMAGE]),
     ],
     childTypes: [],
   },

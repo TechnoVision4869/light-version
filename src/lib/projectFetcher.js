@@ -17,7 +17,7 @@ export const fetchProjectById = async (projectId, useMockup) => {
         if (response?.developerProjects?.[0]) {
             project = { ...response.developerProjects[0], id: projectId };
         }
+        // console.log("response:", response);
     }
-    
     return project;
 };

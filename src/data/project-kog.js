@@ -1,3 +1,4 @@
+import { PROPERTY_TYPE } from "../constants/roles";
 import TBK_LOGO from '../assets/images/tbk-logo.png';
 import TBK_BACKGROUND from '../assets/images/background.jpg';
 import KS_THUMBNAIL from '../assets/images/ks-thumbnail.png';
@@ -1385,7 +1386,7 @@ export const DEVELOPER_TBK = {
                         properties: [
                             {
                                 id: "town",
-                                type: "town",
+                                type: PROPERTY_TYPE.TOWNHOUSE,
                                 videos: sage_family_videos,
                                 views: sage_family_views,
                                 blocks: [
@@ -1424,7 +1425,7 @@ export const DEVELOPER_TBK = {
                         properties: [
                             {
                                 id: "iris-1",
-                                type: "villa",
+                                type: PROPERTY_TYPE.VILLA,
                                 videos: iris_1_videos,
                                 views: iris_views,
                                 units: [
@@ -1659,7 +1660,7 @@ export const DEVELOPER_TBK = {
                         properties: [
                             {
                                 id: "iris-2",
-                                type: "villa",
+                                type: PROPERTY_TYPE.VILLA,
                                 highlight: "kog/highlight/types/type1.png",
                                 description: "Luxury 4-bedroom villa with rooftop lounge.",
                                 videos: iris_2_videos,
@@ -1766,7 +1767,7 @@ export const DEVELOPER_TBK = {
                         properties: [
                             {
                                 id: "meadows1",
-                                type: "town",
+                                type: PROPERTY_TYPE.TOWNHOUSE,
                                 videos: meadows_1_videos,
                                 views: meadows_views,
                                 blocks: [
@@ -2200,7 +2201,7 @@ export const DEVELOPER_TBK = {
                         properties: [
                             {
                                 id: "meadows1",
-                                type: "town",
+                                type: PROPERTY_TYPE.TOWNHOUSE,
                                 videos: meadows_2_videos,
                                 views: meadows_views,
                                 blocks: [
@@ -2952,7 +2953,7 @@ export const DEVELOPER_TBK = {
                         properties: [
                             {
                                 id: "town",
-                                type: "town",
+                                type: PROPERTY_TYPE.TOWNHOUSE,
                                 videos: oak168_videos,
                                 views: oak168_views,
                                 blocks: [
@@ -3273,7 +3274,7 @@ export const DEVELOPER_TBK = {
                         properties: [
                             {
                                 id: "town",
-                                type: "town",
+                                type: PROPERTY_TYPE.TOWNHOUSE,
                                 videos: oak170_z8_6u_videos,
                                 views: oak170_6u_views,
                                 blocks: [
@@ -3326,7 +3327,7 @@ export const DEVELOPER_TBK = {
                         properties: [
                             {
                                 id: "town",
-                                type: "town",
+                                type: PROPERTY_TYPE.TOWNHOUSE,
                                 videos: oak170_4u_videos,
                                 views: oak170_4u_views,
                                 blocks: [
@@ -3414,7 +3415,7 @@ export const DEVELOPER_TBK = {
                         properties: [
                             {
                                 id: "town",
-                                type: "town",
+                                type: PROPERTY_TYPE.TOWNHOUSE,
                                 videos: oak178_z9_videos,
                                 views: oak178_z9_views,
                                 blocks: [
@@ -3467,7 +3468,7 @@ export const DEVELOPER_TBK = {
                         properties: [
                             {
                                 id: "town",
-                                type: "town",
+                                type: PROPERTY_TYPE.TOWNHOUSE,
                                 videos: oak178_z10_videos,
                                 views: oak178_z10_views,
                                 blocks: [
@@ -3576,7 +3577,7 @@ export const DEVELOPER_TBK = {
                         properties: [
                             {
                                 id: "camilia-z11",
-                                type: "villa",
+                                type: PROPERTY_TYPE.VILLA,
                                 videos: camilia_1_videos,
                                 views: camilia_views,
                                 units: [
@@ -3621,7 +3622,7 @@ export const DEVELOPER_TBK = {
                         properties: [
                             {
                                 id: "camilia-z12",
-                                type: "villa",
+                                type: PROPERTY_TYPE.VILLA,
                                 videos: camilia_2_videos,
                                 views: camilia_views,
                                 units: [

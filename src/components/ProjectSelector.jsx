@@ -9,6 +9,7 @@ import { assetApi } from "../api/admin/assetApi";
 import { DATA, PATH } from "../data/layers";
 import { fetchProjectById } from "../lib/projectFetcher";
 
+const DEFAULT_LOGO = '/default-logo.png';
 const projectPath = PATH;
 const PROJECT_HIGHLIGHT = `/${projectPath}/images/project-highlight.png`;
 
@@ -93,7 +94,7 @@ export default function ProjectSelector({
           setLoading(false);
           return;
         }
-
+        console.log("Fetched projects:", response);
         setProjects(response);
 
         // Fetch thumbnails and intro videos for all projects
@@ -258,18 +259,22 @@ export default function ProjectSelector({
 
         {/* Project highlight overlay — same cover sizing = pixel-perfect match */}
         {usePredefinedPos && !loading && projects.length > 0 && (
-          <img
-            src={PROJECT_HIGHLIGHT}
-            alt=""
-            className={`absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-300 ${isProjectHovered ? 'opacity-70' : 'opacity-100'}`}
-          />
+          projects.map((project) => {
+            return (
+              <img
+              src={thumbnailUrls[project.id]}
+              alt=""
+              className={`absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-300 ${isProjectHovered ? 'opacity-70' : 'opacity-100'}`}
+            />
+            )
+          })
         )}
 
         {/* UI content */}
         <div className="relative z-10 w-full h-full flex flex-col items-center justify-start pt-8">
           <div className="mb-8">
             <img
-              src={developerAssets.logoImage}
+              src={developerAssets.logoImage || DEFAULT_LOGO}
               alt="Developer Logo"
               className="w-auto h-auto max-h-22 xl:max-h-26 xl:w-26 max-w-[90vw] xl:max-w-md"
             />
@@ -307,7 +312,7 @@ export default function ProjectSelector({
                       disabled={disabled}
                       className="absolute rounded-2xl overflow-hidden backdrop-blur-sm bg-[#00000066]
                        text-white py-2 px-4 text-xl
-                       hover:bg-[#4a6082] hover:scale-105 disabled:bg-[00000044] disabled:text-white/50 disabled:cursor-not-allowed transition-all duration-200"
+                       hover:bg-[#4a6082] hover:scale-105 disabled:bg-[00000044] disabled:text-white/50 disabled:cursor-not-allowed transition-all duration-500"
                       onClick={() => handleProjectPress(project.id, introVideoUrls[project.id])}
                       onMouseEnter={() => !disabled && setIsProjectHovered(true)}
                       onMouseLeave={() => setIsProjectHovered(false)}

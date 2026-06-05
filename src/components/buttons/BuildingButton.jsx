@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { SidebarContext } from "../../store/SidebarContextProvider";
+import { PROPERTY_TYPE } from "../../constants/roles";
 // Icons
 import AREA_ICON from "../../assets/icons/area.svg"
 import BED_ICON from "../../assets/icons/bed.png"
@@ -11,7 +12,7 @@ export default function BuildingButton({ building, isDisabled, goToItem }) {
     const { highlightedButton, setHighlightedButton } = useContext(SidebarContext);
 
     let unitsToFilter = [];
-    if (building.type === "tower") unitsToFilter = building.floors.flatMap(floor => floor.units);
+    if (building.type === PROPERTY_TYPE.TOWER) unitsToFilter = building.floors.flatMap(floor => floor.units);
     else unitsToFilter = building.units;
     
     const { min: minBedrooms, max: maxBedrooms } = getMinMaxRange(unitsToFilter, FILTER_ENUM.BEDROOMS);

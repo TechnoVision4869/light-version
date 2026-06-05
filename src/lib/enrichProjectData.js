@@ -149,7 +149,7 @@ export async function prefetchProjectByLevels(project, depth = 1) {
         surrounding.zoomoutAssetId,
         surrounding.forwardAssetId,
         surrounding.reverseAssetId,
-        surrounding.idleAssetId,
+        surrounding.idleAssetId || surrounding.sideVideoId,
       ];
       videos.forEach((vid) => {
         if (vid && typeof vid === 'string' && !videoUrls.includes(vid)) {
@@ -320,6 +320,7 @@ async function transformAssetIds(obj) {
     if (
       (key.endsWith("AssetId") ||
         key.endsWith("VideoId") ||
+        key.endsWith("ImgId") ||
         key.includes("highlight") ||
         key.includes("zoomOutVideo") ||
         key.includes("balconyView")) &&

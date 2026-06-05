@@ -1,3 +1,10 @@
+// Mirrors backend PropertyType enum (property.entity.ts)
+export const PROPERTY_TYPE = {
+  VILLA: 'VILLA',
+  TOWER: 'TOWER',
+  TOWNHOUSE: 'TOWNHOUSE',
+};
+
 export const ROLES = {
   ADMIN: 'admin',
   SYSTEM_ADMIN: 'system_admin',
