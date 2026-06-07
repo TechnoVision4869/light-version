@@ -28,19 +28,21 @@ export default function SidebarContextProvider({ children }) {
             return null;
         };
 
-        return [
-        {
-            tab: TABS.HOME,
-            layer: null,
-            item: null,
-            videosPath: {
-                forwardVideo: getVideoUrl(project, 'zoomoutVideo', 'zoomoutVideoId') ?? null,
-                reverseVideo: null,
-                idleVideo: getVideoUrl(project, 'idleVideo', 'idleVideoId', 'idleAssetId') ?? null,
+        const initHistory = [
+            {
+                tab: TABS.HOME,
+                layer: null,
+                item: null,
+                videosPath: {
+                    forwardVideo: getVideoUrl(project, 'zoomoutVideo', 'zoomoutVideoId') ?? null,
+                    reverseVideo: null,
+                    idleVideo: getVideoUrl(project, 'idleVideo', 'idleVideoId', 'idleAssetId') ?? null,
+                },
+                views: null,
             },
-            views: null,
-        },
-    ]
+        ];
+        
+        return initHistory;
     }, []);
 
 
@@ -145,7 +147,7 @@ export default function SidebarContextProvider({ children }) {
                 idleVideo: selectedItem.zonesSideVideoId || selectedItem.sideVideoId,
             }
             : {
-                forwardVideo: selectedItem.zonesZoomoutVideoId || selectedItem.zoomOutVideo,
+                forwardVideo: selectedItem.zonesZoomoutVideoId || selectedItem.zoomoutVideo,
                 reverseVideo: selectedItem.zonesReverseVideoId || selectedItem.reverseVideoId,
                 idleVideo: selectedItem.zonesSideVideoId || selectedItem.sideVideoId,
             };

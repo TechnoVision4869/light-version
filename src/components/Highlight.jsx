@@ -3,7 +3,7 @@ import { SidebarContext } from "../store/SidebarContextProvider"
 
 export default function Highlight() {
     const { highlightedButton } = useContext(SidebarContext);
-    const HIGHLIGHT_IMG = highlightedButton?.highlight;
+    const HIGHLIGHT_IMG = highlightedButton?.highlight || highlightedButton?.highlightAssetId;
     if (HIGHLIGHT_IMG) {
         return (
             <>

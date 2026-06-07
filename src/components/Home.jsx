@@ -157,7 +157,7 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
       case TABS.ZONES:
         selectedItem = currentProject.zones;
         if(selectedItem.items.length === 1) {
-          const zonesZoomoutVideo = selectedItem.zoomoutVideo;
+          const zonesZoomoutVideo = selectedItem.zoomoutVideo || selectedItem.zonesZoomoutVideoId;
           selectedItem = { ...selectedItem.items[0], zoomoutVideo: zonesZoomoutVideo };
           layer = LAYERS.ZONE_DETAIL;
         }

@@ -264,6 +264,7 @@ export default function ProjectSelector({
               <img
               src={thumbnailUrls[project.id]}
               alt=""
+              id={`highlight-${project.id}`}
               className={`absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-300 ${isProjectHovered ? 'opacity-70' : 'opacity-100'}`}
             />
             )
