@@ -122,7 +122,7 @@ export async function prefetchProjectByLevels(project, depth = 1) {
             }
           });
 
-          // ===== LEVEL 3: Unit Interior Videos =====
+          // ===== LEVEL 3: Unit Videos =====
           if (depth >= 3 && property.units?.length) {
             property.units.forEach((unit) => {
               const unitVideos = [
@@ -352,7 +352,7 @@ async function transformAssetIds(obj) {
       transformed[key] = await transformAssetIds(value);
     }
   }
-  console.log(transformed);
+  // console.log(transformed);
   return transformed;
 }
 
