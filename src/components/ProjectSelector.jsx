@@ -272,14 +272,14 @@ export default function ProjectSelector({
         )}
 
         {/* UI content */}
-        <div className="relative z-10 w-full h-full flex flex-col items-center justify-start pt-8">
-          <div className="mb-8">
+        <div className="relative z-10 w-full h-full flex flex-col items-center justify-start pt-14">
+          {developerAssets.logoImage && <div className="mb-8">
             <img
-              src={developerAssets.logoImage || DEFAULT_LOGO}
+              src={developerAssets.logoImage}
               alt="Developer Logo"
               className="w-auto h-auto max-h-22 xl:max-h-26 xl:w-26 max-w-[90vw] xl:max-w-md"
             />
-          </div>
+          </div>}
           {showBackButton && !useStatic && onBackButtonClick && (
             <button
               onClick={onBackButtonClick}
@@ -341,6 +341,7 @@ export default function ProjectSelector({
             <div className="flex flex-wrap gap-8 xl:gap-10 justify-center">
               {projects.map((project) => {
                 const disabled = !introVideoUrls[project.id];
+                const isPressed = pressedProjectId === project.id;
                 return (
                   <div
                     key={project.id}
@@ -364,14 +365,21 @@ export default function ProjectSelector({
                       </p>
 
                       <button
-                        onClick={() =>
-                          fetchSelectedProject(
-                            project.id,
-                            introVideoUrls[project.id],
-                          )
-                        }
+                        onClick={() => handleProjectPress(project.id, introVideoUrls[project.id])}
                         disabled={disabled}
-                        className={`w-full py-2 px-4 bg-transparent border ${disabled ? "" : "hover:bg-white hover:text-black hover:border-white"} disabled:text-white/50 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-colors duration-300`}
+                        className={`w-full py-2 px-4 bg-transparent border
+                          ${disabled ? "" : "hover:bg-white hover:text-black hover:font-bold hover:border-white"} hover:scale-102
+                          disabled:text-white/50 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-all duration-300`}
+                        style={
+                          isPressed
+                            ? {
+                                backgroundColor: "white",
+                                color: "black",
+                                fontWeight: "bold",
+                                transform: "scale(1.02)",
+                              }
+                            : {}
+                        }
                       >
                         {disabled ? "Coming Soon" : "Open Project"}
                       </button>

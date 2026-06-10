@@ -20,10 +20,8 @@ export default function AnimFloatButton({
         >
             {/* Name Part (Left) - Only if nameDirection is "left" */}
             {nameDirection === "left" && (
-                <div className={`px-[8px] py-[7px] rounded-l-full flex items-center transition-all duration-200
-                    ${isSelected
-                        ? 'bg-[#1A5C55]'
-                        : 'bg-[#59A198]/85'}`}>
+                <div className={`surr-btn px-[8px] py-[7px] rounded-l-full flex items-center transition-all duration-200
+                    ${isSelected ? "selected" : ""}`}>
                     <span className={`whitespace-nowrap font-medium transition-all duration-200 text-white
                         ${isSelected
                             ? 'text-sm'
@@ -32,10 +30,10 @@ export default function AnimFloatButton({
             )}
 
             {/* Icon Part - Teal Background */}
-            <div className={`px-[6px] py-[5px] flex items-center justify-center flex-shrink-0 transition-all duration-200
-                ${isSelected
-                    ? `bg-[#1A5C55] ${nameDirection === "left" ? 'rounded-r-full' : 'rounded-l-full'}`
-                    : `bg-[#59A198]/85 rounded-l-full`}`}>
+            <div className={`surr-icon px-[6px] py-[5px] flex items-center justify-center flex-shrink-0 transition-all duration-200
+                ${isSelected 
+                    ? `selected ${nameDirection && nameDirection === "left" ? 'rounded-r-full' : 'rounded-l-full'}` 
+                    : `${!nameDirection ? "rounded-full": "rounded-l-full"}`} `}> 
                 {icon && (
                     <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
                         <img src={icon} className="w-4 h-4 p-[1px]" />
@@ -46,10 +44,8 @@ export default function AnimFloatButton({
 
             {/* Name Part (Right) - Only if nameDirection is "right" */}
             {nameDirection === "right" && (
-                <div className={`px-[8px] py-[7px] rounded-r-full flex items-center gap-1 transition-all duration-200
-                    ${isSelected
-                        ? 'bg-[#1A5C55]'
-                        : 'bg-[#59A198]/85'}`}>
+                <div className={`surr-name px-[8px] py-[7px] rounded-r-full flex items-center gap-1 transition-all duration-200
+                    ${isSelected ? "selected" : ""} `}> 
                     <span className={`whitespace-nowrap font-medium transition-all duration-200 text-white
                         ${isSelected
                             ? 'text-sm'

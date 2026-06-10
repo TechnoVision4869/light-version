@@ -144,7 +144,7 @@ export default function BaseFloating({ mediaRef }) {
                             goToItem(item, LAYERS.SURROUNDING_DETAIL);
                         }}
                         isSelected={isSelected}
-                        // nameDirection={item.nameDirection || "right"}
+                        nameDirection={item.nameDirection ? item.nameDirection : "right"}
                     />
                 );
             })
@@ -187,6 +187,8 @@ export default function BaseFloating({ mediaRef }) {
         );
     }
 
+    const shortName = itemsToRender.length >= 12 && activeLayer === LAYERS.ZONE_DETAIL;
+
     // Default rendering for other layers
     return (
         itemsToRender.map((item) => {
@@ -201,6 +203,7 @@ export default function BaseFloating({ mediaRef }) {
                     <BaseFloatButton
                         key={item.id}
                         name={item.displayName || item.zoneName || item.name}
+                        shortName={shortName} 
                         tabType={activeTab}
                         layerType={activeLayer}
                         style={{
@@ -223,6 +226,7 @@ export default function BaseFloating({ mediaRef }) {
                 <BaseFloatButton
                     key={item.id}
                     name={item.displayName || item.name}
+                    shortName={shortName}
                     tabType={activeTab}
                     layerType={activeLayer}
                     triClass="triangle-small-down"

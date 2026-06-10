@@ -213,9 +213,9 @@ export default function Panorama({ unit }) {
         projection={projection}
         onLoad={handleLoad}
         onReady={handleReady}
-        zoomRange={CONFIG.ZOOM_RANGE}
-        pitchRange={CONFIG.PITCH_RANGE}
-        initialYaw={CONFIG.INITIAL_YAW}
+        zoomRange={{ min: 0.8, max: 1.333 }}
+        pitchRange={{ min: -30, max: 15 }}
+        initialYaw={190}
         style={{ touchAction: "none" }}
         scrollable={false}
       >

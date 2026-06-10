@@ -59,7 +59,7 @@ export default function InfoPopup({ showInfoPopup, onClose }) {
     if (activeLayer === LAYERS.SURROUNDING_DETAIL) {
         return (
             <div className={wrapperClass} onTransitionEnd={handleTransitionEnd}>
-                <div className="bg-[#4A8E86] text-white rounded-2xl shadow-2xl p-3 md:p-4 relative overflow-hidden">
+                <div className="info-bg-main text-white rounded-2xl shadow-2xl p-3 md:p-4 relative overflow-hidden">
                     {closeBtn}
 
                     {/* Horizontal layout */}
@@ -77,7 +77,7 @@ export default function InfoPopup({ showInfoPopup, onClose }) {
                                 <h3 className="font-bold text-sm md:text-base">
                                     {currentItem.displayName}
                                 </h3>
-                                <div className="mt-1 inline-flex items-center space-x-1 bg-[#1A5C55BD] px-2 py-1 rounded-xl">
+                                <div className="info-bg-sub mt-1 inline-flex items-center space-x-1 px-2 py-1 rounded-xl">
                                     <img src={CAR_ICON} className="w-6 h-4" />
                                     <span className="text-sm md:text-base">
                                         {currentItem.distance}

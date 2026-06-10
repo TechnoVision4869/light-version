@@ -5,8 +5,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @font-face {
-  font-family: 'Quicksand';
+  font-family: 'Quicksand'; 
   src: url('./fonts/Quicksand/Quicksand-VariableFont_wght.ttf') format('truetype');
+  /* font-family: 'Roboto'; */
+  /* src: url('./fonts/Roboto/Roboto-VariableFont_wdth,wght.ttf') format('truetype'); */
   font-weight: 300 700;
   font-style: normal;
   font-display: swap;
@@ -62,8 +64,9 @@ html {
 body {
   margin: 0;
   overflow-x: hidden;
-  /* font-family: 'Quicksand', sans-serif; */
-  font-family: 'Inter', sans-serif;
+  font-family: 'Quicksand', sans-serif;
+  /* font-family: 'Roboto', sans-serif; */
+  /* font-family: 'Inter', sans-serif; */
   background-color: #434343;
   color: #FFFFFF;
 }
@@ -224,15 +227,93 @@ body {
   z-index: 30;
 }
 
+/* for tbk */
+/*
 .blur-backdrop-button {
-  background: rgba(52, 47, 38, 0.8);
+  background: rgba(62, 74, 92, 0.9);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
+.blur-backdrop-button.selected {
+  background: rgba(58, 120, 210, 1);
+}
 
+.surr-btn {
+  background: rgba(64, 50, 30, 0);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.surr-btn.selected {
+  background: rgba(64, 50, 30, 1);
+}
+  
+.surr-icon {
+  background: rgba(148, 132, 109, 0.75);
+}
+.surr-icon:hover {
+  background: rgba(148, 132, 109, 0.85);
+}
+.surr-icon.selected {
+  background: rgba(64, 50, 30, 1);
+}
+  
+.surr-name{
+  background: rgba(64, 50, 30, 0);
+}
+.surr-name.selected {
+  background: rgba(64, 50, 30, 1);
+}
+
+.info-bg-main {
+  background: rgba(148, 132, 109, 1);
+}
+.info-bg-sub {
+  background: rgba(64, 50, 30, 0.75);
+}
+*/
+
+
+/* for somabay */
+
+.blur-backdrop-button {
+  background:  rgba(52, 47, 38, 0.8);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
 .blur-backdrop-button.selected {
   background: rgba(74, 96, 130, 0.9);
 }
+
+.surr-btn {
+  background: rgba(89, 161, 152, 0.85);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.surr-btn.selected {
+  background: rgba(26, 92, 85, 1);
+}
+
+.surr-icon {
+  background: rgba(89, 161, 152, 0.85);
+}
+.surr-icon.selected {
+  background: rgba(26, 92, 85, 1);
+}
+
+.surr-name{
+  background: rgba(89, 161, 152, 0.85);
+}
+.surr-name.selected {
+  background: rgba(26, 92, 85, 1);
+}
+
+.info-bg-main {
+  background: rgba(74, 142, 134, 1);
+}
+.info-bg-sub {
+  background: rgba(26, 92, 85, 0.75);
+}
+
 
 @keyframes fadeInOut {
   0% { opacity: 0; }

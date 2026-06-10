@@ -1,6 +1,6 @@
 import { LAYERS } from '../../data/layers';
 
-export default function BaseFloatButton({ name, layerType = null, style = {}, isSelected, onSelect, showName = true, triClass = "triangle" }) {
+export default function BaseFloatButton({ name, layerType = null, style = {}, isSelected, onSelect, shortName = false, triClass = "triangle" }) {
     const isFloor = layerType === LAYERS.BUILDING;
 
     return (
@@ -12,8 +12,8 @@ export default function BaseFloatButton({ name, layerType = null, style = {}, is
             }}
             onClick={onSelect}
         >
-            {!showName && <span className='whitespace-nowrap'>{name.split(" ")[1]}</span>}
-            {showName && <span className='whitespace-nowrap'>{name}</span>}
+            {shortName && <span className='whitespace-nowrap'>{name.split(" ")[1]}</span>}
+            {!shortName && <span className='whitespace-nowrap'>{name}</span>}
             {isFloor ? <span className='triangle-right backdrop-blur-sm'></span> : <span className='triangle-small-down'></span>}
             {/* <span className={triClass}></span> */}
         </button>

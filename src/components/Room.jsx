@@ -16,14 +16,14 @@ export default function Room({ room }) {
   const [textureError, setTextureError] = useState(null);
 
   // DEV: tunable values — remove before shipping
-  const [testPointerScale, setTestPointerScale] = useState(1.7);
-  const [testDuration, setTestDuration] = useState(750);
+  // const [testPointerScale, setTestPointerScale] = useState(1.7);
+  // const [testDuration, setTestDuration] = useState(750);
 
-  useEffect(() => {
-    if (!viewerRef.current) return;
-    viewerRef.current.control.rotate.pointerScale = [testPointerScale, testPointerScale];
-    viewerRef.current.control.rotate.duration = testDuration;
-  }, [testPointerScale, testDuration]);
+  // useEffect(() => {
+  //   if (!viewerRef.current) return;
+  //   viewerRef.current.control.rotate.pointerScale = [testPointerScale, testPointerScale];
+  //   viewerRef.current.control.rotate.duration = testDuration;
+  // }, [testPointerScale, testDuration]);
 
   // Check gl.getError() off the render timeline — setTimeout avoids a GPU pipeline stall on the current frame
   const checkGLError = (src) => {
@@ -48,9 +48,12 @@ export default function Room({ room }) {
   };
 
   const handleReady = () => {
+    if (!viewerRef.current) return;
     viewerRef.current.camera.lookAt({ zoom: 1 });
-    viewerRef.current.control.rotate.pointerScale = [testPointerScale, testPointerScale];
-    viewerRef.current.control.rotate.duration = testDuration;
+    // viewerRef.current.control.rotate.pointerScale = [testPointerScale, testPointerScale];
+    // viewerRef.current.control.rotate.duration = testDuration;
+    viewerRef.current.control.rotate.pointerScale = [1.7, 1.7];
+    viewerRef.current.control.rotate.duration = 750;
     viewerRef.current.control.rotate.easing = EASING.EASE_OUT_CUBIC;
   };
 

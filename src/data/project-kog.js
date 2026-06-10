@@ -26,7 +26,7 @@ export const config = {
   // Balcony/Location
     BALCONY_ZOOM_RANGE: { min: 1, max: 1.333 },
     BALCONY_PITCH_RANGE: { min: 0, max: 25 },
-    BALCONY_YAW_RANGE: { min: -70, max: 70 },
+    // BALCONY_YAW_RANGE: { min: -70, max: 70 },
 
   // Titles
     BALCONY_TITLE: "Location View",
@@ -42,7 +42,7 @@ const iris_1_videos = {
 const iris_2_videos = {
     forwardVideo: "/kog/videos/zones/zone3/iris/zone3_iris_gen_trans.mp4",
     reverseVideo: "/kog/videos/zones/zone3/iris/zone3_iris_gen_rev.mp4",
-    idleVideo: "kog/videos/zones/zone3/iris/views/view1/zone3_iris_view1_idle.mp4",
+    idleVideo: "kog/videos/zones/zone2/iris/views/view1/zone2_iris_view1_idle.mp4",
 };
 const iris_views = [
     {
@@ -352,41 +352,41 @@ const oak170_4u_views = [
     {
         name: "view 1",
         videos: {
-            forwardVideo: "kog/videos/zones/zone6/oak170/views/view1/zone6_oak170_view1_trans.mp4",
-            reverseVideo: "kog/videos/zones/zone6/oak170/views/view1/zone6_oak170_view1_rev.mp4",
-            idleVideo: "kog/videos/zones/zone6/oak170/views/view1/zone6_oak170_view1_idle.mp4",
+            forwardVideo: "kog/videos/zones/zone7/oak170/views/view1/zone7_oak170_view1_trans.mp4",
+            reverseVideo: "kog/videos/zones/zone7/oak170/views/view1/zone7_oak170_view1_rev.mp4",
+            idleVideo: "kog/videos/zones/zone7/oak170/views/view1/zone7_oak170_view1_idle.mp4",
         }
     },
     {
         name: "view 2",
         videos: {
-            forwardVideo: "kog/videos/zones/zone6/oak170/views/view2/zone6_oak170_view2_trans.mp4",
-            reverseVideo: "kog/videos/zones/zone6/oak170/views/view2/zone6_oak170_view2_rev.mp4",
-            idleVideo: "kog/videos/zones/zone6/oak170/views/view2/zone6_oak170_view2_idle.mp4",
+            forwardVideo: "kog/videos/zones/zone7/oak170/views/view2/zone7_oak170_view2_trans.mp4",
+            reverseVideo: "kog/videos/zones/zone7/oak170/views/view2/zone7_oak170_view2_rev.mp4",
+            idleVideo: "kog/videos/zones/zone7/oak170/views/view2/zone7_oak170_view2_idle.mp4",
         }
     },
     {
         name: "view 3",
         videos: {
-            forwardVideo: "kog/videos/zones/zone6/oak170/views/view3/zone6_oak170_view3_trans.mp4",
-            reverseVideo: "kog/videos/zones/zone6/oak170/views/view3/zone6_oak170_view3_rev.mp4",
-            idleVideo: "kog/videos/zones/zone6/oak170/views/view3/zone6_oak170_view3_idle.mp4",
+            forwardVideo: "kog/videos/zones/zone7/oak170/views/view3/zone7_oak170_view3_trans.mp4",
+            reverseVideo: "kog/videos/zones/zone7/oak170/views/view3/zone7_oak170_view3_rev.mp4",
+            idleVideo: "kog/videos/zones/zone7/oak170/views/view3/zone7_oak170_view3_idle.mp4",
         }
     },
     {
         name: "view 4",
         videos: {
-            forwardVideo: "kog/videos/zones/zone6/oak170/views/view4/zone6_oak170_view4_trans.mp4",
-            reverseVideo: "kog/videos/zones/zone6/oak170/views/view4/zone6_oak170_view4_rev.mp4",
-            idleVideo: "kog/videos/zones/zone6/oak170/views/view4/zone6_oak170_view4_idle.mp4",
+            forwardVideo: "kog/videos/zones/zone7/oak170/views/view4/zone7_oak170_view4_trans.mp4",
+            reverseVideo: "kog/videos/zones/zone7/oak170/views/view4/zone7_oak170_view4_rev.mp4",
+            idleVideo: "kog/videos/zones/zone7/oak170/views/view4/zone7_oak170_view4_idle.mp4",
         }
     },
     {
         name: "view 5",
         videos: {
-            forwardVideo: "kog/videos/zones/zone6/oak170/views/view5/zone6_oak170_view5_trans.mp4",
-            reverseVideo: "kog/videos/zones/zone6/oak170/views/view5/zone6_oak170_view5_rev.mp4",
-            idleVideo: "kog/videos/zones/zone6/oak170/views/view5/zone6_oak170_view5_idle.mp4",
+            forwardVideo: "kog/videos/zones/zone7/oak170/views/view5/zone7_oak170_view5_trans.mp4",
+            reverseVideo: "kog/videos/zones/zone7/oak170/views/view5/zone7_oak170_view5_rev.mp4",
+            idleVideo: "kog/videos/zones/zone7/oak170/views/view5/zone7_oak170_view5_idle.mp4",
         }
     },
 ];
@@ -995,7 +995,7 @@ const camilia_1_videos = {
 const camilia_2_videos = {
     forwardVideo: "/kog/videos/zones/zone12/camilia/zone12_camilia_gen_trans.mp4",
     reverseVideo: "/kog/videos/zones/zone12/camilia/zone12_camilia_gen_rev.mp4",
-    idleVideo: "kog/videos/zones/zone12/camilia/views/view1/zone11_camilia_view1_idle.mp4",
+    idleVideo: "kog/videos/zones/zone11/camilia/views/view1/zone11_camilia_view1_idle.mp4",
 };
 const camilia_views = [
     {
@@ -3310,15 +3310,15 @@ export const DEVELOPER_TBK = {
                             },
                         ],
                     },
-                    // ZONE 7 OAK 170 4 & 6 UNITS
+                    // ZONE 7 OAK 170 4 UNITS
                     {
-                        id: "zone7",
+                        id: "zone7-1",
                         displayName: "Oak 170 2",
                         subtitle: "Residential Zone",
                         thumbnail: "kog/thumbnails/zones/zone7.png",
-                        highlight: "kog/highlight/zones/zone7.png",
+                        highlight: "kog/highlight/zones/zone7-2.jpg",
                         description: "A tranquil enclave of elegant contemporary townhouses surrounded by lush greenery.",
-                        x: 0.26, y: 0.37,
+                        x: 0.2, y: 0.41,
                         videos: {
                             forwardVideo: "/kog/videos/zones/zone7/zone7_gen_trans.mp4",
                             reverseVideo: "/kog/videos/zones/zone7/zone7_gen_rev.mp4",
@@ -3338,13 +3338,6 @@ export const DEVELOPER_TBK = {
                                         x: 0.83, y: 0.479,
                                         units: oak170_4u_units,
                                     },
-                                    // Oak170 18
-                                    {
-                                        id: "oak170-18",
-                                        displayName: "Oak170 18",
-                                        x: 0.756, y: 0.346,
-                                        units: oak170_z7_6u_units,
-                                    },
                                     // Oak170 19
                                     {
                                         id: "oak170-19",
@@ -3358,13 +3351,6 @@ export const DEVELOPER_TBK = {
                                         displayName: "Oak170 20",
                                         x: 0.571, y: 0.479,
                                         units: oak170_4u_units,
-                                    },
-                                    // Oak170 21
-                                    {
-                                        id: "oak170-21",
-                                        displayName: "Oak170 21",
-                                        x: 0.497, y: 0.333,
-                                        units: oak170_z7_6u_units,
                                     },
                                     // Oak170 22
                                     {
@@ -3380,19 +3366,58 @@ export const DEVELOPER_TBK = {
                                         x: 0.308, y: 0.479,
                                         units: oak170_4u_units,
                                     },
-                                    // Oak170 24
-                                    {
-                                        id: "oak170-24",
-                                        displayName: "Oak170 24",
-                                        x: 0.269, y: 0.331,
-                                        units: oak170_z7_6u_units,
-                                    },
                                     // Oak170 25
                                     {
                                         id: "oak170-25",
                                         displayName: "Oak170 25",
                                         x: 0.153, y: 0.479,
                                         units: oak170_4u_units,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                    // ZONE 7 OAK 170 6 UNITS
+                    {
+                        id: "zone7-2",
+                        displayName: "Oak 170 3",
+                        subtitle: "Residential Zone",
+                        thumbnail: "kog/thumbnails/zones/zone7.png",
+                        highlight: "kog/highlight/zones/zone7-3.jpg",
+                        description: "A tranquil enclave of elegant contemporary townhouses surrounded by lush greenery.",
+                        x: 0.27, y: 0.37,
+                        videos: {
+                            forwardVideo: "/kog/videos/zones/zone7/zone7_gen_trans.mp4",
+                            reverseVideo: "/kog/videos/zones/zone7/zone7_gen_rev.mp4",
+                            idleVideo: "/kog/videos/zones/zone7/zone7_gen_idle.mp4",
+                        },
+                        properties: [
+                            {
+                                id: "town",
+                                type: PROPERTY_TYPE.TOWNHOUSE,
+                                videos: oak170_z7_6u_videos,
+                                views: oak170_6u_views,
+                                blocks: [
+                                    // Oak170 18
+                                    {
+                                        id: "oak170-18",
+                                        displayName: "Oak170 18",
+                                        x: 0.756, y: 0.346,
+                                        units: oak170_z7_6u_units,
+                                    },
+                                    // Oak170 21
+                                    {
+                                        id: "oak170-21",
+                                        displayName: "Oak170 21",
+                                        x: 0.497, y: 0.333,
+                                        units: oak170_z7_6u_units,
+                                    },
+                                    // Oak170 24
+                                    {
+                                        id: "oak170-24",
+                                        displayName: "Oak170 24",
+                                        x: 0.269, y: 0.331,
+                                        units: oak170_z7_6u_units,
                                     },
                                 ],
                             },
@@ -3685,14 +3710,14 @@ export const DEVELOPER_TBK = {
                                         hotspots: [
                                             { id: "hp2", yaw: 162.69, pitch: -11.91, type: "scene", label: "Ground/Living 2" },
                                             { id: "hp3", yaw: 67.19, pitch: -20.96, type: "scene", label: "Ground/Kitchen" },
-                                            { id: "hp4", yaw: -78.18, pitch: -27.69, type: "scene", label: "Ground/Toilet" },
+                                            { id: "hp4", yaw: -52, pitch: -17, type: "scene", label: "Ground/Toilet" },
                                             { id: "hp5", yaw: -171.43, pitch: -14.63, type: "scene", label: "Ground/Living 1" },
                                             { id: "hp6", yaw: -105.42, pitch: -55.75, type: "scene", label: "First/Corridor" }
                                         ]
                                     },
                                     {
                                         id: "g-living01",
-                                        displayName: "Living01",
+                                        displayName: "Living 1",
                                         furnitureImgId: "/kog/panorama/family_midd/f/ground/living01.jpg",
                                         unfurnitureImgId: "/kog/panorama/family_midd/unf/ground/living01.jpg",
                                         hotspots: [
@@ -3701,7 +3726,7 @@ export const DEVELOPER_TBK = {
                                     },
                                     {
                                         id: "g-living02",
-                                        displayName: "Living02",
+                                        displayName: "Living 2",
                                         furnitureImgId: "/kog/panorama/family_midd/f/ground/living02.jpg",
                                         unfurnitureImgId: "/kog/panorama/family_midd/unf/ground/living02.jpg",
                                         hotspots: [
@@ -3859,8 +3884,8 @@ export const DEVELOPER_TBK = {
                                     {
                                         id: "g-entrance",
                                         displayName: "Entrance",
-                                        furnitureImgId: "/kog/panorama/Family_corner/f/ground/entrance_corner.jpeg",
-                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/ground/entrance_corner.jpeg",
+                                        furnitureImgId: "/kog/panorama/Family_corner/f/ground/entrance_corner.jpg",
+                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/ground/entrance_corner.jpg",
                                         hotspots: [
                                             { id: "hp1", yaw: 174.59, pitch: -44.91, type: "scene", label: "First/Corridor" },
                                             { id: "hp2", yaw: -87.67, pitch: -28.3, type: "scene", label: "Ground/Toilet" },
@@ -3968,7 +3993,7 @@ export const DEVELOPER_TBK = {
                                         id: "f1-m_bedroom_toilet",
                                         displayName: "Master Bedroom Toilet",
                                         furnitureImgId: "/kog/panorama/Family_corner/f/first/m.bed_toilet.jpg",
-                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/first/m.bedroom_toilet.jpeg",
+                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/first/m.bedroom_toilet.jpg",
                                         hotspots: [
                                             { id: "hp1", yaw: -90.09, pitch: -46.01, type: "scene", label: "First/Master Bedroom Dressing" }
                                         ]
@@ -3976,8 +4001,8 @@ export const DEVELOPER_TBK = {
                                     {
                                         id: "f1-toilet",
                                         displayName: "Toilet",
-                                        furnitureImgId: "/kog/panorama/Family_corner/f/first/toilet.jpeg",
-                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/first/toilet.jpeg",
+                                        furnitureImgId: "/kog/panorama/Family_corner/f/first/toilet.jpg",
+                                        unfurnitureImgId: "/kog/panorama/Family_corner/unf/first/toilet.jpg",
                                         hotspots: [
                                             { id: "hp1", yaw: 169.63, pitch: -44.25, type: "scene", label: "First/Corridor" }
                                         ]
@@ -4450,8 +4475,8 @@ export const DEVELOPER_TBK = {
                                     {
                                         id: "g-entrance",
                                         displayName: "Entrance",
-                                        furnitureImgId: "/kog/panorama/Meadows/f/ground/entrance.jpeg",
-                                        unfurnitureImgId: "/kog/panorama/Meadows/unf/ground/unf_entrance.jpeg",
+                                        furnitureImgId: "/kog/panorama/Meadows/f/ground/entrance.jpg",
+                                        unfurnitureImgId: "/kog/panorama/Meadows/unf/ground/unf_entrance.jpg",
                                         hotspots: [
                                             { id: "hp1", yaw: 94.17, pitch: -13.89, type: "scene", label: "Ground/Living" },
                                             { id: "hp2", yaw: 50.8, pitch: -36.87, type: "scene", label: "Ground/Toilet" },
@@ -4647,7 +4672,7 @@ export const DEVELOPER_TBK = {
                                         unfurnitureImgId: "/kog/panorama/camilia/unf/ground/entrance_camilia.jpg",
                                         hotspots: [
                                             { id: "hp1", yaw: -146.43, pitch: -11.69, type: "scene", label: "Ground/Living 2" },
-                                            { id: "hp2", yaw: 171.21, pitch: -10.9, type: "scene", label: "Ground/Living01" },
+                                            { id: "hp2", yaw: 171.21, pitch: -10.9, type: "scene", label: "Ground/Living 1" },
                                             { id: "hp3", yaw: 40.08, pitch: -21.36, type: "scene", label: "Ground/Bedroom" },
                                             { id: "hp4", yaw: 160.62, pitch: -29.88, type: "scene", label: "First/Corridor" },
                                             { id: "hp5", yaw: -145.06, pitch: -22.98, type: "scene", label: "Ground/Dining" },
@@ -4660,7 +4685,7 @@ export const DEVELOPER_TBK = {
                                         furnitureImgId: "/kog/panorama/camilia/f/ground/dining.jpg",
                                         unfurnitureImgId: "/kog/panorama/camilia/unf/ground/dining.jpg",
                                         hotspots: [
-                                            { id: "hp1", yaw: 137.5, pitch: -18.06, type: "scene", label: "Ground/Living01" },
+                                            { id: "hp1", yaw: 137.5, pitch: -18.06, type: "scene", label: "Ground/Living 1" },
                                             { id: "hp2", yaw: -135.22, pitch: -23.47, type: "scene", label: "Ground/Living 2" },
                                             { id: "hp3", yaw: 74.62, pitch: -25.14, type: "scene", label: "First/Corridor" },
                                             { id: "hp4", yaw: 19.56, pitch: -25.62, type: "scene", label: "Ground/Entrance" }
@@ -4685,7 +4710,7 @@ export const DEVELOPER_TBK = {
                                         ]
                                     },
                                     {
-                                        id: "living01",
+                                        id: "living 1",
                                         displayName: "Living 1",
                                         furnitureImgId: "/kog/panorama/camilia/f/ground/living01.jpg",
                                         unfurnitureImgId: "/kog/panorama/camilia/unf/ground/living01.jpg",

@@ -6,7 +6,7 @@ import MALL_ICON from '../assets/icons/mall.svg';
 import SERVICE_SVG from '../assets/svgs/service.svg?raw';
 
 export const projectPath = "projects/lastest-light-house";
-const SOMABAY_BG = `/${projectPath}/images/background.jpeg`;
+const SOMABAY_BG = `/${projectPath}/images/background.jpg`;
 
 export const config = {
   // General
@@ -63,7 +63,7 @@ const penta2 = [
 
 export const DEVELOPER_SOMABAY = {
   developerId: "somabay",
-  developerLogo: SOMABAY_LOGO,
+  developerLogo: null,
   backgroundImage: SOMABAY_BG,
   developerProjects: [
     {

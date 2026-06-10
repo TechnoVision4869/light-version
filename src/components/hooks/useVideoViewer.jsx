@@ -322,6 +322,7 @@ export function useVideoViewer() {
         setIsVideosLoaded(true);
 
         setCurrentViewIndex(0);
+        currentViewIndexRef.current = 0;
 
         if (shouldStayIdle || skipNextTransitionRef.current) {
           skipNextTransitionRef.current = false;

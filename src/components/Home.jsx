@@ -524,7 +524,7 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
                       );
                     })()}
 
-                    {activeLayer === LAYERS.SURROUNDING_DETAIL && (
+                    {activeLayer === LAYERS.SURROUNDING_DETAIL && currentItem.svgPath && (
                       <AnimatedPath path={currentItem.svgPath || currentItem?.svg} />
                     )}
 
