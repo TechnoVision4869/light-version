@@ -41,7 +41,7 @@ export default function SidebarContextProvider({ children }) {
                 views: null,
             },
         ];
-        
+
         return initHistory;
     }, []);
 
@@ -54,23 +54,29 @@ export default function SidebarContextProvider({ children }) {
     // Reset history when project changes
     const handleSetCurrentProject = useCallback((project) => {
         // console.log("project", project);
-        
+
         const enrich = async () => {
             try {
-                // Only enrich (preload + cache videos) when using API, not with static data
-                const enrichedProject = useStatic 
-                    ? project 
-                    : await enrichProjectData(project, useStatic, 3);
-                setCurrentProject(enrichedProject);
-                setHistory(getInitHistory(enrichedProject));
-                // Save only the project ID to localStorage
+                if (useStatic) {
+                    setCurrentProject(project);
+                    setHistory(getInitHistory(project));
+                } else {
+                    // Step 1: enrich at depth 0 first, render immediately
+                    const shallowProject = await enrichProjectData(project, useStatic, 0);
+                    setCurrentProject(shallowProject);
+                    setHistory(getInitHistory(shallowProject));
+
+                    // Step 2: then enrich deeper in the background
+                    const deepProject = await enrichProjectData(project, useStatic, 3);
+                    setCurrentProject(deepProject);
+                    setHistory(getInitHistory(deepProject));
+                }
+
                 localStorage.setItem(STORAGE_KEY, project.id);
             } catch (error) {
                 console.error('Error enriching project data:', error);
-                // Fall back to non-enriched project
                 setCurrentProject(project);
                 setHistory(getInitHistory(project));
-                // Save only the project ID to localStorage
                 localStorage.setItem(STORAGE_KEY, project.id);
             }
         };
@@ -79,25 +85,25 @@ export default function SidebarContextProvider({ children }) {
 
     // Restore project from localStorage on mount (after auth is initialized)
     const restoreProject = useCallback(async () => {
-    try {
-        let isMounted = true;
-        const projectId = localStorage.getItem(STORAGE_KEY);
-        
-        if (projectId && isMounted) {
-            // For API mode, only restore after auth is initialized
-            // For static mode, restore immediately
-            if (useStatic || isAuthInitialized) {
-                const project = await fetchProjectById(projectId, useStatic);
-                if (project && isMounted) {
-                    handleSetCurrentProject(project);
+        try {
+            let isMounted = true;
+            const projectId = localStorage.getItem(STORAGE_KEY);
+
+            if (projectId && isMounted) {
+                // For API mode, only restore after auth is initialized
+                // For static mode, restore immediately
+                if (useStatic || isAuthInitialized) {
+                    const project = await fetchProjectById(projectId, useStatic);
+                    if (project && isMounted) {
+                        handleSetCurrentProject(project);
+                    }
                 }
             }
+
+            return () => { isMounted = false; };
+        } catch (error) {
+            console.warn("Failed to restore project:", error);
         }
-        
-        return () => { isMounted = false; };
-    } catch (error) {
-        console.warn("Failed to restore project:", error);
-    }
     }, [handleSetCurrentProject, useStatic, isAuthInitialized]);
 
     useEffect(() => {
@@ -116,7 +122,7 @@ export default function SidebarContextProvider({ children }) {
 
     const findPropertyForItem = useCallback((zone, targetItem) => {
         // console.log(zone, targetItem);
-        
+
         if (!zone?.properties?.length) return null;
         if (zone.properties.length === 1) return zone.properties[0];
 
@@ -131,27 +137,27 @@ export default function SidebarContextProvider({ children }) {
         // console.log(tabKey);
         // console.log(selectedItem);
         let calculatedVideosPath = null;
-        if(useStatic) {
+        if (useStatic) {
             calculatedVideosPath = isFromHome
-            ? selectedItem.videos
-            : {
-                forwardVideo: selectedItem.zoomoutVideo,
-                reverseVideo: selectedItem.videos.reverseVideo,
-                idleVideo: selectedItem.videos.idleVideo,
-            };
+                ? selectedItem.videos
+                : {
+                    forwardVideo: selectedItem.zoomoutVideo,
+                    reverseVideo: selectedItem.videos.reverseVideo,
+                    idleVideo: selectedItem.videos.idleVideo,
+                };
         } else {
             calculatedVideosPath = isFromHome
-            ? {
-                forwardVideo: selectedItem.zonesForwardVideoId || selectedItem.forwardVideoId,
-                reverseVideo: selectedItem.zonesReverseVideoId || selectedItem.reverseVideoId,
-                idleVideo: selectedItem.zonesSideVideoId || selectedItem.sideVideoId,
-            }
-            : {
-                forwardVideo: selectedItem.zonesZoomoutVideoId || selectedItem.zoomoutVideo,
-                reverseVideo: selectedItem.zonesReverseVideoId || selectedItem.reverseVideoId,
-                idleVideo: selectedItem.zonesSideVideoId || selectedItem.sideVideoId,
-            };
-        }        
+                ? {
+                    forwardVideo: selectedItem.zonesForwardVideoId || selectedItem.forwardVideoId,
+                    reverseVideo: selectedItem.zonesReverseVideoId || selectedItem.reverseVideoId,
+                    idleVideo: selectedItem.zonesSideVideoId || selectedItem.sideVideoId,
+                }
+                : {
+                    forwardVideo: selectedItem.zonesZoomoutVideoId || selectedItem.zoomoutVideo || selectedItem.zoomOutVideo,
+                    reverseVideo: selectedItem.zonesReverseVideoId || selectedItem.reverseVideoId,
+                    idleVideo: selectedItem.zonesSideVideoId || selectedItem.sideVideoId,
+                };
+        }
 
         const calculatedViews = selectedItem.views || null;
 
@@ -161,7 +167,7 @@ export default function SidebarContextProvider({ children }) {
                 tab: tabKey,
                 layer: layerKey,
                 item: {
-                    displayName: String(tabKey).charAt(0).toUpperCase() + String(tabKey).slice(1), 
+                    displayName: String(tabKey).charAt(0).toUpperCase() + String(tabKey).slice(1),
                     ...selectedItem
                 },
                 videosPath: calculatedVideosPath,
@@ -194,7 +200,7 @@ export default function SidebarContextProvider({ children }) {
         // Determine videosPath and views with careful fallbacks.
         // Use `undefined` to detect missing values and `null` to represent explicit absence.
         let videosPath = null;
-        if(useStatic) {
+        if (useStatic) {
             videosPath = item?.videos; // undefined if not present
         } else {
             const forwardVideo = item.forwardVideoId || item.forwardAssetId;
@@ -220,8 +226,8 @@ export default function SidebarContextProvider({ children }) {
         }
 
         if (videosPath === undefined) {
-            if(useStatic) {
-            videosPath = property?.videos;
+            if (useStatic) {
+                videosPath = property?.videos;
             } else {
                 videosPath = {
                     forwardVideo: property?.forwardAssetId,
@@ -252,7 +258,7 @@ export default function SidebarContextProvider({ children }) {
         if (videosPath === undefined) videosPath = currentVideosPaths ?? null;
         if (views === undefined) views = currentViews ?? null;
 
-        if(!useStatic) {
+        if (!useStatic) {
             views = views?.map(view => {
                 return {
                     name: view.name,
@@ -267,7 +273,7 @@ export default function SidebarContextProvider({ children }) {
                 const aNum = parseInt(a.name.match(/\d+/)?.[0] || 0);
                 const bNum = parseInt(b.name.match(/\d+/)?.[0] || 0);
                 return aNum - bNum;
-            })            
+            })
         }
 
         setHistory((prev) => [
@@ -396,11 +402,11 @@ export default function SidebarContextProvider({ children }) {
             else if (activeLayer === LAYERS.UNIT) {
                 // Get rooms from unit type interior for floating buttons (only in hotspot/panorama mode)
                 if (!APP_CONFIG.USE_HOTSPOTS) {
-                    const unitType = useStatic 
+                    const unitType = useStatic
                         ? currentProject?.unitTypes?.[currentItem?.unitTypeId]
                         : currentProject?.unitTypes?.find(type => type.id === currentItem?.unitTypeId);
                     const levels = useStatic ? unitType?.interior?.levels : unitType?.levels;
-                    if (levels) {                        
+                    if (levels) {
                         items = levels.flatMap(level => level.rooms || []);
                     }
                 }
@@ -420,7 +426,7 @@ export default function SidebarContextProvider({ children }) {
 
     const ctxValue = {
         useStatic,
-        
+
         currentProject,
         setCurrentProject: handleSetCurrentProject,
         clearSelectedProject: handleClearSelectedProject,

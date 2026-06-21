@@ -22,9 +22,9 @@ export async function enrichProjectData(project, useMockup, preloadDepth = 3) {
 
   // For real data, convert all assetIds/videoIds to file URLs and fetch unit types
   const enrichedProject = await transformAssetIds(project);
-  
+
   // Fetch and attach unit types to the project
-  try {    
+  try {
     let unitTypes = await unitTypeApi.getByProject(enrichedProject.id);
     if (!unitTypes || unitTypes.length === 0) {
       console.warn(`No unit types found for project ${enrichedProject.id}`);
@@ -42,15 +42,31 @@ export async function enrichProjectData(project, useMockup, preloadDepth = 3) {
     console.error("Failed to fetch unit types:", error);
     toast.error("Failed to fetch unit types");
   }
-  
+
+  // Format the data BEFORE preloading so the preloader finds the correct paths
+  // const formattedProject = adaptProjectForUI(enrichedProject);
+
   // Load all videos upfront and wait for Service Worker to cache them
   if (preloadDepth > 0) {
     try {
       console.log('[Cache] Starting video preload...');
       toast.loading('Loading project assets...', { id: 'asset-load' });
-      
+
       await prefetchProjectByLevels(enrichedProject, preloadDepth);
-      
+
+      toast.success('Project assets loaded', { id: 'asset-load' });
+      console.log('[Cache] Video preload complete');
+    } catch (error) {
+      console.error('[Cache] Video preload failed:', error);
+      toast.error('Some assets failed to load', { id: 'asset-load' });
+    }
+  } else if( preloadDepth == 0) {
+    try {
+      console.log('[Cache] Starting video preload...');
+      toast.loading('Loading project assets...', { id: 'asset-load' });
+
+      await prefetchProjectByLevels(enrichedProject, preloadDepth);
+
       toast.success('Project assets loaded', { id: 'asset-load' });
       console.log('[Cache] Video preload complete');
     } catch (error) {
@@ -58,8 +74,111 @@ export async function enrichProjectData(project, useMockup, preloadDepth = 3) {
       toast.error('Some assets failed to load', { id: 'asset-load' });
     }
   }
-  
+
+  console.log("EP: ", enrichedProject);
   return enrichedProject;
+  // console.log("FP: ",formattedProject);
+  // return formattedProject;
+}
+
+/**
+ * Adapts the raw API project data to match the UI's expected hierarchical schema.
+ * Run this AFTER URLs have been resolved by transformAssetIds.
+ */
+export function adaptProjectForUI(raw) {
+  if (!raw) return null;
+
+  // Helper to standardise the nested 'videos' object
+  // const extractVideos = (obj, prefix = "") => ({
+  //   forwardVideo: obj[`${prefix}forwardVideoId`] || obj[`${prefix}ForwardVideoId`] || null,
+  //   reverseVideo: obj[`${prefix}reverseVideoId`] || obj[`${prefix}ReverseVideoId`] || null,
+  //   idleVideo: obj[`${prefix}sideVideoId`] || obj[`${prefix}SideVideoId`] || obj.idleVideoId || null,
+  // });
+
+  // 1. Map Root Properties
+  const uiProject = {
+    ...raw,
+    name: raw.projectName,
+    thumbnail: raw.thumbnailAssetId,
+    introVideo: raw.introVideoId,
+    idleVideo: raw.idleVideoId,
+    zoomoutVideo: raw.zoomoutVideoId,
+  };
+
+  // Clean up old root keys
+  delete uiProject.projectName;
+  delete uiProject.thumbnailAssetId;
+  delete uiProject.introVideoId;
+  delete uiProject.idleVideoId;
+  delete uiProject.zoomoutVideoId;
+
+  // 2. Map Amenities
+  if (uiProject.amenities) {
+    uiProject.amenities = {
+      ...uiProject.amenities,
+      // zoomoutVideo: uiProject.amenities.zoomOutVideo,
+      // videos: extractVideos(uiProject.amenities),
+      items: (uiProject.amenities.items || []).map(item => ({
+        ...item,
+        thumbnail: item.thumbnailAssetId,
+        // videos: extractVideos(item)
+      }))
+    };
+  }
+
+  // 3. Map Surroundings
+  if (uiProject.surroundings) {
+    uiProject.surroundings = {
+      ...uiProject.surroundings,
+      // zoomoutVideo: uiProject.surroundings.zoomOutVideo,
+      // videos: extractVideos(uiProject.surroundings),
+      items: (uiProject.surroundings.items || []).map(item => ({
+        ...item,
+        iconSrc: item.iconAssetId, // Aligning icon names
+        // videos: extractVideos(item)
+      }))
+    };
+  }
+
+  // 4. Map Zones
+  if (uiProject.zones) {
+    uiProject.zones = {
+      ...uiProject.zones,
+      // zoomoutVideo: uiProject.zones.zonesZoomoutVideoId,
+      // videos: extractVideos(uiProject.zones, "zones"), // Uses the prefix
+      items: (uiProject.zones.items || []).map(zone => ({
+        ...zone,
+        displayName: zone.zoneName || zone.displayName, // Fix the zoneName mismatch
+        thumbnail: zone.thumbnailAssetId,
+        // videos: extractVideos(zone),
+        // Assuming properties need similar mapping if populated
+        properties: (zone.properties || []).map(prop => ({
+          ...prop,
+          // videos: extractVideos(prop)
+        }))
+      }))
+    };
+  }
+
+  // 5. Map Unit Types (Array to Dictionary & Remove redundent Project object)
+  if (Array.isArray(uiProject.unitTypes)) {
+    const unitDictionary = {};
+
+    uiProject.unitTypes.forEach(unit => {
+      // Create a clean copy without the redundant project object
+      const cleanUnit = { ...unit };
+      delete cleanUnit.project;
+
+      // Store in dictionary using the unit name (e.g., "107A11") as the key
+      if (cleanUnit.name) {
+        unitDictionary[cleanUnit.name] = cleanUnit;
+      }
+    });
+
+    uiProject.unitTypes = unitDictionary;
+  }
+
+  return uiProject;
 }
 
 /**
@@ -76,66 +195,112 @@ export async function enrichProjectData(project, useMockup, preloadDepth = 3) {
  * @returns {Promise<{loaded: number, failed: number, totalSize: string}>}
  */
 export async function prefetchProjectByLevels(project, depth = 1) {
-  if (!project || depth < 1) {
+  if (!project || depth < 0) {
     return { loaded: 0, failed: 0, totalSize: '0 MB' };
   }
 
   const videoUrls = [];
 
-  // ===== LEVEL 0: Project Videos (already loaded from URL conversion) =====
+  // ===== LEVEL 0: Project Videos =====
   const projectVideos = [
-    project.zoomoutAssetId,
-    project.introAssetId,
-    project.idleAssetId,
+    project.zoomoutVideoId,
+    project.introVideoId,
+    project.idleVideoId,
   ];
   projectVideos.forEach((vid) => {
     if (vid && typeof vid === 'string') videoUrls.push(vid);
   });
 
   // ===== LEVEL 1: Zone Videos =====
-  if (depth >= 1 && project?.zones?.items?.length) {
-    project.zones.items.forEach((zone) => {
+  if (depth >= 1 && project?.zones) {
+    const zonesVideos = [
+      project?.zones.zonesZoomoutVideoId,
+      project?.zones.zonesForwardVideoId,
+      project?.zones.zonesReverseVideoId,
+      project?.zones.zonesSideVideoId,
+    ];
+    zonesVideos.forEach((vid) => {
+      if (vid && typeof vid === 'string' && !videoUrls.includes(vid)) {
+        videoUrls.push(vid);
+      }
+    });
+
+    project.zones.items.forEach((item) => {
       const zoneVideos = [
-        zone.zoomoutAssetId,
-        zone.zoomoutVideo,
-        zone.forwardAssetId,
-        zone.reverseAssetId,
+        item?.forwardVideoId,
+        item?.reverseVideoId,
+        item?.sideVideoId,
       ];
+
       zoneVideos.forEach((vid) => {
         if (vid && typeof vid === 'string' && !videoUrls.includes(vid)) {
           videoUrls.push(vid);
         }
       });
 
-      // ===== LEVEL 2: Property Videos (within zones) =====
-      if (depth >= 2 && zone.properties?.length) {
-        zone.properties.forEach((property) => {
-          const propVideos = [
+      // ===== LEVEL 2: Zone video & Properties Videos (within zones) =====
+      if (depth >= 2 && item.properties?.length) {
+        item.properties.forEach((property) => {
+          const propertyVideos = [
             property.forwardAssetId,
             property.reverseAssetId,
             property.idleAssetId,
-            property.zoomoutAssetId,
           ];
-          propVideos.forEach((vid) => {
+          propertyVideos.forEach((vid) => {
             if (vid && typeof vid === 'string' && !videoUrls.includes(vid)) {
               videoUrls.push(vid);
             }
           });
 
-          // ===== LEVEL 3: Unit Videos =====
-          if (depth >= 3 && property.units?.length) {
-            property.units.forEach((unit) => {
-              const unitVideos = [
-                unit.forwardAssetId,
-                unit.reverseAssetId,
-                unit.idleAssetId,
+          // Property Viwes
+          if (property.views?.length) {
+            property.views.forEach((view) => {
+              const viewVideo = [
+                view.forwardAssetId,
+                view.reverseAssetId,
+                view.sideAssetId,
               ];
-              unitVideos.forEach((vid) => {
+              viewVideo.forEach((vid) => {
                 if (vid && typeof vid === 'string' && !videoUrls.includes(vid)) {
                   videoUrls.push(vid);
                 }
               });
-            });
+            })
+          }
+
+
+          // ===== LEVEL 3: Unit Videos =====
+          if (depth >= 3 && property.floors?.length) {
+            property.floors.forEach((floor) => {
+              const floorVideos = [
+                floor.forwardAssetId,
+                floor.reverseAssetId,
+                floor.sideAssetId,
+                floor.highlightAssetId,
+              ];
+              floorVideos.forEach((vid) => {
+                if (vid && typeof vid === 'string' && !videoUrls.includes(vid)) {
+                  videoUrls.push(vid);
+                }
+              });
+
+              if (floor.units?.length) {
+                floor.units.forEach((unit) => {
+                  const unitVideos = [
+                    unit.forwardAssetId,
+                    unit.reverseAssetId,
+                    unit.sideAssetId,
+                    unit.balconyView,
+                  ];
+                  unitVideos.forEach((vid) => {
+                    if (vid && typeof vid === 'string' && !videoUrls.includes(vid)) {
+                      videoUrls.push(vid);
+                    }
+                  });
+                })
+              }
+            }
+            );
           }
         });
       }
@@ -146,10 +311,10 @@ export async function prefetchProjectByLevels(project, depth = 1) {
   if (depth >= 1 && project?.surroundings?.items?.length) {
     project.surroundings.items.forEach((surrounding) => {
       const videos = [
-        surrounding.zoomoutAssetId,
-        surrounding.forwardAssetId,
-        surrounding.reverseAssetId,
-        surrounding.idleAssetId || surrounding.sideVideoId,
+        surrounding.zoomOutVideo,
+        surrounding.forwardVideoId,
+        surrounding.reverseVideoId,
+        surrounding.sideVideoId,
       ];
       videos.forEach((vid) => {
         if (vid && typeof vid === 'string' && !videoUrls.includes(vid)) {
@@ -163,10 +328,10 @@ export async function prefetchProjectByLevels(project, depth = 1) {
   if (depth >= 1 && project?.amenities?.items?.length) {
     project.amenities.items.forEach((amenity) => {
       const videos = [
-        amenity.zoomoutAssetId,
-        amenity.forwardAssetId,
-        amenity.reverseAssetId,
-        amenity.idleAssetId,
+        amenity.zoomOutVideo,
+        amenity.forwardVideoId,
+        amenity.reverseVideoId,
+        amenity.sideVideoId,
       ];
       videos.forEach((vid) => {
         if (vid && typeof vid === 'string' && !videoUrls.includes(vid)) {
@@ -188,7 +353,7 @@ export async function prefetchProjectByLevels(project, depth = 1) {
 
   for (let i = 0; i < uniqueUrls.length; i += batchSize) {
     const batch = uniqueUrls.slice(i, i + batchSize);
-    
+
     const results = await Promise.allSettled(
       batch.map((url) => loadAndCacheVideo(url))
     );
@@ -228,7 +393,7 @@ async function loadAndCacheVideo(url) {
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
-    
+
     const blob = await response.blob();
     return blob.size;
   } catch (error) {
@@ -259,8 +424,8 @@ export function describeLevels(project) {
       surroundings: project.surroundings?.items?.length || 0,
       amenities: project.amenities?.items?.length || 0,
       totalVideos: (project.zones?.items?.length || 0) * 3 +
-                   (project.surroundings?.items?.length || 0) * 3 +
-                   (project.amenities?.items?.length || 0) * 3,
+        (project.surroundings?.items?.length || 0) * 3 +
+        (project.amenities?.items?.length || 0) * 3,
     },
     level2: {
       name: 'Properties (within Zones)',
@@ -364,7 +529,7 @@ async function enrichImageArrays(imageArray) {
   return Promise.all(
     imageArray.map(async (item) => {
       if (!item.assetId) return item;
-      
+
       try {
         const fileUrl = await assetApi.getAssetFileUrl(item.assetId);
         return {
@@ -394,12 +559,12 @@ async function enrichUnitTypeLevels(unitType) {
   enriched.levels = await Promise.all(
     unitType.levels.map(async (level) => {
       const enrichedLevel = { ...level };
-      
+
       if (level.rooms && Array.isArray(level.rooms)) {
         enrichedLevel.rooms = await Promise.all(
           level.rooms.map(async (room) => {
             const enrichedRoom = { ...room };
-            
+
             // Transform furnitureImgId
             if (room.furnitureImgId) {
               try {
@@ -408,7 +573,7 @@ async function enrichUnitTypeLevels(unitType) {
                 console.error(`Failed to fetch furnitureImgId for room ${room.id}:`, error);
               }
             }
-            
+
             // Transform unfurnitureImgId
             if (room.unfurnitureImgId) {
               try {
@@ -417,12 +582,12 @@ async function enrichUnitTypeLevels(unitType) {
                 console.error(`Failed to fetch unfurnitureImgId for room ${room.id}:`, error);
               }
             }
-            
+
             return enrichedRoom;
           })
         );
       }
-      
+
       return enrichedLevel;
     })
   );
