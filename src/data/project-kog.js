@@ -986,7 +986,7 @@ const oak178_z10_units = [
     },
 ];
 
-// CAMILIA - ZONE 11 & 12 - 5 UNITS
+// FOREST (CAMILIA) - ZONE 11 & 12 - 5 UNITS
 const camilia_1_videos = {
     forwardVideo: "/kog/videos/zones/zone11/camilia/zone11_camilia_gen_trans.mp4",
     reverseVideo: "/kog/videos/zones/zone11/camilia/zone11_camilia_gen_rev.mp4",
@@ -3585,10 +3585,10 @@ export const DEVELOPER_TBK = {
                             },
                         ],
                     },
-                    // ZONE 11 CAMILIA 1
+                    // ZONE 11 FOREST (CAMILIA) 1
                     {
                         id: "zone11",
-                        displayName: "CAMILIA 1",
+                        displayName: "FOREST 1",
                         subtitle: "Residential Zone",
                         thumbnail: "kog/thumbnails/zones/zone11.png",
                         highlight: "kog/highlight/zones/zone11.png",
@@ -3609,7 +3609,7 @@ export const DEVELOPER_TBK = {
                                     {
                                         id: "CAMILIA-1A",
                                         unitTypeId: "camilia",
-                                        displayName: "CAMILIA 1A",
+                                        displayName: "FOREST 1A",
                                         price: 2200000,
                                         area: 385,
                                         bedrooms: 5, bathrooms: 7,
@@ -3619,7 +3619,7 @@ export const DEVELOPER_TBK = {
                                     {
                                         id: "CAMILIA-1B",
                                         unitTypeId: "camilia",
-                                        displayName: "CAMILIA 1B",
+                                        displayName: "FOREST 1B",
                                         price: 2200000,
                                         area: 385,
                                         bedrooms: 5, bathrooms: 7,
@@ -3630,10 +3630,10 @@ export const DEVELOPER_TBK = {
                             },
                         ],
                     },
-                    // ZONE 12 CAMILIA 2
+                    // ZONE 12 FOREST (CAMILIA) 2
                     {
                         id: "zone12",
-                        displayName: "CAMILIA 2",
+                        displayName: "FOREST 2",
                         subtitle: "Residential Zone",
                         thumbnail: "kog/thumbnails/zones/zone12.png",
                         highlight: "kog/highlight/zones/zone12.png",
@@ -3654,7 +3654,7 @@ export const DEVELOPER_TBK = {
                                     {
                                         id: "CAMILIA-2",
                                         unitTypeId: "camilia",
-                                        displayName: "CAMILIA 2",
+                                        displayName: "FOREST 2",
                                         price: 2200000,
                                         area: 385,
                                         bedrooms: 5, bathrooms: 7,
@@ -3664,7 +3664,7 @@ export const DEVELOPER_TBK = {
                                     {
                                         id: "CAMILIA-3",
                                         unitTypeId: "camilia",
-                                        displayName: "CAMILIA 3",
+                                        displayName: "FOREST 3",
                                         price: 2200000,
                                         area: 385,
                                         bedrooms: 5, bathrooms: 7,

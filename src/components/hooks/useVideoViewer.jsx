@@ -302,7 +302,7 @@ export function useVideoViewer() {
     (isFromAnotherTab, onReverseEnded) => {
       if (history.length <= 1) return;
       if (activeLayer === LAYERS.SURROUNDING_DETAIL) {
-        justNavigatedBackRef.current = true;
+        justNavigatedBackRef.current = false;
         goBack();
         return;
       }
@@ -323,7 +323,8 @@ export function useVideoViewer() {
 
         setCurrentViewIndex(0);
         currentViewIndexRef.current = 0;
-
+        
+        // console.log(shouldStayIdle, skipNextTransitionRef.current);
         if (shouldStayIdle || skipNextTransitionRef.current) {
           skipNextTransitionRef.current = false;
           playIdleVideo();

@@ -29,11 +29,11 @@ export default function AnimFloatButton({
                 </div>
             )}
 
-            {/* Icon Part - Teal Background */}
+            {/* Icon Part */}
             <div className={`surr-icon px-[6px] py-[5px] flex items-center justify-center flex-shrink-0 transition-all duration-200
                 ${isSelected 
                     ? `selected ${nameDirection && nameDirection === "left" ? 'rounded-r-full' : 'rounded-l-full'}` 
-                    : `${!nameDirection ? "rounded-full": "rounded-l-full"}`} `}> 
+                    : "rounded-full"} `}> 
                 {icon && (
                     <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
                         <img src={icon} className="w-4 h-4 p-[1px]" />
@@ -44,7 +44,7 @@ export default function AnimFloatButton({
 
             {/* Name Part (Right) - Only if nameDirection is "right" */}
             {nameDirection === "right" && (
-                <div className={`surr-name px-[8px] py-[7px] rounded-r-full flex items-center gap-1 transition-all duration-200
+                <div className={`surr-btn px-[8px] py-[7px] rounded-r-full flex items-center gap-1 transition-all duration-200
                     ${isSelected ? "selected" : ""} `}> 
                     <span className={`whitespace-nowrap font-medium transition-all duration-200 text-white
                         ${isSelected
