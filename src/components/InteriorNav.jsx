@@ -30,9 +30,13 @@ const Dropdown = ({ label, options, value, onChange }) => {
                 <SelectTrigger className="w-36 bg-[#383838] text-white border-none">
                     <SelectValue />
                 </SelectTrigger>
-                <SelectContent side="top" sideOffset={8} className="bg-[#53535380] backdrop-blur-md text-white border-[#FFFFFF5E] z-[9999]">
+                <SelectContent className="bg-[#53535380] backdrop-blur-md text-white border-[#FFFFFF5E] z-[9999]"
+                    side="top"
+                    sideOffset={2}
+                    position="popper"
+                >
                     {options.map((opt) => (
-                        <SelectItem key={opt} value={opt} className='text-white hover:bg-[#383838] focus:bg-[#383838]'>
+                        <SelectItem key={opt} value={opt} className='text-white hover:bg-[#383838] focus:bg-[#383838] focus:text-[#dddddd]'>
                             {opt}
                         </SelectItem>
                     ))}

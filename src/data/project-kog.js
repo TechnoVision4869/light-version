@@ -4851,7 +4851,7 @@ export const DEVELOPER_TBK = {
                                 rooms: [
                                     {
                                         id: "roof_room",
-                                        displayName: "Room",
+                                        displayName: "Roof Room",
                                         furnitureImgId: "/kog/panorama/camilia/f/roof/roof_room.jpg",
                                         unfurnitureImgId: "/kog/panorama/camilia/unf/roof/roof_room.jpg",
                                         hotspots: [
@@ -4865,7 +4865,7 @@ export const DEVELOPER_TBK = {
                                         furnitureImgId: "/kog/panorama/camilia/f/roof/roof_toilet.jpg",
                                         unfurnitureImgId: "/kog/panorama/camilia/unf/roof/roof_toilet.jpg",
                                         hotspots: [
-                                            { id: "hp1", yaw: -101.6, pitch: -35.77, type: "scene", label: "Roof/Room" }
+                                            { id: "hp1", yaw: -101.6, pitch: -35.77, type: "scene", label: "Roof/Roof Room" }
                                         ]
                                     }
                                 ]
