@@ -1,6 +1,6 @@
 // import { DEVELOPER_MIX as DEVELOPER } from "./project-mix";
-import { DEVELOPER_TBK as DEVELOPER, projectPath, config } from "./project-kog";
-// import { DEVELOPER_SOMABAY as DEVELOPER, projectPath, config  } from "./project-lighthouse";
+// import { DEVELOPER_TBK as DEVELOPER, projectPath, config } from "./project-kog";
+import { DEVELOPER_SOMABAY as DEVELOPER, projectPath, config  } from "./project-lighthouse";
 // import { DEVELOPER_SOMABAY as DEVELOPER, projectPath, config  } from "./projectnpm -lightlight";
 // import { DEVELOPER_SOMABAY as DEVELOPER, projectPath, config } from "./project-sandbox";
 // import { DEVELOPER_SOMABAY as DEVELOPER, projectPath, config } from "./project-demo";

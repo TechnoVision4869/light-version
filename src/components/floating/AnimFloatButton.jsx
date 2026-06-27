@@ -33,7 +33,7 @@ export default function AnimFloatButton({
             <div className={`surr-icon px-[6px] py-[5px] flex items-center justify-center flex-shrink-0 transition-all duration-200
                 ${isSelected 
                     ? `selected ${nameDirection && nameDirection === "left" ? 'rounded-r-full' : 'rounded-l-full'}` 
-                    : "rounded-full"} `}> 
+                    : nameDirection !== null ? "rounded-l-full" : "rounded-full"} `}> 
                 {icon && (
                     <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
                         <img src={icon} className="w-4 h-4 p-[1px]" />
