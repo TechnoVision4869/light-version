@@ -47,20 +47,7 @@ export async function enrichProjectData(project, useMockup, preloadDepth = 3) {
   // const formattedProject = adaptProjectForUI(enrichedProject);
 
   // Load all videos upfront and wait for Service Worker to cache them
-  if (preloadDepth > 0) {
-    try {
-      console.log('[Cache] Starting video preload...');
-      toast.loading('Loading project assets...', { id: 'asset-load' });
-
-      await prefetchProjectByLevels(enrichedProject, preloadDepth);
-
-      toast.success('Project assets loaded', { id: 'asset-load' });
-      console.log('[Cache] Video preload complete');
-    } catch (error) {
-      console.error('[Cache] Video preload failed:', error);
-      toast.error('Some assets failed to load', { id: 'asset-load' });
-    }
-  } else if( preloadDepth == 0) {
+  if (preloadDepth >= 0) {
     try {
       console.log('[Cache] Starting video preload...');
       toast.loading('Loading project assets...', { id: 'asset-load' });
@@ -194,155 +181,223 @@ export function adaptProjectForUI(raw) {
  * @param {number} depth - Maximum depth to prefetch (0-3)
  * @returns {Promise<{loaded: number, failed: number, totalSize: string}>}
  */
-export async function prefetchProjectByLevels(project, depth = 1) {
+export async function prefetchProjectByLevels(project, depth = 1, startDepth = 0) {
+  console.log("Depth: ", depth, " Start Depth: ", startDepth);
+  
   if (!project || depth < 0) {
     return { loaded: 0, failed: 0, totalSize: '0 MB' };
   }
 
-  const videoUrls = [];
+  const assetUrls = [];
 
   // ===== LEVEL 0: Project Videos =====
-  const projectVideos = [
-    project.zoomoutVideoId,
-    project.introVideoId,
-    project.idleVideoId,
-  ];
-  projectVideos.forEach((vid) => {
-    if (vid && typeof vid === 'string') videoUrls.push(vid);
-  });
-
-  // ===== LEVEL 1: Zone Videos =====
-  if (depth >= 1 && project?.zones) {
-    const zonesVideos = [
-      project?.zones.zonesZoomoutVideoId,
-      project?.zones.zonesForwardVideoId,
-      project?.zones.zonesReverseVideoId,
-      project?.zones.zonesSideVideoId,
+  if (startDepth <= 0) {
+    const projectAssets = [
+      project.zoomoutVideoId,
+      project.introVideoId,
+      project.idleVideoId,
+      // project.thumbnailAssetId,
     ];
-    zonesVideos.forEach((vid) => {
-      if (vid && typeof vid === 'string' && !videoUrls.includes(vid)) {
-        videoUrls.push(vid);
-      }
+    projectAssets.forEach((vid) => {
+      if (vid && typeof vid === 'string') assetUrls.push(vid);
     });
+  }
 
-    project.zones.items.forEach((item) => {
-      const zoneVideos = [
-        item?.forwardVideoId,
-        item?.reverseVideoId,
-        item?.sideVideoId,
+  // ===== LEVEL 1: Zone/Surroundings/Amenities Videos =====
+  if (startDepth <= 1 && depth >= 1) {
+    if (project?.zones) {
+      // zones top-level videos
+      const zonesVideos = [
+        project?.zones.zonesZoomoutVideoId,
+        project?.zones.zonesForwardVideoId,
+        project?.zones.zonesReverseVideoId,
+        project?.zones.zonesSideVideoId,
       ];
-
-      zoneVideos.forEach((vid) => {
-        if (vid && typeof vid === 'string' && !videoUrls.includes(vid)) {
-          videoUrls.push(vid);
+      zonesVideos.forEach((vid) => {
+        if (vid && typeof vid === 'string' && !assetUrls.includes(vid)) {
+          assetUrls.push(vid);
         }
       });
 
-      // ===== LEVEL 2: Zone video & Properties Videos (within zones) =====
-      if (depth >= 2 && item.properties?.length) {
-        item.properties.forEach((property) => {
-          const propertyVideos = [
-            property.forwardAssetId,
-            property.reverseAssetId,
-            property.idleAssetId,
-          ];
-          propertyVideos.forEach((vid) => {
-            if (vid && typeof vid === 'string' && !videoUrls.includes(vid)) {
-              videoUrls.push(vid);
+      project.zones.items.forEach((item) => {
+        const zoneVideos = [
+          item?.forwardVideoId,
+          item?.reverseVideoId,
+          item?.sideVideoId,
+        ];
+
+        zoneVideos.forEach((vid) => {
+          if (vid && typeof vid === 'string' && !assetUrls.includes(vid)) {
+            assetUrls.push(vid);
+          }
+        });
+      })
+    }
+
+    // ===== LEVEL 1: Surroundings Videos =====
+    const surroundings = project?.surroundings;
+
+    if (surroundings) {
+      // surroundings top-level videos
+      const surroundingsVideos = [
+        surroundings.zoomOutVideo,
+        surroundings.forwardVideoId,
+        surroundings.reverseVideoId,
+        surroundings.sideVideoId,
+      ];
+
+      surroundingsVideos.forEach((vid) => {
+        if (vid && typeof vid === 'string' && !assetUrls.includes(vid)) {
+          assetUrls.push(vid);
+        }
+      });
+
+      // each surrounding assets
+      project.surroundings.items.forEach((surrounding) => {
+        const videos = [
+          surrounding.forwardVideoId,
+          surrounding.reverseVideoId,
+          surrounding.sideVideoId,
+          surrounding.iconAssetId,
+          surrounding.thumbnailAssetId,
+        ];
+        videos.forEach((vid) => {
+          if (vid && typeof vid === 'string' && !assetUrls.includes(vid)) {
+            assetUrls.push(vid);
+          }
+        });
+      });
+    }
+
+    // ===== LEVEL 1: Amenities Videos =====
+    const amenities = project?.amenities;
+    if (amenities) {
+      // amenities top-level videos
+      const amenitiesVideos = [
+        amenities.zoomOutVideo,
+        amenities.forwardVideoId,
+        amenities.reverseVideoId,
+        amenities.sideVideoId,
+      ];
+
+      amenitiesVideos.forEach((vid) => {
+        if (vid && typeof vid === 'string' && !assetUrls.includes(vid)) {
+          assetUrls.push(vid);
+        }
+      });
+
+      amenities.items.forEach((amenity) => {
+        const videos = [
+          amenity.forwardVideoId,
+          amenity.reverseVideoId,
+          amenity.sideVideoId,
+          amenity.thumbnailAssetId,
+        ];
+        videos.forEach((vid) => {
+          if (vid && typeof vid === 'string' && !assetUrls.includes(vid)) {
+            assetUrls.push(vid);
+          }
+        });
+      });
+  }
+}
+
+    // ===== LEVEL 2: Zone video & Properties Videos (within zones) =====
+    if (startDepth <= 2 && depth >= 2) {
+      const items = project?.zones?.items;
+      if(items?.length) {
+        items.forEach((item) => {
+          item.properties.forEach((property) => {
+            const propertyVideos = [
+              property.forwardAssetId,
+              property.reverseAssetId,
+              property.idleAssetId,
+            ];
+            propertyVideos.forEach((vid) => {
+              if (vid && typeof vid === 'string' && !assetUrls.includes(vid)) {
+                assetUrls.push(vid);
+              }
+            });
+
+            // Property Viwes
+            if (property.views?.length) {
+              property.views.forEach((view) => {
+                const viewVideo = [
+                  view.forwardAssetId,
+                  view.reverseAssetId,
+                  view.sideAssetId,
+                ];
+                viewVideo.forEach((vid) => {
+                  if (vid && typeof vid === 'string' && !assetUrls.includes(vid)) {
+                    assetUrls.push(vid);
+                  }
+                });
+              })
             }
           });
+        })
+      }
+    }
 
-          // Property Viwes
-          if (property.views?.length) {
-            property.views.forEach((view) => {
-              const viewVideo = [
-                view.forwardAssetId,
-                view.reverseAssetId,
-                view.sideAssetId,
-              ];
-              viewVideo.forEach((vid) => {
-                if (vid && typeof vid === 'string' && !videoUrls.includes(vid)) {
-                  videoUrls.push(vid);
+    // ===== LEVEL 3: Unit Videos =====
+    if (startDepth <= 3 && depth >= 3) {
+      const items = project?.zones?.items;
+      if(items?.length) {
+          items.forEach((item) => {
+            item.properties?.forEach((property) => {
+              property.floors.forEach((floor) => {
+                const floorVideos = [
+                  floor.forwardAssetId,
+                  floor.reverseAssetId,
+                  floor.sideAssetId,
+                  floor.highlightAssetId,
+                ];
+                floorVideos.forEach((vid) => {
+                  if (vid && typeof vid === 'string' && !assetUrls.includes(vid)) {
+                    assetUrls.push(vid);
+                  }
+                });
+
+                if (floor.units?.length) {
+                  floor.units.forEach((unit) => {
+                    const unitVideos = [
+                      unit.forwardAssetId,
+                      unit.reverseAssetId,
+                      unit.sideAssetId,
+                      unit.balconyView,
+                    ];
+                    unitVideos.forEach((vid) => {
+                      if (vid && typeof vid === 'string' && !assetUrls.includes(vid)) {
+                        assetUrls.push(vid);
+                      }
+                    });
+                  })
                 }
               });
             })
-          }
+        })
+      }
 
-
-          // ===== LEVEL 3: Unit Videos =====
-          if (depth >= 3 && property.floors?.length) {
-            property.floors.forEach((floor) => {
-              const floorVideos = [
-                floor.forwardAssetId,
-                floor.reverseAssetId,
-                floor.sideAssetId,
-                floor.highlightAssetId,
-              ];
-              floorVideos.forEach((vid) => {
-                if (vid && typeof vid === 'string' && !videoUrls.includes(vid)) {
-                  videoUrls.push(vid);
-                }
-              });
-
-              if (floor.units?.length) {
-                floor.units.forEach((unit) => {
-                  const unitVideos = [
-                    unit.forwardAssetId,
-                    unit.reverseAssetId,
-                    unit.sideAssetId,
-                    unit.balconyView,
-                  ];
-                  unitVideos.forEach((vid) => {
-                    if (vid && typeof vid === 'string' && !videoUrls.includes(vid)) {
-                      videoUrls.push(vid);
-                    }
-                  });
-                })
+      // ===== LEVEL 3: Unit Type Furniture Images =====
+      if (Array.isArray(project.unitTypes)) {
+        project.unitTypes.forEach((unitType) => {
+          (unitType.levels || []).forEach((level) => {
+            (level.rooms || []).forEach((room) => {
+              if (room.furnitureImgId && typeof room.furnitureImgId === 'string') {
+                assetUrls.push(room.furnitureImgId);
               }
-            }
-            );
-          }
+              if (room.unfurnitureImgId && typeof room.unfurnitureImgId === 'string') {
+                assetUrls.push(room.unfurnitureImgId);
+              }
+            });
+          });
         });
       }
-    });
-  }
+    }
 
-  // ===== LEVEL 1: Surroundings Videos =====
-  if (depth >= 1 && project?.surroundings?.items?.length) {
-    project.surroundings.items.forEach((surrounding) => {
-      const videos = [
-        surrounding.zoomOutVideo,
-        surrounding.forwardVideoId,
-        surrounding.reverseVideoId,
-        surrounding.sideVideoId,
-      ];
-      videos.forEach((vid) => {
-        if (vid && typeof vid === 'string' && !videoUrls.includes(vid)) {
-          videoUrls.push(vid);
-        }
-      });
-    });
-  }
-
-  // ===== LEVEL 1: Amenities Videos =====
-  if (depth >= 1 && project?.amenities?.items?.length) {
-    project.amenities.items.forEach((amenity) => {
-      const videos = [
-        amenity.zoomOutVideo,
-        amenity.forwardVideoId,
-        amenity.reverseVideoId,
-        amenity.sideVideoId,
-      ];
-      videos.forEach((vid) => {
-        if (vid && typeof vid === 'string' && !videoUrls.includes(vid)) {
-          videoUrls.push(vid);
-        }
-      });
-    });
-  }
 
   // Remove duplicates
-  const uniqueUrls = [...new Set(videoUrls)];
+  const uniqueUrls = [...new Set(assetUrls)];
   console.log(`[Cache] Loading ${uniqueUrls.length} unique videos at depth ${depth}`);
 
   // Load videos in parallel batches (5 at a time to avoid overwhelming network)

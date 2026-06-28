@@ -262,6 +262,7 @@ export default function ProjectSelector({
           projects.map((project) => {
             return (
               <img
+              key={project.id}
               src={thumbnailUrls[project.id]}
               alt=""
               id={`highlight-${project.id}`}

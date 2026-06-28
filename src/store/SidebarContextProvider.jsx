@@ -4,7 +4,7 @@ import { SidebarContext } from "./SidebarContext";
 import { AuthContext } from "./jwt-context";
 import { TABS, LAYERS, DATA } from "../data/layers";
 import { PROPERTY_TYPE } from "../constants/roles";
-import { enrichProjectData } from "../lib/enrichProjectData";
+import { enrichProjectData, prefetchProjectByLevels } from "../lib/enrichProjectData";
 import { APP_CONFIG } from "../config/appConfig";
 import { fetchProjectById } from "../lib/projectFetcher";
 
@@ -61,15 +61,15 @@ export default function SidebarContextProvider({ children }) {
                     setCurrentProject(project);
                     setHistory(getInitHistory(project));
                 } else {
-                    // Step 1: enrich at depth 0 first, render immediately
-                    const shallowProject = await enrichProjectData(project, useStatic, 0);
-                    setCurrentProject(shallowProject);
-                    setHistory(getInitHistory(shallowProject));
+                    // URL resolution runs once here, depth 0 assets prefetched
+                    const enrichedProject = await enrichProjectData(project, useStatic, 0);
+                    setCurrentProject(enrichedProject);
+                    setHistory(getInitHistory(enrichedProject));
 
-                    // Step 2: then enrich deeper in the background
-                    const deepProject = await enrichProjectData(project, useStatic, 3);
-                    setCurrentProject(deepProject);
-                    setHistory(getInitHistory(deepProject));
+                    // Each call only walks and fetches its own level
+                    for (const depth of [1, 2, 3]) {
+                        await prefetchProjectByLevels(enrichedProject, depth, depth);
+                    }
                 }
 
                 localStorage.setItem(STORAGE_KEY, project.id);

@@ -22,8 +22,6 @@ export const LoginForm = (props) => {
     onSubmit: async (values) => {
       try {
         setLoading(true);
-        console.log(values);
-
         await login(values);
         toast.success("Login successful");
       } catch (err) {
