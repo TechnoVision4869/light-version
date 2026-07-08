@@ -62,7 +62,7 @@ export async function enrichProjectData(project, useMockup, preloadDepth = 3) {
     }
   }
 
-  console.log("EP: ", enrichedProject);
+  // console.log("EP: ", enrichedProject);
   return enrichedProject;
   // console.log("FP: ",formattedProject);
   // return formattedProject;
@@ -224,7 +224,7 @@ export async function prefetchProjectByLevels(project, depth = 1, startDepth = 0
   if (startDepth <= 0) {
     const projectAssets = [
       project.zoomoutVideoId,
-      // project.introVideoId,
+      project.introVideoId,
       project.idleVideoId,
       // project.thumbnailAssetId,
     ];

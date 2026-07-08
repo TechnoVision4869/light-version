@@ -96,7 +96,7 @@ export default function ProjectSelector({
           setLoading(false);
           return;
         }
-        console.log("Fetched projects:", response);
+        // console.log("Fetched projects:", response);
         setProjects(response);
 
         // Fetch thumbnails and intro videos for all projects
@@ -121,11 +121,7 @@ export default function ProjectSelector({
             }
           }
 
-          // Fetch intro video
-          console.log("introVideoId: ", project.introVideoId);
-          console.log("introAssetId: ", project.introAssetId);
-          console.log("idleVideoId: ", project.idleVideoId);
-          
+          // Fetch project intro video
           if (project.introAssetId) {
             try {
               const url = await assetApi.getAssetFileUrl(project.introAssetId);
@@ -140,24 +136,12 @@ export default function ProjectSelector({
                 error,
               );
             }
-          } else if (project.introVideoId) {
-            try {
-              const url = await assetApi.getAssetFileUrl(project.introVideoId);
-              if (url) {
-                introVideos[project.id] = url;
-                // Load and cache the video in the service worker
-                prefetchSingleUrl(url);
-              }
-            } catch (error) {
-              console.error(
-                `Failed to fetch intro video for project ${project.id}:`,
-                error,
-              );
-            }
           }
-          if (project.idleVideoId) {
+
+          // Fetch project idle video
+          if (project.idleAssetId) {
             try {
-              const url = await assetApi.getAssetFileUrl(project.idleVideoId);
+              const url = await assetApi.getAssetFileUrl(project.idleAssetId);
               if (url) {
                 // Load and cache the video in the service worker
                 prefetchSingleUrl(url);
