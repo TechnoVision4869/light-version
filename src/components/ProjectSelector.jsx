@@ -62,6 +62,7 @@ export default function ProjectSelector({
   }, [usePredefinedPos, updatePredefinedPos]);
   
   const fetchProjects = async () => {
+    console.log("Fetching projects...");
     try {
       setLoading(true);
       
@@ -95,7 +96,7 @@ export default function ProjectSelector({
           setLoading(false);
           return;
         }
-        // console.log("Fetched projects:", response);
+        console.log("Fetched projects:", response);
         setProjects(response);
 
         // Fetch thumbnails and intro videos for all projects
@@ -136,6 +137,34 @@ export default function ProjectSelector({
             } catch (error) {
               console.error(
                 `Failed to fetch intro video for project ${project.id}:`,
+                error,
+              );
+            }
+          } else if (project.introVideoId) {
+            try {
+              const url = await assetApi.getAssetFileUrl(project.introVideoId);
+              if (url) {
+                introVideos[project.id] = url;
+                // Load and cache the video in the service worker
+                prefetchSingleUrl(url);
+              }
+            } catch (error) {
+              console.error(
+                `Failed to fetch intro video for project ${project.id}:`,
+                error,
+              );
+            }
+          }
+          if (project.idleVideoId) {
+            try {
+              const url = await assetApi.getAssetFileUrl(project.idleVideoId);
+              if (url) {
+                // Load and cache the video in the service worker
+                prefetchSingleUrl(url);
+              }
+            } catch (error) {
+              console.error(
+                `Failed to fetch idle video for project ${project.id}:`,
                 error,
               );
             }
