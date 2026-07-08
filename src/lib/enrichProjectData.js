@@ -169,6 +169,36 @@ export function adaptProjectForUI(raw) {
 }
 
 /**
+ * preload a single URL
+ * BLOCKING: Waits for the video to be cached by Service Worker before returning
+ * 
+ */
+export async function prefetchSingleUrl(url) {
+  if (!url) return { loaded: 0, failed: 1, totalSize: '0 MB' };
+
+  let loaded = 0;
+  let failed = 0;
+  let totalBytes = 0;
+  
+  const result = await loadAndCacheVideo(url);
+  if(result.status === 'fulfilled') {
+    loaded++;
+    totalBytes += result.value;
+  } else {
+    failed++;
+    console.warn('[Cache] Failed to load a single video:', result.reason);
+  }
+
+  const totalSizeMB = (totalBytes / 1024 / 1024).toFixed(2);
+  console.log(
+    `[Cache] Preload complete: ${loaded} loaded, ${failed} failed, ${totalSizeMB}MB cached for a single video`
+  );
+
+  return { loaded, failed, totalSize: `${totalSizeMB} MB` };
+}
+
+
+/**
  * Intelligent preloading strategy based on project hierarchy depth
  * BLOCKING: Waits for all videos to be cached by Service Worker before returning
  * 
@@ -194,7 +224,7 @@ export async function prefetchProjectByLevels(project, depth = 1, startDepth = 0
   if (startDepth <= 0) {
     const projectAssets = [
       project.zoomoutVideoId,
-      project.introVideoId,
+      // project.introVideoId,
       project.idleVideoId,
       // project.thumbnailAssetId,
     ];

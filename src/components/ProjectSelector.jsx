@@ -8,6 +8,7 @@ import { developerApi } from "@/api/admin/developerApi";
 import { assetApi } from "../api/admin/assetApi";
 import { DATA, PATH } from "../data/layers";
 import { fetchProjectById } from "../lib/projectFetcher";
+import { prefetchSingleUrl } from "../lib/enrichProjectData";
 
 const DEFAULT_LOGO = '/default-logo.png';
 const projectPath = PATH;
@@ -120,11 +121,17 @@ export default function ProjectSelector({
           }
 
           // Fetch intro video
+          console.log("introVideoId: ", project.introVideoId);
+          console.log("introAssetId: ", project.introAssetId);
+          console.log("idleVideoId: ", project.idleVideoId);
+          
           if (project.introAssetId) {
             try {
               const url = await assetApi.getAssetFileUrl(project.introAssetId);
               if (url) {
                 introVideos[project.id] = url;
+                // Load and cache the video in the service worker
+                prefetchSingleUrl(url);
               }
             } catch (error) {
               console.error(
