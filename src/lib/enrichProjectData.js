@@ -22,6 +22,7 @@ export async function enrichProjectData(project, useMockup, preloadDepth = 3) {
 
   // For real data, convert all assetIds/videoIds to file URLs and fetch unit types
   const enrichedProject = await transformAssetIds(project);
+  // console.log("Enriched project:", enrichedProject);
 
   // Fetch and attach unit types to the project
   try {
@@ -180,7 +181,10 @@ export async function prefetchSingleUrl(url) {
   let failed = 0;
   let totalBytes = 0;
   
-  const result = await loadAndCacheVideo(url);
+  const result = await loadAndCacheVideo(url)
+    .then(value => ({ status: 'fulfilled', value }))
+    .catch(reason => ({ status: 'rejected', reason }));
+
   if(result.status === 'fulfilled') {
     loaded++;
     totalBytes += result.value;
@@ -602,7 +606,6 @@ async function transformAssetIds(obj) {
       transformed[key] = await transformAssetIds(value);
     }
   }
-  // console.log(transformed);
   return transformed;
 }
 

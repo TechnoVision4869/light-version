@@ -96,7 +96,6 @@ export default function ProjectSelector({
           setLoading(false);
           return;
         }
-        // console.log("Fetched projects:", response);
         setProjects(response);
 
         // Fetch thumbnails and intro videos for all projects

@@ -90,7 +90,7 @@ self.addEventListener('fetch', (event) => {
       caches.open(CACHE_ASSETS).then((cache) =>
         cache.match(request).then((cached) => {
           if (cached) {
-            console.log('[SW] Asset from cache:', url.pathname);
+            // console.log('[SW] Asset from cache:', url.pathname);
             return cached;
           }
 
@@ -103,7 +103,7 @@ self.addEventListener('fetch', (event) => {
                 return networkResponse;
               }
               cache.put(request.url, networkResponse.clone());
-              console.log('[SW] Asset cached:', url.pathname);
+              // console.log('[SW] Asset cached:', url.pathname);
               return networkResponse;
             })
             .catch((error) => {
