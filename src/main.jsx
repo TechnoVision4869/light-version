@@ -7,6 +7,8 @@ import { APP_CONFIG } from "./config/appConfig";
 import SidebarContextProvider from "./store/SidebarContextProvider";
 import MainContextProvider from "./store/MainContextProvider.jsx";
 import { AuthProvider, AuthConsumer } from "./store/jwt-context.jsx";
+import { Toaster } from "react-hot-toast";
+
 import App from "./App.jsx";
 
 // Register Service Worker for offline caching and performance (only when using API, not static data)
@@ -57,6 +59,7 @@ createRoot(document.getElementById("root")).render(
           </SidebarContextProvider>
         </MainContextProvider>
       </AuthProvider>
+      <Toaster position="top-center" />
     </BrowserRouter>
   </StrictMode>,
 );

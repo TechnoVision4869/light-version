@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
 import TECHNO_LOGO from "../assets/techno.png";
 import { useAuth } from "./hooks/use-auth";
 
@@ -108,7 +107,6 @@ export default function Layout({ children, backgroundImage, fullscreen = false, 
         backgroundColor: backgroundImage ? "transparent" : "#434343",
       }}
     >
-      <Toaster position="top-center" />
 
       {/* Header Bar */}
       {showHeader ? (

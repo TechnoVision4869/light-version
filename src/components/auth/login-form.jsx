@@ -1,7 +1,7 @@
 import { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuth } from "../../components/hooks/use-auth";
 
@@ -16,7 +16,7 @@ export const LoginForm = (props) => {
       password: "",
     },
     validationSchema: Yup.object({
-      email: Yup.string().max(255).required("Email is required"),
+      email: Yup.string().max(255).email("Enter a valid email").required("Email is required"),
       password: Yup.string().max(255).required("Password is required"),
     }),
     onSubmit: async (values) => {
@@ -26,39 +26,23 @@ export const LoginForm = (props) => {
         toast.success("Login successful");
       } catch (err) {
         toast.error(err.message || "Login failed");
+      } finally {
         setLoading(false);
       }
     },
   });
 
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
   return (
     <div
-      style={{
-        width: "100%",
-        maxWidth: 480,
-        backgroundColor: "rgba(255,255,255,0.03)",
-        padding: 32,
-        borderRadius: 12,
-      }}
+      className="w-full max-w-[420px] rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm p-6 sm:p-8 shadow-[0_8px_30px_rgba(0,0,0,0.35)]"
+      {...props}
     >
-      <form noValidate onSubmit={formik.handleSubmit} {...props}>
-        <div style={{ marginTop: 8 }}>
+      <form noValidate onSubmit={formik.handleSubmit} className="flex flex-col gap-5">
+        {/* Email */}
+        <div>
           <label
             htmlFor="login-email"
-            style={{
-              display: "block",
-              color: "rgba(249,250,251,0.8)",
-              marginBottom: 6,
-              fontFamily: "sans-serif",
-            }}
+            className="block text-sm text-[#f9fafbcc] mb-1.5"
           >
             Email
           </label>
@@ -66,6 +50,7 @@ export const LoginForm = (props) => {
             id="login-email"
             name="email"
             type="email"
+            autoComplete="email"
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             value={formik.values.email}
@@ -75,120 +60,83 @@ export const LoginForm = (props) => {
                 ? "login-email-error"
                 : undefined
             }
-            style={{
-              width: "100%",
-              padding: "12px 14px",
-              borderRadius: 12,
-              border: "1px solid rgba(249,250,251,0.12)",
-              backgroundColor: "transparent",
-              color: "#f9fafb",
-              fontFamily: "sans-serif",
-              outline: "none",
-            }}
+            className={`w-full rounded-xl bg-transparent px-3.5 py-3 text-[#f9fafb] outline-none transition-colors
+              border ${
+                formik.touched.email && formik.errors.email
+                  ? "border-red-400/60 focus:border-red-400"
+                  : "border-white/15 focus:border-[#4F6F4F]"
+              } focus:ring-2 focus:ring-[#4F6F4F]/30`}
           />
           {formik.touched.email && formik.errors.email && (
-            <div
-              id="login-email-error"
-              style={{ color: "#f87171", marginTop: 6, fontSize: 12 }}
-            >
+            <div id="login-email-error" className="mt-1.5 text-xs text-red-400">
               {formik.errors.email}
             </div>
           )}
         </div>
 
-        <div style={{ marginTop: 12 }}>
-          <label
-            htmlFor="login-password"
-            style={{
-              display: "block",
-              color: "rgba(249,250,251,0.8)",
-              marginBottom: 6,
-              fontFamily: "sans-serif",
-            }}
-          >
-            Password
-          </label>
-          <div style={{ position: "relative" }}>
+        {/* Password */}
+        <div>
+          <div className="flex items-center justify-between mb-1.5">
+            <label htmlFor="login-password" className="block text-sm text-[#f9fafbcc]">
+              Password
+            </label>
+          </div>
+          <div className="relative">
             <input
               id="login-password"
               name="password"
               type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               value={formik.values.password}
               aria-invalid={Boolean(
-                formik.touched.password && formik.errors.password,
+                formik.touched.password && formik.errors.password
               )}
               aria-describedby={
                 formik.touched.password && formik.errors.password
                   ? "login-password-error"
                   : undefined
               }
-              style={{
-                width: "100%",
-                padding: "12px 44px 12px 14px",
-                borderRadius: 12,
-                border: "1px solid rgba(249,250,251,0.12)",
-                backgroundColor: "transparent",
-                color: "#f9fafb",
-                fontFamily: "sans-serif",
-                outline: "none",
-              }}
+              className={`w-full rounded-xl bg-transparent pl-3.5 pr-11 py-3 text-[#f9fafb] outline-none transition-colors
+                border ${
+                  formik.touched.password && formik.errors.password
+                    ? "border-red-400/60 focus:border-red-400"
+                    : "border-white/15 focus:border-[#4F6F4F]"
+                } focus:ring-2 focus:ring-[#4F6F4F]/30`}
             />
             <button
               type="button"
-              aria-label="toggle password visibility"
-              onClick={handleClickShowPassword}
-              onMouseDown={handleMouseDownPassword}
-              style={{
-                position: "absolute",
-                right: 10,
-                top: "50%",
-                transform: "translateY(-50%)",
-                border: "none",
-                background: "transparent",
-                color: "#eff0f1",
-                padding: 4,
-                cursor: "pointer",
-              }}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              onClick={() => setShowPassword((s) => !s)}
+              onMouseDown={(e) => e.preventDefault()}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#f9fafb99] hover:text-[#f9fafb] transition-colors"
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           </div>
           {formik.touched.password && formik.errors.password && (
-            <div
-              id="login-password-error"
-              style={{ color: "#f87171", marginTop: 6, fontSize: 12 }}
-            >
+            <div id="login-password-error" className="mt-1.5 text-xs text-red-400">
               {formik.errors.password}
             </div>
           )}
         </div>
 
         {formik.errors.submit && (
-          <div style={{ marginTop: 12, color: "#f87171", fontSize: 12 }}>
-            {formik.errors.submit}
-          </div>
+          <div className="text-xs text-red-400">{formik.errors.submit}</div>
         )}
 
-        <div style={{ marginTop: 16 }}>
-          <button
-            type="submit"
-            disabled={formik.isSubmitting}
-            style={{
-              width: "100%",
-              borderRadius: 12,
-              backgroundColor: loading ? "#465345" : "#4F6F4F",
-              color: "#f9fafb",
-              border: "none",
-              padding: "12px 16px",
-              fontSize: 16,
-              cursor: loading ? "not-allowed" : "pointer",
-            }}
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </div>
+        <button
+          type="submit"
+          disabled={loading || formik.isSubmitting}
+          className="mt-1 w-full rounded-xl bg-[#4F6F4F] hover:bg-[#5c805c] active:bg-[#455f45]
+            disabled:cursor-not-allowed disabled:opacity-70
+            text-[#f9fafb] text-base font-medium py-3 transition-colors
+            flex items-center justify-center gap-2"
+        >
+          {loading && <Loader2 size={18} className="animate-spin" />}
+          {loading ? "Logging in..." : "Login"}
+        </button>
       </form>
     </div>
   );
