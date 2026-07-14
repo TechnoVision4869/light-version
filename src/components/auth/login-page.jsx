@@ -2,13 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatedHeader } from "../../components/ui/AnimatedHeader.jsx";
 import { LoginForm } from "./login-form.jsx";
 import { LoginFooter } from "../../components/ui/LoginFooter.jsx";
+import HERO_BG from "../../assets/hero-bg.jpg";
 
 export default function LoginPage() {
   const [showForm, setShowForm] = useState(false);
   const formWrapperRef = useRef(null);
   const loginButtonRef = useRef(null);
 
-  // move focus into the form the moment it's revealed (a11y: disclosure pattern)
   useEffect(() => {
     if (showForm) {
       formWrapperRef.current?.querySelector("input")?.focus();
@@ -19,17 +19,27 @@ export default function LoginPage() {
 
   const closeForm = () => {
     setShowForm(false);
-    // return focus to the trigger, since its content is about to become inert
     loginButtonRef.current?.focus();
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#2f2f2f] flex flex-col px-4 sm:px-6 xl:px-8">
-      <main className="flex-1 flex flex-col items-center justify-center gap-6 py-6">
+    <div
+      className="relative w-full min-h-screen flex flex-col px-4 sm:px-6 xl:px-8 bg-[#141414] bg-cover bg-center"
+      style={{ backgroundImage: `url(${HERO_BG})` }}
+    >
+      {/* dark gradient overlay for text contrast, sits above the photo, below content */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(20,20,20,0.55) 0%, rgba(20,20,20,0.75) 55%, rgba(15,15,15,0.92) 100%)",
+        }}
+      />
+
+      <main className="relative z-10 flex-1 flex flex-col items-center justify-center gap-6 py-6">
         <AnimatedHeader />
 
         <div className="grid place-items-center">
-          {/* Intro + CTA */}
           <div
             inert={showForm}
             className={`col-start-1 row-start-1 flex flex-col items-center gap-6 transition duration-300 ${
@@ -48,7 +58,7 @@ export default function LoginPage() {
               aria-expanded={showForm}
               className="flex flex-row gap-3 px-6 py-2 rounded-lg bg-[#4f6f4f] hover:bg-[#5c805c]
                 text-white font-medium items-center transition-colors
-                focus:outline-none focus:ring-2 focus:ring-[#4f6f4f]/50 focus:ring-offset-2 focus:ring-offset-[#2f2f2f]"
+                focus:outline-none focus:ring-2 focus:ring-[#4f6f4f]/50 focus:ring-offset-2 focus:ring-offset-[#141414]"
             >
               Login
               <svg
@@ -70,7 +80,6 @@ export default function LoginPage() {
             </button>
           </div>
 
-          {/* Login form */}
           <div
             ref={formWrapperRef}
             inert={!showForm}
@@ -80,7 +89,9 @@ export default function LoginPage() {
           >
             <LoginForm />
 
-            <button type="button" onClick={closeForm}
+            <button
+              type="button"
+              onClick={closeForm}
               className="flex flex-row gap-3 items-center text-sm text-[#f9fafb99] hover:text-[#f9fafb] transition-colors
                 focus:outline-none focus:underline"
             >
