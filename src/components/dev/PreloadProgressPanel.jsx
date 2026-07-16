@@ -30,7 +30,7 @@ export default function PreloadProgressPanel() {
     const [open, setOpen] = useState(false);
     const { preloadStats } = useContext(SidebarContext);
 
-    if (!import.meta.env.DEV) return null;
+    // if (!import.meta.env.DEV) return null;
 
     const levels = Object.entries(preloadStats ?? {});
     const totalLoaded = levels.reduce((sum, [, s]) => sum + s.loaded, 0);
