@@ -30,10 +30,8 @@ export function AnimatedHeader() {
                 {titles.map((title, index) => (
                   <span
                     key={index}
-                    className={`absolute font-semibold transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                      titleNumber === 4 ? "text-[#FD0042]" : "text-[#f9fafb]"
-                    } ${
-                      titleNumber === index
+                    className={`absolute font-semibold transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
+                      ${ titleNumber === index
                         ? "translate-y-0 opacity-100"
                         : titleNumber > index
                         ? "-translate-y-[150%] opacity-0"

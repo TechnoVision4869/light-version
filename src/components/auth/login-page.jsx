@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatedHeader } from "../../components/ui/AnimatedHeader.jsx";
 import { LoginForm } from "./login-form.jsx";
 import { LoginFooter } from "../../components/ui/LoginFooter.jsx";
-import HERO_BG from "../../assets/hero-bg.jpg";
+import HERO_BG from "../../assets/hero-bg-3.jpg";
 
 export default function LoginPage() {
   const [showForm, setShowForm] = useState(false);
@@ -46,9 +46,9 @@ export default function LoginPage() {
               showForm ? "opacity-0 scale-95" : "opacity-100 scale-100"
             }`}
           >
-            <p className="text-lg md:text-xl leading-relaxed tracking-tight text-[#f9fafbcc] max-w-2xl text-center">
-              We design and build communities where life truly flourishes—blending
-              thoughtful design, premium quality, and lasting value into places
+            <p className="text-balance text-lg md:text-xl leading-relaxed tracking-tight text-[#f9fafbcc] max-w-2xl text-center">
+              We design and build communities where life truly flourishes,<br />blending
+              thoughtful design, premium quality, and lasting value<br />into places
               people are proud to call home.
             </p>
 

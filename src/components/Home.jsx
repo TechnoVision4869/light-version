@@ -33,6 +33,7 @@ import TECHNO_LOGO from "../assets/techno.png";
 import Highlight from "./Highlight.jsx";
 import Test from "./Test.jsx";
 import { APP_CONFIG } from "../config/appConfig";
+import PreloadProgressPanel from "./dev/PreloadProgressPanel.jsx";
 export default function Home({ introVideoUrl = null, onExitRequest }) {
   //states
   const [showInfoPopup, setShowInfoPopup] = useState(false);
@@ -472,6 +473,7 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
 
               {/* Main content area */}
               <main className="flex-1 relative">
+                <PreloadProgressPanel />
                 <div
                   className="w-full h-full bg-white/9 rounded-2xl overflow-hidden shadow-inner select-none"
                   style={{ touchAction: "none" }}

@@ -2,7 +2,7 @@ import TECHNO_LOGO from "../../assets/techno.png";
 
 export function LoginFooter() {
   return (
-    <footer className="w-full flex flex-wrap items-center justify-between gap-4 px-2 py-4 text-[#f9fafb]">
+    <footer className="w-full flex flex-wrap items-center justify-between gap-4 px-2 py-4 text-[#f9fafb] z-10">
       <div className="flex flex-wrap items-center gap-3 sm:gap-4">
         <span className="text-sm text-[#f9fafb99] whitespace-nowrap">
           Join <span className="text-[#f9fafb] font-medium">top</span> developers

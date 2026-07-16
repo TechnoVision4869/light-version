@@ -51,6 +51,12 @@ export default function SidebarContextProvider({ children }) {
 
     const [highlightedButton, setHighlightedButton] = useState(null);
 
+    const [preloadStats, setPreloadStats] = useState({
+        1: { name: 'Zones + Surroundings + Amenities', loaded: 0, total: 0, status: 'idle' },
+        2: { name: 'Properties within zones', loaded: 0, total: 0, status: 'idle' },
+        3: { name: 'Units + interiors', loaded: 0, total: 0, status: 'idle' },
+    });
+
     // Reset history when project changes
     const handleSetCurrentProject = useCallback((project) => {
         // console.log("project", project);
@@ -68,7 +74,16 @@ export default function SidebarContextProvider({ children }) {
 
                     // Each call only walks and fetches its own level
                     for (const depth of [1, 2, 3]) {
-                        await prefetchProjectByLevels(enrichedProject, depth, depth);
+                        setPreloadStats((prev) => ({ ...prev, [depth]: { ...prev[depth], status: 'loading' } }));
+                        try {
+                            await prefetchProjectByLevels(enrichedProject, depth, depth, ({ loaded, total }) => {
+                                setPreloadStats((prev) => ({ ...prev, [depth]: { ...prev[depth], loaded, total } }));
+                            });
+                            setPreloadStats((prev) => ({ ...prev, [depth]: { ...prev[depth], status: 'done' } }));
+                        } catch (levelError) {
+                            setPreloadStats((prev) => ({ ...prev, [depth]: { ...prev[depth], status: 'error' } }));
+                            throw levelError;
+                        }
                     }
                 }
 
@@ -440,6 +455,8 @@ export default function SidebarContextProvider({ children }) {
 
         highlightedButton,
         setHighlightedButton,
+
+        preloadStats,
 
         sidebarOpen,
         handleSidebarState,

@@ -2,6 +2,8 @@ import { createContext, useEffect, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import { authApi } from "../api/authApi";
 import { apiService } from "../services/api.service";
+import { APP_CONFIG } from "../config/appConfig";
+import { preloadDeveloperBackground } from "../lib/preloadDeveloperBackground";
 
 const ActionType = {
   INITIALIZE: "INITIALIZE",
@@ -150,6 +152,10 @@ export const AuthProvider = ({ children }) => {
           accessToken: access_token,
         },
       });
+
+      if (!APP_CONFIG.USE_STATIC && user?.developerId) {
+        await preloadDeveloperBackground(user.developerId);
+      }
 
       navigate("/");
     } else {

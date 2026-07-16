@@ -208,14 +208,14 @@ export async function prefetchSingleUrl(url) {
  * 
  * Level 0: No preloading
  * Level 1: Zones + Surroundings + Amenities videos (fast, ~30-40 videos)
- * Level 2: Also Properties within zones (~60-80 videos total)
- * Level 3: Also Unit interiors (~150+ videos total, takes longer)
+ * Level 2: Properties within zones (~60-80 videos total)
+ * Level 3: Units + interiors (~150+ videos total, takes longer)
  * 
  * @param {Object} project - The enriched project
  * @param {number} depth - Maximum depth to prefetch (0-3)
  * @returns {Promise<{loaded: number, failed: number, totalSize: string}>}
  */
-export async function prefetchProjectByLevels(project, depth = 1, startDepth = 0) {
+export async function prefetchProjectByLevels(project, depth = 1, startDepth = 0, onProgress) {
   console.log("Depth: ", depth, " Start Depth: ", startDepth);
   
   if (!project || depth < 0) {
@@ -433,6 +433,7 @@ export async function prefetchProjectByLevels(project, depth = 1, startDepth = 0
   // Remove duplicates
   const uniqueUrls = [...new Set(assetUrls)];
   console.log(`[Cache] Loading ${uniqueUrls.length} unique videos at depth ${depth}`);
+  onProgress?.({ loaded: 0, total: uniqueUrls.length });
 
   // Load videos in parallel batches (5 at a time to avoid overwhelming network)
   const batchSize = 5;
@@ -460,6 +461,7 @@ export async function prefetchProjectByLevels(project, depth = 1, startDepth = 0
     // Log progress
     const progress = Math.min(i + batchSize, uniqueUrls.length);
     console.log(`[Cache] Progress: ${progress}/${uniqueUrls.length}`);
+    onProgress?.({ loaded: progress, total: uniqueUrls.length });
   }
 
   const totalSizeMB = (totalBytes / 1024 / 1024).toFixed(2);
