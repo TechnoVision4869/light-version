@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:somabay.com)",
+      "Bash(sed 's/.*\\\\.//')",
+      "Bash(grep -E \"package.json|tsconfig|\\\\.md$\")",
+      "Bash(mkdir -p \"e:/techno-vision/light-version/.claude/rules\")"
+    ],
+    "additionalDirectories": [
+      "e:\\techno-vision\\light-version\\.claude"
+    ]
+  }
+}
