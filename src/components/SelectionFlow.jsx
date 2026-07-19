@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from './hooks/use-auth';
 import { APP_CONFIG } from '../config/appConfig';
+import { preloadDeveloperBackground } from '../lib/preloadDeveloperBackground';
 import DeveloperSelector from './DeveloperSelector';
 import ProjectSelector from './ProjectSelector';
 import Layout from './Layout';
@@ -18,9 +19,14 @@ export default function SelectionFlow({ onProjectSelect }) {
 
   const userNeedsSelection = needsDeveloperSelection.includes(user?.role);
 
+  const handleDeveloperSelect = async (developer) => {
+    await preloadDeveloperBackground(developer.id);
+    setSelectedDeveloper(developer);
+  };
+
   // Skip developer selection if useStatic is true
   if (!useStatic && userNeedsSelection && !selectedDeveloper) {
-    return <DeveloperSelector onDeveloperSelect={setSelectedDeveloper} />;
+    return <DeveloperSelector onDeveloperSelect={handleDeveloperSelect} />;
   }
 
   // If user has selected a developer or has one pre-assigned, show ProjectSelector

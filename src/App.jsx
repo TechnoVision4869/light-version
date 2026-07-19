@@ -53,8 +53,8 @@ export default function App() {
     return () => document.head.removeChild(link);
   }, [splashVideoUrl]);
 
-  const handleProjectSelect = (project, introVideoUrl) => {
-    setCurrentProject(project);
+  const handleProjectSelect = (project, introVideoUrl, developerId) => {
+    setCurrentProject(project, developerId);
     setSplashVideoUrl(introVideoUrl ?? null);
     setIsNavigatingToHome(false); // Reset flag for new splash sequence
     // Delay splash mount slightly to coordinate with press visual effect

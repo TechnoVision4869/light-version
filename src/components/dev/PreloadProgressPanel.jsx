@@ -1,5 +1,8 @@
 import { useContext, useState } from "react";
 import { SidebarContext } from "../../store/SidebarContextProvider";
+import { useAuth } from "../hooks/use-auth";
+import { ROLES } from "../../constants/roles";
+import { useCountUp } from "../hooks/useCountUp";
 
 const STATUS_COLOR = {
     idle: "bg-gray-500",
@@ -8,17 +11,20 @@ const STATUS_COLOR = {
     error: "bg-red-500",
 };
 
+const ALLOWED_ROLES = [ROLES.ADMIN, ROLES.SYSTEM_ADMIN, ROLES.SYSTEM_TECHNICIAN];
+
 function LevelBar({ level, name, loaded, total, status }) {
-    const pct = total > 0 ? Math.round((loaded / total) * 100) : 0;
+    const displayedLoaded = useCountUp(loaded);
+    const pct = total > 0 ? Math.round((displayedLoaded / total) * 100) : 0;
     return (
-        <div className="mb-1.5 last:mb-0">
-            <div className="flex justify-between text-[13px] text-white/80 mb-0.5">
+        <div className="mb-1.5 last:mb-0 py-0.5">
+            <div className="flex justify-between text-[12px] text-white/85 mb-0.5">
                 <span>Level {level}: {name}</span>
-                <span>{loaded}/{total} ({pct}%)</span>
+                <span>{displayedLoaded}/{total} ({pct}%)</span>
             </div>
             <div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">
                 <div
-                    className={`h-full rounded-full transition-all duration-200 ${STATUS_COLOR[status] ?? "bg-gray-500"}`}
+                    className={`h-full rounded-full transition-all duration-750 ${STATUS_COLOR[status] ?? "bg-gray-500"}`}
                     style={{ width: `${pct}%` }}
                 />
             </div>
@@ -29,13 +35,15 @@ function LevelBar({ level, name, loaded, total, status }) {
 export default function PreloadProgressPanel() {
     const [open, setOpen] = useState(false);
     const { preloadStats } = useContext(SidebarContext);
-
-    // if (!import.meta.env.DEV) return null;
+    const { user } = useAuth();
 
     const levels = Object.entries(preloadStats ?? {});
     const totalLoaded = levels.reduce((sum, [, s]) => sum + s.loaded, 0);
     const totalAssets = levels.reduce((sum, [, s]) => sum + s.total, 0);
-    const overallPct = totalAssets > 0 ? Math.round((totalLoaded / totalAssets) * 100) : 0;
+    const displayedTotalLoaded = useCountUp(totalLoaded);
+    const overallPct = totalAssets > 0 ? Math.round((displayedTotalLoaded / totalAssets) * 100) : 0;
+
+    if (!ALLOWED_ROLES.includes(user?.role)) return null;
 
     return (
         <div className="absolute top-2 right-2 z-50 text-white flex flex-col items-end">
@@ -47,11 +55,11 @@ export default function PreloadProgressPanel() {
             </button>
 
             {open && (
-                <div className="mt-1.5 w-96 bg-black/60 backdrop-blur-sm rounded-lg border border-white/10 p-4">
+                <div className="mt-1.5 w-85 bg-black/60 backdrop-blur-sm rounded-lg border border-white/10 p-4">
                     <div className="mb-1.5">
-                        <div className="flex justify-between text-[13px] text-white/80 mb-0.5">
+                        <div className="flex justify-between text-[12px] text-white/85 mb-0.5">
                             <span>Overall</span>
-                            <span>{totalLoaded}/{totalAssets} ({overallPct}%)</span>
+                            <span>{displayedTotalLoaded}/{totalAssets} ({overallPct}%)</span>
                         </div>
                         <div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">
                             <div

@@ -20,8 +20,8 @@
  * NO IMPORTS — plain JavaScript required for Service Worker compatibility.
  */
 
-const CACHE_ASSETS = 'techno-vision-assets-v3'; // videos + images under /assets/file/
-const CACHE_API    = 'techno-vision-api-v3';    // API responses under /api/
+const CACHE_ASSETS = 'techno-vision-assets-v4'; // videos + images under /assets/file/
+const CACHE_API    = 'techno-vision-api-v4';    // API responses under /api/
 
 const CURRENT_CACHES = [CACHE_ASSETS, CACHE_API];
 

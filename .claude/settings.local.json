@@ -4,10 +4,13 @@
       "WebFetch(domain:somabay.com)",
       "Bash(sed 's/.*\\\\.//')",
       "Bash(grep -E \"package.json|tsconfig|\\\\.md$\")",
-      "Bash(mkdir -p \"e:/techno-vision/light-version/.claude/rules\")"
+      "Bash(mkdir -p \"e:/techno-vision/light-version/.claude/rules\")",
+      "Bash(xargs grep -li \"landscape\\\\|rotate\")",
+      "Bash(mkdir -p \"C:\\\\Users\\\\user\\\\.claude\\\\plans\" 2>/dev/null; echo ok)"
     ],
     "additionalDirectories": [
-      "e:\\techno-vision\\light-version\\.claude"
+      "e:\\techno-vision\\light-version\\.claude",
+      "C:\\Users\\user\\.claude\\plans"
     ]
   }
 }

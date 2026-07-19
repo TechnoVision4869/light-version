@@ -3,6 +3,7 @@ import { TABS, LAYERS } from "../../data/layers";
 
 import { SidebarContext } from "../../store/SidebarContextProvider";
 import { APP_CONFIG } from "../../config/appConfig";
+import { AssetType } from "../admin/types";
 
 export function useVideoViewer() {
   const useStatic = APP_CONFIG.USE_STATIC;
@@ -19,6 +20,7 @@ export function useVideoViewer() {
   } = useContext(SidebarContext);
 
   const [isVideosLoaded, setIsVideosLoaded] = useState(false);
+  const [isIdleImage, setIsIdleImage] = useState(false);
 
   const [floatingOpacity, setFloatingOpacity] = useState(0);
   const [firstVideoOpacity, setFirstVideoOpacity] = useState(0);
@@ -77,6 +79,7 @@ export function useVideoViewer() {
         playTransitionVideo(
           newViewVideos.forwardVideo,
           newViewVideos.idleVideo,
+          newViewVideos.idleVideoType,
           onComplete,
         );
       } else {
@@ -92,6 +95,7 @@ export function useVideoViewer() {
         playTransitionVideo(
           buildingViewVideos.reverseVideo,
           newViewVideos.idleVideo,
+          newViewVideos.idleVideoType,
           onComplete,
         );
       }
@@ -148,6 +152,7 @@ export function useVideoViewer() {
       };
       video.onerror = () => {
         console.error("Video load error, src:", src);
+        console.log(isIdleImage);
         setIsPlaying(false);
       };
 
@@ -164,13 +169,14 @@ export function useVideoViewer() {
     (
       transitionVideoPath = currentVideosPaths?.forwardVideo,
       idleVideoPath = currentVideosPaths?.idleVideo,
+      idleType = currentVideosPaths?.idleVideoType,
       onComplete = null,
     ) => {
       if (!idleVideoPath) return;
       if (!transitionVideoPath) {
         // If no transition video, directly play idle video
         console.log("No transition video, playing idle video:", idleVideoPath);
-        playIdleVideo(idleVideoPath, onComplete);
+        playIdleVideo(idleVideoPath, idleType, onComplete);
         return;
       }
       // console.log("playTransitionVideo called with videoPath:", transitionVideoPath);
@@ -190,7 +196,7 @@ export function useVideoViewer() {
         }
       };
       const onEnded = () => {
-        playIdleVideo(idleVideoPath, onComplete);
+        playIdleVideo(idleVideoPath, idleType, onComplete);
       };
       playVideo(transitionVideoPath, false, onloaded, onEnded, target);
     },
@@ -250,11 +256,17 @@ export function useVideoViewer() {
   );
 
   const playIdleVideo = useCallback(
-    (videoPath = currentVideosPaths?.idleVideo, onComplete = null) => {
+    (
+      videoPath = currentVideosPaths?.idleVideo,
+      idleType = currentVideosPaths?.idleVideoType,
+      onComplete = null,
+    ) => {
       if (!videoPath) return;
-      // console.log("playIdleVideo called with idleVideo:", videoPath);
-      // this needs to be changed later and add the condition that check asset type when using APIs
-      const isImage = useStatic ? /\.(png|jpe?g|webp|avif)$/i.test(videoPath) : false;
+      const isImage = useStatic
+        ? /\.(png|jpe?g|webp|avif)$/i.test(videoPath)
+        : idleType === AssetType.IMAGE || idleType === AssetType.THUMBNAIL;
+      // console.log("[AssetType] playIdleVideo:", { videoPath, idleType, isImage });
+      setIsIdleImage(isImage);
 
       if (isImage) {
         setFloatingOpacity(1);
@@ -366,6 +378,7 @@ export function useVideoViewer() {
 
   return {
     isVideosLoaded,
+    isIdleImage,
     isPlaying,
     firstVideoRef,
     secondVideoRef,

@@ -6,4 +6,6 @@ export const APP_CONFIG = {
   USE_PREDEFINED_POS: CONFIG.USE_PREDEFINED_POS,
   // Set to true to use panorama hotspots for unit interior, false for single room-interior popup
   USE_HOTSPOTS: CONFIG.USE_HOTSPOTS,
+  // Max viewport width (px) treated as "tablet" for the web landscape prompt / immersive mode
+  TABLET_MAX_WIDTH: 1366,
 };

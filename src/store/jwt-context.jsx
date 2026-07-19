@@ -134,7 +134,6 @@ export const AuthProvider = ({ children }) => {
 
   const login = async ({ email, password }) => {
     const response = await authApi.login({ email, password });
-    console.log(response);
 
     if (response && response.user && response.access_token) {
       // Ensure access_token is present

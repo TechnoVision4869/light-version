@@ -1,21 +1,30 @@
 import { useState, useEffect } from "react";
+import { Capacitor } from "@capacitor/core";
+import { APP_CONFIG } from "../config/appConfig";
 import LandscapeAnim from "../assets/animation/Rotate Phone.gif";
-
 
 export default function LandscapePrompt() {
     // state to show prompt for landscape orientation
     const [showLandscapePrompt, setShowLandscapePrompt] = useState(false);
+
     useEffect(() => {
-        const checkOrientation = () => {
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            const isPortrait = window.innerHeight > window.innerWidth;
-            setShowLandscapePrompt(isMobile && isPortrait);
+        if (Capacitor.getPlatform() !== "web") return;
+
+        const portraitMq = window.matchMedia("(orientation: portrait)");
+        const tabletMq = window.matchMedia(`(max-width: ${APP_CONFIG.TABLET_MAX_WIDTH}px)`);
+
+        const update = () => {
+            setShowLandscapePrompt(tabletMq.matches && portraitMq.matches);
         };
 
-        // Check on load and resize
-        checkOrientation();
-        window.addEventListener("resize", checkOrientation);
-        return () => window.removeEventListener("resize", checkOrientation);
+        update();
+        portraitMq.addEventListener("change", update);
+        tabletMq.addEventListener("change", update);
+
+        return () => {
+            portraitMq.removeEventListener("change", update);
+            tabletMq.removeEventListener("change", update);
+        };
     }, []);
 
     return (

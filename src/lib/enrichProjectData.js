@@ -20,8 +20,12 @@ export async function enrichProjectData(project, useMockup, preloadDepth = 3) {
     return project;
   }
 
+  // Build an assetId -> type lookup once, so URL resolution below can also
+  // preserve the asset's kind (video/image/etc.) alongside its URL.
+  const assetTypeById = await buildAssetTypeMap(project.developerId);
+
   // For real data, convert all assetIds/videoIds to file URLs and fetch unit types
-  const enrichedProject = await transformAssetIds(project);
+  const enrichedProject = await transformAssetIds(project, assetTypeById);
   // console.log("Enriched project:", enrichedProject);
 
   // Fetch and attach unit types to the project
@@ -33,7 +37,7 @@ export async function enrichProjectData(project, useMockup, preloadDepth = 3) {
       // Enrich unit types: convert gallery/cutSections/floorPlans assets and levels/rooms images
       unitTypes = await Promise.all(
         unitTypes.map(async (unitType) => {
-          const enriched = await transformAssetIds(unitType);
+          const enriched = await transformAssetIds(unitType, assetTypeById);
           return await enrichUnitTypeLevels(enriched);
         })
       );
@@ -217,11 +221,68 @@ export async function prefetchSingleUrl(url) {
  */
 export async function prefetchProjectByLevels(project, depth = 1, startDepth = 0, onProgress) {
   console.log("Depth: ", depth, " Start Depth: ", startDepth);
-  
+
   if (!project || depth < 0) {
     return { loaded: 0, failed: 0, totalSize: '0 MB' };
   }
 
+  const uniqueUrls = collectAssetUrls(project, depth, startDepth);
+  console.log(`[Cache] Loading ${uniqueUrls.length} unique videos at depth ${depth}`);
+  onProgress?.({ loaded: 0, total: uniqueUrls.length });
+
+  // Load videos in parallel batches (5 at a time to avoid overwhelming network)
+  const batchSize = 5;
+  let loaded = 0;
+  let failed = 0;
+  let totalBytes = 0;
+
+  for (let i = 0; i < uniqueUrls.length; i += batchSize) {
+    const batch = uniqueUrls.slice(i, i + batchSize);
+
+    const results = await Promise.allSettled(
+      batch.map((url) => loadAndCacheVideo(url))
+    );
+
+    results.forEach((result) => {
+      if (result.status === 'fulfilled') {
+        loaded++;
+        totalBytes += result.value;
+      } else {
+        failed++;
+        console.warn('[Cache] Failed to load video:', result.reason);
+      }
+    });
+
+    // Log progress
+    const progress = Math.min(i + batchSize, uniqueUrls.length);
+    console.log(`[Cache] Progress: ${progress}/${uniqueUrls.length}`);
+    onProgress?.({ loaded: progress, total: uniqueUrls.length });
+  }
+
+  const totalSizeMB = (totalBytes / 1024 / 1024).toFixed(2);
+  console.log(
+    `[Cache] Preload complete: ${loaded} loaded, ${failed} failed, ${totalSizeMB}MB cached`
+  );
+
+  return { loaded, failed, totalSize: `${totalSizeMB} MB` };
+}
+
+/**
+ * Returns the exact count of unique assets that would be loaded for a single level,
+ * with no network calls — used to know preload totals upfront, before loading starts.
+ */
+export function getLevelAssetTotal(project, level) {
+  if (!project) return 0;
+  return collectAssetUrls(project, level, level).length;
+}
+
+/**
+ * Walks the project tree and collects every unique *AssetId/*VideoId value referenced
+ * within [startDepth, depth], with no I/O. Shared by prefetchProjectByLevels (which then
+ * loads them) and getLevelAssetTotal (which just needs the count).
+ * @private
+ */
+function collectAssetUrls(project, depth, startDepth) {
   const assetUrls = [];
 
   // ===== LEVEL 0: Project Videos =====
@@ -429,47 +490,8 @@ export async function prefetchProjectByLevels(project, depth = 1, startDepth = 0
       }
     }
 
-
   // Remove duplicates
-  const uniqueUrls = [...new Set(assetUrls)];
-  console.log(`[Cache] Loading ${uniqueUrls.length} unique videos at depth ${depth}`);
-  onProgress?.({ loaded: 0, total: uniqueUrls.length });
-
-  // Load videos in parallel batches (5 at a time to avoid overwhelming network)
-  const batchSize = 5;
-  let loaded = 0;
-  let failed = 0;
-  let totalBytes = 0;
-
-  for (let i = 0; i < uniqueUrls.length; i += batchSize) {
-    const batch = uniqueUrls.slice(i, i + batchSize);
-
-    const results = await Promise.allSettled(
-      batch.map((url) => loadAndCacheVideo(url))
-    );
-
-    results.forEach((result) => {
-      if (result.status === 'fulfilled') {
-        loaded++;
-        totalBytes += result.value;
-      } else {
-        failed++;
-        console.warn('[Cache] Failed to load video:', result.reason);
-      }
-    });
-
-    // Log progress
-    const progress = Math.min(i + batchSize, uniqueUrls.length);
-    console.log(`[Cache] Progress: ${progress}/${uniqueUrls.length}`);
-    onProgress?.({ loaded: progress, total: uniqueUrls.length });
-  }
-
-  const totalSizeMB = (totalBytes / 1024 / 1024).toFixed(2);
-  console.log(
-    `[Cache] Preload complete: ${loaded} loaded, ${failed} failed, ${totalSizeMB}MB cached`
-  );
-
-  return { loaded, failed, totalSize: `${totalSizeMB} MB` };
+  return [...new Set(assetUrls)];
 }
 
 /**
@@ -550,17 +572,41 @@ export function describeLevels(project) {
 }
 
 /**
- * Recursively traverses an object and converts all *AssetId and *VideoId fields to file URLs
+ * Fetches every asset belonging to a developer and builds an assetId -> type lookup,
+ * so URL resolution can preserve each asset's kind (video/image/etc.) alongside its URL.
  * @private
  */
-async function transformAssetIds(obj) {
+async function buildAssetTypeMap(developerId) {
+  if (!developerId) {
+    console.warn('[AssetType] No developerId on project — skipping asset type lookup, all *Type fields will be null.');
+    return new Map();
+  }
+
+  try {
+    const data = await assetApi.getByDeveloper({ developerId });
+    const assets = Array.isArray(data) ? data : (data?.data ?? data?.items ?? []);
+    // console.log(`[AssetType] Loaded ${assets.length} assets for developer ${developerId}. Sample:`, assets[0]);
+    return new Map(assets.map((a) => [a.id, a.type]));
+  } catch (error) {
+    console.error(`Failed to fetch assets for developer ${developerId}:`, error);
+    return new Map();
+  }
+}
+
+/**
+ * Recursively traverses an object and converts all *AssetId and *VideoId fields to file URLs.
+ * Also stamps a sibling `${field}Type` key next to each resolved URL (e.g. idleAssetId ->
+ * idleAssetType) using assetTypeById, so callers can tell video assets from image assets.
+ * @private
+ */
+async function transformAssetIds(obj, assetTypeById = new Map()) {
   if (obj === null || obj === undefined) {
     return obj;
   }
 
   // Handle arrays
   if (Array.isArray(obj)) {
-    return Promise.all(obj.map((item) => transformAssetIds(item)));
+    return Promise.all(obj.map((item) => transformAssetIds(item, assetTypeById)));
   }
 
   // Handle primitive types
@@ -582,6 +628,9 @@ async function transformAssetIds(obj) {
       typeof value === "string" &&
       value
     ) {
+      const typeKey = key.endsWith("Id") ? `${key.slice(0, -2)}Type` : `${key}Type`;
+      transformed[typeKey] = assetTypeById.get(value) ?? null;
+
       try {
         // Call the API to get the file URL
         const fileUrl = await assetApi.getAssetFileUrl(value);
@@ -605,7 +654,7 @@ async function transformAssetIds(obj) {
     }
     // Recursively handle nested objects and arrays
     else if (typeof value === "object") {
-      transformed[key] = await transformAssetIds(value);
+      transformed[key] = await transformAssetIds(value, assetTypeById);
     }
   }
   return transformed;

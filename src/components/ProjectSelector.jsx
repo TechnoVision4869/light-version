@@ -213,7 +213,7 @@ export default function ProjectSelector({
     try {
       const project = await fetchProjectById(projectId, useStatic);
       if (project) {
-        onProjectSelect(project, introVideoUrl);
+        onProjectSelect(project, introVideoUrl, developerId);
       } else {
         toast.error("Failed to load project details.");
       }

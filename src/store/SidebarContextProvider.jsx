@@ -4,18 +4,19 @@ import { SidebarContext } from "./SidebarContext";
 import { AuthContext } from "./jwt-context";
 import { TABS, LAYERS, DATA } from "../data/layers";
 import { PROPERTY_TYPE } from "../constants/roles";
-import { enrichProjectData, prefetchProjectByLevels } from "../lib/enrichProjectData";
+import { enrichProjectData, prefetchProjectByLevels, getLevelAssetTotal } from "../lib/enrichProjectData";
 import { APP_CONFIG } from "../config/appConfig";
 import { fetchProjectById } from "../lib/projectFetcher";
 
 export { SidebarContext };
 
 const STORAGE_KEY = "selectedProject";
+const DEVELOPER_STORAGE_KEY = "selectedDeveloperId";
 
 export default function SidebarContextProvider({ children }) {
     const useStatic = APP_CONFIG.USE_STATIC;
     const [currentProject, setCurrentProject] = useState(null);
-    const { isInitialized: isAuthInitialized } = useContext(AuthContext);
+    const { isInitialized: isAuthInitialized, user } = useContext(AuthContext);
 
     const getInitHistory = useCallback((project) => {
         // Helper to get the video URL from project, checking both naming patterns
@@ -37,6 +38,7 @@ export default function SidebarContextProvider({ children }) {
                     forwardVideo: getVideoUrl(project, 'zoomoutVideo', 'zoomoutVideoId') ?? null,
                     reverseVideo: null,
                     idleVideo: getVideoUrl(project, 'idleVideo', 'idleVideoId', 'idleAssetId') ?? null,
+                    idleVideoType: getVideoUrl(project, 'idleVideoType', 'idleAssetType') ?? null,
                 },
                 views: null,
             },
@@ -52,13 +54,13 @@ export default function SidebarContextProvider({ children }) {
     const [highlightedButton, setHighlightedButton] = useState(null);
 
     const [preloadStats, setPreloadStats] = useState({
-        1: { name: 'Zones + Surroundings + Amenities', loaded: 0, total: 0, status: 'idle' },
-        2: { name: 'Properties within zones', loaded: 0, total: 0, status: 'idle' },
-        3: { name: 'Units + interiors', loaded: 0, total: 0, status: 'idle' },
+        1: { name: 'Top Tabs', loaded: 0, total: 0, status: 'idle' },
+        2: { name: 'Properties in Zones', loaded: 0, total: 0, status: 'idle' },
+        3: { name: 'Units + Interiors', loaded: 0, total: 0, status: 'idle' },
     });
 
     // Reset history when project changes
-    const handleSetCurrentProject = useCallback((project) => {
+    const handleSetCurrentProject = useCallback((project, developerId) => {
         // console.log("project", project);
 
         const enrich = async () => {
@@ -67,10 +69,27 @@ export default function SidebarContextProvider({ children }) {
                     setCurrentProject(project);
                     setHistory(getInitHistory(project));
                 } else {
+                    // Merge in the developerId known from selection context, since the
+                    // project entity itself never carries one — see Feature C.
+                    const projectToEnrich = developerId
+                        ? { ...project, developerId: project.developerId || developerId }
+                        : project;
+
                     // URL resolution runs once here, depth 0 assets prefetched
-                    const enrichedProject = await enrichProjectData(project, useStatic, 0);
+                    const enrichedProject = await enrichProjectData(projectToEnrich, useStatic, 0);
                     setCurrentProject(enrichedProject);
                     setHistory(getInitHistory(enrichedProject));
+
+                    // Know all three levels' totals upfront (no network calls), so the
+                    // panel shows the true grand total immediately instead of it growing
+                    // as each level's prefetch starts.
+                    setPreloadStats((prev) => {
+                        const next = { ...prev };
+                        [1, 2, 3].forEach((level) => {
+                            next[level] = { ...next[level], total: getLevelAssetTotal(enrichedProject, level) };
+                        });
+                        return next;
+                    });
 
                     // Each call only walks and fetches its own level
                     for (const depth of [1, 2, 3]) {
@@ -88,11 +107,13 @@ export default function SidebarContextProvider({ children }) {
                 }
 
                 localStorage.setItem(STORAGE_KEY, project.id);
+                if (developerId) localStorage.setItem(DEVELOPER_STORAGE_KEY, developerId);
             } catch (error) {
                 console.error('Error enriching project data:', error);
                 setCurrentProject(project);
                 setHistory(getInitHistory(project));
                 localStorage.setItem(STORAGE_KEY, project.id);
+                if (developerId) localStorage.setItem(DEVELOPER_STORAGE_KEY, developerId);
             }
         };
         enrich();
@@ -110,7 +131,8 @@ export default function SidebarContextProvider({ children }) {
                 if (useStatic || isAuthInitialized) {
                     const project = await fetchProjectById(projectId, useStatic);
                     if (project && isMounted) {
-                        handleSetCurrentProject(project);
+                        const storedDeveloperId = localStorage.getItem(DEVELOPER_STORAGE_KEY);
+                        handleSetCurrentProject(project, storedDeveloperId || user?.developerId);
                     }
                 }
             }
@@ -119,7 +141,7 @@ export default function SidebarContextProvider({ children }) {
         } catch (error) {
             console.warn("Failed to restore project:", error);
         }
-    }, [handleSetCurrentProject, useStatic, isAuthInitialized]);
+    }, [handleSetCurrentProject, useStatic, isAuthInitialized, user]);
 
     useEffect(() => {
         restoreProject();
@@ -166,11 +188,13 @@ export default function SidebarContextProvider({ children }) {
                     forwardVideo: selectedItem.zonesForwardVideoId || selectedItem.forwardVideoId,
                     reverseVideo: selectedItem.zonesReverseVideoId || selectedItem.reverseVideoId,
                     idleVideo: selectedItem.zonesSideVideoId || selectedItem.sideVideoId,
+                    idleVideoType: selectedItem.zonesSideVideoType || selectedItem.sideVideoType,
                 }
                 : {
                     forwardVideo: selectedItem.zonesZoomoutVideoId || selectedItem.zoomoutVideo || selectedItem.zoomOutVideo,
                     reverseVideo: selectedItem.zonesReverseVideoId || selectedItem.reverseVideoId,
                     idleVideo: selectedItem.zonesSideVideoId || selectedItem.sideVideoId,
+                    idleVideoType: selectedItem.zonesSideVideoType || selectedItem.sideVideoType,
                 };
         }
 
@@ -221,10 +245,11 @@ export default function SidebarContextProvider({ children }) {
             const forwardVideo = item.forwardVideoId || item.forwardAssetId;
             const reverseVideo = item.reverseVideoId || item.reverseAssetId;
             const idleVideo = item.sideVideoId || item.idleAssetId || item.sideAssetId;
+            const idleVideoType = item.sideVideoType || item.idleAssetType || item.sideAssetType;
 
             // Only create videosPath if at least one field has a value
             if (forwardVideo || reverseVideo || idleVideo) {
-                videosPath = { forwardVideo, reverseVideo, idleVideo };
+                videosPath = { forwardVideo, reverseVideo, idleVideo, idleVideoType };
             } else {
                 videosPath = undefined;  // Falls back to property?.videos
             }
@@ -248,6 +273,7 @@ export default function SidebarContextProvider({ children }) {
                     forwardVideo: property?.forwardAssetId,
                     reverseVideo: property?.reverseAssetId,
                     idleVideo: property?.idleAssetId,
+                    idleVideoType: property?.idleAssetType,
                 }
             }
         } // still undefined if not present on property
@@ -281,6 +307,7 @@ export default function SidebarContextProvider({ children }) {
                         forwardVideo: view.forwardAssetId,
                         reverseVideo: view.reverseAssetId,
                         idleVideo: view.sideAssetId,
+                        idleVideoType: view.sideAssetType,
                     },
                 }
             }).sort((a, b) => {
@@ -312,8 +339,9 @@ export default function SidebarContextProvider({ children }) {
             const forwardVideo = floor.forwardVideoId || floor.forwardAssetId;
             const reverseVideo = floor.reverseVideoId || floor.reverseAssetId;
             const idleVideo = floor.sideVideoId || floor.idleAssetId || floor.sideAssetId;
+            const idleVideoType = floor.sideVideoType || floor.idleAssetType || floor.sideAssetType;
             if (forwardVideo || reverseVideo || idleVideo) {
-                videosPath = { forwardVideo, reverseVideo, idleVideo };
+                videosPath = { forwardVideo, reverseVideo, idleVideo, idleVideoType };
             }
         }
 
@@ -435,6 +463,7 @@ export default function SidebarContextProvider({ children }) {
     // Clear selected project from localStorage
     const handleClearSelectedProject = useCallback(() => {
         localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(DEVELOPER_STORAGE_KEY);
         setCurrentProject(null);
         setHistory(getInitHistory(null));
     }, [getInitHistory]);

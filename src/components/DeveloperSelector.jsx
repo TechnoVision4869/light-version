@@ -9,6 +9,17 @@ export default function DeveloperSelector({ onDeveloperSelect }) {
   const [developers, setDevelopers] = useState([]);
   const [developerLogos, setDeveloperLogos] = useState({});
   const [loading, setLoading] = useState(true);
+  const [selectingId, setSelectingId] = useState(null);
+
+  const handleSelect = async (developer) => {
+    if (selectingId) return;
+    setSelectingId(developer.id);
+    try {
+      await onDeveloperSelect(developer);
+    } finally {
+      setSelectingId(null);
+    }
+  };
 
   const fetchDevelopers = async () => {
     try {
@@ -84,35 +95,39 @@ export default function DeveloperSelector({ onDeveloperSelect }) {
               </div>
             </div>
           ) : (
-            <div className="flex flex-wrap gap-8 xl:gap-10 justify-center">
-              {developers.map((developer) => (
-                <div
-                  key={developer.id}
-                  className="flex flex-col items-center gap-3 p-4 rounded-2xl backdrop-blur-sm bg-[#1C1C1C8C] cursor-pointer hover:bg-[#2C2C2C8C] transition-colors duration-300"
-                  onClick={() => onDeveloperSelect(developer)}
-                >
-                  <img
-                    src={getDeveloperLogo(developer) || DEFAULT_LOGO}
-                    alt={developer.name}
-                    className="rounded-xl w-full h-24 sm:h-28 lg:h-32 object-cover"
-                  />
-
-                  <h2 className="tracking-wide text-sm sm:text-base font-semibold text-white text-center line-clamp-2">
-                    {developer.name}
-                  </h2>
-
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDeveloperSelect(developer);
-                    }}
-                    className="w-full py-1.5 px-3 text-sm bg-transparent border border-white hover:bg-white hover:text-black hover:border-white text-white font-medium rounded-lg transition-colors duration-300"
+            <>
+              <h1 className="tracking-wide text-2xl sm:text-3xl font-semibold text-white mb-8">
+                Select a Developer
+              </h1>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 xl:gap-8">
+                {developers.map((developer) => (
+                  <div
+                    key={developer.id}
+                    className={`relative w-[170px] min-h-[170px] flex flex-col justify-around gap-3 px-4 py-3 shadow-lg rounded-2xl backdrop-blur-sm bg-[#1C1C1C8C] transition-all duration-300
+                      ${selectingId === developer.id ? "opacity-60 cursor-wait" : "cursor-pointer hover:bg-[#2C2C2C8C] hover:-translate-y-1 hover:shadow-xl"}`}
+                    onClick={() => handleSelect(developer)}
                   >
-                    Select
-                  </button>
-                </div>
-              ))}
-            </div>
+                    {selectingId === developer.id && (
+                      <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-black/30">
+                        <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin mt-9" />
+                      </div>
+                    )}
+
+                    <div className="w-full h-30 rounded-xl bg-white/5 flex items-center justify-center overflow-hidden">
+                      <img
+                        src={getDeveloperLogo(developer) || DEFAULT_LOGO}
+                        alt={developer.name}
+                        className="max-w-full max-h-full object-contain"
+                      />
+                    </div>
+
+                    <h2 className="tracking-wide text-sm sm:text-base font-semibold text-white text-center line-clamp-2">
+                      {developer.name}
+                    </h2>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </div>
