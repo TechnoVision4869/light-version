@@ -8,8 +8,6 @@ import { TABS, LAYERS, CONFIG } from "../data/layers.js";
 import { useVideoViewer } from "./hooks/useVideoViewer.jsx";
 
 // Components
-import LandscapePrompt from "./LandscapePrompt.jsx";
-import { useTabletImmersiveMode } from "./hooks/useTabletImmersiveMode";
 import InfoPopup from "./InfoPopup.jsx";
 
 import HomeButton from "./buttons/HomeButton";
@@ -37,7 +35,6 @@ import { APP_CONFIG } from "../config/appConfig";
 import PreloadProgressPanel from "./dev/PreloadProgressPanel.jsx";
 export default function Home({ introVideoUrl = null, onExitRequest }) {
   //states
-  const { eligible: tabletImmersiveEligible, isFullscreen, requestImmersive } = useTabletImmersiveMode();
   const [showInfoPopup, setShowInfoPopup] = useState(false);
   const [showI, setShowI] = useState(false);
   const [floorSwitchBlur, setFloorSwitchBlur] = useState(false);
@@ -476,22 +473,7 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
 
               {/* Main content area */}
               <main className="flex-1 relative">
-                <LandscapePrompt />
                 <PreloadProgressPanel />
-                {tabletImmersiveEligible && !isFullscreen && (
-                  <button
-                    onClick={requestImmersive}
-                    aria-label="Enter fullscreen"
-                    className="absolute bottom-3 left-3 z-50 bg-gradient-to-bl from-black/60 to-transparent rounded-full p-2.5 text-white hover:bg-black/80"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M8 3H5a2 2 0 0 0-2 2v3" />
-                      <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
-                      <path d="M3 16v3a2 2 0 0 0 2 2h3" />
-                      <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
-                    </svg>
-                  </button>
-                )}
                 <div
                   className="w-full h-full bg-white/9 rounded-2xl overflow-hidden shadow-inner select-none"
                   style={{ touchAction: "none" }}

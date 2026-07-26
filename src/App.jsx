@@ -11,6 +11,7 @@ import SplashVideo from "./components/SplashVideo";
 import LoginPage from "./components/auth/login-page";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import UsersPage from "./components/user/UsersPage";
+import ImmersiveGate from "./components/ImmersiveGate";
 
 
 export default function App() {
@@ -93,6 +94,7 @@ export default function App() {
 
   return (
     <>
+      <ImmersiveGate />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route

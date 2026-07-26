@@ -4,6 +4,7 @@ import { APP_CONFIG } from "../../config/appConfig";
 
 export function useTabletImmersiveMode() {
     const [eligible, setEligible] = useState(false);
+    const [isPortrait, setIsPortrait] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(!!document.fullscreenElement);
 
     useEffect(() => {
@@ -15,6 +16,17 @@ export function useTabletImmersiveMode() {
         update();
         tabletMq.addEventListener("change", update);
         return () => tabletMq.removeEventListener("change", update);
+    }, []);
+
+    useEffect(() => {
+        if (Capacitor.getPlatform() !== "web") return;
+
+        const portraitMq = window.matchMedia("(orientation: portrait)");
+        const update = () => setIsPortrait(portraitMq.matches);
+
+        update();
+        portraitMq.addEventListener("change", update);
+        return () => portraitMq.removeEventListener("change", update);
     }, []);
 
     useEffect(() => {
@@ -40,5 +52,5 @@ export function useTabletImmersiveMode() {
             });
     }, []);
 
-    return { eligible, isFullscreen, requestImmersive };
+    return { eligible, isPortrait, isFullscreen, requestImmersive };
 }
