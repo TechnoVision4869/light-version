@@ -31,6 +31,7 @@ This project is me redoing that same idea, but from scratch, using the real 3D e
 - **react-three-drei** — a helper toolkit on top of react-three-fiber with ready-made building blocks for common 3D needs.
 
 
+---
 
 ## More of The Technical Background
 
