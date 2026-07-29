@@ -19,7 +19,7 @@ export const scenes = [
     hotspots: [
       {
         id: "to-space-hall",
-        yaw: 50,
+        yaw: -50,
         pitch: 0,
         type: "nav",
         label: "Enter Space Odyssey  Hall",
@@ -27,7 +27,7 @@ export const scenes = [
       },
       {
         id: "info-dome",
-        yaw: 130,
+        yaw: -130,
         pitch: 7,
         type: "info",
         label: "Geodesic Dome Theatre",

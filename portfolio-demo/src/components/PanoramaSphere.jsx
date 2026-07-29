@@ -73,7 +73,7 @@ export default function PanoramaSphere({ texture, verticalFov = 180 }) {
   return (
     <group>
       {layers.map((layer, i) => (
-        <mesh key={layer.id} renderOrder={i}>
+        <mesh key={layer.id} renderOrder={i} scale={[-1, 1, 1]}>
           <sphereGeometry args={sphereArgs(layer.verticalFov)} />
           <meshBasicMaterial
             ref={(mat) => {
