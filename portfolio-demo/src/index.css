@@ -33,6 +33,9 @@ body,
   top: 20px;
   left: 20px;
   z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 8px 16px;
   color: #f5f5f5;
   background: rgba(0, 0, 0, 0.4);
@@ -41,6 +44,21 @@ body,
   font-size: 14px;
   letter-spacing: 0.02em;
   pointer-events: none;
+}
+
+.scene-label-spinner {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #f5f5f5;
+  animation: scene-label-spin 0.7s linear infinite;
+}
+
+@keyframes scene-label-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .overlay {

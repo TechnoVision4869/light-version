@@ -11,6 +11,7 @@ export default function PanoramaViewer() {
   const [sceneId, setSceneId] = useState(scenes[0].id);
   const [error, setError] = useState(false);
   const [retryToken, setRetryToken] = useState(0);
+  const [hasShownAny, setHasShownAny] = useState(false);
   const targetScene = getSceneById(sceneId);
   const handleError = useCallback(() => setError(true), []);
   const texture = useTextureSafe(targetScene.image, handleError, retryToken);
@@ -21,12 +22,19 @@ export default function PanoramaViewer() {
   // angle while the *old* image was still the one on screen, ahead of the
   // crossfade. Gating on displayedSceneId keeps the old scene fully in
   // control of the camera/hotspots until PanoramaSphere has something to
-  // crossfade to.
+  // crossfade to. HotspotLayer is mounted off this too (not off `texture`,
+  // which refers to the in-flight *target* scene) -- otherwise every
+  // scene switch, and any failed load, would leave the viewer with no
+  // hotspots at all until the target happened to succeed.
   const [displayedSceneId, setDisplayedSceneId] = useState(sceneId);
   useEffect(() => {
-    if (texture) setDisplayedSceneId(sceneId);
+    if (texture) {
+      setDisplayedSceneId(sceneId);
+      setHasShownAny(true);
+    }
   }, [texture, sceneId]);
   const displayedScene = getSceneById(displayedSceneId);
+  const isSwitching = sceneId !== displayedSceneId && !error;
 
   const handleSelect = useCallback(
     (hotspotId) => {
@@ -45,19 +53,16 @@ export default function PanoramaViewer() {
 
   return (
     <div className="viewer-root">
-      <div className="scene-label">{displayedScene.label}</div>
+      <div className="scene-label">
+        {displayedScene.label}
+        {isSwitching && <span className="scene-label-spinner" aria-hidden="true" />}
+      </div>
       <Canvas camera={{ fov: 75, near: 0.1, far: 1000, position: [0, 0, 0.01] }}>
         <PanoramaSphere texture={texture} verticalFov={targetScene.verticalFov} />
         <CameraRig scene={displayedScene} />
-        {texture && (
-          <HotspotLayer hotspots={displayedScene.hotspots} onSelect={handleSelect} />
-        )}
+        {hasShownAny && <HotspotLayer hotspots={displayedScene.hotspots} onSelect={handleSelect} />}
       </Canvas>
-      <LoadingOverlay
-        loading={!texture && !error && sceneId === displayedSceneId}
-        error={error}
-        onRetry={handleRetry}
-      />
+      <LoadingOverlay loading={!hasShownAny && !error} error={error} onRetry={handleRetry} />
     </div>
   );
 }

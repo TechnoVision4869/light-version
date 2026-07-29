@@ -4,6 +4,7 @@ import * as THREE from "three";
 import Hotspot from "./Hotspot";
 
 const CLICK_MOVE_THRESHOLD = 6; // px -- beyond this, treat it as a drag, not a click
+const OFFSCREEN = -10; // parks the raycast pointer off-canvas so nothing registers as hovered
 
 // Three.js objects aren't DOM elements -- a mesh floating in 3D space has no
 // native "onClick". A Raycaster projects an invisible line from the camera
@@ -12,7 +13,7 @@ const CLICK_MOVE_THRESHOLD = 6; // px -- beyond this, treat it as a drag, not a 
 export default function HotspotLayer({ hotspots, onSelect }) {
   const { camera, gl } = useThree();
   const raycaster = useRef(new THREE.Raycaster()).current;
-  const pointer = useRef(new THREE.Vector2(-10, -10)).current;
+  const pointer = useRef(new THREE.Vector2(OFFSCREEN, OFFSCREEN)).current;
   const meshRefs = useRef(new Map());
   const pointerDownAt = useRef(null);
   const [hoveredId, setHoveredId] = useState(null);
@@ -38,6 +39,14 @@ export default function HotspotLayer({ hotspots, onSelect }) {
     [updatePointer],
   );
 
+  // Without this, hovering a marker and then moving the pointer off the
+  // canvas onto surrounding page UI leaves it stuck "hovered" forever --
+  // there's no further pointermove over the canvas to ever clear it.
+  const handlePointerLeave = useCallback(() => {
+    pointer.x = OFFSCREEN;
+    pointer.y = OFFSCREEN;
+  }, [pointer]);
+
   const handlePointerDown = useCallback((event) => {
     pointerDownAt.current = { x: event.clientX, y: event.clientY };
   }, []);
@@ -46,7 +55,10 @@ export default function HotspotLayer({ hotspots, onSelect }) {
   // canvas, so selecting a hotspot immediately on pointerdown would hijack
   // every orbit gesture that happens to start near one. Requiring the
   // pointer to still be near its down-position on release is what tells a
-  // click apart from the start of a drag.
+  // click apart from the start of a drag. Listening on the window (not just
+  // the canvas) for the "up" half means a release outside the canvas -- a
+  // fast drag past its edge -- still resolves cleanly instead of leaving a
+  // stale pointerdown behind.
   const handlePointerUp = useCallback(
     (event) => {
       const start = pointerDownAt.current;
@@ -68,14 +80,16 @@ export default function HotspotLayer({ hotspots, onSelect }) {
     const canvas = gl.domElement;
     canvas.addEventListener("pointermove", handlePointerMove);
     canvas.addEventListener("pointerdown", handlePointerDown);
-    canvas.addEventListener("pointerup", handlePointerUp);
+    canvas.addEventListener("pointerleave", handlePointerLeave);
+    window.addEventListener("pointerup", handlePointerUp);
     return () => {
       canvas.removeEventListener("pointermove", handlePointerMove);
       canvas.removeEventListener("pointerdown", handlePointerDown);
-      canvas.removeEventListener("pointerup", handlePointerUp);
+      canvas.removeEventListener("pointerleave", handlePointerLeave);
+      window.removeEventListener("pointerup", handlePointerUp);
       canvas.style.cursor = "auto";
     };
-  }, [gl, handlePointerMove, handlePointerDown, handlePointerUp]);
+  }, [gl, handlePointerMove, handlePointerDown, handlePointerLeave, handlePointerUp]);
 
   useFrame(() => {
     raycaster.setFromCamera(pointer, camera);

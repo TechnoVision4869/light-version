@@ -26,11 +26,14 @@ function sphereArgs(verticalFov) {
 // Scene transitions crossfade rather than hard-cut. Each texture this
 // component is ever handed becomes a "layer" (its own sphere + material)
 // that fades in, then fades out once superseded. Layers -- not just a
-// single current/previous pair -- so that clicking through scenes faster
-// than the fade can finish still resolves cleanly: older layers just
-// collapse together behind the newest one instead of getting clobbered
-// and leaked. This component owns disposing every texture it receives,
-// once that texture's layer is no longer needed.
+// single current/previous pair -- so nothing ever gets clobbered or
+// leaked no matter how fast scenes change: every texture is disposed
+// exactly once, whenever its layer stops being needed. Clicking through
+// several scenes faster than one fade can finish will briefly composite
+// more than one outgoing panorama at once (a visible but harmless
+// double-exposure) rather than losing track of any of them -- correctness
+// over a pixel-perfect multi-hop crossfade, which isn't worth the extra
+// complexity for how rarely that timing actually happens.
 export default function PanoramaSphere({ texture, verticalFov = 180 }) {
   const layersRef = useRef([]);
   const [, setTick] = useState(0);
