@@ -12,10 +12,15 @@ export default function CameraRig({ scene }) {
 
   // Point the camera at the scene's initial yaw before OrbitControls takes
   // over, so each scene opens facing a deliberate direction instead of
-  // wherever the previous scene's camera happened to end up.
+  // wherever the previous scene's camera happened to end up. The camera
+  // itself stays fixed near the sphere's center -- what moves is the
+  // OrbitControls *target* it looks toward (setting camera.position instead
+  // would point the camera 180° away from the intended yaw, since it'd be
+  // looking back toward the origin rather than out toward `facing`).
   useEffect(() => {
-    const facing = yawPitchToVector3(scene.initialYaw, 0, 0.01);
-    camera.position.copy(facing);
+    camera.position.set(0, 0, 0.01);
+    const facing = yawPitchToVector3(scene.initialYaw, 0, 1);
+    controlsRef.current?.target.copy(facing);
     camera.fov = (scene.fovRange.min + scene.fovRange.max) / 2;
     camera.updateProjectionMatrix();
     controlsRef.current?.update();

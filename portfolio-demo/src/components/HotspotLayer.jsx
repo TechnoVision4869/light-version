@@ -3,6 +3,8 @@ import { useThree, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import Hotspot from "./Hotspot";
 
+const CLICK_MOVE_THRESHOLD = 6; // px -- beyond this, treat it as a drag, not a click
+
 // Three.js objects aren't DOM elements -- a mesh floating in 3D space has no
 // native "onClick". A Raycaster projects an invisible line from the camera
 // through the pointer position each frame and reports which object it
@@ -12,6 +14,7 @@ export default function HotspotLayer({ hotspots, onSelect }) {
   const raycaster = useRef(new THREE.Raycaster()).current;
   const pointer = useRef(new THREE.Vector2(-10, -10)).current;
   const meshRefs = useRef(new Map());
+  const pointerDownAt = useRef(null);
   const [hoveredId, setHoveredId] = useState(null);
 
   const registerMesh = useCallback((id, mesh) => {
@@ -28,8 +31,31 @@ export default function HotspotLayer({ hotspots, onSelect }) {
     [gl, pointer],
   );
 
-  const handlePointerDown = useCallback(
+  const handlePointerMove = useCallback(
     (event) => {
+      updatePointer(event);
+    },
+    [updatePointer],
+  );
+
+  const handlePointerDown = useCallback((event) => {
+    pointerDownAt.current = { x: event.clientX, y: event.clientY };
+  }, []);
+
+  // OrbitControls also starts its drag-to-look on pointerdown on this same
+  // canvas, so selecting a hotspot immediately on pointerdown would hijack
+  // every orbit gesture that happens to start near one. Requiring the
+  // pointer to still be near its down-position on release is what tells a
+  // click apart from the start of a drag.
+  const handlePointerUp = useCallback(
+    (event) => {
+      const start = pointerDownAt.current;
+      pointerDownAt.current = null;
+      if (!start) return;
+      const dx = event.clientX - start.x;
+      const dy = event.clientY - start.y;
+      if (Math.hypot(dx, dy) > CLICK_MOVE_THRESHOLD) return;
+
       updatePointer(event);
       raycaster.setFromCamera(pointer, camera);
       const hit = raycaster.intersectObjects(Array.from(meshRefs.current.values()), false)[0];
@@ -40,13 +66,16 @@ export default function HotspotLayer({ hotspots, onSelect }) {
 
   useEffect(() => {
     const canvas = gl.domElement;
-    canvas.addEventListener("pointermove", updatePointer);
+    canvas.addEventListener("pointermove", handlePointerMove);
     canvas.addEventListener("pointerdown", handlePointerDown);
+    canvas.addEventListener("pointerup", handlePointerUp);
     return () => {
-      canvas.removeEventListener("pointermove", updatePointer);
+      canvas.removeEventListener("pointermove", handlePointerMove);
       canvas.removeEventListener("pointerdown", handlePointerDown);
+      canvas.removeEventListener("pointerup", handlePointerUp);
+      canvas.style.cursor = "auto";
     };
-  }, [gl, updatePointer, handlePointerDown]);
+  }, [gl, handlePointerMove, handlePointerDown, handlePointerUp]);
 
   useFrame(() => {
     raycaster.setFromCamera(pointer, camera);
