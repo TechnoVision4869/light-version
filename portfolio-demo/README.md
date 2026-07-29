@@ -1,10 +1,38 @@
-# Science City Kolkata — 360° Panorama Viewer
+# Science City Kolkata — Walk Through It in 360°
 
-A small interactive 360° virtual tour, built with [Three.js](https://threejs.org) via [react-three-fiber](https://docs.pmnd.rs/react-three-fiber). Drag to look around inside a real photographed panorama, scroll to zoom, and click a glowing marker to walk to the next scene.
+Step inside Science City Kolkata, a real museum and science park, right from your browser. Look around in every direction, walk from room to room by clicking glowing dots, and explore an actual planetarium-style exhibit hall — no headset, no app, just a browser tab.
 
-**Live demo:** deployed via Netlify — see the branch this was built on.
+![Screenshot of the Space Odyssey Hall scene, showing glowing hotspot markers over a planetarium-style exhibit wall with planet displays](docs/screenshot.png)
 
-## Why this exists
+## Try it
+
+- **Drag** with your mouse (or swipe on mobile) to look around — up, down, left, right, a full 360°.
+- **Scroll** to zoom in and out.
+- **Click a glowing marker** to walk into the next room.
+
+There are three scenes to explore:
+
+- **Science City Kolkata — Exterior**, the entrance view outside the museum, with a marker pointing toward the Geodesic Dome Theatre and a door into the Space Odyssey Hall.
+- **Space Odyssey Hall**, a planetarium-style exhibit room with planet displays and info markers to look closer at.
+- A second view of the **Space Odyssey Hall**, one step further into the room, so you can keep exploring deeper.
+
+## Why I built this
+
+In my day job, I've already shipped a production 360° virtual tour feature for a real-estate app — the kind where you click through a building room by room. I built that one using a ready-made panorama library that handled all the 3D work behind the scenes for me.
+
+This project is me redoing that same idea, but from scratch, using the real 3D engine underneath — Three.js — directly, instead of a plug-and-play library. I wanted to prove to myself (and to anyone reviewing my work) that I actually understand how the 3D pieces fit together, not just how to configure someone else's package.
+
+## Built with
+
+- **React** — the UI framework the whole app's interface is built in.
+- **Vite** — the tool that runs the app locally and bundles it for deployment.
+- **Three.js** — the 3D engine that renders everything you see and handles the camera and interactions.
+- **react-three-fiber** — lets Three.js scenes be written as React components, so the 3D world fits naturally into the rest of the app.
+- **react-three-drei** — a helper toolkit on top of react-three-fiber with ready-made building blocks for common 3D needs.
+
+
+
+## More of The Technical Background
 
 I've shipped a production 360° panorama viewer with interactive hotspots before, in a React real-estate app, using [`@egjs/react-view360`](https://github.com/naver/egjs-view360) — a library that wraps Three.js under the hood. That project taught me the *domain*: equirectangular panoramas, yaw/pitch hotspot placement, camera zoom-as-field-of-view, scene-to-scene navigation, defensive handling of texture load failures.
 
@@ -27,14 +55,6 @@ A few pieces intentionally go beneath react-three-fiber's declarative layer, sin
 - **Crossfade via layered materials**: rather than a shader effect, the crossfade is done by literally rendering two overlapping spheres and animating their material opacity in opposite directions.
 - **Manual GPU resource cleanup**: textures are a GPU resource. Anything created outside of JSX (this app loads panorama images imperatively via `THREE.TextureLoader`, so it can control exactly when a load is stale) has to be disposed manually once it's no longer needed, or it leaks.
 
-## Running locally
-
-```bash
-npm install
-npm run dev       # dev server
-npm run build     # production build to dist/
-npm run preview   # preview the production build
-```
 
 ## Image credits
 
