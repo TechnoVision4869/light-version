@@ -25,7 +25,15 @@ export const scenes = [
         label: "Enter Space Odyssey  Hall",
         target: "space-hall-1",
       },
-      { id: "info-dome", yaw: 130, pitch: 7, type: "info", label: "Geodesic Dome Theatre" },
+      {
+        id: "info-dome",
+        yaw: 130,
+        pitch: 7,
+        type: "info",
+        label: "Geodesic Dome Theatre",
+        infoType: "text",
+        infoContent: "The Geodesic Dome Theatre showcases planetarium shows and immersive experiences.",
+      },
     ],
   },
   {
@@ -37,9 +45,26 @@ export const scenes = [
     pitchRange: { min: -30, max: 37.5 },
     fovRange: { min: 40, max: 90 },
     hotspots: [
-      { id: "to-exterior", yaw: 175, pitch: 3, type: "nav", label: "Back Outside", target: "exterior" },
-      { id: "to-space-hall-2", yaw: -72, pitch: -5, type: "nav", label: "Next Scene", target: "space-hall-2" },
-      { id: "info-space", yaw: 85, pitch: -9, type: "info", label: "Space thing" },
+      { id: "to-exterior", yaw: 183, pitch: 3, type: "nav", label: "Back Outside", target: "exterior" },
+      { id: "to-space-hall-2", yaw: 72, pitch: -5, type: "nav", label: "Next Scene", target: "space-hall-2" },
+      {
+        id: "info-earth",
+        yaw: -28,
+        pitch: -9,
+        type: "info",
+        label: "Earth Poster",
+        infoType: "image",
+        infoContent: "/info/earth-poster.png",
+      },
+      {
+        id: "info-venus",
+        yaw: -87,
+        pitch: -6,
+        type: "info",
+        label: "Venus Fact",
+        infoType: "text",
+        infoContent: "Did You Know? Venus is the brightest planet visible in Earth's night sky.",
+      },
     ],
   },
   {
@@ -52,7 +77,16 @@ export const scenes = [
     fovRange: { min: 40, max: 90 },
     hotspots: [
       { id: "to-space-hall-1", yaw: 160, pitch: -10, type: "nav", label: "Prev Scene", target: "space-hall-1" },
-      { id: "info-space", yaw: 200, pitch: -15, type: "info", label: "Space thing" },
+      {
+        id: "info-space",
+        yaw: 200,
+        pitch: -15,
+        type: "info",
+        label: "Space thing",
+        infoType: "text",
+        infoContent:
+          'Astronomers use "light-years" to measure distance, not time. One light-year is about 9.46 trillion kilometers (5.88 trillion miles).',
+      },
     ],
   },
 ];

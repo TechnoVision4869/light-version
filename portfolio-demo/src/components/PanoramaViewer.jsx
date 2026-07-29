@@ -4,6 +4,7 @@ import PanoramaSphere from "./PanoramaSphere";
 import CameraRig from "./CameraRig";
 import HotspotLayer from "./HotspotLayer";
 import LoadingOverlay from "./LoadingOverlay";
+import InfoOverlay from "./InfoOverlay";
 import { useTextureSafe } from "../hooks/useTextureSafe";
 import { scenes, getSceneById } from "../data/scenes";
 
@@ -12,6 +13,7 @@ export default function PanoramaViewer() {
   const [error, setError] = useState(false);
   const [retryToken, setRetryToken] = useState(0);
   const [hasShownAny, setHasShownAny] = useState(false);
+  const [infoOverlay, setInfoOverlay] = useState(null);
   const targetScene = getSceneById(sceneId);
   const handleError = useCallback(() => setError(true), []);
   const texture = useTextureSafe(targetScene.image, handleError, retryToken);
@@ -39,9 +41,13 @@ export default function PanoramaViewer() {
   const handleSelect = useCallback(
     (hotspotId) => {
       const hotspot = displayedScene.hotspots.find((candidate) => candidate.id === hotspotId);
-      if (!hotspot?.target) return;
-      setError(false);
-      setSceneId(hotspot.target);
+      if (!hotspot) return;
+      if (hotspot.type === "nav") {
+        setError(false);
+        setSceneId(hotspot.target);
+      } else if (hotspot.type === "info") {
+        setInfoOverlay(hotspot);
+      }
     },
     [displayedScene],
   );
@@ -57,12 +63,13 @@ export default function PanoramaViewer() {
         {displayedScene.label}
         {isSwitching && <span className="scene-label-spinner" aria-hidden="true" />}
       </div>
-      <Canvas camera={{ fov: 75, near: 0.1, far: 1000, position: [0, 0, 0.01] }}>
+      <Canvas camera={{ fov: 85, near: 0.1, far: 1000, position: [0, 0, 0.01] }}>
         <PanoramaSphere texture={texture} verticalFov={targetScene.verticalFov} />
         <CameraRig scene={displayedScene} />
         {hasShownAny && <HotspotLayer hotspots={displayedScene.hotspots} onSelect={handleSelect} />}
       </Canvas>
       <LoadingOverlay loading={!hasShownAny && !error} error={error} onRetry={handleRetry} />
+      <InfoOverlay info={infoOverlay} onClose={() => setInfoOverlay(null)} />
     </div>
   );
 }
