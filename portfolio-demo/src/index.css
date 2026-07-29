@@ -108,42 +108,119 @@ body,
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  position: relative;
 }
 
 .hotspot-marker {
-  width: 30px;
-  height: 30px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.22);
-  border: 2px solid rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(4px);
-  box-shadow: 0 0 16px 4px rgba(255, 255, 255, 0.4);
-  animation: hotspot-pulse 2.4s ease-in-out infinite;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(6px);
+  box-shadow:
+    0 0 12px 2px rgba(255, 255, 255, 0.25),
+    0 2px 4px rgba(0, 0, 0, 0.15);
+  animation: hotspot-breathing 2.8s ease-in-out infinite;
+  transition: transform 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  cursor: pointer;
+}
+
+.hotspot-marker::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .hotspot-marker--nav {
-  border-color: rgba(153, 224, 255, 0.9);
-  box-shadow: 0 0 18px 4px rgba(153, 224, 255, 0.5);
+  border-color: rgba(120, 200, 230, 0.75);
+  box-shadow:
+    0 0 14px 2.5px rgba(120, 200, 230, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.hotspot-marker--nav::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(120, 200, 230, 0.4);
+  opacity: 0;
 }
 
 .hotspot-marker--info {
-  border-color: rgba(255, 214, 165, 0.9);
-  box-shadow: 0 0 18px 4px rgba(255, 214, 165, 0.5);
+  border-color: rgba(230, 190, 120, 0.75);
+  box-shadow:
+    0 0 14px 2.5px rgba(230, 190, 120, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.hotspot-marker--info::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(230, 190, 120, 0.4);
+  opacity: 0;
 }
 
 .hotspot-marker--hovered {
-  transform: scale(1.25);
-  box-shadow: 0 0 20px 4px rgba(255, 255, 255, 0.5);
+  transform: scale(1.08);
+  box-shadow:
+    0 0 18px 3.5px rgba(255, 255, 255, 0.35),
+    0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-@keyframes hotspot-pulse {
+.hotspot-marker--nav:hover {
+  border-color: rgba(120, 200, 230, 0.95);
+  box-shadow:
+    0 0 18px 3.5px rgba(120, 200, 230, 0.45),
+    0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.hotspot-marker--info:hover {
+  border-color: rgba(230, 190, 120, 0.95);
+  box-shadow:
+    0 0 18px 3.5px rgba(230, 190, 120, 0.45),
+    0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.hotspot-marker:active {
+  animation: hotspot-ripple 0.6s ease-out;
+}
+
+@keyframes hotspot-breathing {
   0%,
   100% {
-    opacity: 0.75;
+    opacity: 0.7;
+    transform: scale(1);
   }
   50% {
-    opacity: 1;
+    opacity: 0.95;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes hotspot-ripple {
+  0% {
+    box-shadow:
+      0 0 12px 2px rgba(255, 255, 255, 0.25),
+      0 2px 4px rgba(0, 0, 0, 0.15),
+      0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  100% {
+    box-shadow:
+      0 0 12px 2px rgba(255, 255, 255, 0.25),
+      0 2px 4px rgba(0, 0, 0, 0.15),
+      0 0 0 8px rgba(255, 255, 255, 0);
   }
 }
 
