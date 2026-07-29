@@ -27,16 +27,7 @@ export default function PanoramaViewer() {
   return (
     <div className="viewer-root">
       <div className="scene-label">{scene.label}</div>
-      <Canvas
-        camera={{ fov: 75, near: 0.1, far: 1000, position: [0, 0, 0.01] }}
-        onCreated={(state) => {
-          window.__r3f = state;
-        }}
-      >
-        <mesh position={[0, 0, -5]}>
-          <boxGeometry args={[1, 1, 1]} />
-          <meshBasicMaterial color="red" />
-        </mesh>
+      <Canvas camera={{ fov: 75, near: 0.1, far: 1000, position: [0, 0, 0.01] }}>
         <PanoramaSphere texture={texture} verticalFov={scene.verticalFov} />
         <CameraRig scene={scene} />
         {texture && <HotspotLayer hotspots={scene.hotspots} onSelect={handleSelect} />}

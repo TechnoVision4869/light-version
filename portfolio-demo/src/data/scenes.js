@@ -44,7 +44,7 @@ export const scenes = [
   },
   {
     id: "space-hall-2",
-    label: "Next Scene",
+    label: "Space Odyssey Hall",
     image: "/panoramas/space-hall-2.jpg",
     verticalFov: 121,
     initialYaw: 180,
