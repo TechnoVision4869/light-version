@@ -54,6 +54,8 @@ export default function CameraRig({ scene }) {
       enableDamping
       dampingFactor={0.1}
       rotateSpeed={-0.3}
+      autoRotate
+      autoRotateSpeed={0.35}
       minPolarAngle={polarFromPitch(scene.pitchRange.max)}
       maxPolarAngle={polarFromPitch(scene.pitchRange.min)}
     />

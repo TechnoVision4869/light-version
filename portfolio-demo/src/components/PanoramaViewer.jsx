@@ -10,30 +10,32 @@ import { scenes, getSceneById } from "../data/scenes";
 export default function PanoramaViewer() {
   const [sceneId, setSceneId] = useState(scenes[0].id);
   const [error, setError] = useState(false);
-  const [isSwitching, setIsSwitching] = useState(false);
   const [retryToken, setRetryToken] = useState(0);
-  const scene = getSceneById(sceneId);
+  const targetScene = getSceneById(sceneId);
   const handleError = useCallback(() => setError(true), []);
-  const texture = useTextureSafe(scene.image, handleError, retryToken);
+  const texture = useTextureSafe(targetScene.image, handleError, retryToken);
 
-  // The new scene's camera framing and hotspots apply the instant sceneId
-  // changes, but the new texture arrives an async tick later -- without this,
-  // there'd be a flash of the new camera angle/hotspots over the old image.
-  // Keeping the overlay up until the new texture is actually in hand covers
-  // that gap.
+  // Camera framing and hotspots for a scene only take effect once that
+  // scene's texture is actually ready. Without this, they'd apply the
+  // instant sceneId changes -- snapping the camera to the new scene's
+  // angle while the *old* image was still the one on screen, ahead of the
+  // crossfade. Gating on displayedSceneId keeps the old scene fully in
+  // control of the camera/hotspots until PanoramaSphere has something to
+  // crossfade to.
+  const [displayedSceneId, setDisplayedSceneId] = useState(sceneId);
   useEffect(() => {
-    if (texture) setIsSwitching(false);
-  }, [texture]);
+    if (texture) setDisplayedSceneId(sceneId);
+  }, [texture, sceneId]);
+  const displayedScene = getSceneById(displayedSceneId);
 
   const handleSelect = useCallback(
     (hotspotId) => {
-      const hotspot = scene.hotspots.find((candidate) => candidate.id === hotspotId);
+      const hotspot = displayedScene.hotspots.find((candidate) => candidate.id === hotspotId);
       if (!hotspot?.target) return;
       setError(false);
-      setIsSwitching(true);
       setSceneId(hotspot.target);
     },
-    [scene],
+    [displayedScene],
   );
 
   const handleRetry = useCallback(() => {
@@ -43,14 +45,16 @@ export default function PanoramaViewer() {
 
   return (
     <div className="viewer-root">
-      <div className="scene-label">{scene.label}</div>
+      <div className="scene-label">{displayedScene.label}</div>
       <Canvas camera={{ fov: 75, near: 0.1, far: 1000, position: [0, 0, 0.01] }}>
-        <PanoramaSphere texture={texture} verticalFov={scene.verticalFov} />
-        <CameraRig scene={scene} />
-        {texture && <HotspotLayer hotspots={scene.hotspots} onSelect={handleSelect} />}
+        <PanoramaSphere texture={texture} verticalFov={targetScene.verticalFov} />
+        <CameraRig scene={displayedScene} />
+        {texture && (
+          <HotspotLayer hotspots={displayedScene.hotspots} onSelect={handleSelect} />
+        )}
       </Canvas>
       <LoadingOverlay
-        loading={isSwitching || (!texture && !error)}
+        loading={!texture && !error && sceneId === displayedSceneId}
         error={error}
         onRetry={handleRetry}
       />
