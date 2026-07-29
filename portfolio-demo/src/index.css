@@ -116,11 +116,11 @@ body,
   height: 40px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.15);
-  border: 3px solid rgba(255, 255, 255, 0.6);
+  border: 4px solid rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(6px);
   box-shadow:
-    0 0 24px 8px rgba(255, 255, 255, 0.50),
-    0 4px 12px rgba(0, 0, 0, 0.30);
+    0 0 36px 12px rgba(255, 255, 255, 0.8),
+    0 4px 12px rgba(255, 255, 255, 0.30);
   animation: hotspot-breathing 2.8s ease-in-out infinite;
   transition: transform 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94),
               box-shadow 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -134,8 +134,8 @@ body,
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.95);
 }
@@ -143,8 +143,8 @@ body,
 .hotspot-marker--nav {
   border-color: rgba(120, 200, 230, 0.75);
   box-shadow:
-    0 0 24px 8px rgba(120, 200, 230, 0.45),
-    0 2px 4px rgba(0, 0, 0, 0.15);
+    0 0 36px 12px rgba(120, 200, 230, 0.8),
+    0 4px 8px rgba(255, 255, 255, 0.30);
 }
 
 .hotspot-marker--nav::after {
@@ -159,8 +159,8 @@ body,
 .hotspot-marker--info {
   border-color: rgba(230, 190, 120, 0.75);
   box-shadow:
-    0 0 24px 8px rgba(230, 190, 120, 0.45),
-    0 2px 4px rgba(0, 0, 0, 0.15);
+    0 0 36px 12px rgba(230, 190, 120, 0.8),
+    0 4px 8px rgba(255, 255, 255, 0.30);
 }
 
 .hotspot-marker--info::after {
@@ -176,21 +176,21 @@ body,
   transform: scale(1.2);
   box-shadow:
     0 0 40px 14px rgba(255, 255, 255, 0.5),
-    0 2px 6px rgba(0, 0, 0, 0.2);
+    0 2px 6px rgba(255, 255, 255, 0.3);
 }
 
 .hotspot-marker--nav:hover {
   border-color: rgba(120, 200, 230, 0.95);
   box-shadow:
-    0 0 32px 10px rgba(120, 200, 230, 0.6),
-    0 2px 6px rgba(0, 0, 0, 0.2);
+    0 0 32px 12px rgba(120, 200, 230, 0.6),
+    0 2px 6px rgba(255, 255, 255, 0.3);
 }
 
 .hotspot-marker--info:hover {
   border-color: rgba(230, 190, 120, 0.95);
   box-shadow:
-    0 0 32px 10px rgba(230, 190, 120, 0.6),
-    0 2px 6px rgba(0, 0, 0, 0.2);
+    0 0 32px 12px rgba(230, 190, 120, 0.6),
+    0 2px 6px rgba(255, 255, 255, 0.3);
 }
 
 .hotspot-marker:active {

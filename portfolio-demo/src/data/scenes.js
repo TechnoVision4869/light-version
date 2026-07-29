@@ -45,7 +45,7 @@ export const scenes = [
     pitchRange: { min: -30, max: 37.5 },
     fovRange: { min: 40, max: 90 },
     hotspots: [
-      { id: "to-exterior", yaw: 183, pitch: 3, type: "nav", label: "Back Outside", target: "exterior" },
+      { id: "to-exterior", yaw: 183, pitch: -8, type: "nav", label: "Back Outside", target: "exterior" },
       { id: "to-space-hall-2", yaw: 72, pitch: -5, type: "nav", label: "Next Scene", target: "space-hall-2" },
       {
         id: "info-earth",
