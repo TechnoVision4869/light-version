@@ -63,6 +63,16 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
 
   const { overlay, closeOverlay } = useContext(MainContext);
 
+  // If project enrichment failed (see SidebarContextProvider's catch handler),
+  // currentProject is null here — bounce back to selection rather than
+  // rendering a broken tour. Navigating to "/" re-mounts SelectionFlow, which
+  // already picks DeveloperSelector vs ProjectSelector based on the user's role.
+  useEffect(() => {
+    if (!currentProject) {
+      navigate("/");
+    }
+  }, [currentProject, navigate]);
+
   const videoViewer = useVideoViewer();
 
   let viewerProps = {
@@ -159,8 +169,17 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
         selectedItem = currentProject.zones;
         if(selectedItem.items.length === 1) {
           const zonesZoomoutVideo = selectedItem.zoomoutVideo || selectedItem.zonesZoomoutVideoId;
-          selectedItem = { ...selectedItem.items[0], zoomoutVideo: zonesZoomoutVideo };
-          layer = LAYERS.ZONE_DETAIL;
+          selectedItem = selectedItem.items[0];
+          if(selectedItem.properties?.length === 1) {
+            // If only one property, show its units/blocks/floors directly
+            selectedItem = selectedItem.properties[0];
+            selectedItem = { ...selectedItem, zoomoutVideo: zonesZoomoutVideo };
+            layer = LAYERS.BUILDING;
+          }
+          else {
+            selectedItem = { ...selectedItem, zoomoutVideo: zonesZoomoutVideo };
+            layer = LAYERS.ZONE_DETAIL;
+          }
         }
         checkSwithingBetweenTabs();
         break;

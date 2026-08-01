@@ -1,11 +1,30 @@
 import TECHNO_LOGO from '/default-logo.png';
-// import SOMABAY_BG from '../assets/images/somabay-background.jpg';
 
 import MALL_ICON from '../assets/icons/mall.svg';
 import SERVICE_SVG from '../assets/svgs/service.svg?raw';
 
 export const projectPath = "projects/light-house-demo";
-const SOMABAY_BG = `/${projectPath}/images/background-demo.jpeg`;
+const SOMABAY_BG = `/${projectPath}/images/background.jpg`;
+
+export const config = {
+  // General
+    USE_PREDEFINED_POS: true,
+    USE_HOTSPOTS: false,
+
+  // 360 Settings
+  // Interior
+    INTERIOR_ZOOM_RANGE: { min: 0.8, max: 1.333 },
+    INTERIOR_PITCH_RANGE: { min: -30, max: 15 },
+
+  // Balcony/Location
+    BALCONY_ZOOM_RANGE: { min: 1, max: 1.333 },
+    BALCONY_PITCH_RANGE: { min: 0, max: 25 },
+    BALCONY_YAW_RANGE: { min: -70, max: 70 },
+
+  // ZONES Tab Title
+    ZONES_TAB_TITLE: "PROPERTIES",
+    BALCONY_TITLE: "Balcony View",
+}
 
 const gallery_7A = [
   { id: "7A_gallery_1", src: `/${projectPath}/images/gallery/exterior/7A.jpg` }, 
