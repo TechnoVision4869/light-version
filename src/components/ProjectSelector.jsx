@@ -21,9 +21,7 @@ export default function ProjectSelector({
 }) {
   const useStatic = APP_CONFIG.USE_STATIC;
   const usePredefinedPos = APP_CONFIG.USE_PREDEFINED_POS;
-  const predefinedPos = [
-    {x: 0.42, y: 0.4}   //project 1
-  ];
+  const predefinedPos = {x: 0.42, y: 0.4};
   const { user } = useAuth();
   const [projects, setProjects] = useState([]);
   const [developerAssets, setDeveloperAssets] = useState({
@@ -37,7 +35,7 @@ export default function ProjectSelector({
 
   const containerRef = useRef(null);
   const projectPressTimeoutRef = useRef(null);
-  const [predefinedPixelPos, setPredefinedPixelPos] = useState([{ left: 0, top: 0 }]);
+  const [predefinedPixelPos, setPredefinedPixelPos] = useState({ left: 0, top: 0 });
   const [isProjectHovered, setIsProjectHovered] = useState(false);
 
   const updatePredefinedPos = useCallback(() => {
@@ -47,10 +45,10 @@ export default function ProjectSelector({
     const h = container.clientHeight;
     const videoW = h * (16 / 9);
     const videoLeft = (w - videoW) / 2;
-    setPredefinedPixelPos(predefinedPos.map((pos) => ({
-      left: videoLeft + videoW * pos.x,
-      top: h * pos.y,
-    })));
+    setPredefinedPixelPos({
+      left: videoLeft + videoW * predefinedPos.x,
+      top: h * predefinedPos.y,
+    });
   }, []);
 
   useEffect(() => {
@@ -326,7 +324,7 @@ export default function ProjectSelector({
               </div>
             ) : usePredefinedPos ? (
               <>
-                {projects.map((project, i) => {
+                {projects.map((project) => {
                   const disabled = !introVideoUrls[project.id];
                   const isPressed = pressedProjectId === project.id;
                   return (
@@ -342,14 +340,14 @@ export default function ProjectSelector({
                       style={
                         isPressed
                           ? {
-                              left: `${predefinedPixelPos[i].left}px`,
-                              top: `${predefinedPixelPos[i].top}px`,
+                              left: `${predefinedPixelPos.left}px`,
+                              top: `${predefinedPixelPos.top}px`,
                               backgroundColor: "#4a6082",
                               transform: "scale(1.05)",
                             }
                           : {
-                              left: `${predefinedPixelPos[i].left}px`,
-                              top: `${predefinedPixelPos[i].top}px`,
+                              left: `${predefinedPixelPos.left}px`,
+                              top: `${predefinedPixelPos.top}px`,
                             }
                       }
                       >
