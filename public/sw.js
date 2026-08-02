@@ -127,7 +127,7 @@ self.addEventListener('fetch', (event) => {
   // with all API responses precached after login via application-driven
   // prefetching (see prefetchAssets() in the React codebase).
   //
-  if (url.hostname === 'api.techno-vision.tech') {
+  if (url.pathname.includes('/api/')) {
     event.respondWith(
       fetch(request)
         .then((networkResponse) => {
