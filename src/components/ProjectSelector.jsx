@@ -9,6 +9,7 @@ import { assetApi } from "../api/admin/assetApi";
 import { DATA, PATH } from "../data/layers";
 import { fetchProjectById } from "../lib/projectFetcher";
 import { prefetchSingleUrl } from "../lib/enrichProjectData";
+import DownloadTestOverlay from "./DownloadTestOverlay";
 
 const DEFAULT_LOGO = '/default-logo.png';
 const projectPath = PATH;
@@ -263,6 +264,9 @@ export default function ProjectSelector({
 
   return (
     <Layout backgroundImage={developerAssets.backgroundImage} fullscreen={true} showHeader={false}>
+      {!useStatic && !loading && projects.length > 0 && (
+        <DownloadTestOverlay projects={projects} developerId={developerId} useStatic={useStatic} />
+      )}
       <div
         ref={containerRef}
         className="relative w-full h-full overflow-hidden"

@@ -59,10 +59,14 @@ export function useVideoViewer() {
 
       const idx = currentViewIndexRef.current;
       const total = numViewsRef.current;
-      let newIndex = idx + (direction === "next" ? 1 : -1);
-      // Handle wrap-around
-      if (newIndex >= total) newIndex = 0;
-      if (newIndex < 0) newIndex = total - 1;
+      if (total === 0) {
+        console.error("changeView called but there are no views available");
+        return;
+      }
+      // Modulo wrap-around: stays in range even if idx was left stale by a
+      // previous total (e.g. switching to a unit with fewer views).
+      const step = direction === "next" ? 1 : -1;
+      const newIndex = ((idx + step) % total + total) % total;
 
       const newViewVideos = currentViews?.[newIndex]?.videos;
       if (!newViewVideos) {
@@ -108,11 +112,11 @@ export function useVideoViewer() {
   const changeViewToIndex = useCallback(
     (targetIndex, onDone) => {
       const idx = currentViewIndexRef.current;
-      if (idx === targetIndex) {
+      const total = numViewsRef.current;
+      if (idx === targetIndex || total === 0) {
         onDone?.();
         return;
       }
-      const total = numViewsRef.current;
       const stepsForward = (targetIndex - idx + total) % total;
       const stepsBack = (idx - targetIndex + total) % total;
       const direction = stepsForward <= stepsBack ? "next" : "prev";

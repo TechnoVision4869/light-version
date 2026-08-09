@@ -281,9 +281,8 @@ export function getLevelAssetTotal(project, level) {
  * Walks the project tree and collects every unique *AssetId/*VideoId value referenced
  * within [startDepth, depth], with no I/O. Shared by prefetchProjectByLevels (which then
  * loads them) and getLevelAssetTotal (which just needs the count).
- * @private
  */
-function collectAssetUrls(project, depth, startDepth) {
+export function collectAssetUrls(project, depth, startDepth) {
   const assetUrls = [];
 
   // ===== LEVEL 0: Project Videos =====
