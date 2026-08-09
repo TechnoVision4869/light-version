@@ -35,7 +35,7 @@ const gallery = [
 
 export const DEVELOPER_SOMABAY = {
   developerId: "somabay",
-  developerLogo: SOMABAY_LOGO,
+  developerLogo: null,
   backgroundImage: SOMABAY_BG,
   developerProjects: [
     {

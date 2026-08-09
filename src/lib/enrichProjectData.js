@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 import { assetApi } from "../api/admin/assetApi";
 import { unitTypeApi } from "../api/admin/unitTypeApi";
+import { PROPERTY_TYPE } from "../constants/roles";
 
 /**
  * Recursively enriches project data by converting assetIds to file URLs
@@ -438,37 +439,48 @@ function collectAssetUrls(project, depth, startDepth) {
     if (startDepth <= 3 && depth >= 3) {
       const items = project?.zones?.items;
       if(items?.length) {
+        const pushVideos = (vids) => {
+            vids.forEach((vid) => {
+              if (vid && typeof vid === 'string' && !assetUrls.includes(vid)) {
+                assetUrls.push(vid);
+              }
+            });
+          };
+          const pushUnit = (unit) => pushVideos([
+            unit.forwardAssetId,
+            unit.reverseAssetId,
+            unit.sideAssetId,
+            unit.balconyView,
+          ]);
           items.forEach((item) => {
             item.properties?.forEach((property) => {
-              property.floors.forEach((floor) => {
-                const floorVideos = [
-                  floor.forwardAssetId,
-                  floor.reverseAssetId,
-                  floor.sideAssetId,
-                  floor.highlightAssetId,
-                ];
-                floorVideos.forEach((vid) => {
-                  if (vid && typeof vid === 'string' && !assetUrls.includes(vid)) {
-                    assetUrls.push(vid);
-                  }
+              // TOWER: units live under property.floors[].units
+              // VILLA: units live directly under property.units (no floors)
+              // TOWNHOUSE: units live under property.blocks[].units (no floors)
+              if (property.type === PROPERTY_TYPE.VILLA) {
+                (property.units || []).forEach(pushUnit);
+              } else if (property.type === PROPERTY_TYPE.TOWNHOUSE) {
+                (property.blocks || []).forEach((block) => {
+                  pushVideos([
+                    block.forwardAssetId,
+                    block.reverseAssetId,
+                    block.sideAssetId,
+                    block.highlightAssetId,
+                  ]);
+                  (block.units || []).forEach(pushUnit);
                 });
 
-                if (floor.units?.length) {
-                  floor.units.forEach((unit) => {
-                    const unitVideos = [
-                      unit.forwardAssetId,
-                      unit.reverseAssetId,
-                      unit.sideAssetId,
-                      unit.balconyView,
-                    ];
-                    unitVideos.forEach((vid) => {
-                      if (vid && typeof vid === 'string' && !assetUrls.includes(vid)) {
-                        assetUrls.push(vid);
-                      }
-                    });
-                  })
-                }
-              });
+                 } else {
+                (property.floors || []).forEach((floor) => {
+                  pushVideos([
+                    floor.forwardAssetId,
+                    floor.reverseAssetId,
+                    floor.sideAssetId,
+                    floor.highlightAssetId,
+                  ]);
+                  (floor.units || []).forEach(pushUnit);
+                });
+              }
             })
         })
       }

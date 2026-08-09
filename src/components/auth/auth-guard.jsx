@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/use-auth";
+import { APP_CONFIG } from "../../config/appConfig";
 
 export const AuthGuard = ({ children }) => {
   const auth = useAuth();
@@ -9,6 +10,11 @@ export const AuthGuard = ({ children }) => {
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
+    if (APP_CONFIG.USE_STATIC) {
+      setChecked(true);
+      return;
+    }
+
     if (!auth.isAuthenticated && auth.isInitialized) {
       // Store the return URL for after login
       sessionStorage.setItem(

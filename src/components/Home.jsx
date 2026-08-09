@@ -159,8 +159,17 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
         selectedItem = currentProject.zones;
         if(selectedItem.items.length === 1) {
           const zonesZoomoutVideo = selectedItem.zoomoutVideo || selectedItem.zonesZoomoutVideoId;
-          selectedItem = { ...selectedItem.items[0], zoomoutVideo: zonesZoomoutVideo };
-          layer = LAYERS.ZONE_DETAIL;
+          selectedItem = selectedItem.items[0];
+          if(selectedItem.properties?.length === 1) {
+            // If only one property, show its units/blocks/floors directly
+            selectedItem = selectedItem.properties[0];
+            selectedItem = { ...selectedItem, zoomoutVideo: zonesZoomoutVideo };
+            layer = LAYERS.BUILDING;
+          }
+          else {
+            selectedItem = { ...selectedItem, zoomoutVideo: zonesZoomoutVideo };
+            layer = LAYERS.ZONE_DETAIL;
+          }
         }
         checkSwithingBetweenTabs();
         break;

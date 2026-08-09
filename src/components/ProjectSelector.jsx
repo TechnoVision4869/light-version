@@ -390,6 +390,8 @@ export default function ProjectSelector({
                         className={`w-full py-2 px-4 bg-transparent border
                           ${disabled ? "" : "hover:bg-white hover:text-black hover:font-bold hover:border-white"} hover:scale-102
                           disabled:text-white/50 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-all duration-300`}
+                        onMouseEnter={() => !disabled && setIsProjectHovered(true)}
+                        onMouseLeave={() => setIsProjectHovered(false)}
                         style={
                           isPressed
                             ? {

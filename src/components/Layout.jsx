@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import TECHNO_LOGO from "../assets/techno.png";
 import { useAuth } from "./hooks/use-auth";
+import { APP_CONFIG } from "../config/appConfig";
 
 export default function Layout({ children, backgroundImage, fullscreen = false, title = "", headerClassName = "bg-transparent", showHeader = true }) {
   const { user, logout } = useAuth();
@@ -112,24 +113,26 @@ export default function Layout({ children, backgroundImage, fullscreen = false, 
       {showHeader ? (
         <header className={`fixed top-0 left-0 right-0 h-14 z-40 ${headerClassName}`}>
           <div className="relative flex items-center justify-center h-full px-6">
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="absolute left-6 p-2 rounded-lg hover:bg-white/10 transition-colors shrink-0"
-            >
-              <svg
-                className="w-6 h-6 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            {!APP_CONFIG.USE_STATIC && (
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="absolute left-6 p-2 rounded-lg hover:bg-white/10 transition-colors shrink-0"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            </button>
+                <svg
+                  className="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              </button>
+            )}
             {title ? (
               <h1 className="text-xl font-semibold text-white text-center truncate max-w-full px-16">
                 {title}
@@ -138,65 +141,13 @@ export default function Layout({ children, backgroundImage, fullscreen = false, 
           </div>
         </header>
       ) : (
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="fixed top-2 left-6 z-40 p-2 rounded-lg hover:bg-white/10 transition-colors"
-        >
-          <svg
-            className="w-6 h-6 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
-        </button>
-      )}
-
-      {/* Sidebar Overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-20"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-      {/* Sidebar Menu */}
-      <div
-        className={`fixed left-0 ${showHeader ? 'top-14 h-[calc(100vh-3.5rem)]' : 'top-0 h-screen'} w-52 sm:w-64 bg-[#1C1C1C] shadow-2xl z-25 transform transition-transform duration-300 ease-in-out ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <div className="p-6 flex flex-col h-full">
-          <nav className={`flex flex-col gap-2 flex-1 ${showHeader ? 'mt-4' : 'mt-18'}`}>
-            {menuItems.map((item) => (
-              <button
-                key={item.path}
-                onClick={() => handleNavigation(item.path)}
-                className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-colors flex items-center gap-3 ${
-                  isCurrentPage(item.path)
-                    ? "bg-white/20 text-white"
-                    : "text-white hover:bg-white/10"
-                }`}
-              >
-                {renderIcon(item.icon)}
-                {item.label}
-              </button>
-            ))}
-          </nav>
-
-          {/* Logout Button */}
+        !APP_CONFIG.USE_STATIC && (
           <button
-            onClick={logout}
-            className="w-full px-4 py-3 rounded-lg font-medium transition-colors text-white hover:bg-red-600/20 flex items-center gap-3"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="fixed top-2 left-6 z-40 p-2 rounded-lg hover:bg-white/10 transition-colors"
           >
             <svg
-              className="w-5 h-5"
+              className="w-6 h-6 text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -205,13 +156,71 @@ export default function Layout({ children, backgroundImage, fullscreen = false, 
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                d="M4 6h16M4 12h16M4 18h16"
               />
             </svg>
-            Logout
           </button>
-        </div>
-      </div>
+        )
+      )}
+
+      {!APP_CONFIG.USE_STATIC && (
+        <>
+          {/* Sidebar Overlay */}
+          {sidebarOpen && (
+            <div
+              className="fixed inset-0 bg-black/50 z-20"
+              onClick={() => setSidebarOpen(false)}
+            />
+          )}
+
+          {/* Sidebar Menu */}
+          <div
+            className={`fixed left-0 ${showHeader ? 'top-14 h-[calc(100vh-3.5rem)]' : 'top-0 h-screen'} w-52 sm:w-64 bg-[#1C1C1C] shadow-2xl z-25 transform transition-transform duration-300 ease-in-out ${
+              sidebarOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
+          >
+            <div className="p-6 flex flex-col h-full">
+              <nav className={`flex flex-col gap-2 flex-1 ${showHeader ? 'mt-4' : 'mt-18'}`}>
+                {menuItems.map((item) => (
+                  <button
+                    key={item.path}
+                    onClick={() => handleNavigation(item.path)}
+                    className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-colors flex items-center gap-3 ${
+                      isCurrentPage(item.path)
+                        ? "bg-white/20 text-white"
+                        : "text-white hover:bg-white/10"
+                    }`}
+                  >
+                    {renderIcon(item.icon)}
+                    {item.label}
+                  </button>
+                ))}
+              </nav>
+
+              {/* Logout Button */}
+              <button
+                onClick={logout}
+                className="w-full px-4 py-3 rounded-lg font-medium transition-colors text-white hover:bg-red-600/20 flex items-center gap-3"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  />
+                </svg>
+                Logout
+              </button>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Techno Logo - Bottom Right */}
       <div className="fixed bottom-6 right-6 z-20">

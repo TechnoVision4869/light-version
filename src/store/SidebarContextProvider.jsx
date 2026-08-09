@@ -185,16 +185,16 @@ export default function SidebarContextProvider({ children }) {
         } else {
             calculatedVideosPath = isFromHome
                 ? {
-                    forwardVideo: selectedItem.zonesForwardVideoId || selectedItem.forwardVideoId,
-                    reverseVideo: selectedItem.zonesReverseVideoId || selectedItem.reverseVideoId,
-                    idleVideo: selectedItem.zonesSideVideoId || selectedItem.sideVideoId,
-                    idleVideoType: selectedItem.zonesSideVideoType || selectedItem.sideVideoType,
+                    forwardVideo: selectedItem.zonesForwardVideoId || selectedItem.forwardVideoId || selectedItem.forwardAssetId,
+                    reverseVideo: selectedItem.zonesReverseVideoId || selectedItem.reverseVideoId || selectedItem.reverseAssetId,
+                    idleVideo: selectedItem.zonesSideVideoId || selectedItem.sideVideoId || selectedItem.idleAssetId,
+                    idleVideoType: selectedItem.zonesSideVideoType || selectedItem.sideVideoType || selectedItem.idleAssetType,
                 }
                 : {
                     forwardVideo: selectedItem.zonesZoomoutVideoId || selectedItem.zoomoutVideo || selectedItem.zoomOutVideo,
-                    reverseVideo: selectedItem.zonesReverseVideoId || selectedItem.reverseVideoId,
-                    idleVideo: selectedItem.zonesSideVideoId || selectedItem.sideVideoId,
-                    idleVideoType: selectedItem.zonesSideVideoType || selectedItem.sideVideoType,
+                    reverseVideo: selectedItem.zonesReverseVideoId || selectedItem.reverseVideoId || selectedItem.reverseAssetId,
+                    idleVideo: selectedItem.zonesSideVideoId || selectedItem.sideVideoId || selectedItem.idleAssetId,
+                    idleVideoType: selectedItem.zonesSideVideoType || selectedItem.sideVideoType || selectedItem.idleAssetType,
                 };
         }
 
