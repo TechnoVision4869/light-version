@@ -224,7 +224,7 @@ export async function prefetchProjectByLevels(project, depth = 1, startDepth = 0
   console.log("Depth: ", depth, " Start Depth: ", startDepth);
 
   if (!project || depth < 0) {
-    return { loaded: 0, failed: 0, totalSize: '0 MB' };
+    return { loaded: 0, failed: 0, failedUrls: [], totalSize: '0 MB' };
   }
 
   const uniqueUrls = collectAssetUrls(project, depth, startDepth);
@@ -236,6 +236,7 @@ export async function prefetchProjectByLevels(project, depth = 1, startDepth = 0
   let loaded = 0;
   let failed = 0;
   let totalBytes = 0;
+  const failedUrls = [];
 
   for (let i = 0; i < uniqueUrls.length; i += batchSize) {
     const batch = uniqueUrls.slice(i, i + batchSize);
@@ -244,12 +245,13 @@ export async function prefetchProjectByLevels(project, depth = 1, startDepth = 0
       batch.map((url) => loadAndCacheVideo(url))
     );
 
-    results.forEach((result) => {
+    results.forEach((result, idx) => {
       if (result.status === 'fulfilled') {
         loaded++;
         totalBytes += result.value;
       } else {
         failed++;
+        failedUrls.push(batch[idx]);
         console.warn('[Cache] Failed to load video:', result.reason);
       }
     });
@@ -265,7 +267,7 @@ export async function prefetchProjectByLevels(project, depth = 1, startDepth = 0
     `[Cache] Preload complete: ${loaded} loaded, ${failed} failed, ${totalSizeMB}MB cached`
   );
 
-  return { loaded, failed, totalSize: `${totalSizeMB} MB` };
+  return { loaded, failed, failedUrls, totalSize: `${totalSizeMB} MB` };
 }
 
 /**
@@ -594,7 +596,9 @@ async function buildAssetTypeMap(developerId) {
   }
 
   try {
-    const data = await assetApi.getByDeveloper({ developerId });
+    // limit: 1000 — matches AssetsLibrary.jsx's "fetch everything" call; without it
+    // getByDeveloper appears to fall back to a much smaller default page size.
+    const data = await assetApi.getByDeveloper({ developerId, limit: 1000 });
     const assets = Array.isArray(data) ? data : (data?.data ?? data?.items ?? []);
     // console.log(`[AssetType] Loaded ${assets.length} assets for developer ${developerId}. Sample:`, assets[0]);
     return new Map(assets.map((a) => [a.id, a.type]));

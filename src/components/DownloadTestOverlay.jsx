@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { fetchProjectById } from "../lib/projectFetcher";
+import { assetApi } from "../api/admin/assetApi";
 import {
   enrichProjectData,
   prefetchProjectByLevels,
@@ -28,7 +29,7 @@ async function isProjectFullyCached(urls) {
 export default function DownloadTestOverlay({ projects, developerId, useStatic }) {
   const [panelOpen, setPanelOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(projects[0]?.id ?? "");
-  const [state, setState] = useState({ status: "idle", loaded: 0, total: 0 });
+  const [state, setState] = useState({ status: "idle", loaded: 0, total: 0, failedItems: [] });
 
   const percent = state.total > 0 ? Math.round((state.loaded / state.total) * 100) : 0;
 
@@ -54,7 +55,7 @@ export default function DownloadTestOverlay({ projects, developerId, useStatic }
   // this session is correctly detected as still cached.
   const checkDownloadStatus = async (projectId) => {
     if (!projectId) return;
-    setState({ status: "checking", loaded: 0, total: 0 });
+    setState({ status: "checking", loaded: 0, total: 0, failedItems: [] });
 
     try {
       const enrichedProject = await fetchAndEnrichProject(projectId);
@@ -64,10 +65,11 @@ export default function DownloadTestOverlay({ projects, developerId, useStatic }
         status: cached ? "downloaded" : "idle",
         loaded: cached ? urls.length : 0,
         total: urls.length,
+        failedItems: [],
       });
     } catch (error) {
       console.error(`Failed to check cache status for project ${projectId}:`, error);
-      setState({ status: "idle", loaded: 0, total: 0 });
+      setState({ status: "idle", loaded: 0, total: 0, failedItems: [] });
     }
   };
 
@@ -76,10 +78,31 @@ export default function DownloadTestOverlay({ projects, developerId, useStatic }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [panelOpen, selectedProjectId]);
 
+  // Resolves each failed asset URL's trailing id segment to a human-readable
+  // name via the developer's asset list (same pattern as enrichProjectData's
+  // buildAssetTypeMap), falling back to the raw value when it isn't a real
+  // asset id at all (e.g. a mistyped label like "Location View").
+  const resolveFailedLabels = async (urls) => {
+    let idToName = new Map();
+    if (developerId) {
+      try {
+        const data = await assetApi.getByDeveloper({ developerId, limit: 1000 });
+        const assets = Array.isArray(data) ? data : (data?.data ?? data?.items ?? []);
+        idToName = new Map(assets.map((a) => [a.id, a.assetKey || a.name || a.id]));
+      } catch (error) {
+        console.error("Failed to resolve failed-asset names:", error);
+      }
+    }
+    return urls.map((url) => {
+      const rawValue = decodeURIComponent(url.split("/").pop() ?? url);
+      return { url, label: idToName.get(rawValue) || rawValue };
+    });
+  };
+
   const startDownload = async () => {
     if (!selectedProjectId || state.status === "downloading" || state.status === "checking") return;
 
-    setState({ status: "downloading", loaded: 0, total: 0 });
+    setState({ status: "downloading", loaded: 0, total: 0, failedItems: [] });
 
     try {
       const enrichedProject = await fetchAndEnrichProject(selectedProjectId);
@@ -87,25 +110,30 @@ export default function DownloadTestOverlay({ projects, developerId, useStatic }
       const levels = [0, 1, 2, 3];
       const grandTotal = levels.reduce((sum, level) => sum + getLevelAssetTotal(enrichedProject, level), 0);
 
-      setState({ status: "downloading", loaded: 0, total: grandTotal });
+      setState({ status: "downloading", loaded: 0, total: grandTotal, failedItems: [] });
 
       let cumulativeLoaded = 0;
-      let anyFailed = false;
+      const failedUrls = [];
 
       for (const level of levels) {
         const result = await prefetchProjectByLevels(enrichedProject, level, level, ({ loaded }) => {
-          setState({ status: "downloading", loaded: cumulativeLoaded + loaded, total: grandTotal });
+          setState({ status: "downloading", loaded: cumulativeLoaded + loaded, total: grandTotal, failedItems: [] });
         });
         cumulativeLoaded += result.loaded;
-        if (result.failed > 0) anyFailed = true;
+        failedUrls.push(...result.failedUrls);
       }
 
-      setState({ status: anyFailed ? "failed" : "downloaded", loaded: cumulativeLoaded, total: grandTotal });
-      if (anyFailed) toast.error("Some assets failed to download");
+      if (failedUrls.length > 0) {
+        const failedItems = await resolveFailedLabels(failedUrls);
+        setState({ status: "failed", loaded: cumulativeLoaded, total: grandTotal, failedItems });
+        toast.error(`${failedUrls.length} asset${failedUrls.length > 1 ? "s" : ""} failed to download`);
+      } else {
+        setState({ status: "downloaded", loaded: cumulativeLoaded, total: grandTotal, failedItems: [] });
+      }
     } catch (error) {
       console.error(`Failed to download project ${selectedProjectId}:`, error);
       toast.error("Failed to download project");
-      setState({ status: "failed", loaded: 0, total: 0 });
+      setState({ status: "failed", loaded: 0, total: 0, failedItems: [] });
     }
   };
 
@@ -161,10 +189,24 @@ export default function DownloadTestOverlay({ projects, developerId, useStatic }
                 {state.loaded} / {state.total || "…"} items ({percent}%)
               </p>
             </div>
+          ) : state.status === "failed" && state.failedItems.length > 0 ? (
+            <div className="mb-3">
+              <p className="text-[#DADADA] text-[11px] mb-1">
+                ⚠ {state.failedItems.length} asset{state.failedItems.length === 1 ? "" : "s"} failed:
+              </p>
+              <ul className="max-h-24 overflow-y-auto space-y-0.5">
+                {state.failedItems.map((item, i) => (
+                  <li key={i} className="text-[#DADADA] text-[11px] truncate" title={item.label}>
+                    • {item.label}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : state.status === "failed" ? (
+            <p className="text-[#DADADA] text-[11px] mb-3">⚠ Failed to load project — see console.</p>
           ) : (
             <p className="text-[#DADADA] text-[11px] mb-3">
               {state.status === "downloaded" && "✓ Downloaded — fully cached."}
-              {state.status === "failed" && "⚠ Download failed — some assets didn't cache."}
               {state.status === "idle" && "Not downloaded yet."}
             </p>
           )}
