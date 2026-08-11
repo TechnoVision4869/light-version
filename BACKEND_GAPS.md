@@ -106,7 +106,7 @@ it.
 **Needs:** add a `size` (bytes) field to whatever the `assets/developer/:developerId` (and/or
 `assets/:id`) response returns per asset. Non-blocking for the current offline-download spike, but
 should land before the full multi-project download queue (Phase 1) ships, since that's where
-accurate progress/size upfront actually matters to kiosk staff.
+accurate progress/size upfront actually matters to sales staff using the tablet.
 
 ## Project has no `updatedAt` field
 
