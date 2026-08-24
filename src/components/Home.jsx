@@ -1,8 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { StatusBar } from "@capacitor/status-bar";
-import { Capacitor } from '@capacitor/core';
-import { App as CapApp } from "@capacitor/app"
 import { TABS, LAYERS, CONFIG } from "../data/layers.js";
 // Hooks
 import { useVideoViewer } from "./hooks/useVideoViewer.jsx";
@@ -251,21 +248,6 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
     if (translateX > threshold) viewerProps.changeView("next");
     else if (translateX < -threshold) viewerProps.changeView("prev");
   }, [translateX]);
-
-  useEffect(() => {
-    const hideBars = async () => {
-      if (Capacitor.getPlatform() !== 'web') {
-        await StatusBar.hide();
-        await StatusBar.setOverlaysWebView({ overlay: true });
-      }
-    };
-    hideBars();
-    const resumeListener = CapApp.addListener("resume", hideBars);
-
-    return () => {
-      resumeListener.then(listener => listener.remove());
-    }
-  }, []);
 
   // Close any overlay when navigating away from UNIT layer
   useEffect(() => {

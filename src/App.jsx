@@ -2,6 +2,8 @@ import { useState, useContext, useEffect } from "react";
 import ExpiredDialog from "./components/ExpiredDialog";
 import { ScreenOrientation } from "@capacitor/screen-orientation";
 import { Capacitor } from "@capacitor/core";
+import { StatusBar } from "@capacitor/status-bar";
+import { App as CapApp } from "@capacitor/app";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { SidebarContext } from "./store/SidebarContextProvider";
 import Home from "./components/Home";
@@ -42,6 +44,21 @@ export default function App() {
       }
     };
     lockOrientation();
+  }, []);
+
+  useEffect(() => {
+    const hideBars = async () => {
+      if (Capacitor.getPlatform() !== "web") {
+        await StatusBar.hide();
+        await StatusBar.setOverlaysWebView({ overlay: true });
+      }
+    };
+    hideBars();
+    const resumeListener = CapApp.addListener("resume", hideBars);
+
+    return () => {
+      resumeListener.then((listener) => listener.remove());
+    };
   }, []);
 
   useEffect(() => {
