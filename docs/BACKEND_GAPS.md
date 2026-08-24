@@ -146,6 +146,36 @@ switch to Capacitor's native HTTP bridge (`CapacitorHttp` in `capacitor.config.j
 `fetch`/XHR calls bypass WebView CORS entirely — the more robust fix since it doesn't depend on the
 backend and also covers `api.service.js`'s JSON calls.
 
+## Unit type PATCH returns empty `serviceRooms` (POST works fine)
+
+**Found:** 2026-08-24, while scoping the interactive-map requirements doc's unit-detail fields
+(bedroom/bathroom counts, extra features).
+
+`serviceRooms` (the extra-features string on a unit type) is populated correctly when a unit type is
+created via `POST`, but a subsequent `PATCH` to the same unit type returns it empty. Bedroom/bathroom
+counts and `serviceRooms` are otherwise a completed frontend feature — this is purely a backend
+response gap on the update path.
+
+**Needs:** confirmation from whoever owns `unitTypeApi.js`'s backend endpoint that `PATCH` either
+persists and echoes back `serviceRooms` correctly, or (if it's a partial-update endpoint expecting the
+field to be re-sent) that this is documented so the admin form always includes it on save.
+
+## No unit-level `status` field (available/reserved/sold) returned by the API
+
+**Found:** 2026-08-24, while scoping the interactive-map requirements doc's scarcity-indicator and
+unit-status-display features.
+
+Nothing the API returns for a unit includes an availability status (available / reserved / sold).
+
+**Impact:** two requested features have no real data source as a result — the unit-status display
+("تمييز حالة الوحدات") and the scarcity indicator ("last N units of this model") are both being built
+against mock data for now (see `docs/INTERACTIVE_MAP_IMPLEMENTATION_PLAN.md` §5), with a migration path
+to swap in real data once this field exists.
+
+**Needs:** confirmation from whoever owns the backend on whether a unit `status` field exists or is
+planned, and if so, what its return shape/enum values are, so the mock functions can be replaced with a
+real API call without further UI changes.
+
 ## Admin API endpoints' server-side role enforcement unconfirmed
 
 **Found:** documented in `the-web-application-currently-deep-yao.md`, Step 7 (role-based access

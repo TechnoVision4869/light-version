@@ -13,6 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Path alias: `@/*` → `src/*`.
 - Mixed `.jsx`/`.js`/`.ts` — no full TypeScript migration, `allowJs: true`.
 - No configured test runner in this repo.
+- **Toast notifications**: `react-hot-toast` is already wired up — `<Toaster position="top-center" />` renders globally in `src/main.jsx`. Use its `toast(...)` call from any component; don't build a local/custom toast.
 
 ## Rules
 
