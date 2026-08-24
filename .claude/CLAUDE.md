@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 - **Light Tour**: React 19 + Vite real estate showcase app, packaged as a native Android app via Capacitor.
+- Runs on Android **tablets carried by sales staff and shared between them** — not fixed kiosks. Must tolerate weak/absent connectivity. This shapes real decisions elsewhere (e.g. background downloads are deliberately never auto-cancelled on logout/unmount — see state-management.md).
 - Cinematic MP4 transitions + 360° panoramic interiors/balconies.
 - Nav hierarchy: Developer → Project → Zones/Amenities/Surroundings → Properties (towers/villas) → Floors → Units.
 - Two data modes exist (`USE_STATIC` flag in `src/config/appConfig.js`); **API mode is the primary target going forward** — don't invest in static-mode-only fixes unless asked.
@@ -19,7 +20,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - [.claude/rules/state-management.md](.claude/rules/state-management.md) — Context providers, video-driven navigation.
 - [.claude/rules/android-build.md](.claude/rules/android-build.md) — APK build runbook.
 
-DOCUMENTATION.md has the full architecture writeup if a task needs more depth than the rules above.
+`docs/DOCUMENTATION.md` has the full architecture writeup if a task needs more depth than the rules above.
+
+See `docs/` for architecture details, backend gaps, dev setup (`LIVE_RELOAD.md`, OTA updates), and
+tracking (`SPRINT_TASKS.md`, `REFACTORING_GUIDE.md`). Check `BACKEND_GAPS.md` before treating API
+quirks as new. Kept outside `.claude/` since their audience is broader than Claude — backend owners,
+other devs, and (for `OTA_ROLLOUT_PLAN.md`) non-technical stakeholders.
+
+## Conflict Handling
+
+- If a request conflicts with an existing rule/instruction in this file, do NOT silently skip or reject it.
+- Flag the conflict explicitly: state which rule it conflicts with and why.
+- Ask me to decide how to proceed before taking action.
+- Never assume which one (the request or the existing rule) takes priority.
 
 ## Commands
 

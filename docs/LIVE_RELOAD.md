@@ -1,7 +1,7 @@
 # Not needing to rebuild the APK for React/CSS changes
 
 Normally: edit code → `npm run build` → `npx cap sync` → `./gradlew assemble<Flavor>Debug` →
-reinstall on the device. That's the [android-build.md](.claude/rules/android-build.md) runbook, and
+reinstall on the device. That's the [android-build.md](../.claude/rules/android-build.md) runbook, and
 it's the only way changes reach an *already-installed* APK.
 
 **Live Reload skips all of that — for your own dev-time testing.** It installs the app once, but
@@ -39,7 +39,7 @@ That's it for day-to-day iteration.
 Never ship a build made this way. It points the app at your dev machine's IP — that only works while
 your machine is running the dev server on that network, and shipping it would be a real security
 issue if it ever ran outside your control. Always go back to the normal
-[android-build.md](.claude/rules/android-build.md) runbook for anything that leaves your machine:
+[android-build.md](../.claude/rules/android-build.md) runbook for anything that leaves your machine:
 release builds, builds you hand to someone else to test, etc.
 
 ## What this doesn't cover

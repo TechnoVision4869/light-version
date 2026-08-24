@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect, useContext } from "react";
+import { useCallback, useState, useEffect, useContext, useRef } from "react";
 
 import { SidebarContext } from "./SidebarContext";
 import { AuthContext } from "./jwt-context";
@@ -59,9 +59,18 @@ export default function SidebarContextProvider({ children }) {
         3: { name: 'Units + Interiors', loaded: 0, total: 0, status: 'idle' },
     });
 
+    // Bumped on every new handleSetCurrentProject call and on explicit clear, so a
+    // still-running enrich() from a previous call can tell it's stale and skip writing
+    // state/localStorage — without stopping the underlying asset fetch/caching itself,
+    // which should keep running (and populating the SW cache) regardless. See
+    // handleSetCurrentProject and handleClearSelectedProject below.
+    const currentRequestIdRef = useRef(0);
+
     // Reset history when project changes
     const handleSetCurrentProject = useCallback((project, developerId) => {
         // console.log("project", project);
+        const requestId = ++currentRequestIdRef.current;
+        const isStale = () => currentRequestIdRef.current !== requestId;
 
         const enrich = async () => {
             try {
@@ -77,6 +86,7 @@ export default function SidebarContextProvider({ children }) {
 
                     // URL resolution runs once here, depth 0 assets prefetched
                     const enrichedProject = await enrichProjectData(projectToEnrich, useStatic, 0);
+                    if (isStale()) return;
                     setCurrentProject(enrichedProject);
                     setHistory(getInitHistory(enrichedProject));
 
@@ -91,25 +101,31 @@ export default function SidebarContextProvider({ children }) {
                         return next;
                     });
 
-                    // Each call only walks and fetches its own level
+                    // Each call only walks and fetches its own level. The prefetch call
+                    // itself is never skipped even if stale — it must keep running so its
+                    // assets still get cached by the SW for whoever opens this project next.
                     for (const depth of [1, 2, 3]) {
-                        setPreloadStats((prev) => ({ ...prev, [depth]: { ...prev[depth], status: 'loading' } }));
+                        if (!isStale()) setPreloadStats((prev) => ({ ...prev, [depth]: { ...prev[depth], status: 'loading' } }));
                         try {
                             await prefetchProjectByLevels(enrichedProject, depth, depth, ({ loaded, total }) => {
+                                if (isStale()) return;
                                 setPreloadStats((prev) => ({ ...prev, [depth]: { ...prev[depth], loaded, total } }));
                             });
+                            if (isStale()) continue;
                             setPreloadStats((prev) => ({ ...prev, [depth]: { ...prev[depth], status: 'done' } }));
                         } catch (levelError) {
-                            setPreloadStats((prev) => ({ ...prev, [depth]: { ...prev[depth], status: 'error' } }));
+                            if (!isStale()) setPreloadStats((prev) => ({ ...prev, [depth]: { ...prev[depth], status: 'error' } }));
                             throw levelError;
                         }
                     }
                 }
 
+                if (isStale()) return;
                 localStorage.setItem(STORAGE_KEY, project.id);
                 if (developerId) localStorage.setItem(DEVELOPER_STORAGE_KEY, developerId);
             } catch (error) {
                 console.error('Error enriching project data:', error);
+                if (isStale()) return;
                 setCurrentProject(project);
                 setHistory(getInitHistory(project));
                 localStorage.setItem(STORAGE_KEY, project.id);
@@ -462,6 +478,10 @@ export default function SidebarContextProvider({ children }) {
 
     // Clear selected project from localStorage
     const handleClearSelectedProject = useCallback(() => {
+        // Invalidate any in-flight handleSetCurrentProject enrich() run so it can't
+        // resurrect currentProject/localStorage once it finally resolves — its asset
+        // fetching/caching keeps running regardless, only the state write is skipped.
+        currentRequestIdRef.current++;
         localStorage.removeItem(STORAGE_KEY);
         localStorage.removeItem(DEVELOPER_STORAGE_KEY);
         setCurrentProject(null);

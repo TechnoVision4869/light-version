@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import TECHNO_LOGO from "../assets/techno.png";
 import { useAuth } from "./hooks/use-auth";
 import { APP_CONFIG } from "../config/appConfig";
+import { SidebarContext } from "../store/SidebarContextProvider";
 
 export default function Layout({ children, backgroundImage, fullscreen = false, title = "", headerClassName = "bg-transparent", showHeader = true }) {
   const { user, logout } = useAuth();
+  const { clearSelectedProject } = useContext(SidebarContext);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -199,7 +201,10 @@ export default function Layout({ children, backgroundImage, fullscreen = false, 
 
               {/* Logout Button */}
               <button
-                onClick={logout}
+                onClick={() => {
+                  clearSelectedProject();
+                  logout();
+                }}
                 className="w-full px-4 py-3 rounded-lg font-medium transition-colors text-white hover:bg-red-600/20 flex items-center gap-3"
               >
                 <svg

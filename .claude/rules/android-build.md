@@ -21,4 +21,4 @@ npx capacitor-assets generate --assetPath resources/<project-name> --android
 npx capacitor-assets generate --assetPath resources/main --android   # restore default icons
 ```
 
-Full detail: DOCUMENTATION.md §16.
+Full detail: docs/DOCUMENTATION.md §16.

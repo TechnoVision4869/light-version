@@ -172,6 +172,10 @@ export const AuthProvider = ({ children }) => {
     // You might not have an authApi.logout if it's just client-side token invalidation
     // await authApi.logout(); // Uncomment if you have a logout endpoint
     localStorage.removeItem("auth"); // Changed key from "user" to "auth"
+    // Must match SidebarContextProvider.jsx's STORAGE_KEY/DEVELOPER_STORAGE_KEY — cleared here too
+    // (not just via clearSelectedProject()) so logout always clears them regardless of call site.
+    localStorage.removeItem("selectedProject");
+    localStorage.removeItem("selectedDeveloperId");
     apiService.unsetToken();
     dispatch({
       type: ActionType.LOGOUT,
