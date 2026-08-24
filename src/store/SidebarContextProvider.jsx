@@ -7,11 +7,11 @@ import { PROPERTY_TYPE } from "../constants/roles";
 import { enrichProjectData, prefetchProjectByLevels, getLevelAssetTotal } from "../lib/enrichProjectData";
 import { APP_CONFIG } from "../config/appConfig";
 import { fetchProjectById } from "../lib/projectFetcher";
+import { PROJECT_STORAGE_KEY, DEVELOPER_STORAGE_KEY } from "../constants/storageKeys";
 
 export { SidebarContext };
 
-const STORAGE_KEY = "selectedProject";
-const DEVELOPER_STORAGE_KEY = "selectedDeveloperId";
+const STORAGE_KEY = PROJECT_STORAGE_KEY;
 
 export default function SidebarContextProvider({ children }) {
     const useStatic = APP_CONFIG.USE_STATIC;
@@ -72,6 +72,11 @@ export default function SidebarContextProvider({ children }) {
         const requestId = ++currentRequestIdRef.current;
         const isStale = () => currentRequestIdRef.current !== requestId;
 
+        // Persist the project id immediately, before any enrichment/prefetch work starts —
+        // on weak connectivity that work can take a long time (or never finish before the
+        // app is killed), and the id is already known at this point regardless.
+        localStorage.setItem(STORAGE_KEY, project.id);
+
         const enrich = async () => {
             try {
                 if (useStatic) {
@@ -119,17 +124,11 @@ export default function SidebarContextProvider({ children }) {
                         }
                     }
                 }
-
-                if (isStale()) return;
-                localStorage.setItem(STORAGE_KEY, project.id);
-                if (developerId) localStorage.setItem(DEVELOPER_STORAGE_KEY, developerId);
             } catch (error) {
                 console.error('Error enriching project data:', error);
                 if (isStale()) return;
                 setCurrentProject(project);
                 setHistory(getInitHistory(project));
-                localStorage.setItem(STORAGE_KEY, project.id);
-                if (developerId) localStorage.setItem(DEVELOPER_STORAGE_KEY, developerId);
             }
         };
         enrich();
@@ -483,7 +482,6 @@ export default function SidebarContextProvider({ children }) {
         // fetching/caching keeps running regardless, only the state write is skipped.
         currentRequestIdRef.current++;
         localStorage.removeItem(STORAGE_KEY);
-        localStorage.removeItem(DEVELOPER_STORAGE_KEY);
         setCurrentProject(null);
         setHistory(getInitHistory(null));
     }, [getInitHistory]);

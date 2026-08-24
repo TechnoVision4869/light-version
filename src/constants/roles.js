@@ -5,6 +5,8 @@ export const PROPERTY_TYPE = {
   TOWNHOUSE: 'TOWNHOUSE',
 };
 
+// admin, system_admin, or system_technician
+// developer_admin, developer_marketing, or developer_sales
 export const ROLES = {
   ADMIN: 'admin',
   SYSTEM_ADMIN: 'system_admin',

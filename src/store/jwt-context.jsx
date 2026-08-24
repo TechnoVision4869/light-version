@@ -4,6 +4,8 @@ import { authApi } from "../api/authApi";
 import { apiService } from "../services/api.service";
 import { APP_CONFIG } from "../config/appConfig";
 import { preloadDeveloperBackground } from "../lib/preloadDeveloperBackground";
+import { ROLES } from "../constants/roles";
+import { PROJECT_STORAGE_KEY, DEVELOPER_STORAGE_KEY } from "../constants/storageKeys";
 
 const ActionType = {
   INITIALIZE: "INITIALIZE",
@@ -152,6 +154,15 @@ export const AuthProvider = ({ children }) => {
         },
       });
 
+      // Developer-scoped roles already know their developerId at login — persist it
+      // immediately rather than waiting for a project to be selected. Roles that pick a
+      // developer at runtime (admin/system_admin/system_technician) store it on selection
+      // instead, in SelectionFlow.jsx.
+      const developerRoles = [ROLES.DEVELOPER_ADMIN, ROLES.DEVELOPER_MARKETING, ROLES.DEVELOPER_SALES];
+      if (user?.developerId && developerRoles.includes(user.role)) {
+        localStorage.setItem(DEVELOPER_STORAGE_KEY, user.developerId);
+      }
+
       if (!APP_CONFIG.USE_STATIC && user?.developerId) {
         await preloadDeveloperBackground(user.developerId);
       }
@@ -172,10 +183,10 @@ export const AuthProvider = ({ children }) => {
     // You might not have an authApi.logout if it's just client-side token invalidation
     // await authApi.logout(); // Uncomment if you have a logout endpoint
     localStorage.removeItem("auth"); // Changed key from "user" to "auth"
-    // Must match SidebarContextProvider.jsx's STORAGE_KEY/DEVELOPER_STORAGE_KEY — cleared here too
-    // (not just via clearSelectedProject()) so logout always clears them regardless of call site.
-    localStorage.removeItem("selectedProject");
-    localStorage.removeItem("selectedDeveloperId");
+    // Cleared here too (not just via clearSelectedProject()) so logout always clears
+    // them regardless of call site.
+    localStorage.removeItem(PROJECT_STORAGE_KEY);
+    localStorage.removeItem(DEVELOPER_STORAGE_KEY);
     apiService.unsetToken();
     dispatch({
       type: ActionType.LOGOUT,
