@@ -112,18 +112,45 @@ section (Arabic, for non-technical — English technical terms kept as-is).
 
 ### Technical
 
-- New: `src/components/SimilarUnits.jsx`, rendered below `UnitPanel.jsx`'s content (or as a section
-  within it).
-- Logic (v1, pending final manager confirmation): filter `currentProject`'s unit list where
-  `unitTypeId === currentItem.unitTypeId` and `id !== currentItem.id`, cap to a small display count
-  (e.g. 4-6).
-- No new data dependency — reuses the same unit-list data already loaded for the current project.
+**Data layer — `src/lib/findUnitById.js`**: refactor the existing tree-walk (villa/townhouse/tower
+branching, currently only used by `findUnitInProject` for a single-id lookup) into a shared internal
+walker, then add `findUnitsByType(project, unitTypeId, excludeUnitId, limit = 6)` that collects matching
+units instead of stopping at the first. `findUnitInProject`'s existing signature/behavior is unchanged
+for its current caller (`CompareView.jsx`). Since every unit sharing a `unitTypeId` shares the same
+`unitType` object (gallery/area/floorPlans), only each matched unit's own fields (`id`, `displayName`,
+`price`, `bedrooms`, `bathrooms`) are needed per card — no per-unit `unitType` re-lookup required.
+
+**Display — new `src/components/SimilarUnits.jsx`**: rendered inside `UnitPanel.jsx`, gated on
+`!inCompareView` — **hidden inside Compare columns** (decided: four columns each showing their own
+mini recommendation list would be visually cluttered in the side-by-side compare layout), shown only in
+the normal single-unit view. Small horizontal card list, each card: thumbnail (shared
+`unitType.gallery[0]`, falling back to `floorPlans[0]`, falling back to no image), `displayName`, price,
+area, bed/bath — reusing the same `unitType` already computed in `UnitPanel.jsx` for the current unit.
+
+**Click behavior — read-only popup via `MainContext`** (decided over building real navigation-jump:
+investigation found townhouse units in the data carry **zero ancestor references** — no `zoneId`/
+`propertyId`/`floorId` at all — so reconstructing the nav history stack to actually navigate there would
+need extra fallback handling for that case specifically; a display-only popup sidesteps this entirely):
+- Since this only triggers from the normal (non-Compare) `UnitPanel`, `overlay` is reliably `null` at
+  click time — the same precondition every other `openX` action in `MainContextProvider.jsx` already
+  assumes, so this fits the existing overlay system cleanly (unlike the Compare-page Interior popup,
+  which specifically *couldn't* use it, since `overlay` is already `'compare'` there).
+- `MainContextProvider.jsx`: new `openSimilarUnit(unit)` → routed through the existing `openSubOverlay`
+  helper → `{ type: 'similar-unit', data: { unit } }`.
+- `Home.jsx`: new overlay render block, structurally matching the existing Gallery block (blurred
+  backdrop) but sized as a centered card (~420px wide, not full-bleed, since `UnitPanel` is normally
+  sidebar-width) containing `<UnitPanel unit={overlay.data.unit} />` (full panel, no special props — its
+  own Compare/Brochure/Similar-Units buttons stay active; clicking a similar unit inside *that* popup
+  just swaps the overlay to a new one — no infinite-recursion risk, it's a single-slot swap, not a
+  stack) plus a close button.
 
 ### الشرح المبسط
 
-تظهر أسفل صفحة كل وحدة مجموعة من "الوحدات المشابهة" — وهي وحدات أخرى من نفس نوع الوحدة (unit type) في
-نفس المشروع. هذه نسخة أولى بسيطة من الترشيح، ويمكن تطويرها لاحقاً لتشمل معايير أخرى (السعر، الدور،
-الاتجاه) إذا تم تأكيد ذلك مع الإدارة.
+تظهر أسفل صفحة كل وحدة (في العرض العادي فقط، وليس داخل صفحة المقارنة) مجموعة من "الوحدات المشابهة" — وهي
+وحدات أخرى من نفس نوع الوحدة (unit type) في نفس المشروع. عند الضغط على أي وحدة مشابهة، تظهر نافذة منبثقة
+تعرض بيانات هذه الوحدة بالكامل للاطلاع فقط، بدون الانتقال الفعلي إليها داخل شجرة التنقل الرئيسية للتطبيق —
+تم اختيار هذا الأسلوب بدلاً من التنقل الحقيقي لأن بعض أنواع الوحدات (townhouse) لا تحتوي حالياً على أي
+بيانات تربطها بالمبنى أو المنطقة الأصلية، ما يجعل إعادة بناء مسار التنقل الحقيقي إليها غير موثوق.
 
 ---
 
@@ -155,10 +182,12 @@ section (Arabic, for non-technical — English technical terms kept as-is).
 
 ### Technical
 
-- New: `src/components/ChatbotButton.jsx` — fixed-position button, bottom-left of `Home.jsx` (paired
-  with the Compare button on bottom-right, per the earlier placement decision), **click-to-expand only
-  — no drag, no hover-expand**.
-- Expands into a bottom-centered chat window panel on click; collapses back on a close action.
+- New: `src/components/ChatbotButton.jsx` — button positioned bottom-left **within the media
+  container** (mirroring where the Compare button actually ended up — stacked with the info-reopen
+  button in the media container's bottom-right corner — but on the opposite corner), not a
+  viewport-level/`Home.jsx`-level fixed element. **Click-to-expand only — no drag, no hover-expand**.
+- Expands into a chat window panel anchored bottom-left of the media container (not viewport-centered),
+  consistent with the button's anchor; collapses back on a close action.
 - Content/logic (the actual FAQ question tree, matching options, and any "redirect to filter panel" /
   "redirect to financing calculator" type actions) is **not yet defined** — needs a separate brainstorm
   session. Starting proposal to react to:
@@ -171,8 +200,8 @@ section (Arabic, for non-technical — English technical terms kept as-is).
 
 ### الشرح المبسط
 
-سيتم بناء شكل زر المساعد الذكي فقط الآن: زر ثابت أسفل يسار الشاشة، يفتح نافذة محادثة عند الضغط عليه فقط
-(وليس بالسحب أو التمرير). أما محتوى الأسئلة والإجابات نفسه فما زال غير محدد، ويحتاج جلسة نقاش منفصلة
+سيتم بناء شكل زر المساعد الذكي فقط الآن: زر أسفل يسار منطقة الوسائط (media container)، يفتح نافذة محادثة
+في نفس الموضع عند الضغط عليه فقط (وليس بالسحب أو التمرير). أما محتوى الأسئلة والإجابات نفسه فما زال غير محدد، ويحتاج جلسة نقاش منفصلة
 لتحديد الأسئلة التي سيجيب عليها المساعد والمسارات التي يوجّه إليها المستخدم (مثل فتح خانة البحث، أو حاسبة
 التمويل). تم اقتراح فكرة أولية للنقاش: مساعد يعتمد على أزرار خيارات جاهزة بدلاً من كتابة حرة، لكنها لم
 تُعتمد بعد وتحتاج نقاشاً مباشراً قبل البدء بالتنفيذ.

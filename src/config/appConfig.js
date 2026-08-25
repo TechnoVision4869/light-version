@@ -1,5 +1,14 @@
 import { CONFIG } from "../data/layers";
 
+// Rotation applied to floor plan images in the generated unit brochure PDF (degrees,
+// clockwise). One setting applies to every floor plan image across all units/unit types —
+// per-image rotation isn't supported yet.
+export const FLOOR_PLAN_ROTATION = {
+  NONE: 0,
+  RIGHT: 90,
+  LEFT: -90,
+};
+
 export const APP_CONFIG = {
   // Set to true to use static data, false to use API
   USE_STATIC: false,
@@ -8,4 +17,6 @@ export const APP_CONFIG = {
   USE_HOTSPOTS: CONFIG.USE_HOTSPOTS,
   // Max viewport width (px) treated as "tablet" for the web landscape prompt / immersive mode
   TABLET_MAX_WIDTH: 1366,
+  // One of FLOOR_PLAN_ROTATION's values
+  FLOOR_PLAN_ROTATION_DEG: FLOOR_PLAN_ROTATION.RIGHT,
 };

@@ -22,6 +22,7 @@
     "clsx": "^2.1.1",
     "formik": "^2.4.9",
     "isomorphic-fetch": "^3.0.0",
+    "jspdf": "^4.2.1",
     "lodash": "^4.17.23",
     "lucide-react": "^0.564.0",
     "querystring": "^0.2.1",

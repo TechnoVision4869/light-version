@@ -11,6 +11,7 @@ import AREA_ICON from "../assets/icons/area.svg"
 import DOOR_ICON from "../assets/icons/door.svg"
 import TOILET_ICON from "../assets/icons/bathroom.svg"
 import COMPARE_ICON from "../assets/icons/compare.svg"
+import DOWNLOAD_ICON from "../assets/icons/download-pdf.png"
 
 export default function UnitPanel({ unit, inCompareView = false, onOpenInterior } = {}) {
     const { currentProject, currentItem: contextCurrentItem } = useContext(SidebarContext);
@@ -53,9 +54,28 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
     const [isCutSectionsOpen, setIsCutSectionsOpen] = useState(true);
     const [isPaymentPlanOpen, setIsPaymentPlanOpen] = useState(false);
 
-    const unitType = useStatic 
+    const unitType = useStatic
         ? currentProject?.unitTypes?.[currentItem?.unitTypeId]
         : currentProject?.unitTypes?.find(type => type.id === currentItem?.unitTypeId);
+
+    const [isGeneratingBrochure, setIsGeneratingBrochure] = useState(false);
+
+    const handleDownloadBrochure = async () => {
+        setIsGeneratingBrochure(true);
+        try {
+            const { generateUnitBrochure } = await import("../lib/generateUnitBrochure");
+            const { anyImageFailed } = await generateUnitBrochure(currentItem, unitType, {
+                developerId: currentProject?.developerId,
+            });
+            if (anyImageFailed) {
+                toast("Some images couldn't be included in the brochure");
+            }
+        } catch {
+            toast.error("Failed to generate brochure");
+        } finally {
+            setIsGeneratingBrochure(false);
+        }
+    };
 
     // console.log("type id:", currentProject?.unitTypes?.find(type => type.id));
     // console.log("unitTypeId:", currentItem?.unitTypeId);
@@ -65,11 +85,13 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
 
     const levels = useStatic ? unitType?.interior?.levels : unitType?.levels;
     const serviceRooms = unitType?.serviceRooms;
+    // console.log(serviceRooms);
     const gallery = unitType?.gallery;
     // console.log(gallery);
     
     const cutSections = unitType?.cutSections;
     const paymentPlans = unitType?.paymentPlans;
+    console.log(paymentPlans);
     const floorPlans = unitType?.floorPlans;
     // console.log(floorPlans);
     
@@ -122,7 +144,7 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white/70">
                                         <path d="M12 12C12 10.8954 11.1046 10 10 10C8.89543 10 8 10.8954 8 12C8 13.1046 8.89543 14 10 14C11.1046 14 12 13.1046 12 12Z" stroke="currentColor" strokeWidth="2" />
                                     </svg>
-                                    {room}
+                                    {room.name}
                                 </div>
                             ))}
                         </div>
@@ -172,9 +194,9 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
                             aria-pressed={inCompare}
                         >
                             <div className="flex items-center gap-1">
-                            <img src={COMPARE_ICON} alt={'Compare Icon'} className="w-5 h-auto" />
-                            <span>Add to Compare</span>
-                        </div>
+                                <img src={COMPARE_ICON} alt={'Compare Icon'} className="w-5 h-auto" />
+                                <span>Add to Compare</span>
+                            </div>
                         </button>
                     </>
                 }
@@ -284,12 +306,12 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
                             paymentPlans?.map((plan, index) => (
                                 <div className="mt-2 mb-3 flex justify-between gap-2 whitespace-nowrap" key={index}>
                                     <div className="flex-1 text-center">
-                                        <div className="font-bold text-xs">{plan.downPayment.toLocaleString()} L.E</div>
+                                        <div className="font-bold text-xs">{plan.downPayment} L.E</div>
                                         <div className="text-xs text-white/70">Down Payment</div>
                                     </div>
                                     <div className="v-divider"></div>
                                     <div className="flex-1 text-center">
-                                        <div className="font-bold text-xs">{plan.monthly.toLocaleString()} L.E</div>
+                                        <div className="font-bold text-xs">{plan.monthlyPayment} L.E</div>
                                         <div className="text-xs text-white/70">Monthly</div>
                                     </div>
                                     <div className="v-divider"></div>
@@ -303,6 +325,18 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
                     </div>
                 </>
                 }
+
+                <hr className="h-divider" />
+                <button
+                    className="w-full border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium flex justify-center transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleDownloadBrochure}
+                    disabled={isGeneratingBrochure}
+                >
+                    <div className="flex items-center gap-1">
+                        <img src={DOWNLOAD_ICON} alt={'Download Icon'} className="w-5 h-auto" />
+                        <span>{isGeneratingBrochure ? 'Generating...' : 'Download Brochure'}</span>
+                    </div>
+                </button>
             </div>
         </div>
     );
