@@ -255,6 +255,30 @@ overlayState: 'entering' | 'active' | 'exiting',
 transitionDuration: 300
 ```
 
+## Known Issue: Three Inconsistent Interior-Viewing Presentations
+
+**Found:** 2026-08-24, while building a Compare-page-local interior popup
+(`src/components/InteriorBrowser.jsx`).
+
+Unit interior viewing currently has three different presentation styles, not one:
+
+1. **Full-screen** — `Panorama` (hotspot projects), rendered `fixed inset-0` (`Home.jsx`), blocks the
+   top tabs/breadcrumbs entirely.
+2. **Media-container-scoped card** — the `room-interior` overlay (`Home.jsx:608-627`), confined to the
+   video area only; top tabs/breadcrumbs/Sidebar stay live and interactive around it. Room switching is
+   driven by the real Sidebar rendering `<RoomList />`, sourced from `SidebarContext`'s actual navigated
+   `currentItems` (`SidebarContextProvider.jsx:474-476`).
+3. **Compare-page-local popup** — `InteriorBrowser`, deliberately **not** part of the `MainContext`
+   `overlay` system (a Compare column's unit isn't the app's real navigated `currentItem`, so routing it
+   through the single-slot `overlay` state would either hijack real navigation or unmount the Compare
+   page entirely — see the component for the full reasoning). Local state inside `CompareView`, rendered
+   as a blurred-backdrop card layered above the still-visible Compare grid.
+
+Unifying these was considered and deliberately deferred: doing so would change the normal single-unit
+flow's current `room-interior` behavior (case 2), which was confirmed correct and intentionally left
+untouched. Worth revisiting as a dedicated task if the product direction wants one consistent interior
+viewer treatment across all three entry points.
+
 3. **Multi-Modal Overlays**: Support nested overlays
 ```javascript
 overlay: {

@@ -7,6 +7,7 @@ import { PROPERTY_TYPE } from "../constants/roles";
 import { enrichProjectData, prefetchProjectByLevels, getLevelAssetTotal } from "../lib/enrichProjectData";
 import { APP_CONFIG } from "../config/appConfig";
 import { fetchProjectById } from "../lib/projectFetcher";
+import { pruneCompareUnits } from "../lib/compareStorage";
 import { PROJECT_STORAGE_KEY, DEVELOPER_STORAGE_KEY } from "../constants/storageKeys";
 
 export { SidebarContext };
@@ -77,10 +78,17 @@ export default function SidebarContextProvider({ children }) {
         // app is killed), and the id is already known at this point regardless.
         localStorage.setItem(STORAGE_KEY, project.id);
 
+        // Compare-list unit IDs only make sense within the project they were added from —
+        // prune any that don't resolve in whatever project ends up set below.
+        const setCurrentProjectAndPrune = (resolvedProject) => {
+            setCurrentProject(resolvedProject);
+            pruneCompareUnits(resolvedProject);
+        };
+
         const enrich = async () => {
             try {
                 if (useStatic) {
-                    setCurrentProject(project);
+                    setCurrentProjectAndPrune(project);
                     setHistory(getInitHistory(project));
                 } else {
                     // Merge in the developerId known from selection context, since the
@@ -92,7 +100,7 @@ export default function SidebarContextProvider({ children }) {
                     // URL resolution runs once here, depth 0 assets prefetched
                     const enrichedProject = await enrichProjectData(projectToEnrich, useStatic, 0);
                     if (isStale()) return;
-                    setCurrentProject(enrichedProject);
+                    setCurrentProjectAndPrune(enrichedProject);
                     setHistory(getInitHistory(enrichedProject));
 
                     // Know all three levels' totals upfront (no network calls), so the
@@ -127,7 +135,7 @@ export default function SidebarContextProvider({ children }) {
             } catch (error) {
                 console.error('Error enriching project data:', error);
                 if (isStale()) return;
-                setCurrentProject(project);
+                setCurrentProjectAndPrune(project);
                 setHistory(getInitHistory(project));
             }
         };

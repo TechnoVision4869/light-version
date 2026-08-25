@@ -17,6 +17,8 @@ import Balcony from "./Balcony";
 import Room from "./Room";
 import Gallery from "./Gallery";
 import AnimatedPath from "./AnimatedPath";
+import CompareView from "./CompareView";
+import CompareButton from "./buttons/CompareButton";
 
 // Context
 import FilterContextProvider from "../store/FilterContextProvider";
@@ -58,7 +60,7 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
     switchToFloor,
     currentVideosPaths } = useContext(SidebarContext);
 
-  const { overlay, closeOverlay } = useContext(MainContext);
+  const { overlay, closeOverlay, openCompare } = useContext(MainContext);
 
   const videoViewer = useVideoViewer();
 
@@ -361,6 +363,12 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
           </div>
         </div>
       )}
+
+      {overlay?.type === 'compare' && (
+        <div className="fixed inset-0 z-60">
+          <CompareView />
+        </div>
+      )}
       <div className="w-full h-screen bg-[#2f2f2f] py-2 px-3 xl:p-4 overflow-hidden">
         <div className="w-full h-full flex flex-col">
           {/* Top Tabs */}
@@ -371,20 +379,9 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
                 disabled={isDisabled || history.length <= 1}
                 className={`w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/70 transition disabled:opacity-50 disabled:cursor-not-allowed ${videoViewer.currentViewIndex !== 0 ? 'bg-white/95' : 'bg-white/85'}`}
               >
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M31 12H2M2 12L9 6M2 12L9 18"
-                    stroke="black"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                  xmlns="http://www.w3.org/2000/svg" >
+                  <path d="M31 12H2M2 12L9 6M2 12L9 18" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
             </div>
@@ -561,23 +558,26 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
                       <BaseFloat mediaRef={mediaContainerRef} />
                     )}
 
-                  {/* info re-open button */}
-                  {showI && (
-                    <button
-                      className={`absolute -bottom-1 -right-1 flex items-center justify-center z-25
-                        ${activeTab === TABS.SURROUNDINGS ? "bg-[#59A198]/60 backdrop-blur" : 'bg-black/60 backdrop-blur-sm'}
-                        w-10 h-10 hover:w-11 hover:h-11
-                        transition-all duration-500 ease-in-out
-                        rounded-tl-xl rounded-bl-2xl rounded-tr-2xl`}
-                      onClick={() => setShowInfoPopup(true)}
-                    >
-                      <span className="absolute inset-0 rounded-tl-xl rounded-bl-2xl rounded-tr-2xl border-2 border-white/70 ping-3 pointer-events-none" />
-                      <svg width="30" height="30" viewBox="0 0 23 23" fill="none">
-                        <circle cx="11" cy="5" r="1.5" fill="white" />
-                        <path d="M11 9 C11.8 11, 10.2 13, 11 15" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
-                      </svg>
-                    </button>
-                  )}
+                  {/* info re-open + compare buttons, stacked bottom-right */}
+                  <div className="absolute bottom-2 right-2 flex flex-col-reverse items-end gap-2 z-25">
+                    {showI && (
+                      <button
+                        className={`relative flex items-center justify-center
+                          ${activeTab === TABS.SURROUNDINGS ? "bg-[#59A198]/60 backdrop-blur" : 'bg-black/60 backdrop-blur-sm'}
+                          w-10 h-10 hover:w-11 hover:h-11
+                          transition-all duration-500 ease-in-out
+                          rounded-xl`}
+                        onClick={() => setShowInfoPopup(true)}
+                      >
+                        <span className="absolute inset-0 rounded-tl-xl rounded-bl-2xl rounded-tr-2xl border-2 border-white/70 ping-3 pointer-events-none" />
+                        <svg width="30" height="30" viewBox="0 0 23 23" fill="none">
+                          <circle cx="11" cy="5" r="1.5" fill="white" />
+                          <path d="M11 9 C11.8 11, 10.2 13, 11 15" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+                        </svg>
+                      </button>
+                    )}
+                    <CompareButton onClick={openCompare} />
+                  </div>
 
                   {/* bottom info popup */}
                   {showInfoPopup && currentItem?.id && (

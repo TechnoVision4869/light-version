@@ -10,10 +10,10 @@ import { MainContext } from "../store/MainContextProvider";
 import { FilterContext } from "../store/FilterContextProvider";
 
 export default function Sidebar({ onNavigate }) {
-    const { activeTab, activeLayer, currentItem, sidebarOpen } = useContext(SidebarContext);
+    const { activeTab, activeLayer, currentItem, currentItems, sidebarOpen } = useContext(SidebarContext);
     const { resetFilters } = useContext(FilterContext);
     const [isFilter, setIsFilter] = useState(false); // 'navigate' or 'filter'
-    const { overlay } = useContext(MainContext);
+    const { overlay, openRoomInterior } = useContext(MainContext);
     
     useEffect(() => {
         // console.log(activeLayer);
@@ -47,7 +47,12 @@ export default function Sidebar({ onNavigate }) {
         >
             {activeTab === TABS.ZONES && activeLayer === LAYERS.UNIT ? (
                 overlay?.type === 'room-interior' ? (
-                    <RoomList />           
+                    <RoomList
+                        title={currentItem?.displayName || currentItem?.name}
+                        rooms={currentItems}
+                        activeRoomId={overlay?.data?.room?.id}
+                        onSelectRoom={openRoomInterior}
+                    />
                 ) : (
                     <UnitPanel />
                 )

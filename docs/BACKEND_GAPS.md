@@ -176,6 +176,31 @@ to swap in real data once this field exists.
 planned, and if so, what its return shape/enum values are, so the mock functions can be replaced with a
 real API call without further UI changes.
 
+## Compare/favorites list is localStorage-only — no backend concept exists
+
+**Found:** 2026-08-24, while building the interactive-map requirements' Compare feature
+(`src/lib/compareStorage.js`, `src/components/CompareView.jsx`).
+
+The "Add to Compare" list (up to 4 units, toggled from `UnitPanel.jsx`) is stored purely in the
+browser's `localStorage`, keyed `compareUnits`. There is no backend concept of a favorites/compare list
+— per-user, per-project, or otherwise.
+
+**Impact:** the app targets Android tablets **carried by sales staff and shared between them**, not
+assigned 1:1 (per `.claude/rules/state-management.md`). A `localStorage` list is inherently per-device,
+not per-user — it does not follow a sales rep across devices, does not survive the browser/app storage
+being cleared, and mixes together whatever the previous person using the tablet had selected. The
+frontend also has to defensively prune stale IDs on every project switch
+(`SidebarContextProvider.jsx`'s `setCurrentProjectAndPrune`) since a unit ID from a different project is
+meaningless once the tree changes — a workaround for the lack of any real scoping, not a complete fix
+(e.g. two different projects sharing a coincidentally-identical unit ID would not be caught by this
+pruning).
+
+**Needs:** a real favorites/compare-list concept on the backend, ideally scoped to the logged-in user
+(so it follows them across devices) and/or the project. Once available, `compareStorage.js`'s functions
+(`getCompareUnits`/`addToCompare`/`removeFromCompare`/`isInCompare`) can be swapped to call the API
+instead of `localStorage` with no UI changes needed — the rest of the feature (`UnitPanel.jsx`,
+`CompareView.jsx`, `CompareButton.jsx`) already only depends on those functions' signatures.
+
 ## Admin API endpoints' server-side role enforcement unconfirmed
 
 **Found:** documented in `the-web-application-currently-deep-yao.md`, Step 7 (role-based access

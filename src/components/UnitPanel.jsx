@@ -1,20 +1,53 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 import { SidebarContext } from '../store/SidebarContextProvider';
 import { MainContext } from '../store/MainContextProvider';
 import { APP_CONFIG } from "../config/appConfig";
 import { CONFIG } from "../data/layers";
+import { isInCompare, addToCompare, removeFromCompare, COMPARE_UPDATED_EVENT } from "../lib/compareStorage";
 
 import AREA_ICON from "../assets/icons/area.svg"
 import DOOR_ICON from "../assets/icons/door.svg"
 import TOILET_ICON from "../assets/icons/bathroom.svg"
+import COMPARE_ICON from "../assets/icons/compare.svg"
 
-export default function UnitPanel() {
-    const { currentProject, currentItem } = useContext(SidebarContext);
+export default function UnitPanel({ unit, inCompareView = false, onOpenInterior } = {}) {
+    const { currentProject, currentItem: contextCurrentItem } = useContext(SidebarContext);
+    const currentItem = unit ?? contextCurrentItem;
     const useStatic = APP_CONFIG.USE_STATIC;
-    
+
     const { openPanorama, openBalconyView, openGallery, openRoomInterior } = useContext(MainContext);
     const useHotspots = APP_CONFIG.USE_HOTSPOTS;
+
+    const [inCompare, setInCompare] = useState(() => isInCompare(currentItem?.id));
+
+    useEffect(() => {
+        setInCompare(isInCompare(currentItem?.id));
+    }, [currentItem?.id]);
+
+    // Resync when the compare list changes elsewhere (e.g. removed from CompareView's
+    // own "X" button) — currentItem?.id doesn't change in that case, so the effect above
+    // alone won't catch it.
+    useEffect(() => {
+        const handleUpdate = () => setInCompare(isInCompare(currentItem?.id));
+        window.addEventListener(COMPARE_UPDATED_EVENT, handleUpdate);
+        return () => window.removeEventListener(COMPARE_UPDATED_EVENT, handleUpdate);
+    }, [currentItem?.id]);
+
+    const handleToggleCompare = () => {
+        if (inCompare) {
+            removeFromCompare(currentItem.id);
+            setInCompare(false);
+            return;
+        }
+        const result = addToCompare(currentItem.id);
+        if (!result.ok) {
+            toast.error("You can compare only 4 units at a time");
+            return;
+        }
+        setInCompare(true);
+    };
 
     const [isVisualsOpen, setIsVisualsOpen] = useState(true);
     const [isCutSectionsOpen, setIsCutSectionsOpen] = useState(true);
@@ -102,6 +135,8 @@ export default function UnitPanel() {
                                 onClick={() => {
                                     if (useHotspots) {
                                         openPanorama(currentItem);
+                                    } else if (inCompareView) {
+                                        onOpenInterior?.(currentItem);
                                     } else {
                                         const firstRoom = levels?.[0]?.rooms?.[0];
                                         if (firstRoom) openRoomInterior(firstRoom);
@@ -124,6 +159,22 @@ export default function UnitPanel() {
                         <button className="w-full border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition"
                             onClick={() => openBalconyView(currentItem)}
                         > { CONFIG.BALCONY_TITLE }
+                        </button>
+                    </>
+                }
+
+                {!inCompareView &&
+                    <>
+                        <hr className="h-divider" />
+                        <button
+                            className={`bg-[#00000066] border-1 border-black py-3 px-4 rounded-lg text-sm font-medium relative w-full flex justify-center transition ${inCompare ? 'opacity-100 ring-2 ring-white rounded-xl' : 'opacity-90 hover:opacity-100'}`}
+                            onClick={handleToggleCompare}
+                            aria-pressed={inCompare}
+                        >
+                            <div className="flex items-center gap-1">
+                            <img src={COMPARE_ICON} alt={'Compare Icon'} className="w-5 h-auto" />
+                            <span>Add to Compare</span>
+                        </div>
                         </button>
                     </>
                 }
