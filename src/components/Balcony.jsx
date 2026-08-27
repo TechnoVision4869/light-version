@@ -64,7 +64,7 @@ export default function Balcony({ view }) {
   // Handle initial load
   const handleReady = () => {
     viewerRef.current.camera.animateTo({
-      zoom: 1,
+      zoom: CONFIG.BALCONY_INITIAL_ZOOM ?? 1,
       duration: ZOOM_OUT_TIME,
     });
     checkGLError();

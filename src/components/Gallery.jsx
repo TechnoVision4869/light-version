@@ -8,9 +8,9 @@ export default function Gallery({ unit, galleryType, onClose }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const useStatic = APP_CONFIG.USE_STATIC;
 
-    const unitType = useStatic 
+    const unitType = useStatic
         ? currentProject?.unitTypes?.[unit?.unitTypeId]
-        : currentProject?.unitTypes?.find(type => type.name === unit?.visualTypeId);
+        : currentProject?.unitTypes?.find(type => type.id === unit?.unitTypeId);
     
     const images = unitType?.[galleryType] || [];
 

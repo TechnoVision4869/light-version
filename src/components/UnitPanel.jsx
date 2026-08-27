@@ -93,7 +93,7 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
     
     const cutSections = unitType?.cutSections;
     const paymentPlans = unitType?.paymentPlans;
-    console.log(paymentPlans);
+    // console.log(paymentPlans);
     const floorPlans = unitType?.floorPlans;
     // console.log(floorPlans);
     
@@ -119,28 +119,33 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
                     </div>}
                 </div>
 
-                <hr className="h-divider" />
-
                 {/* Rooms & Interior & FLoor plan buttons */}
                 <div>
-                    <div className="flex items-left gap-1 mb-2">
-                        <div className="w-6 h-6 flex items-center justify-center">
-                            <img src={DOOR_ICON} alt="Area icon" className="w-6 h-6 p-[1px]" />
+                    {currentItem.bedrooms !== null && (
+                        <>
+                        <hr className="h-divider" />
+                        <div className="flex items-left gap-1 mb-2">
+                            <div className="w-6 h-6 flex items-center justify-center">
+                                <img src={DOOR_ICON} alt="Area icon" className="w-6 h-6 p-[1px]" />
+                            </div>
+                            <span>Rooms : {currentItem.bedrooms}</span>
                         </div>
-                        <span>Rooms : {currentItem.bedrooms}</span>
-                    </div>
-                    <div className="flex items-left gap-1 mb-2">
-                        <div className="w-6 h-6 flex items-center justify-center">
-                            <img src={TOILET_ICON} alt="Area icon" className="w-6 h-6 p-[1px]" />
+                        </>
+                    )}
+                    {currentItem.bathrooms !== null && (
+                        <div className="flex items-left gap-1 mb-2">
+                            <div className="w-6 h-6 flex items-center justify-center">
+                                <img src={TOILET_ICON} alt="Area icon" className="w-6 h-6 p-[1px]" />
+                            </div>
+                            <span>Toilets : {currentItem.bathrooms}</span>
                         </div>
-                        <span>Toilets : {currentItem.bathrooms}</span>
-                    </div>
+                    )}
                     {serviceRooms?.length > 0 && <>
                         <div className="flex items-center gap-2 mb-4">
-                            <small className="text-sm">+ service Rooms</small>
+                            <small className="text-sm">+ Services</small>
                             <hr className="flex-grow border-b border-white opacity-50" />
                         </div>
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-1 gap-2">
                             {serviceRooms.map((room, i) => (
                                 <div key={i} className="flex items-center gap-1 text-xs text-[#E4E3E3]">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white/70">
@@ -321,19 +326,23 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
                             paymentPlans?.map((plan, index) => (
                                 <div className="mt-2 mb-3 flex justify-between gap-2 whitespace-nowrap" key={index}>
                                     <div className="flex-1 text-center">
-                                        <div className="font-bold text-xs">{plan.downPayment} SAR</div>
+                                        <div className="font-bold text-xs">{Number(plan.downPayment).toLocaleString()} SAR</div>
                                         <div className="text-xs text-white/70">Down Payment</div>
                                     </div>
                                     <div className="v-divider"></div>
                                     <div className="flex-1 text-center">
-                                        <div className="font-bold text-xs">{plan.monthlyPayment} SAR</div>
+                                        <div className="font-bold text-xs">{Number(plan.monthlyPayment).toLocaleString()} SAR</div>
                                         <div className="text-xs text-white/70">Monthly</div>
                                     </div>
-                                    <div className="v-divider"></div>
-                                    <div className="flex-1 text-center">
-                                        <div className="font-bold text-xs">{plan.years}</div>
-                                        <div className="text-xs text-white/70">Years</div>
-                                    </div>
+                                    {plan.years > 0 && (
+                                        <>
+                                            <div className="v-divider"></div>
+                                            <div className="flex-1 text-center">
+                                                <div className="font-bold text-xs">{plan.years}</div>
+                                                <div className="text-xs text-white/70">Years</div>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             ))
                         )}

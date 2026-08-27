@@ -49,7 +49,7 @@ export default function Room({ room }) {
 
   const handleReady = () => {
     if (!viewerRef.current) return;
-    viewerRef.current.camera.lookAt({ zoom: 1 });
+    viewerRef.current.camera.lookAt({ zoom: CONFIG.INTERIOR_INITIAL_ZOOM ?? 1 });
     // viewerRef.current.control.rotate.pointerScale = [testPointerScale, testPointerScale];
     // viewerRef.current.control.rotate.duration = testDuration;
     viewerRef.current.control.rotate.pointerScale = [1.7, 1.7];

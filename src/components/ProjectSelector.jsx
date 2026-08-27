@@ -9,6 +9,7 @@ import { assetApi } from "../api/admin/assetApi";
 import { DATA, PATH } from "../data/layers";
 import { fetchProjectById } from "../lib/projectFetcher";
 import { prefetchSingleUrl } from "../lib/enrichProjectData";
+import { setCachedDeveloperLogo } from "../lib/developerLogoCache";
 import DownloadTestOverlay from "./DownloadTestOverlay";
 
 const DEFAULT_LOGO = '/default-logo.png';
@@ -196,6 +197,9 @@ export default function ProjectSelector({
           const logoImg = await assetApi.getAssetFileUrl(developer.logoAssetId);
           if (logoImg) {
             setDeveloperAssets((prev) => ({ ...prev, logoImage: logoImg }));
+            // Save it so other places that need the developer logo later (e.g. the unit
+            // brochure PDF) can reuse it instead of re-fetching it themselves.
+            setCachedDeveloperLogo(developerId, logoImg);
           } else {
             console.warn("Asset response missing URL:", logoImg);
             toast.error("Failed to load logo image");
@@ -296,8 +300,8 @@ export default function ProjectSelector({
         )}
 
         {/* UI content */}
-        <div className="relative z-10 w-full h-full flex flex-col items-center justify-start pt-14">
-          {developerAssets.logoImage &&
+        <div className="relative z-10 w-full h-full flex flex-col items-center justify-start pt-8">
+          {/* {developerAssets.logoImage &&
           <div className="mb-8">
             <img
               src={developerAssets.logoImage}
@@ -305,7 +309,7 @@ export default function ProjectSelector({
               className="w-auto h-auto max-h-28 xl:max-h-32 xl:w-32 max-w-[90vw] xl:max-w-md"
             />
           </div>
-          }
+          } */}
           {showBackButton && !useStatic && onBackButtonClick && (
             <button
               onClick={onBackButtonClick}

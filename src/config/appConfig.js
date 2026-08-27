@@ -18,5 +18,5 @@ export const APP_CONFIG = {
   // Max viewport width (px) treated as "tablet" for the web landscape prompt / immersive mode
   TABLET_MAX_WIDTH: 1366,
   // One of FLOOR_PLAN_ROTATION's values
-  FLOOR_PLAN_ROTATION_DEG: FLOOR_PLAN_ROTATION.RIGHT,
+  FLOOR_PLAN_ROTATION_DEG: FLOOR_PLAN_ROTATION.NONE,
 };

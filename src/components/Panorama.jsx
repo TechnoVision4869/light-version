@@ -56,9 +56,9 @@ export default function Panorama({ unit }) {
   }, []);
 
   // Get unit data
-  const unitType = useStatic 
+  const unitType = useStatic
         ? currentProject?.unitTypes?.[unit?.unitTypeId]
-        : currentProject?.unitTypes?.find(type => type.name === unit?.visualTypeId);
+        : currentProject?.unitTypes?.find(type => type.id === unit?.unitTypeId);
   const levels = useStatic ? unitType.interior.levels : unitType.levels;
   const [room, setRoom] = useState(levels[0].rooms[0]);
   const [currentImage, setCurrentImage] = useState(room.furnitureImgId);
