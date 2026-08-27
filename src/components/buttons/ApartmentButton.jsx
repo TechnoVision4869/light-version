@@ -1,15 +1,17 @@
 import { useContext } from "react";
 import { SidebarContext } from "../../store/SidebarContextProvider";
+import { recordUnitView } from "../../lib/mockEngagementData";
 
 export default function ApartmentButton({ apartment, isDisabled = false, goToItem }) {
     const { highlightedButton, setHighlightedButton } = useContext(SidebarContext);
-    
+
     const isSelected = highlightedButton === apartment;
 
     const handleClick = () => {
-        
+
         if (isSelected) {
             // console.log("ApartmentButton clicked");
+            recordUnitView(apartment.id);
             goToItem();
             setHighlightedButton(null);
         }

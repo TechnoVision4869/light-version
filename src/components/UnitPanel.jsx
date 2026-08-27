@@ -6,7 +6,14 @@ import { MainContext } from '../store/MainContextProvider';
 import { APP_CONFIG } from "../config/appConfig";
 import { CONFIG } from "../data/layers";
 import { isInCompare, addToCompare, removeFromCompare, COMPARE_UPDATED_EVENT } from "../lib/compareStorage";
+import { getMockRemainingCount, getMockViewCount, getMockUnitStatus } from "../lib/mockEngagementData";
 import SimilarUnits from "./SimilarUnits";
+
+const STATUS_STYLES = {
+    available: { label: "Available", className: "bg-green-600/80 text-white" },
+    reserved: { label: "Reserved", className: "bg-yellow-600/80 text-white" },
+    sold: { label: "Sold", className: "bg-red-600/80 text-white" },
+};
 
 import AREA_ICON from "../assets/icons/area.svg";
 import DOOR_ICON from "../assets/icons/door.svg";
@@ -104,7 +111,12 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
             <div className="flex flex-col gap-3 max-h-[calc(100vh-200px)] scrollbar-custom overflow-auto px-2 py-2 text-white">
                 {/* name and area */}
                 <div>
-                    <h1 className="text-xl font-bold mb-2">{currentItem.displayName || currentItem.name}</h1>
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                        <h1 className="text-xl font-bold">{currentItem.displayName || currentItem.name}</h1>
+                        <span className={`text-xs font-semibold px-2 py-1 rounded-full whitespace-nowrap ${STATUS_STYLES[getMockUnitStatus()].className}`}>
+                            {STATUS_STYLES[getMockUnitStatus()].label}
+                        </span>
+                    </div>
                     <div className="flex items-center gap-1">
                         <div className="w-6 h-6 items-center justify-center">
                             <img src={AREA_ICON} alt="Area icon" className="w-6 h-6 p-[1px]" />
@@ -117,6 +129,18 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
                         </div>
                          <span>Roof Area : {Math.round(unitType?.roofarea)} m²</span>
                     </div>}
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-xs text-white/70">
+                        <span className="flex items-center gap-1 whitespace-nowrap">
+                            🔥 Only {getMockRemainingCount(currentItem.unitTypeId)} left of this model
+                        </span>
+                        <span className="flex items-center gap-1 whitespace-nowrap">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" stroke="currentColor" strokeWidth="1.5" />
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5" />
+                            </svg>
+                            {getMockViewCount(currentItem.id)} views
+                        </span>
+                    </div>
                 </div>
 
                 {/* Rooms & Interior & FLoor plan buttons */}
@@ -304,13 +328,13 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
                 {paymentPlans?.length > 0 &&
                 <>
                     <hr className="h-divider" />
-                    {/* Payment Plan */}
+                    {/* Payment Options */}
                     <div>
                         <button
                             onClick={() => setIsPaymentPlanOpen(!isPaymentPlanOpen)}
                             className="flex justify-between w-full"
                         >
-                            <span className='font-semibold'>Payment Plan</span>
+                            <span className='font-semibold'>Payment Options</span>
                             <svg
                                 width="16"
                                 height="16"

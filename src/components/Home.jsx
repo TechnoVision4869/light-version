@@ -21,6 +21,7 @@ import CompareView from "./CompareView";
 import CompareButton from "./buttons/CompareButton";
 import PaymentPlanSchedule from "./PaymentPlanSchedule";
 import UnitPanel from "./UnitPanel";
+import WhatsAppButton from "./buttons/WhatsAppButton";
 
 // Context
 import FilterContextProvider from "../store/FilterContextProvider";
@@ -590,6 +591,13 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
                     viewerProps.currentViewIndex === 0 && (
                       <BaseFloat mediaRef={mediaContainerRef} />
                     )}
+
+                  {/* WhatsApp — top-right (primary spot). PreloadProgressPanel (admin/
+                      technician-only, rendered outside this container but on the same
+                      on-screen corner) is offset below it — see PreloadProgressPanel.jsx. */}
+                  <div className="absolute top-2 right-2 z-30">
+                    <WhatsAppButton />
+                  </div>
 
                   {/* info re-open + compare buttons, stacked bottom-right */}
                   <div className="absolute bottom-2 right-2 flex flex-col-reverse items-end gap-2 z-25">

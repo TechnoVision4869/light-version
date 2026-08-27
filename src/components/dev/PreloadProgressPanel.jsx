@@ -46,7 +46,7 @@ export default function PreloadProgressPanel() {
     if (!ALLOWED_ROLES.includes(user?.role)) return null;
 
     return (
-        <div className="absolute top-2 right-2 z-50 text-white flex flex-col items-end">
+        <div className="absolute top-14 right-2 z-50 text-white flex flex-col items-end">
             <button
                 onClick={() => setOpen((o) => !o)}
                 className="bg-black/50 backdrop-blur-sm rounded-full px-3 py-1.5 text-[13px] font-mono border border-white/10 hover:bg-black/80"
