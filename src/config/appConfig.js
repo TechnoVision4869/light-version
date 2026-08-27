@@ -9,6 +9,16 @@ export const FLOOR_PLAN_ROTATION = {
   LEFT: -90,
 };
 
+// Which cached video ReloadLoadingSplash shows while a hard reload of /home is
+// re-fetching/re-enriching the project. "idle" = the project's Home idle loop (the exact
+// state Home settles into, so the handoff is seamless). "intro" = the project's intro/zoomout
+// video shown during the normal selection→Home flow. If the chosen one isn't cached yet
+// (e.g. never loaded before), ReloadLoadingSplash falls back to whichever is cached.
+export const RELOAD_PLACEHOLDER_SOURCE = {
+  IDLE: "idle",
+  INTRO: "intro",
+};
+
 export const APP_CONFIG = {
   // Set to true to use static data, false to use API
   USE_STATIC: false,
@@ -19,4 +29,6 @@ export const APP_CONFIG = {
   TABLET_MAX_WIDTH: 1366,
   // One of FLOOR_PLAN_ROTATION's values
   FLOOR_PLAN_ROTATION_DEG: FLOOR_PLAN_ROTATION.NONE,
+  // One of RELOAD_PLACEHOLDER_SOURCE's values
+  RELOAD_PLACEHOLDER_SOURCE: RELOAD_PLACEHOLDER_SOURCE.INTRO,
 };

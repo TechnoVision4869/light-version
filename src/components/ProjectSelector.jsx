@@ -10,6 +10,8 @@ import { DATA, PATH } from "../data/layers";
 import { fetchProjectById } from "../lib/projectFetcher";
 import { prefetchSingleUrl } from "../lib/enrichProjectData";
 import { setCachedDeveloperLogo } from "../lib/developerLogoCache";
+import { PROJECT_INTRO_VIDEO_STORAGE_KEY } from "../constants/storageKeys";
+import { AssetType } from "./admin/types";
 import DownloadTestOverlay from "./DownloadTestOverlay";
 
 const DEFAULT_LOGO = '/default-logo.png';
@@ -218,6 +220,21 @@ export default function ProjectSelector({
     try {
       const project = await fetchProjectById(projectId, useStatic);
       if (project) {
+        // Cache it here — the project-detail fetch that SidebarContextProvider enriches
+        // into currentProject doesn't reliably carry introAssetId the way this list-level
+        // fetch does, so re-deriving it later from currentProject can silently come up
+        // empty. This URL is already known-good (it's what the intro splash itself uses),
+        // so persist it directly for Home.jsx's reload placeholder.
+        if (introVideoUrl) {
+          try {
+            localStorage.setItem(
+              PROJECT_INTRO_VIDEO_STORAGE_KEY,
+              JSON.stringify({ url: introVideoUrl, type: AssetType.VIDEO }),
+            );
+          } catch {
+            // Storage full/unavailable — this cache is a pure UX optimization, safe to skip.
+          }
+        }
         onProjectSelect(project, introVideoUrl, developerId);
       } else {
         toast.error("Failed to load project details.");
@@ -313,7 +330,7 @@ export default function ProjectSelector({
           {showBackButton && !useStatic && onBackButtonClick && (
             <button
               onClick={onBackButtonClick}
-              className="text-white text-sm font-medium hover:opacity-70 transition-opacity"
+              className="text-white text-sm font-medium hover:opacity-70 transition-opacity mt-20"
             >
               ← Back to Developers
             </button>

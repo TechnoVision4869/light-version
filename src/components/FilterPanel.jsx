@@ -146,6 +146,20 @@ export default function FilterPanel() {
     });
   }, [unitType, bedrooms, bathrooms, area, price]);
 
+  // Log the available filter ranges once, when the Filter tab is opened (Sidebar.jsx mounts this
+  // component on that click) — not on every slider drag, which would spam the console.
+  useEffect(() => {
+    console.log("Filter ranges:", {
+      area: AREA_RANGE,
+      budget: BUDGET_RANGE,
+      bedroomOptions: BEDROOM_OPTIONS,
+      bathroomOptions: BATHROOM_OPTIONS,
+      unitTypes: UNIT_TYPES,
+    });
+    // Deliberately mount-only — see comment above.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (!currentItem) return null;
 
   return (
@@ -183,19 +197,23 @@ export default function FilterPanel() {
 
       <div className="h-divider"></div>
 
-      <Discrete
-        name="Bedrooms"
-        options={BEDROOM_OPTIONS}
-        array={bedrooms}
-        onValueChange={setBedrooms}
-      />
+      {BEDROOM_OPTIONS.some((option) => option != null) && (
+        <Discrete
+          name="Bedrooms"
+          options={BEDROOM_OPTIONS}
+          array={bedrooms}
+          onValueChange={setBedrooms}
+        />
+      )}
 
-      <Discrete
-        name="Bathrooms"
-        options={BATHROOM_OPTIONS}
-        array={bathrooms}
-        onValueChange={setBathrooms}
-      />
+      {BATHROOM_OPTIONS.some((option) => option != null) && (
+        <Discrete
+          name="Bathrooms"
+          options={BATHROOM_OPTIONS}
+          array={bathrooms}
+          onValueChange={setBathrooms}
+        />
+      )}
 
     </div>
   );

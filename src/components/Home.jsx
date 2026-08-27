@@ -22,6 +22,7 @@ import CompareButton from "./buttons/CompareButton";
 import PaymentPlanSchedule from "./PaymentPlanSchedule";
 import UnitPanel from "./UnitPanel";
 import WhatsAppButton from "./buttons/WhatsAppButton";
+import ChatbotWidget from "./ChatbotWidget";
 
 // Context
 import FilterContextProvider from "../store/FilterContextProvider";
@@ -36,6 +37,7 @@ import Test from "./Test.jsx";
 import { APP_CONFIG } from "../config/appConfig";
 import { sortFloors } from "../lib/sortFloors";
 import PreloadProgressPanel from "./dev/PreloadProgressPanel.jsx";
+import ReloadLoadingSplash from "./ReloadLoadingSplash.jsx";
 export default function Home({ introVideoUrl = null, onExitRequest }) {
   //states
   const [showInfoPopup, setShowInfoPopup] = useState(false);
@@ -264,6 +266,10 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
 
   return (
     <>
+      {/* Reload placeholder — covers the blank gap while a hard-reloaded /home
+          re-fetches and re-enriches the project. Renders null if nothing's cached. */}
+      {!currentProject && <ReloadLoadingSplash />}
+
       {/* Unified Overlay Management */}
       {overlay?.type === 'panorama' && (
         <div className="absolute inset-0 z-60">
@@ -592,13 +598,6 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
                       <BaseFloat mediaRef={mediaContainerRef} />
                     )}
 
-                  {/* WhatsApp — top-right (primary spot). PreloadProgressPanel (admin/
-                      technician-only, rendered outside this container but on the same
-                      on-screen corner) is offset below it — see PreloadProgressPanel.jsx. */}
-                  <div className="absolute top-2 right-2 z-30">
-                    <WhatsAppButton />
-                  </div>
-
                   {/* info re-open + compare buttons, stacked bottom-right */}
                   <div className="absolute bottom-2 right-2 flex flex-col-reverse items-end gap-2 z-25">
                     {showI && (
@@ -619,6 +618,15 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
                     )}
                     <CompareButton onClick={openCompare} />
                   </div>
+
+                  {/* WhatsApp, stacked above the FAQ chatbot toggle in the bottom-left corner
+                      (mirrors the info+compare stack on bottom-right) */}
+                  <div className="absolute bottom-14 left-2 z-25">
+                    <WhatsAppButton />
+                  </div>
+
+                  {/* FAQ chatbot — owns its own persisted state, see ChatbotWidget.jsx */}
+                  <ChatbotWidget />
 
                   {/* bottom info popup */}
                   {showInfoPopup && currentItem?.id && (

@@ -9,11 +9,51 @@ import { APP_CONFIG } from "../config/appConfig";
 import { fetchProjectById } from "../lib/projectFetcher";
 import { pruneCompareUnits } from "../lib/compareStorage";
 import { sortFloors } from "../lib/sortFloors";
-import { PROJECT_STORAGE_KEY, DEVELOPER_STORAGE_KEY } from "../constants/storageKeys";
+import {
+    PROJECT_STORAGE_KEY,
+    DEVELOPER_STORAGE_KEY,
+    HOME_IDLE_VIDEO_STORAGE_KEY,
+    PROJECT_INTRO_VIDEO_STORAGE_KEY,
+} from "../constants/storageKeys";
 
 export { SidebarContext };
 
 const STORAGE_KEY = PROJECT_STORAGE_KEY;
+
+// Get a video URL from a project, checking both naming patterns (static data uses
+// zoomoutVideo/idleVideo, API uses zoomoutAssetId/idleAssetId after enrichment).
+function getVideoUrl(project, ...keys) {
+    if (!project) return null;
+    for (const key of keys) {
+        if (project[key]) return project[key];
+    }
+    return null;
+}
+
+function cacheVideo(storageKey, url, type) {
+    if (!url) return;
+    try {
+        localStorage.setItem(storageKey, JSON.stringify({ url, type: type ?? null }));
+    } catch {
+        // Storage full/unavailable — this cache is a pure UX optimization, safe to skip.
+    }
+}
+
+// Refreshes the "last-known-good" Home idle video and project intro video used as reload
+// placeholders — see HOME_IDLE_VIDEO_STORAGE_KEY/PROJECT_INTRO_VIDEO_STORAGE_KEY and
+// Home.jsx's ReloadLoadingSplash.
+function cacheReloadPlaceholders(project) {
+    cacheVideo(
+        HOME_IDLE_VIDEO_STORAGE_KEY,
+        getVideoUrl(project, 'idleVideo', 'idleVideoId', 'idleAssetId'),
+        getVideoUrl(project, 'idleVideoType', 'idleAssetType'),
+    );
+    cacheVideo(
+        PROJECT_INTRO_VIDEO_STORAGE_KEY,
+        getVideoUrl(project, 'introVideo', 'introAssetId'),
+        getVideoUrl(project, 'introVideoType', 'introAssetType'),
+    );
+}
 
 export default function SidebarContextProvider({ children }) {
     const useStatic = APP_CONFIG.USE_STATIC;
@@ -21,16 +61,6 @@ export default function SidebarContextProvider({ children }) {
     const { isInitialized: isAuthInitialized, user } = useContext(AuthContext);
 
     const getInitHistory = useCallback((project) => {
-        // Helper to get the video URL from project, checking both naming patterns
-        // (static data uses zoomoutVideo/idleVideo, API uses zoomoutAssetId/idleAssetId after enrichment)
-        const getVideoUrl = (project, ...keys) => {
-            if (!project) return null;
-            for (const key of keys) {
-                if (project[key]) return project[key];
-            }
-            return null;
-        };
-
         const initHistory = [
             {
                 tab: TABS.HOME,
@@ -84,6 +114,7 @@ export default function SidebarContextProvider({ children }) {
         const setCurrentProjectAndPrune = (resolvedProject) => {
             setCurrentProject(resolvedProject);
             pruneCompareUnits(resolvedProject);
+            cacheReloadPlaceholders(resolvedProject);
         };
 
         const enrich = async () => {
