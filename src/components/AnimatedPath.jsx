@@ -11,6 +11,8 @@ export default function AnimatedPath({ path }) {
   const pathElement = doc.querySelector('path');
   const d = pathElement?.getAttribute('d');
 
+  const color = pathElement?.getAttribute('stroke') || '#ffffff';
+
   const pathRef = useRef(null);
 
   useEffect(() => {
@@ -41,7 +43,7 @@ export default function AnimatedPath({ path }) {
           ref={pathRef}
           d={d}
           fill="none"
-          stroke="#ffffff"
+          stroke={color}
           strokeWidth="5"
           strokeLinecap="round"
         />

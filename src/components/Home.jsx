@@ -33,6 +33,7 @@ import TECHNO_LOGO from "../assets/techno.png";
 import Highlight from "./Highlight.jsx";
 import Test from "./Test.jsx";
 import { APP_CONFIG } from "../config/appConfig";
+import { sortFloors } from "../lib/sortFloors";
 import PreloadProgressPanel from "./dev/PreloadProgressPanel.jsx";
 export default function Home({ introVideoUrl = null, onExitRequest }) {
   //states
@@ -561,7 +562,7 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
                   {activeLayer === LAYERS.FLOOR && floors.length > 0 && (
                     <div className="absolute right-3 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-1.5 max-h-[80%] overflow-y-auto py-1 items-center">
                       <p className="pb-1">Floors</p>
-                      {[...floors].reverse().map((floor) => (
+                      {sortFloors(floors).reverse().map((floor) => (
                         <button
                           key={floor.id}
                           onClick={() => handleFloorSwitch(floor)}

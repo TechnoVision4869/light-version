@@ -8,6 +8,7 @@ import { enrichProjectData, prefetchProjectByLevels, getLevelAssetTotal } from "
 import { APP_CONFIG } from "../config/appConfig";
 import { fetchProjectById } from "../lib/projectFetcher";
 import { pruneCompareUnits } from "../lib/compareStorage";
+import { sortFloors } from "../lib/sortFloors";
 import { PROJECT_STORAGE_KEY, DEVELOPER_STORAGE_KEY } from "../constants/storageKeys";
 
 export { SidebarContext };
@@ -221,7 +222,25 @@ export default function SidebarContextProvider({ children }) {
                 };
         }
 
-        const calculatedViews = selectedItem.views || null;
+        let calculatedViews = selectedItem.views || null;
+        if (!useStatic) {
+            calculatedViews = calculatedViews?.map(view => {
+                return {
+                    name: view.name,
+                    videos: {
+                        forwardVideo: view.forwardAssetId,
+                        reverseVideo: view.reverseAssetId,
+                        idleVideo: view.sideAssetId,
+                        idleVideoType: view.sideAssetType,
+                    },
+                }
+            }).sort((a, b) => {
+                // Extract numbers from "View N" format and sort numerically
+                const aNum = parseInt(a.name.match(/\d+/)?.[0] || 0);
+                const bNum = parseInt(b.name.match(/\d+/)?.[0] || 0);
+                return aNum - bNum;
+            }) ?? null;
+        }
 
         setHistory(() => [
             ...getInitHistory(currentProject),
@@ -447,7 +466,7 @@ export default function SidebarContextProvider({ children }) {
             }
             else if (activeLayer === LAYERS.BUILDING) {
                 if (currentItem?.type === PROPERTY_TYPE.TOWER) {
-                    items = currentItem.floors || [];
+                    items = sortFloors(currentItem.floors || []);
                 }
                 else {
                     items = currentItem?.units || [];
