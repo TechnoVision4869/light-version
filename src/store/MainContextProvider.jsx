@@ -11,6 +11,7 @@ export const MainContext = createContext({
   openGallery: () => {},
   openCompare: () => {},
   openPaymentPlan: () => {},
+  openSimilarUnit: () => {},
   closeOverlay: () => {},
   
   galleryType: null,
@@ -58,6 +59,10 @@ export default function MainContextProvider({ children }) {
     openSubOverlay({ type: 'paymentPlan', data: { unit } });
   }, [openSubOverlay]);
 
+  const openSimilarUnit = useCallback((unit) => {
+    openSubOverlay({ type: 'similar-unit', data: { unit } });
+  }, [openSubOverlay]);
+
   const openCompare = useCallback(() => {
     previousOverlayRef.current = null;
     setOverlay({ type: 'compare' });
@@ -79,6 +84,7 @@ export default function MainContextProvider({ children }) {
     openGallery,
     openCompare,
     openPaymentPlan,
+    openSimilarUnit,
     closeOverlay,
 
     galleryType: overlay?.type === 'gallery' ? overlay?.data?.galleryType : null,

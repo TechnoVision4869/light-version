@@ -20,6 +20,7 @@ import AnimatedPath from "./AnimatedPath";
 import CompareView from "./CompareView";
 import CompareButton from "./buttons/CompareButton";
 import PaymentPlanSchedule from "./PaymentPlanSchedule";
+import UnitPanel from "./UnitPanel";
 
 // Context
 import FilterContextProvider from "../store/FilterContextProvider";
@@ -375,6 +376,28 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
         <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={closeOverlay}>
           <div onClick={(e) => e.stopPropagation()}>
             <PaymentPlanSchedule unit={overlay.data?.unit} onClose={closeOverlay} />
+          </div>
+        </div>
+      )}
+
+      {overlay?.type === 'similar-unit' && (
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={closeOverlay}>
+          <div
+            className="relative w-full max-w-[420px] max-h-[85vh] bg-[#2f2f2f] rounded-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={closeOverlay}
+              className="absolute top-2 right-2 z-10 w-8 h-8 rounded-lg bg-white/85 flex items-center justify-center hover:bg-white/70 transition"
+              aria-label="Close"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M18 6L6 18M6 6l12 12" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <div className="p-5">
+              <UnitPanel unit={overlay.data?.unit} />
+            </div>
           </div>
         </div>
       )}

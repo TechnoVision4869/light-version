@@ -26,6 +26,7 @@ video::-webkit-media-controls-panel {
 /* Custom scrollbar */
 .scrollbar-custom::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
 .scrollbar-custom::-webkit-scrollbar-thumb {

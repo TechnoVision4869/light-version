@@ -6,6 +6,7 @@ import { MainContext } from '../store/MainContextProvider';
 import { APP_CONFIG } from "../config/appConfig";
 import { CONFIG } from "../data/layers";
 import { isInCompare, addToCompare, removeFromCompare, COMPARE_UPDATED_EVENT } from "../lib/compareStorage";
+import SimilarUnits from "./SimilarUnits";
 
 import AREA_ICON from "../assets/icons/area.svg";
 import DOOR_ICON from "../assets/icons/door.svg";
@@ -19,7 +20,7 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
     const currentItem = unit ?? contextCurrentItem;
     const useStatic = APP_CONFIG.USE_STATIC;
 
-    const { openPanorama, openBalconyView, openGallery, openRoomInterior, openPaymentPlan } = useContext(MainContext);
+    const { openPanorama, openBalconyView, openGallery, openRoomInterior, openPaymentPlan, openSimilarUnit } = useContext(MainContext);
     const useHotspots = APP_CONFIG.USE_HOTSPOTS;
 
     const [inCompare, setInCompare] = useState(() => isInCompare(currentItem?.id));
@@ -351,6 +352,15 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
                         <span>{isGeneratingBrochure ? 'Generating...' : 'Download Brochure'}</span>
                     </div>
                 </button>
+
+                {!inCompareView &&
+                    <SimilarUnits
+                        currentItem={currentItem}
+                        unitType={unitType}
+                        currentProject={currentProject}
+                        onSelect={openSimilarUnit}
+                    />
+                }
             </div>
         </div>
     );
