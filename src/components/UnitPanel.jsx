@@ -9,6 +9,8 @@ import { isInCompare, addToCompare, removeFromCompare, COMPARE_UPDATED_EVENT } f
 import { getMockRemainingCount, getMockViewCount, getMockUnitStatus } from "../lib/mockEngagementData";
 import SimilarUnits from "./SimilarUnits";
 
+const BOOK_NOW_URL = "https://siwar-aldahab-landing-production.up.railway.app/";
+
 const STATUS_STYLES = {
     available: { label: "Available", className: "bg-green-600/80 text-white" },
     reserved: { label: "Reserved", className: "bg-yellow-600/80 text-white" },
@@ -244,6 +246,15 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
 
                     </button>
                 }
+
+                <a
+                    href={BOOK_NOW_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-[#00000066] border-1 border-black py-3 px-4 rounded-lg text-sm font-medium relative w-full flex justify-center transition opacity-90 hover:opacity-100"
+                >
+                    Book Now
+                </a>
 
 
                 {/* Visuals Section */}

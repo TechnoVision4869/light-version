@@ -6,7 +6,7 @@ section (Arabic, for non-technical — English technical terms kept as-is).
 
 ---
 
-## 1. Compare / Favorites
+## 1. Compare / Favorites ✅ Implemented
 
 ### Technical
 
@@ -59,7 +59,7 @@ section (Arabic, for non-technical — English technical terms kept as-is).
 
 ---
 
-## 2. Unit Brochure (PDF download)
+## 2. Unit Brochure (PDF download) ✅ Implemented
 
 ### Technical
 
@@ -108,7 +108,7 @@ section (Arabic, for non-technical — English technical terms kept as-is).
 
 ---
 
-## 4. "Similar Units" Recommendations
+## 4. "Similar Units" Recommendations ✅ Implemented
 
 ### Technical
 
@@ -154,27 +154,42 @@ need extra fallback handling for that case specifically; a display-only popup si
 
 ---
 
-## 5. Scarcity Indicator + View Counter (mock data first)
+## 5. Scarcity Indicator + View Counter (mock data first) ✅ Implemented
 
 ### Technical
 
-- New: `src/lib/mockEngagementData.js` — deterministic mock functions keyed by unit/unitType ID (e.g.
-  a stable hash-based pseudo-random count, so the same unit always shows the same mock number within a
-  session, avoiding a visibly "random" feel during demos).
-  - `getMockRemainingCount(unitTypeId)` → small int (e.g. 1-5), used for "last N units of this model."
-  - `getMockViewCount(unitId)` → int, used for the view counter badge.
-- UI: small badge/label components in `UnitPanel.jsx`, reading from these mock functions.
-- **Migration path when real data exists:** both functions get swapped for real API calls with the
-  same signatures — no UI changes needed. Scarcity depends on the still-missing unit `status` field
-  (per `docs/BACKEND_GAPS.md`); view counter depends on a new backend counter endpoint (also does not
-  exist yet — needs to be requested separately, this is not just a missing field).
+**As actually built** (evolved beyond the original static-hash proposal below, per follow-up
+decisions): `src/lib/mockEngagementData.js` exports:
+- `getMockRemainingCount(unitTypeId)` → deterministic hash-based int in [1, 5], "last N units of this
+  model."
+- `getMockUnitStatus()` → hardcoded `"available"` for every unit (no per-unit signal exists to vary it
+  by yet). `UnitPanel.jsx` renders it via a `STATUS_STYLES` lookup that already has Reserved/Sold
+  styling defined, so wiring in a real `status` field later is a one-line change to this function, not
+  a UI rework.
+- `getMockViewCount(unitId)` / `recordUnitView(unitId)` → **not a pure hash** — `localStorage`-backed
+  (`mockUnitViews` key), with two combined mechanisms: (1) lazy "+5 per elapsed real hour" growth,
+  computed on read against a stored `lastAutoIncrementAt` timestamp rather than a live timer (a running
+  `setInterval` would only count hours while the app happened to be open — wrong for a tablet that's
+  frequently backgrounded/closed); (2) +1 per real navigation into the unit, called from
+  `ApartmentButton.jsx`'s click handler (the sole "enter a unit" button across every property type —
+  see data-model.md). Both mechanisms feed the same displayed number by design (confirmed with the
+  user: an hour passing *and* a real visit combine additively).
+- UI: status badge next to the unit title, scarcity + view-count row below the area block in
+  `UnitPanel.jsx` — unconditional, no `inCompareView` gating needed (harmless to show everywhere
+  `UnitPanel` renders).
+- **Migration path when real data exists:** each function's internals swap to a real lookup/API call
+  with the same signature — no UI changes needed. Scarcity and status both depend on the still-missing
+  unit `status` field (per `docs/BACKEND_GAPS.md`); the view counter depends on a new backend counter
+  endpoint (also does not exist yet).
 
 ### الشرح المبسط
 
-سيتم بناء شكل الميزة الآن (مثال: "آخر 3 وحدات من هذا النموذج" وعدّاد مشاهدات لكل وحدة)، لكن بأرقام
-تجريبية مؤقتة وليست بيانات حقيقية، لأن النظام الحالي لا يخزّن حالة الوحدة الحقيقية (متاحة/محجوزة/مباعة)
-ولا عدد المشاهدات الفعلي. عندما تتوفر هذه البيانات من الـ backend مستقبلاً، سيتم استبدال الأرقام التجريبية
-بالأرقام الحقيقية دون الحاجة لإعادة بناء الواجهة.
+تم بناء الميزة فعليًا (مثال: "آخر 3 وحدات من هذا النموذج"، شارة حالة الوحدة "متاحة"، وعدّاد مشاهدات لكل
+وحدة)، لكن بأرقام تجريبية وليست بيانات حقيقية، لأن النظام الحالي لا يخزّن حالة الوحدة الحقيقية
+(متاحة/محجوزة/مباعة) ولا عدد المشاهدات الفعلي. عدّاد المشاهدات تحديدًا يجمع بين آليتين: زيادة تلقائية
+بمرور الوقت الفعلي، وزيادة حقيقية عند دخول المستخدم للوحدة فعليًا — والاثنان يظهران معًا في نفس الرقم.
+عندما تتوفر هذه البيانات من الـ backend مستقبلاً، سيتم استبدال الأرقام التجريبية بالأرقام الحقيقية دون
+الحاجة لإعادة بناء الواجهة.
 
 ---
 

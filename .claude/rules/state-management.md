@@ -5,7 +5,8 @@ Four nested React Context providers, set up in `src/main.jsx`:
 `AuthProvider` → `MainContextProvider` → `SidebarContextProvider` → `App`
 
 - **`SidebarContext`** — the core navigation state machine: `currentProject`, a history stack (tab/layer/item/videosPath/views), `activeTab` (`TABS.*`), `activeLayer` (`LAYERS.*`), `currentItem`, `currentVideosPaths`.
-- **`MainContext`** — full-screen overlay state: `null` or `{ type, data }` where type is `panorama` | `balcony` | `gallery` | `room-interior`. Use its `open*`/`closeOverlay` actions rather than local overlay state.
+- **`MainContext`** — full-screen overlay state: `null` or `{ type, data }` where type is `panorama` | `balcony` | `gallery` | `room-interior` | `compare` | `paymentPlan` | `similar-unit`. Use its `open*`/`closeOverlay` actions rather than local overlay state.
+  - **Single-slot, not a stack — with one special case.** Opening any sub-overlay (`panorama`/`balcony`/`gallery`/`paymentPlan`/`similar-unit`) always *replaces* whatever overlay is currently open; `closeOverlay()` normally just nulls it out. The one exception: `MainContextProvider.jsx`'s `openSubOverlay` helper checks whether the *current* overlay is specifically `'compare'` before replacing it — if so, it stashes that compare overlay into a `previousOverlayRef`, and `closeOverlay()` restores it instead of nulling. This exists because `CompareView` renders full `UnitPanel`s whose Interior/Balcony/Gallery/Payment-Plan/Similar-Unit buttons would otherwise silently unmount the whole compare page. **This stash is `'compare'`-specific, not generic** — a new overlay type opened from within some *other* already-open overlay will just overwrite it with no restore, unless it's also special-cased in `openSubOverlay`.
 - **`FilterContext`** — floor-level unit filter values (price, area, bedrooms, bathrooms), consumed by `FilterPanel` / `SideBarButtons`.
 
 ## Video-driven navigation

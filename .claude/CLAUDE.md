@@ -14,6 +14,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Mixed `.jsx`/`.js`/`.ts` — no full TypeScript migration, `allowJs: true`.
 - No configured test runner in this repo.
 - **Toast notifications**: `react-hot-toast` is already wired up — `<Toaster position="top-center" />` renders globally in `src/main.jsx`. Use its `toast(...)` call from any component; don't build a local/custom toast.
+- **Lazy-load heavy dependencies used behind an infrequent action.** Confirmed precedent: `jspdf` (plus its incidental `html2canvas`/`dompurify` pull-through) added ~400KB to the *eager* main bundle when imported at module top-level in `src/lib/generateUnitBrochure.js`; switching `UnitPanel.jsx` to `const { generateUnitBrochure } = await import("../lib/generateUnitBrochure")` inside the click handler moved the whole thing into its own on-demand chunk, fetched only on first use, with zero cost to initial load. Follow this pattern for any future heavy one-off feature — it matters directly for this app's weak-connectivity constraint above.
 
 ## Rules
 
