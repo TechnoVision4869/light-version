@@ -19,6 +19,7 @@ import Gallery from "./Gallery";
 import AnimatedPath from "./AnimatedPath";
 import CompareView from "./CompareView";
 import CompareButton from "./buttons/CompareButton";
+import PaymentPlanSchedule from "./PaymentPlanSchedule";
 
 // Context
 import FilterContextProvider from "../store/FilterContextProvider";
@@ -367,6 +368,14 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
       {overlay?.type === 'compare' && (
         <div className="fixed inset-0 z-60">
           <CompareView />
+        </div>
+      )}
+
+      {overlay?.type === 'paymentPlan' && (
+        <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={closeOverlay}>
+          <div onClick={(e) => e.stopPropagation()}>
+            <PaymentPlanSchedule unit={overlay.data?.unit} onClose={closeOverlay} />
+          </div>
         </div>
       )}
       <div className="w-full h-screen bg-[#2f2f2f] py-2 px-3 xl:p-4 overflow-hidden">

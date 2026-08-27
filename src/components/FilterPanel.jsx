@@ -115,7 +115,7 @@ export default function FilterPanel() {
   const BUDGET_RANGE = {
     MIN: priceMinMax.min,
     MAX: priceMinMax.max,
-    UNIT: "L.E",
+    UNIT: "SAR",
   };
 
   // Bedroom/Bathroom options

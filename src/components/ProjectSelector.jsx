@@ -297,13 +297,15 @@ export default function ProjectSelector({
 
         {/* UI content */}
         <div className="relative z-10 w-full h-full flex flex-col items-center justify-start pt-14">
-          {developerAssets.logoImage && <div className="mb-8">
+          {developerAssets.logoImage &&
+          <div className="mb-8">
             <img
               src={developerAssets.logoImage}
               alt="Developer Logo"
-              className="w-auto h-auto max-h-22 xl:max-h-26 xl:w-26 max-w-[90vw] xl:max-w-md"
+              className="w-auto h-auto max-h-28 xl:max-h-32 xl:w-32 max-w-[90vw] xl:max-w-md"
             />
-          </div>}
+          </div>
+          }
           {showBackButton && !useStatic && onBackButtonClick && (
             <button
               onClick={onBackButtonClick}

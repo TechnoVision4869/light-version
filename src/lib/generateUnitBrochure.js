@@ -119,7 +119,7 @@ export async function generateUnitBrochure(unit, unitType, { floorPlanRotationDe
     }
 
     const facts = [];
-    if (unit?.price != null) facts.push(["Price", `${unit.price.toLocaleString()} L.E`]);
+    if (unit?.price != null) facts.push(["Price", `${unit.price.toLocaleString()} SAR`]);
     if (unitType?.area != null) facts.push(["Area", `${Math.round(unitType.area)} m²`]);
     if (unitType?.roofarea) facts.push(["Roof Area", `${Math.round(unitType.roofarea)} m²`]);
     if (unit?.bedrooms != null) facts.push(["Bedrooms", String(unit.bedrooms)]);
@@ -155,8 +155,8 @@ export async function generateUnitBrochure(unit, unitType, { floorPlanRotationDe
 
         const colWidth = CONTENT_WIDTH / 3;
         const columns = [
-            { label: "Down Payment", value: (plan) => `${Number(plan.downPayment).toLocaleString()} L.E` },
-            { label: "Monthly", value: (plan) => `${Number(plan.monthlyPayment).toLocaleString()} L.E` },
+            { label: "Down Payment", value: (plan) => `${Number(plan.downPayment).toLocaleString()} SAR` },
+            { label: "Monthly", value: (plan) => `${Number(plan.monthlyPayment).toLocaleString()} SAR` },
             { label: "Years", value: (plan) => String(plan.years) },
         ];
 

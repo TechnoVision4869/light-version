@@ -7,18 +7,19 @@ import { APP_CONFIG } from "../config/appConfig";
 import { CONFIG } from "../data/layers";
 import { isInCompare, addToCompare, removeFromCompare, COMPARE_UPDATED_EVENT } from "../lib/compareStorage";
 
-import AREA_ICON from "../assets/icons/area.svg"
-import DOOR_ICON from "../assets/icons/door.svg"
-import TOILET_ICON from "../assets/icons/bathroom.svg"
-import COMPARE_ICON from "../assets/icons/compare.svg"
-import DOWNLOAD_ICON from "../assets/icons/download-pdf.png"
+import AREA_ICON from "../assets/icons/area.svg";
+import DOOR_ICON from "../assets/icons/door.svg";
+import TOILET_ICON from "../assets/icons/bathroom.svg";
+import COMPARE_ICON from "../assets/icons/compare.svg";
+import CALCULATOR_ICON from "../assets/icons/icons8-calculator-30.png";
+import DOWNLOAD_ICON from "../assets/icons/download-pdf.png";
 
 export default function UnitPanel({ unit, inCompareView = false, onOpenInterior } = {}) {
     const { currentProject, currentItem: contextCurrentItem } = useContext(SidebarContext);
     const currentItem = unit ?? contextCurrentItem;
     const useStatic = APP_CONFIG.USE_STATIC;
 
-    const { openPanorama, openBalconyView, openGallery, openRoomInterior } = useContext(MainContext);
+    const { openPanorama, openBalconyView, openGallery, openRoomInterior, openPaymentPlan } = useContext(MainContext);
     const useHotspots = APP_CONFIG.USE_HOTSPOTS;
 
     const [inCompare, setInCompare] = useState(() => isInCompare(currentItem?.id));
@@ -193,12 +194,25 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
                             onClick={handleToggleCompare}
                             aria-pressed={inCompare}
                         >
-                            <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-2">
                                 <img src={COMPARE_ICON} alt={'Compare Icon'} className="w-5 h-auto" />
                                 <span>Add to Compare</span>
                             </div>
                         </button>
                     </>
+                }
+
+                {currentItem?.price > 0 &&
+                    <button
+                        className="bg-[#00000066] border-1 border-black py-3 px-4 rounded-lg text-sm font-medium relative w-full flex justify-center transition opacity-90 hover:opacity-100"
+                        onClick={() => openPaymentPlan(currentItem)}
+                    >
+                        <div className="flex items-center gap-1">
+                            <img src={CALCULATOR_ICON} alt={'Calculator Icon'} className="w-5 h-auto" />
+                            <span>Payment Plan</span>
+                        </div>
+
+                    </button>
                 }
 
 
@@ -306,12 +320,12 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
                             paymentPlans?.map((plan, index) => (
                                 <div className="mt-2 mb-3 flex justify-between gap-2 whitespace-nowrap" key={index}>
                                     <div className="flex-1 text-center">
-                                        <div className="font-bold text-xs">{plan.downPayment} L.E</div>
+                                        <div className="font-bold text-xs">{plan.downPayment} SAR</div>
                                         <div className="text-xs text-white/70">Down Payment</div>
                                     </div>
                                     <div className="v-divider"></div>
                                     <div className="flex-1 text-center">
-                                        <div className="font-bold text-xs">{plan.monthlyPayment} L.E</div>
+                                        <div className="font-bold text-xs">{plan.monthlyPayment} SAR</div>
                                         <div className="text-xs text-white/70">Monthly</div>
                                     </div>
                                     <div className="v-divider"></div>

@@ -117,7 +117,7 @@ export default function DeveloperSelector({ onDeveloperSelect }) {
                       <img
                         src={getDeveloperLogo(developer) || DEFAULT_LOGO}
                         alt={developer.name}
-                        className="max-w-full max-h-full object-contain"
+                        className="max-w-full max-h-full px-2 object-contain"
                       />
                     </div>
 
