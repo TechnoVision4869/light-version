@@ -2,6 +2,7 @@ import { LAYERS } from "../data/layers";
 import { APP_CONFIG } from "../config/appConfig";
 import { findUnitsByType } from "./findUnitById";
 import { getCompareUnits } from "./compareStorage";
+import { getFakeRefurnitureImage } from "./fakeRefurniture";
 import { WHATSAPP_URL } from "../components/buttons/WhatsAppButton";
 
 function resolveUnitType(currentProject, currentItem) {
@@ -44,17 +45,22 @@ function formatDistance(distance) {
 // (e.g. "ask me about Tell me about this unit"). Each entry is either an `action` (performs a
 // real app action), an `href` (external link), or an `answer` (inline text) — see
 // ChatbotPanel.jsx for how each kind is rendered/handled.
-export function getFaqCategories({ currentItem, activeLayer, currentProject, openPaymentPlan, openCompare }) {
+export function getFaqCategories({ currentItem, activeLayer, currentProject, openPaymentPlan, openCompare, overlay, requestRoomView, roomViewMode }) {
   const hasUnit = activeLayer === LAYERS.UNIT && !!currentItem;
   const unitType = hasUnit ? resolveUnitType(currentProject, currentItem) : null;
   const compareCount = getCompareUnits().length;
+  const inRoomInterior = overlay?.type === "room-interior";
+  const currentRoom = inRoomInterior ? overlay.data?.room : null;
+  // Room.jsx reports what it's currently showing via roomViewMode ({ roomId, mode }) — the data
+  // model itself has no "current view" field, so this is the only way to know.
+  const currentRoomMode = currentRoom && roomViewMode?.roomId === currentRoom.id ? roomViewMode.mode : null;
 
   return [
     {
       id: "unit-info",
       label: "Tell me about this unit",
       topic: "this unit",
-      available: hasUnit,
+      available: hasUnit && !inRoomInterior,
       answer: () => {
         const name = currentItem.displayName || currentItem.name;
         const bits = [];
@@ -73,7 +79,7 @@ export function getFaqCategories({ currentItem, activeLayer, currentProject, ope
       id: "payment-plan",
       label: "Pricing & payment plans",
       topic: "pricing & payment plans",
-      available: hasUnit,
+      available: hasUnit && !inRoomInterior,
       confirmText: "Sure thing — let me pull up the payment plan for this unit.",
       action: () => openPaymentPlan(currentItem),
     },
@@ -81,7 +87,7 @@ export function getFaqCategories({ currentItem, activeLayer, currentProject, ope
       id: "amenities",
       label: "Amenities & surroundings",
       topic: "amenities & surroundings",
-      available: true,
+      available: !inRoomInterior,
       answer: () => {
         const amenities = currentProject?.amenities?.items || [];
         const surroundings = currentProject?.surroundings?.items || [];
@@ -108,7 +114,7 @@ export function getFaqCategories({ currentItem, activeLayer, currentProject, ope
       id: "similar-units",
       label: "Similar units available?",
       topic: "similar units",
-      available: hasUnit,
+      available: hasUnit && !inRoomInterior,
       answer: () => {
         // No explicit limit — defaults to the same cap SimilarUnits.jsx itself displays, so this
         // count never overstates what the user can actually scroll down and see.
@@ -123,7 +129,7 @@ export function getFaqCategories({ currentItem, activeLayer, currentProject, ope
       id: "compare",
       label: "Compare units",
       topic: "comparing your units",
-      available: compareCount > 0,
+      available: compareCount > 0 && !inRoomInterior,
       confirmText: "Great choice — let's put those units side by side for you.",
       action: () => openCompare(),
     },
@@ -131,23 +137,53 @@ export function getFaqCategories({ currentItem, activeLayer, currentProject, ope
       id: "brochure",
       label: "Download brochure",
       topic: "the brochure",
-      available: hasUnit,
+      available: hasUnit && !inRoomInterior,
       answer: () => 'I can\'t generate it from here just yet, but the "Download Brochure" button right in this unit\'s panel will get you a full PDF in seconds.',
     },
     {
       id: "search",
       label: "Search for a unit",
       topic: "searching for a unit",
-      available: true,
+      available: !inRoomInterior,
       answer: () => "Looking for something specific? The Filter button in the sidebar lets you search by price, area, bedrooms, and bathrooms.",
     },
     {
       id: "contact",
       label: "Book a visit / talk to sales",
       topic: "booking a visit",
-      available: true,
+      available: !inRoomInterior,
       confirmText: "Of course — opening WhatsApp so you can chat directly with our sales team.",
       href: WHATSAPP_URL,
+    },
+    // Room-interior flow: starts unfurnished -> "Add Furniture" -> furnished -> "Remove
+    // Furniture" (back to unfurnished) or "Try Another Style" (fake refurnished, still counts as
+    // "furnished" for the Remove-Furniture option). Only one option is ever offered at a time per
+    // state, so there's no dead-end chip that does nothing when tapped.
+    {
+      id: "room-add-furniture",
+      label: "Add Furniture",
+      topic: "adding furniture to this room",
+      available: currentRoomMode === "unfurnished",
+      confirmText: "Sure — let me furnish this room for you.",
+      action: () => requestRoomView(currentRoom.id, "furnished"),
+    },
+    {
+      id: "room-remove-furniture",
+      label: "Remove Furniture",
+      topic: "removing the furniture from this room",
+      // Also requires a real unfurnished image to exist — mirrors the old toggle button's gating,
+      // so this never offers to switch to a view that doesn't actually exist for this room.
+      available: (currentRoomMode === "furnished" || currentRoomMode === "fake-refurnished") && !!currentRoom?.unfurnitureImgId,
+      confirmText: "Sure — clearing out the furniture for you.",
+      action: () => requestRoomView(currentRoom.id, "unfurnished"),
+    },
+    {
+      id: "room-try-another-style",
+      label: "Try Another Style",
+      topic: "a different furniture style for this room",
+      available: currentRoomMode === "furnished" && !!getFakeRefurnitureImage(currentRoom),
+      confirmText: "Here's a different look for this room.",
+      action: () => requestRoomView(currentRoom.id, "fake-refurnished"),
     },
   ];
 }

@@ -23,7 +23,7 @@ function nextMessageId() {
 // resets the conversation — only a full app reload does.
 export default function ChatbotWidget() {
   const { currentItem, activeLayer, currentProject } = useContext(SidebarContext);
-  const { openPaymentPlan, openCompare } = useContext(MainContext);
+  const { overlay, openPaymentPlan, openCompare, requestRoomView, roomViewMode } = useContext(MainContext);
 
   const [showChatbot, setShowChatbot] = useState(false);
   const [messages, setMessages] = useState(() => [{ id: nextMessageId(), role: "bot", text: GREETING }]);
@@ -38,7 +38,7 @@ export default function ChatbotWidget() {
     return () => window.removeEventListener(COMPARE_UPDATED_EVENT, handleUpdate);
   }, []);
 
-  const categories = getFaqCategories({ currentItem, activeLayer, currentProject, openPaymentPlan, openCompare });
+  const categories = getFaqCategories({ currentItem, activeLayer, currentProject, openPaymentPlan, openCompare, overlay, requestRoomView, roomViewMode });
   const availableCategories = categories.filter((category) => category.available);
   const availableIdsKey = availableCategories.map((category) => category.id).join(",");
 
@@ -105,15 +105,20 @@ export default function ChatbotWidget() {
     setShowChatbot((shown) => !shown);
   };
 
+  // The room-interior overlay renders at z-60 (Home.jsx) and would otherwise bury the chat
+  // entirely. z-[70] is this codebase's existing convention for "sits above the room-interior
+  // overlay" — the sidebar chevron already uses it for exactly this reason (Home.jsx).
+  const zIndexClass = overlay?.type === "room-interior" ? "z-[70]" : "z-25";
+
   return (
     <>
-      <div className="absolute bottom-2 left-2 z-25">
+      <div className={`absolute bottom-2 left-2 ${zIndexClass}`}>
         <ChatbotButton onClick={handleToggle} />
       </div>
 
       {tooltip && !showChatbot && (
         <button
-          className="absolute bottom-2 left-16 z-25 max-w-[220px] text-left text-xs bg-[#59A198] text-white px-3 py-2 rounded-2xl rounded-bl-sm shadow-lg"
+          className={`absolute bottom-2 left-16 ${zIndexClass} max-w-[220px] text-left text-xs bg-[#59A198] text-white px-3 py-2 rounded-2xl rounded-bl-sm shadow-lg`}
           onClick={handleToggle}
         >
           {tooltip}
@@ -121,7 +126,7 @@ export default function ChatbotWidget() {
       )}
 
       {showChatbot && (
-        <div className="absolute bottom-2 left-16 z-25">
+        <div className={`absolute bottom-2 left-16 ${zIndexClass}`}>
           <ChatbotPanel
             botName={BOT_NAME}
             messages={messages}
