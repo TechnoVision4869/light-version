@@ -1,20 +1,33 @@
-import { useState, useRef, useEffect } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import View360, { EquirectProjection, EASING } from "@egjs/react-view360";
 import "@egjs/react-view360/css/view360.min.css";
 import { CONFIG } from "../data/layers";
+import { MainContext } from "../store/MainContextProvider";
+import { getFakeRefurnitureImage } from "../lib/fakeRefurniture";
 
-import FURNITURE from "../assets/icons/furniture.svg";
-import UNFURNITURE from "../assets/icons/un-furniture.svg";
+// Toggle button icons — unused while the manual toggle below is commented out in favor of the
+// chatbot-driven Unfurnish/Refurnish options.
+// import FURNITURE from "../assets/icons/furniture.svg";
+// import UNFURNITURE from "../assets/icons/un-furniture.svg";
+
+const ROOM_VIEW_SWAP_DELAY_MS = 2000;
 
 export default function Room({ room }) {
+  const { roomViewRequest, clearRoomViewRequest, setRoomViewMode } = useContext(MainContext);
+
   const viewerRef = useRef(null);
   const containerRef = useRef(null);
   const glRef = useRef(null);
-  const initialProjection = useRef(new EquirectProjection({ src: room.furnitureImgId }));
-  const [isFurnished, setIsFurnished] = useState(true);
-  const currentSrcRef = useRef(room.furnitureImgId);
+  // Starts unfurnished (per the chatbot-driven flow: unfurnished -> Add Furniture -> furnished
+  // -> Remove Furniture / Try Another Style) — falls back to furnished for rooms that don't have
+  // a distinct unfurnished image at all, since there'd be nothing to start unfurnished with.
+  const initialMode = room.unfurnitureImgId ? "unfurnished" : "furnished";
+  const initialSrc = initialMode === "unfurnished" ? room.unfurnitureImgId : room.furnitureImgId;
+  const initialProjection = useRef(new EquirectProjection({ src: initialSrc }));
+  const [isSwapping, setIsSwapping] = useState(false);
+  const currentSrcRef = useRef(initialSrc);
   const [textureError, setTextureError] = useState(null);
-
+  console.log("Room component rendered with room:", room);
   // DEV: tunable values — remove before shipping
   // const [testPointerScale, setTestPointerScale] = useState(1.7);
   // const [testDuration, setTestDuration] = useState(750);
@@ -61,15 +74,58 @@ export default function Room({ room }) {
     checkGLError(currentSrcRef.current);
   };
 
-  const handleToggle = () => {
-    if (!viewerRef.current) return;
-    const newFurnished = !isFurnished;
-    setIsFurnished(newFurnished);
-    const newView = newFurnished ? room.furnitureImgId : room.unfurnitureImgId;
-    currentSrcRef.current = newView;
-    // load() swaps the image without remounting — camera position is preserved automatically
-    viewerRef.current.load(new EquirectProjection({ src: newView }));
-  };
+  // Old manual toggle — replaced by the chatbot-driven request effect below.
+  // const handleToggle = () => {
+  //   if (!viewerRef.current) return;
+  //   const newFurnished = !isFurnished;
+  //   setIsFurnished(newFurnished);
+  //   const newView = newFurnished ? room.furnitureImgId : room.unfurnitureImgId;
+  //   currentSrcRef.current = newView;
+  //   viewerRef.current.load(new EquirectProjection({ src: newView }));
+  // };
+
+  // Report the starting mode once, on mount, so the chatbot's gating has something to read right
+  // away — it has no other way to know what Room.jsx decided to start with (see initialMode above).
+  useEffect(() => {
+    setRoomViewMode(room.id, initialMode);
+    // Mount-only — room.id/initialMode are stable for this component's lifetime (Room remounts
+    // via key={room.id} on room switch, per Home.jsx).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Driven by the chatbot's "Add Furniture" / "Remove Furniture" / "Try Another Style" options
+  // (src/lib/faqCategories.js), via MainContext.requestRoomView — see MainContextProvider.jsx.
+  // One-shot signal, but NOT cleared up front: clearing it immediately would change
+  // `roomViewRequest` (a dependency of this same effect) and re-trigger it right away, running
+  // this effect's own cleanup — which cancels the very setTimeout below — before the 2s delay
+  // ever elapses. It's cleared only once the swap actually completes (or turns out to be a
+  // no-op), which still keeps it one-shot for the "switch rooms and back" replay case.
+  useEffect(() => {
+    if (!roomViewRequest || roomViewRequest.roomId !== room.id) return;
+    const { mode } = roomViewRequest;
+
+    const targetSrc =
+      mode === "unfurnished" ? room.unfurnitureImgId :
+      mode === "furnished" ? room.furnitureImgId :
+      getFakeRefurnitureImage(room);
+
+    if (!targetSrc || !viewerRef.current || targetSrc === currentSrcRef.current) {
+      clearRoomViewRequest();
+      return;
+    }
+
+    setIsSwapping(true);
+    const timeoutId = setTimeout(() => {
+      currentSrcRef.current = targetSrc;
+      // load() swaps the image without remounting — camera position is preserved automatically
+      viewerRef.current.load(new EquirectProjection({ src: targetSrc }));
+      setRoomViewMode(room.id, mode);
+      setIsSwapping(false);
+      clearRoomViewRequest();
+    }, ROOM_VIEW_SWAP_DELAY_MS);
+
+    return () => clearTimeout(timeoutId);
+  }, [roomViewRequest, room, clearRoomViewRequest, setRoomViewMode]);
 
   return (
     <div ref={containerRef} className="relative w-full h-full">
@@ -125,7 +181,7 @@ export default function Room({ room }) {
         </div>
       )}
 
-      {/* Furniture toggle button — only shown when two distinct images exist */}
+      {/* Old furniture toggle button — replaced by the chatbot's Unfurnish/Refurnish options.
       {room.unfurnitureImgId && room.furnitureImgId !== room.unfurnitureImgId && (
         <div className="absolute bottom-4 right-4 z-40">
           <button
@@ -138,6 +194,17 @@ export default function Room({ room }) {
               alt={isFurnished ? "Unfurnish" : "Furnish"}
             />
           </button>
+        </div>
+      )}
+      */}
+
+      {isSwapping && (
+        <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/50">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-white/80 animate-bounce" style={{ animationDelay: "0ms" }} />
+            <span className="w-2.5 h-2.5 rounded-full bg-white/80 animate-bounce" style={{ animationDelay: "150ms" }} />
+            <span className="w-2.5 h-2.5 rounded-full bg-white/80 animate-bounce" style={{ animationDelay: "300ms" }} />
+          </div>
         </div>
       )}
     </div>

@@ -15,6 +15,7 @@ export const projectPath = "projects/kog";
 export const config = {
   // General
     USE_PREDEFINED_POS: false,
+    PREDEFINED_POS: {x: 0.42, y: 0.4},
     USE_HOTSPOTS: true,
   
   // 360 Settings

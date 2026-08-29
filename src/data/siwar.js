@@ -1,6 +1,7 @@
 export const config = {
   // General
-    USE_PREDEFINED_POS: false,
+    USE_PREDEFINED_POS: true,
+    PREDEFINED_POS: {x: 0.47, y: 0.55},
     USE_HOTSPOTS: false,
 
   // 360 Settings

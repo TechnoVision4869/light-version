@@ -25,7 +25,7 @@ export default function ProjectSelector({
 }) {
   const useStatic = APP_CONFIG.USE_STATIC;
   const usePredefinedPos = APP_CONFIG.USE_PREDEFINED_POS;
-  const predefinedPos = {x: 0.42, y: 0.4};
+  const predefinedPos = APP_CONFIG.PREDEFINED_POS;
   const { user } = useAuth();
   const [projects, setProjects] = useState([]);
   const [developerAssets, setDeveloperAssets] = useState({
@@ -299,6 +299,13 @@ export default function ProjectSelector({
             alt=""
             className="absolute inset-0 w-full h-full object-cover"
           />
+        )}
+
+        {/* Darkens the background so text above it stays readable — only needed in the
+            non-predefined-position layout, since the predefined layout's highlight images
+            fully cover the background anyway. */}
+        {!usePredefinedPos && developerAssets.backgroundImage && (
+          <div className="absolute inset-0 bg-black/40" />
         )}
 
         {/* Project highlight overlay — same cover sizing = pixel-perfect match */}

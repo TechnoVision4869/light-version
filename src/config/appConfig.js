@@ -23,6 +23,7 @@ export const APP_CONFIG = {
   // Set to true to use static data, false to use API
   USE_STATIC: false,
   USE_PREDEFINED_POS: CONFIG.USE_PREDEFINED_POS,
+  PREDEFINED_POS: CONFIG.PREDEFINED_POS || { x: 0.5, y: 0.5 }, // Centered by default
   // Set to true to use panorama hotspots for unit interior, false for single room-interior popup
   USE_HOTSPOTS: CONFIG.USE_HOTSPOTS,
   // Max viewport width (px) treated as "tablet" for the web landscape prompt / immersive mode
