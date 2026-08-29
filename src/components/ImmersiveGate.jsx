@@ -1,11 +1,20 @@
+import { useLocation } from "react-router-dom";
 import { useTabletImmersiveMode } from "./hooks/useTabletImmersiveMode";
 import LandscapeAnim from "../assets/animation/Rotate Phone.gif";
 import FullscreenAnim from "../assets/animation/Full screen mode.svg";
 
+// Routes that stay usable without fullscreen/landscape — the admin dashboard is a
+// data-entry screen, not part of the cinematic tour, so it shouldn't be gated.
+const EXEMPT_PATHS = ["/dashboard"];
+
 export default function ImmersiveGate() {
     const { eligible, isPortrait, isFullscreen, requestImmersive } = useTabletImmersiveMode();
+    const { pathname } = useLocation();
 
-    const needsGate = eligible && (isPortrait || !isFullscreen);
+    const exempt = EXEMPT_PATHS.some(
+        (path) => pathname === path || pathname.startsWith(`${path}/`)
+    );
+    const needsGate = !exempt && eligible && (isPortrait || !isFullscreen);
     if (!needsGate) return null;
 
     const content = isPortrait ? (
