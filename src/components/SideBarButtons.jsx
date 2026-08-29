@@ -1,8 +1,10 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SidebarContext } from "../store/SidebarContextProvider";
 import { MainContext } from "../store/MainContextProvider";
 import { TABS, LAYERS} from "../data/layers";
 import { PROPERTY_TYPE } from "../constants/roles";
+import { featureApi } from "../api/admin/featureApi";
+import { assetApi } from "../api/admin/assetApi";
 
 import ZoneButton from "./buttons/ZoneButton";
 import AmenityButton from "./buttons/AmenityButton";
@@ -14,9 +16,39 @@ import FloorButton from "./buttons/FloorButton";
 import ApartmentButton from "./buttons/ApartmentButton";
 
 export default function SidebarButtons({ onNavigate = (action) => action() }) {
-  const { currentProject, activeTab, activeLayer, currentItem, currentItems, goToItem, isPlaying } = useContext(SidebarContext);
+  const {
+    currentProject, activeTab, activeLayer, currentItem, currentItems, goToItem, isPlaying,
+    viewingFloorFeatures, setViewingFloorFeatures,
+  } = useContext(SidebarContext);
   const { openRoomInterior } = useContext(MainContext);
-  
+
+  // Floor features: fetched lazily (only for the floor currently being viewed, not the whole
+  // project upfront) since there's no per-project bulk endpoint — only featureApi.getByFloor.
+  // Each one is a 360 panorama "room" (idle/side asset only, no forward/reverse transition and
+  // no furniture toggle), so it's handled as a local drill-down here rather than through
+  // SidebarContext's history/layer machinery, which is built around video transitions.
+  // viewingFloorFeatures itself lives in SidebarContext (not local state) so Home.jsx's back
+  // button can close it — same priority as it already gives MainContext's overlay.
+  const [floorFeatures, setFloorFeatures] = useState([]);
+
+  useEffect(() => {
+    setViewingFloorFeatures(false);
+    if (activeLayer !== LAYERS.FLOOR || !currentItem?.id) {
+      setFloorFeatures([]);
+      return;
+    }
+    let cancelled = false;
+    featureApi.getByFloor(currentItem.id)
+      .then((features) => Promise.all(features.map(async (feature) => {
+        const sideUrl = feature.sideAssetId ? await assetApi.getAssetFileUrl(feature.sideAssetId) : null;
+        const thumbnailUrl = feature.thumbnailAssetId ? await assetApi.getAssetFileUrl(feature.thumbnailAssetId) : null;
+        return { ...feature, furnitureImgId: sideUrl, unfurnitureImgId: sideUrl, thumbnailAssetId: thumbnailUrl };
+      })))
+      .then((resolved) => { if (!cancelled) setFloorFeatures(resolved.filter((f) => f.furnitureImgId)); })
+      .catch(() => { if (!cancelled) setFloorFeatures([]); });
+    return () => { cancelled = true; };
+  }, [activeLayer, currentItem?.id, setViewingFloorFeatures]);
+
   // Determine which component and props to use for rendering
   let Component = null;
   let propName = "";
@@ -55,7 +87,7 @@ export default function SidebarButtons({ onNavigate = (action) => action() }) {
     if (activeLayer === LAYERS.ZONE_DETAIL) {
       const properties = currentItem?.properties || [];
       if (properties.length === 1) {
-        const property = properties[0];        
+        const property = properties[0];
         if (property.type === PROPERTY_TYPE.VILLA) {
           Component = ApartmentButton;
           propName = "apartment";
@@ -110,8 +142,23 @@ export default function SidebarButtons({ onNavigate = (action) => action() }) {
   const isTower = currentItem?.type === PROPERTY_TYPE.TOWER;
   const towerFeatures = activeLayer === LAYERS.BUILDING && isTower ? currentItem?.features : null;
 
+  if (viewingFloorFeatures) {
+    return (
+      <div className="flex-1 min-h-0 scrollbar-custom overflow-y-auto overflow-x-hidden space-y-3 px-2 py-2">
+        {floorFeatures.map((feature) => (
+          <AmenityButton
+            key={feature.id}
+            amenity={feature}
+            isDisabled={isPlaying}
+            goToItem={() => onNavigate(() => openRoomInterior(feature))}
+          />
+        ))}
+      </div>
+    );
+  }
+
   if (!currentItems || currentItems.length === 0 || Component === null) {
-    if (!towerFeatures) return null;
+    if (!towerFeatures && floorFeatures.length === 0) return null;
   }
 
   return (
@@ -125,12 +172,21 @@ export default function SidebarButtons({ onNavigate = (action) => action() }) {
           {towerFeatures.displayName || "Features"}
         </button>
       )}
+      {floorFeatures.length > 0 && (
+        <button
+          onClick={() => onNavigate(() => setViewingFloorFeatures(true))}
+          disabled={isPlaying}
+          className="w-full text-left px-3 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-semibold transition-colors border border-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Features
+        </button>
+      )}
       {currentItems.map((item) => {
         const isImageOnly = activeLayer === LAYERS.BUILDING_FEATURE
           && !item.videos?.forwardVideo
           && item.videos?.idleVideo;
         const itemGoToItem = isImageOnly
-          ? () => openRoomInterior({ furnitureImg: item.videos.idleVideo, unfurnitureImg: item.videos.idleVideo })
+          ? () => openRoomInterior({ furnitureImgId: item.videos.idleVideo, unfurnitureImgId: item.videos.idleVideo })
           : () => onNavigate(() => goToItem(item, layerKey));
         return (
           <Component

@@ -85,6 +85,12 @@ export default function SidebarContextProvider({ children }) {
 
     const [highlightedButton, setHighlightedButton] = useState(null);
 
+    // True while SideBarButtons is showing a floor's features list in place of its units list.
+    // Not a MainContext overlay (it renders inline in the sidebar, not over the video area), but
+    // Home.jsx's back button needs to know about it so it can close this before falling back to
+    // normal layer navigation — same priority as it already gives MainContext's `overlay`.
+    const [viewingFloorFeatures, setViewingFloorFeatures] = useState(false);
+
     const [preloadStats, setPreloadStats] = useState({
         1: { name: 'Top Tabs', loaded: 0, total: 0, status: 'idle' },
         2: { name: 'Properties in Zones', loaded: 0, total: 0, status: 'idle' },
@@ -565,6 +571,9 @@ export default function SidebarContextProvider({ children }) {
 
         sidebarOpen,
         handleSidebarState,
+
+        viewingFloorFeatures,
+        setViewingFloorFeatures,
 
         currentItems,
         setCurrentItems,

@@ -19,6 +19,9 @@ export const SidebarContext = createContext({
     sidebarOpen: false,
     handleSidebarState: () => { },
 
+    viewingFloorFeatures: false,
+    setViewingFloorFeatures: () => { },
+
     currentItems: [],
     setCurrentItems: () => { },
 

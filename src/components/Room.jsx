@@ -20,8 +20,10 @@ export default function Room({ room }) {
   const glRef = useRef(null);
   // Starts unfurnished (per the chatbot-driven flow: unfurnished -> Add Furniture -> furnished
   // -> Remove Furniture / Try Another Style) — falls back to furnished for rooms that don't have
-  // a distinct unfurnished image at all, since there'd be nothing to start unfurnished with.
-  const initialMode = room.unfurnitureImgId ? "unfurnished" : "furnished";
+  // a distinct unfurnished image at all (e.g. floor features, which only ever have one 360 image
+  // and reuse it for both fields), since there'd be nothing to start unfurnished with.
+  const hasDistinctUnfurnished = room.unfurnitureImgId && room.unfurnitureImgId !== room.furnitureImgId;
+  const initialMode = hasDistinctUnfurnished ? "unfurnished" : "furnished";
   const initialSrc = initialMode === "unfurnished" ? room.unfurnitureImgId : room.furnitureImgId;
   const initialProjection = useRef(new EquirectProjection({ src: initialSrc }));
   const [isSwapping, setIsSwapping] = useState(false);

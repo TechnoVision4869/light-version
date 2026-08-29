@@ -171,9 +171,12 @@ export function getFaqCategories({ currentItem, activeLayer, currentProject, ope
       id: "room-remove-furniture",
       label: "Remove Furniture",
       topic: "removing the furniture from this room",
-      // Also requires a real unfurnished image to exist — mirrors the old toggle button's gating,
-      // so this never offers to switch to a view that doesn't actually exist for this room.
-      available: (currentRoomMode === "furnished" || currentRoomMode === "fake-refurnished") && !!currentRoom?.unfurnitureImgId,
+      // Also requires a real, distinct unfurnished image — mirrors the old toggle button's
+      // gating, so this never offers to switch to a view that doesn't actually exist for this
+      // room (e.g. floor features, which reuse the same image for both fields).
+      available: (currentRoomMode === "furnished" || currentRoomMode === "fake-refurnished")
+        && !!currentRoom?.unfurnitureImgId
+        && currentRoom.unfurnitureImgId !== currentRoom.furnitureImgId,
       confirmText: "Sure — clearing out the furniture for you.",
       action: () => requestRoomView(currentRoom.id, "unfurnished"),
     },
@@ -184,6 +187,15 @@ export function getFaqCategories({ currentItem, activeLayer, currentProject, ope
       available: currentRoomMode === "furnished" && !!getFakeRefurnitureImage(currentRoom),
       confirmText: "Here's a different look for this room.",
       action: () => requestRoomView(currentRoom.id, "fake-refurnished"),
+    },
+    // Not tied to unit rooms specifically — works for any room-interior overlay with a
+    // description, which currently just means floor features (see SideBarButtons.jsx).
+    {
+      id: "room-learn-more",
+      label: "Learn more about this...",
+      topic: "this feature",
+      available: inRoomInterior && !!currentRoom?.description,
+      answer: () => currentRoom.description,
     },
   ];
 }

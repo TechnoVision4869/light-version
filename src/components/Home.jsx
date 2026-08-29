@@ -64,6 +64,8 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
     goHome,
     clearSelectedProject,
     switchToFloor,
+    viewingFloorFeatures,
+    setViewingFloorFeatures,
     currentVideosPaths } = useContext(SidebarContext);
 
   const { overlay, closeOverlay, openCompare } = useContext(MainContext);
@@ -125,13 +127,17 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
       closeOverlay();
       return;
     }
+    if (viewingFloorFeatures) {
+      setViewingFloorFeatures(false);
+      return;
+    }
     const doBack = () => videoViewer.StartReverse(false, () => {});
     if (videoViewer.currentViewIndex !== 0) {
       videoViewer.changeViewToIndex(0, doBack);
       return;
     }
     doBack();
-  }, [activeTab, activeLayer, overlay, videoViewer, handleSidebarState, closeOverlay]);
+  }, [activeTab, activeLayer, overlay, videoViewer, handleSidebarState, closeOverlay, viewingFloorFeatures, setViewingFloorFeatures]);
 
   const { currentViewIndex: viewerViewIndex, changeViewToIndex } = videoViewer;
   const onNavigate = useCallback((action) => {
