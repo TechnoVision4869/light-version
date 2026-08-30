@@ -80,6 +80,16 @@ export function recordUnitView(unitId) {
     return entries[unitId].count;
 }
 
-export function getMockUnitStatus() {
-    return "available"; // hardcoded for now — no per-unit status data exists yet
+// No backend "status" field exists yet, so we derive a stand-in from the unit's display
+// name: "Unit 71" -> 71 -> odd -> sold, "Unit 72" -> 72 -> even -> vacant. Falls back to
+// vacant if the name doesn't end in a number, so it never crashes on an unexpected shape.
+export function getMockUnitStatus(unit) {
+    const name = unit?.displayName || unit?.name || "";
+    const match = String(name).match(/(\d+)\s*$/);
+    if (!match) return "vacant";
+
+    const num = parseInt(match[1], 10);
+    if (Number.isNaN(num)) return "vacant";
+
+    return num % 2 === 0 ? "vacant" : "sold";
 }

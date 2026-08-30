@@ -161,6 +161,14 @@ export default function SidebarButtons({ onNavigate = (action) => action() }) {
     if (!towerFeatures && floorFeatures.length === 0) return null;
   }
 
+  // Apartment buttons (units, wherever they're shown — a floor, or a villa/townhouse property
+  // with no floors) are listed alphabetically; every other button type keeps its natural/API order.
+  const itemsToRender = propName === "apartment"
+    ? [...currentItems].sort((a, b) =>
+        String(a.displayName ?? a.name ?? "").localeCompare(String(b.displayName ?? b.name ?? ""), undefined, { numeric: true, sensitivity: "base" })
+      )
+    : currentItems;
+
   return (
     <div className="flex-1 min-h-0 scrollbar-custom overflow-y-auto overflow-x-hidden space-y-3 px-2 py-2">
       {towerFeatures?.length > 0 && (
@@ -181,7 +189,7 @@ export default function SidebarButtons({ onNavigate = (action) => action() }) {
           Features
         </button>
       )}
-      {currentItems.map((item) => {
+      {itemsToRender.map((item) => {
         const isImageOnly = activeLayer === LAYERS.BUILDING_FEATURE
           && !item.videos?.forwardVideo
           && item.videos?.idleVideo;

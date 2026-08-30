@@ -4,6 +4,8 @@ import { SidebarContext } from "../store/SidebarContextProvider";
 // import helper functions
 import { FILTER_ENUM, getMinMaxRange, getDiscreteValues } from "./helpers/filterHelper";
 
+const STATUS_OPTIONS = ["vacant", "sold"];
+
 const AREA_STEP = 5;
 
 function clamp(value, min, max) {
@@ -73,7 +75,7 @@ function Discrete({ name, options, array, onValueChange }) {
           <button
             key={option}
             onClick={() => toggleOption(option)}
-            className={`py-2 px-3 rounded-lg
+            className={`py-2 px-3 rounded-lg capitalize
                                 ${isSelected(option)
                 ? "bg-white/10 border border-white/90 hover:bg-[#2e2e2e]"
                 : "bg-[#2e2e2e] border border-[#2e2e2e] hover:bg-white/7 hover:border-white/7"
@@ -93,7 +95,7 @@ export default function FilterPanel() {
   // console.log(currentItem);
 
   const currentApartments = currentItem?.units || [];
-  // console.log(currentApartments);
+  console.log(currentApartments);
 
   const UNIT_TYPES = getDiscreteValues(currentApartments, FILTER_ENUM.TYPE);
 
@@ -110,6 +112,7 @@ export default function FilterPanel() {
     ACTUAL_MAX: areaActualMax,
     UNIT: "m²",
   };
+  console.log("Area range:", AREA_RANGE);
 
   // Budget range (in local currency)
   const BUDGET_RANGE = {
@@ -125,6 +128,7 @@ export default function FilterPanel() {
   const [unitType, setUnitType] = useState([]);
   const [bedrooms, setBedrooms] = useState([]);
   const [bathrooms, setBathrooms] = useState([]);
+  const [status, setStatus] = useState([]);
   const [area, setArea] = useState(AREA_RANGE.MAX);
   const [price, setPrice] = useState(BUDGET_RANGE.MAX);
 
@@ -134,6 +138,7 @@ export default function FilterPanel() {
     setUnitType([]);
     setBedrooms([]);
     setBathrooms([]);
+    setStatus([]);
   }, [AREA_RANGE.MAX, BUDGET_RANGE.MAX, currentItem?.id]);
 
   useEffect(() => {
@@ -141,10 +146,11 @@ export default function FilterPanel() {
       unitType,
       bedrooms,
       bathrooms,
+      status,
       area,
       price,
     });
-  }, [unitType, bedrooms, bathrooms, area, price]);
+  }, [unitType, bedrooms, bathrooms, status, area, price]);
 
   // Log the available filter ranges once, when the Filter tab is opened (Sidebar.jsx mounts this
   // component on that click) — not on every slider drag, which would spam the console.
@@ -170,6 +176,15 @@ export default function FilterPanel() {
         array={unitType}
         onValueChange={setUnitType}
       /> */}
+
+      <div className="h-divider"></div>
+
+      <Discrete
+        name="Status"
+        options={STATUS_OPTIONS}
+        array={status}
+        onValueChange={setStatus}
+      />
 
       <div className="h-divider"></div>
 

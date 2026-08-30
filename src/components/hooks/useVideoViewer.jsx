@@ -318,7 +318,14 @@ export function useVideoViewer() {
     (isFromAnotherTab, onReverseEnded) => {
       if (history.length <= 1) return;
       if (activeLayer === LAYERS.SURROUNDING_DETAIL) {
-        justNavigatedBackRef.current = false;
+        // No reverse video is played here (goBack() just pops the history entry), but the
+        // entry we're returning to can still carry a *different* videosPath object than the
+        // one active in SURROUNDING_DETAIL — e.g. an API-mode surrounding item with its own
+        // forwardAssetId/reverseAssetId/sideAssetId. That reference change alone would
+        // re-trigger the load effect below, and without this flag it defaults to replaying
+        // the forward transition. Mark it "just navigated back" (mirrors playReverseVideo's
+        // onEnded) so the effect plays the idle video directly instead.
+        justNavigatedBackRef.current = true;
         goBack();
         return;
       }

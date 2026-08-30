@@ -7,6 +7,7 @@ import AnimFloatButton from "./AnimFloatButton";
 import { TABS, LAYERS } from '../../data/layers';
 import { PROPERTY_TYPE } from '../../constants/roles';
 import { MainContext } from "@/store/MainContextProvider";
+import { getMockUnitStatus } from "../../lib/mockEngagementData";
 
 export default function BaseFloating({ mediaRef }) {
     const { filters } = useContext(FilterContext);
@@ -34,6 +35,11 @@ export default function BaseFloating({ mediaRef }) {
 
                 // Apply bathroom filter
                 if (filters.bathrooms.length > 0 && !filters.bathrooms.includes(item.bathrooms)) {
+                    return false;
+                }
+
+                // Apply status filter
+                if (filters.status?.length > 0 && !filters.status.includes(getMockUnitStatus(item))) {
                     return false;
                 }
 

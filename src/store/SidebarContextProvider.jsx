@@ -67,7 +67,9 @@ export default function SidebarContextProvider({ children }) {
                 layer: null,
                 item: null,
                 videosPath: {
-                    forwardVideo: getVideoUrl(project, 'zoomoutVideo', 'zoomoutVideoId') ?? null,
+                    // Falls back to the intro video when the project has no zoomout video set
+                    // (e.g. zoomoutAssetId is null) so returning to Home still plays something.
+                    forwardVideo: getVideoUrl(project, 'zoomoutVideo', 'zoomoutVideoId', 'zoomoutAssetId', 'introVideo', 'introAssetId') ?? null,
                     reverseVideo: null,
                     idleVideo: getVideoUrl(project, 'idleVideo', 'idleVideoId', 'idleAssetId') ?? null,
                     idleVideoType: getVideoUrl(project, 'idleVideoType', 'idleAssetType') ?? null,

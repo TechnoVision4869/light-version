@@ -16,11 +16,11 @@ export function getMinMaxRange(units, filterName) {
         return { min: 0, max: 0 };
     }
 
-    let min = units[0][filterName];
-    let max = units[0][filterName];
+    let min = Number(units[0][filterName]);
+    let max = Number(units[0][filterName]);
 
     for (let i = 1; i < units.length; i++) {
-        const value = units[i][filterName];
+        const value = Number(units[i][filterName]);
         if (value < min) min = value;
         if (value > max) max = value;
     }

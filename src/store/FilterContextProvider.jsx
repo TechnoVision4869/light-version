@@ -10,6 +10,7 @@ const createInitialFilters = () => ({
     unitType: [],
     bedrooms: [],
     bathrooms: [],
+    status: [],
     area: null,
     price: null,
 });

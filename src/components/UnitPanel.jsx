@@ -12,8 +12,7 @@ import SimilarUnits from "./SimilarUnits";
 const BOOK_NOW_URL = "https://siwar-aldahab-landing-production.up.railway.app/";
 
 const STATUS_STYLES = {
-    available: { label: "Available", className: "bg-green-600/80 text-white" },
-    reserved: { label: "Reserved", className: "bg-yellow-600/80 text-white" },
+    vacant: { label: "Vacant", className: "bg-green-600/80 text-white" },
     sold: { label: "Sold", className: "bg-red-600/80 text-white" },
 };
 
@@ -115,8 +114,8 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
                 <div>
                     <div className="flex items-center justify-between gap-2 mb-2">
                         <h1 className="text-xl font-bold">{currentItem.displayName || currentItem.name}</h1>
-                        <span className={`text-xs font-semibold px-2 py-1 rounded-full whitespace-nowrap ${STATUS_STYLES[getMockUnitStatus()].className}`}>
-                            {STATUS_STYLES[getMockUnitStatus()].label}
+                        <span className={`text-xs font-semibold px-2 py-1 rounded-full whitespace-nowrap ${STATUS_STYLES[getMockUnitStatus(currentItem)].className}`}>
+                            {STATUS_STYLES[getMockUnitStatus(currentItem)].label}
                         </span>
                     </div>
                     <div className="flex items-center gap-1">
