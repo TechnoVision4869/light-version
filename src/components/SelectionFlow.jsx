@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useAuth } from './hooks/use-auth';
 import { APP_CONFIG } from '../config/appConfig';
 import { preloadDeveloperBackground } from '../lib/preloadDeveloperBackground';
 import { DEVELOPER_STORAGE_KEY } from '../constants/storageKeys';
+import { SidebarContext } from '../store/SidebarContextProvider';
 import DeveloperSelector from './DeveloperSelector';
 import ProjectSelector from './ProjectSelector';
 import Layout from './Layout';
@@ -10,6 +11,7 @@ import Layout from './Layout';
 export default function SelectionFlow({ onProjectSelect }) {
   const useStatic = APP_CONFIG.USE_STATIC;
   const { user } = useAuth();
+  const { setActiveDeveloper } = useContext(SidebarContext);
   const [selectedDeveloper, setSelectedDeveloper] = useState(null);
 
   // Roles that need to select a developer; all other roles (developer_admin,
@@ -23,6 +25,7 @@ export default function SelectionFlow({ onProjectSelect }) {
     // that call can be slow/fail on weak connectivity, but the developer id is already
     // known here regardless.
     localStorage.setItem(DEVELOPER_STORAGE_KEY, developer.id);
+    setActiveDeveloper(developer.id);
     await preloadDeveloperBackground(developer.id);
     setSelectedDeveloper(developer);
   };
@@ -51,6 +54,7 @@ export default function SelectionFlow({ onProjectSelect }) {
       onProjectSelect={onProjectSelect}
       onBackButtonClick={() => {
         localStorage.removeItem(DEVELOPER_STORAGE_KEY);
+        setActiveDeveloper(null);
         setSelectedDeveloper(null);
       }}
     />

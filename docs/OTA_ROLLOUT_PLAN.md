@@ -2,7 +2,7 @@
 
 ## Scope
 
-This is a focused, 5-day (Sunday–Thursday) implementation plan covering exactly two priorities from
+This is a focused, 5-day (Wednesday-Teusday, skipping Friday and Saturday) implementation plan covering exactly two priorities from
 the larger project plan (`the-web-application-currently-deep-yao.md`):
 
 1. **App updates reach users' devices without installing a new APK.**
@@ -23,8 +23,8 @@ plugin's current release notes right before installing, not assumed from memory.
 
 ---
 
-## اليوم 1 (الأحد) — القرار + التركيب الأساسي
-## Day 1 (Sunday) — Decision + Base Setup
+## اليوم 1 (الاربعاء) — القرار + التركيب الأساسي ✅ تم
+## Day 1 (Wednesday) — Decision + Base Setup ✅ Done
 
 ### Step 1: Choose how updates will be hosted
 **Technical:** Decide between two ways to deliver the updated app bundle to devices, since we're
@@ -51,9 +51,24 @@ excluding backend work:
   **السلبيات:** تكلفة شهرية/سنوية مستمرة، وملفات التطبيق بتتخزن عند شركة خارجية.
 
 **Backend required?** No, for either option. Option (a) needs someone to set up a storage account
-(a one-time, non-code task) — this is infrastructure, not backend engineering. **Decision needed
-before noon on Day 1** — everything else this week depends on it. Recommendation: option (a) unless
+(a one-time, non-code task) — this is infrastructure, not backend engineering. **Decision needed on Day 1** — everything else this week depends on it. Recommendation: option (a) unless
 speed-to-ship outweighs the small setup cost, since it avoids a recurring third-party dependency.
+
+**✅ Decision made: option (a), self-hosted, on Cloudflare** (Workers with static assets — Cloudflare's
+current unified product, which replaced the older separate "Pages" product referenced above).
+Hostinger was considered first since the team already has a paid account there, but that account turned
+out to be domain registration only (no hosting plan) — adding hosting would have meant a new purchase,
+canceling out the "free, no extra cost" reason for choosing self-hosting. Cloudflare is genuinely free
+at this file size, no purchase needed.
+
+Setup completed today:
+- Deployed a Worker named **`light-tour-ota`**, live at
+  `https://light-tour-ota.cold-bush-b9d3.workers.dev` — HTTPS automatic.
+- Uploaded a placeholder `index.html` plus a `_headers` file
+  (`Access-Control-Allow-Origin: *`) so the app's JS `fetch()`-based update checks won't be blocked by
+  CORS once real files are published here.
+- This URL is what Day 2 (Step 3) will publish the real bundle `.zip` + version manifest to, replacing
+  the placeholder.
 
 ### Step 2: Install and wire the update plugin into the app
 **Technical:** `npm install @capgo/capacitor-updater` (works with either hosting choice from Step 1 —
@@ -67,10 +82,23 @@ the app still launches normally with the plugin present but inactive.
 
 **Backend required?** No.
 
+**✅ Done:**
+- Installed `@capgo/capacitor-updater@8.51.15` (confirmed compatible with this repo's Capacitor `^8.1.0`
+  peer dependency, and Capgo's v7→v8 migration notes confirmed no breaking plugin-API changes).
+- `capacitor.config.json` now has `plugins.CapacitorUpdater.autoUpdate: false` — plugin is present but
+  inactive, per this step's intent.
+- Wired the required `CapacitorUpdater.notifyAppReady()` startup call into `src/App.jsx`, following the
+  existing platform-guarded `useEffect` pattern already used there for `ScreenOrientation`/`StatusBar`.
+- `npx cap sync android` registered the native plugin; `./gradlew assembleSandboxDebug` built cleanly →
+  `sandbox-debug-v1.8.apk`. `eslint src/App.jsx` shows no new errors from the change.
+- **Still pending:** installing that APK on an actual device/emulator to visually confirm normal launch
+  and check `adb logcat` for no errors from the new code — no device was connected yet to do this. Not
+  blocking Day 2, but should be closed out before Day 3's first end-to-end test.
+
 ---
 
-## اليوم 2 (الاثنين) — نشر التحديث + آلية الفحص التلقائي
-## Day 2 (Monday) — Publish Mechanism + Auto-Check Flow
+## اليوم 2 (الخميس) — نشر التحديث + آلية الفحص التلقائي
+## Day 2 (Thursday) — Publish Mechanism + Auto-Check Flow
 
 ### Step 3: Package and publish the first test update
 **Technical:** `npm run build`, package `dist/` into the bundle format the plugin expects, upload it
@@ -99,8 +127,8 @@ offline-first design (no error shown, no blocking).
 
 ---
 
-## اليوم 3 (الثلاثاء) — إشعار المستخدم بوجود تحديث
-## Day 3 (Tuesday) — Notify Users of the Update (Priority 2)
+## اليوم 3 (الاحد) — إشعار المستخدم بوجود تحديث
+## Day 3 (Sunday) — Notify Users of the Update (Priority 2)
 
 ### Step 5: Build the "update available / ready" notification
 **Technical:** Listen to the plugin's download-progress/download-complete events and show a small,
@@ -123,8 +151,8 @@ broken before moving to full testing Day 4.
 
 ---
 
-## اليوم 4 (الأربعاء) — اختبار شامل على أجهزة حقيقية
-## Day 4 (Wednesday) — Full Real-Device Testing
+## اليوم 4 (الاثنين) — اختبار شامل على أجهزة حقيقية
+## Day 4 (Monday) — Full Real-Device Testing
 
 ### Step 6: Testing and rollout safety
 **Technical:** Test on real tablets, not just an emulator. Cover:
@@ -146,8 +174,8 @@ broken before moving to full testing Day 4.
 
 ---
 
-## اليوم 5 (الخميس) — اختبار نهائي + توثيق + التسليم
-## Day 5 (Thursday) — Final Test, Documentation, Handoff
+## اليوم 5 (الثلاثاء) — اختبار نهائي + توثيق + التسليم
+## Day 5 (Tuesday) — Final Test, Documentation, Handoff
 
 ### Step 7: Final pass and documentation
 **Technical:**
@@ -175,11 +203,11 @@ realistically cover it:
 
 | Day | Primary owner | Support |
 |---|---|---|
-| Sun (Day 1) | Frontend Developer (build) | Whoever owns hosting/budget decisions (Step 1 decision) |
-| Mon (Day 2) | Frontend Developer | — |
-| Tue (Day 3) | Frontend Developer | — |
-| Wed (Day 4) | QA / Tester (device testing) | Frontend Developer (on-call for fixes) |
-| Thu (Day 5) | Frontend Developer (docs) | QA (final sign-off), stakeholder for demo |
+| Wed (Day 1) | Frontend Developer (build) | Whoever owns hosting/budget decisions (Step 1 decision) |
+| Thu (Day 2) | Frontend Developer | — |
+| Sun (Day 3) | Frontend Developer | — |
+| Mon (Day 4) | QA / Tester (device testing) | Frontend Developer (on-call for fixes) |
+| Tue (Day 5) | Frontend Developer (docs) | QA (final sign-off), stakeholder for demo |
 
 ## Milestones
 

@@ -1,5 +1,5 @@
 import { projectApi } from "../api/admin/projectApi";
-import { DATA } from "../data/layers";
+import { DEVELOPER_ALAWALY as DATA } from "../data/siwar";
 
 /**
  * Fetch a project by ID from either mock data or API

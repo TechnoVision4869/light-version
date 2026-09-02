@@ -3,7 +3,7 @@ import TECHNO_LOGO from "../assets/techno-logo-black.png";
 import { APP_CONFIG } from "../config/appConfig";
 import { AssetType } from "../components/admin/types";
 import { PAYMENT_MILESTONES, formatMoney } from "./paymentSchedule";
-import { DATA } from "../data/layers";
+import { DEVELOPER_ALAWALY as DATA } from "../data/siwar";
 import { getCachedDeveloperLogo } from "./developerLogoCache";
 import EB_GARAMOND_REGULAR_URL from "../fonts/EB_Garamond/static/EBGaramond-Regular.ttf?url";
 import EB_GARAMOND_BOLD_URL from "../fonts/EB_Garamond/static/EBGaramond-Bold.ttf?url";

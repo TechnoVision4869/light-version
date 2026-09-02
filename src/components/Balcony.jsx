@@ -1,7 +1,7 @@
-import { useRef, useState, useEffect } from "react";
+import { useContext, useRef, useState, useEffect } from "react";
 import View360, { EquirectProjection } from "@egjs/react-view360";
 import "@egjs/react-view360/css/view360.min.css";
-import { CONFIG } from "../data/layers";
+import { SidebarContext } from "../store/SidebarContextProvider";
 
 /**
  * Generic Balcony/360 View Component
@@ -9,6 +9,7 @@ import { CONFIG } from "../data/layers";
  */
 export default function Balcony({ view }) {
   const ZOOM_OUT_TIME = 600;
+  const { developerConfig: CONFIG } = useContext(SidebarContext);
 
   const viewerRef = useRef(null);
   const containerRef = useRef(null);

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { TABS, LAYERS, CONFIG } from "../data/layers.js";
+import { TABS, LAYERS } from "../data/layers.js";
 // Hooks
 import { useVideoViewer } from "./hooks/useVideoViewer.jsx";
 
@@ -66,7 +66,8 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
     switchToFloor,
     viewingFloorFeatures,
     setViewingFloorFeatures,
-    currentVideosPaths } = useContext(SidebarContext);
+    currentVideosPaths,
+    developerConfig } = useContext(SidebarContext);
 
   const { overlay, closeOverlay, openCompare } = useContext(MainContext);
 
@@ -473,7 +474,7 @@ export default function Home({ introVideoUrl = null, onExitRequest }) {
                   : "text-white"
                   }`}
               >
-                {CONFIG.ZONES_TAB_TITLE || "ZONES"}
+                {developerConfig.ZONES_TAB_TITLE || "ZONES"}
               </button>
               <button
                 onClick={() => handleActiveTab(TABS.AMENITIES)}

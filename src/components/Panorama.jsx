@@ -2,7 +2,6 @@ import { useState, useMemo, useRef, useEffect, useCallback, useContext } from "r
 import { SidebarContext } from '../store/SidebarContextProvider';
 import View360, { EquirectProjection, EASING } from "@egjs/react-view360";
 import { APP_CONFIG } from "@/config/appConfig";
-import { CONFIG } from "../data/layers";
 
 import Pin from "./Pin";
 import "@egjs/react-view360/css/view360.min.css";

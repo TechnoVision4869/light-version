@@ -2,13 +2,14 @@ import { useCallback, useState, useEffect, useContext, useRef } from "react";
 
 import { SidebarContext } from "./SidebarContext";
 import { AuthContext } from "./jwt-context";
-import { TABS, LAYERS, DATA } from "../data/layers";
+import { TABS, LAYERS } from "../data/layers";
 import { PROPERTY_TYPE } from "../constants/roles";
 import { enrichProjectData, prefetchProjectByLevels, getLevelAssetTotal } from "../lib/enrichProjectData";
 import { APP_CONFIG } from "../config/appConfig";
 import { fetchProjectById } from "../lib/projectFetcher";
 import { pruneCompareUnits } from "../lib/compareStorage";
 import { sortFloors } from "../lib/sortFloors";
+import { resolveDeveloperData, FALLBACK_RESOLVED } from "../data/register-developer";
 import {
     PROJECT_STORAGE_KEY,
     DEVELOPER_STORAGE_KEY,
@@ -59,6 +60,40 @@ export default function SidebarContextProvider({ children }) {
     const useStatic = APP_CONFIG.USE_STATIC;
     const [currentProject, setCurrentProject] = useState(null);
     const { isInitialized: isAuthInitialized, user } = useContext(AuthContext);
+
+    // Explicit developer pick (from SelectionFlow's DeveloperSelector) or restored value —
+    // separate from currentProject.developerId, which is more authoritative once a project
+    // is actually open. See register-developer.js for the resolution this drives.
+    const [activeDeveloperId, setActiveDeveloperIdState] = useState(
+        () => localStorage.getItem(DEVELOPER_STORAGE_KEY) || null
+    );
+    const [developerData, setDeveloperData] = useState(FALLBACK_RESOLVED);
+    const developerRequestIdRef = useRef(0);
+
+    // Sync with user.developerId once auth resolves (developer-scoped roles) if no explicit
+    // pick/restore has already set it.
+    useEffect(() => {
+        if (!activeDeveloperId && user?.developerId) {
+            setActiveDeveloperIdState(user.developerId);
+        }
+    }, [user, activeDeveloperId]);
+
+    const setActiveDeveloper = useCallback((developerId) => {
+        setActiveDeveloperIdState(developerId);
+    }, []);
+
+    // currentProject.developerId (once a project is open) wins over the explicitly-picked/
+    // restored activeDeveloperId — same priority data-model.md documents for other
+    // developerId consumers.
+    const effectiveDeveloperId = currentProject?.developerId || activeDeveloperId || null;
+
+    useEffect(() => {
+        const requestId = ++developerRequestIdRef.current;
+        resolveDeveloperData(effectiveDeveloperId).then((resolved) => {
+            if (developerRequestIdRef.current !== requestId) return; // stale, a newer id was picked meanwhile
+            setDeveloperData(resolved);
+        });
+    }, [effectiveDeveloperId]);
 
     const getInitHistory = useCallback((project) => {
         const initHistory = [
@@ -525,7 +560,7 @@ export default function SidebarContextProvider({ children }) {
             }
             else if (activeLayer === LAYERS.UNIT) {
                 // Get rooms from unit type interior for floating buttons (only in hotspot/panorama mode)
-                if (!APP_CONFIG.USE_HOTSPOTS) {
+                if (!developerData.config.USE_HOTSPOTS) {
                     const unitType = useStatic
                         ? currentProject?.unitTypes?.[currentItem?.unitTypeId]
                         : currentProject?.unitTypes?.find(type => type.id === currentItem?.unitTypeId);
@@ -539,7 +574,7 @@ export default function SidebarContextProvider({ children }) {
 
         setCurrentItems(items);
         setType(itemType);
-    }, [activeTab, activeLayer, currentItem, currentProject]);
+    }, [activeTab, activeLayer, currentItem, currentProject, developerData]);
 
     // Clear selected project from localStorage
     const handleClearSelectedProject = useCallback(() => {
@@ -558,6 +593,12 @@ export default function SidebarContextProvider({ children }) {
         currentProject,
         setCurrentProject: handleSetCurrentProject,
         clearSelectedProject: handleClearSelectedProject,
+
+        activeDeveloperId: effectiveDeveloperId,
+        setActiveDeveloper,
+        developerConfig: developerData.config,
+        developerPath: developerData.projectPath,
+        developerStaticData: developerData.DEVELOPER,
 
         history,
         activeTab,

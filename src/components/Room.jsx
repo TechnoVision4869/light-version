@@ -1,8 +1,8 @@
 import { useContext, useState, useRef, useEffect } from "react";
 import View360, { EquirectProjection, EASING } from "@egjs/react-view360";
 import "@egjs/react-view360/css/view360.min.css";
-import { CONFIG } from "../data/layers";
 import { MainContext } from "../store/MainContextProvider";
+import { SidebarContext } from "../store/SidebarContextProvider";
 import { getFakeRefurnitureImage } from "../lib/fakeRefurniture";
 
 // Toggle button icons — unused while the manual toggle below is commented out in favor of the
@@ -14,6 +14,7 @@ const ROOM_VIEW_SWAP_DELAY_MS = 2000;
 
 export default function Room({ room }) {
   const { roomViewRequest, clearRoomViewRequest, setRoomViewMode } = useContext(MainContext);
+  const { developerConfig: CONFIG } = useContext(SidebarContext);
 
   const viewerRef = useRef(null);
   const containerRef = useRef(null);

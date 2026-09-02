@@ -6,6 +6,12 @@ export const SidebarContext = createContext({
     currentProject: null,
     setCurrentProject: () => { },
 
+    activeDeveloperId: null,
+    setActiveDeveloper: () => { },
+    developerConfig: {},
+    developerPath: null,
+    developerStaticData: null,
+
     history: [],
     activeTab: "",
     activeLayer: "",

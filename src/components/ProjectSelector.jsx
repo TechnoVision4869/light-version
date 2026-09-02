@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { projectApi } from "../api/admin/projectApi";
 import { APP_CONFIG } from "../config/appConfig";
 import Layout from "./Layout";
@@ -6,7 +6,7 @@ import { useAuth } from "./hooks/use-auth";
 import toast from "react-hot-toast";
 import { developerApi } from "@/api/admin/developerApi";
 import { assetApi } from "../api/admin/assetApi";
-import { DATA, PATH } from "../data/layers";
+import { SidebarContext } from "../store/SidebarContextProvider";
 import { fetchProjectById } from "../lib/projectFetcher";
 import { prefetchSingleUrl } from "../lib/enrichProjectData";
 import { setCachedDeveloperLogo } from "../lib/developerLogoCache";
@@ -15,8 +15,6 @@ import { AssetType } from "./admin/types";
 import DownloadTestOverlay from "./DownloadTestOverlay";
 
 const DEFAULT_LOGO = '/default-logo.png';
-const projectPath = PATH;
-const PROJECT_HIGHLIGHT = `/${projectPath}/images/project-highlight.png`;
 
 export default function ProjectSelector({
   developerId,
@@ -24,8 +22,9 @@ export default function ProjectSelector({
   onBackButtonClick,
 }) {
   const useStatic = APP_CONFIG.USE_STATIC;
-  const usePredefinedPos = APP_CONFIG.USE_PREDEFINED_POS;
-  const predefinedPos = APP_CONFIG.PREDEFINED_POS;
+  const { developerConfig, developerStaticData } = useContext(SidebarContext);
+  const usePredefinedPos = developerConfig.USE_PREDEFINED_POS;
+  const predefinedPos = developerConfig.PREDEFINED_POS;
   const { user } = useAuth();
   const [projects, setProjects] = useState([]);
   const [developerAssets, setDeveloperAssets] = useState({
@@ -72,7 +71,7 @@ export default function ProjectSelector({
       
       if (useStatic) {
         // Load from static data
-        const staticProjects = DATA.developerProjects || [];
+        const staticProjects = developerStaticData?.developerProjects || [];
         setProjects(staticProjects);
 
         // Build static thumbnail and intro video URLs
@@ -175,8 +174,8 @@ export default function ProjectSelector({
       if (useStatic) {
         // Load from static data
         setDeveloperAssets({
-          backgroundImage: DATA.backgroundImage || null,
-          logoImage: DATA.developerLogo || null,
+          backgroundImage: developerStaticData?.backgroundImage || null,
+          logoImage: developerStaticData?.developerLogo || null,
         });
       } else {
         // Load from API

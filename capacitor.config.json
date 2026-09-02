@@ -1,5 +1,10 @@
 {
   "appId": "com.technovision.light",
   "appName": "Light Tour",
-  "webDir": "dist"
+  "webDir": "dist",
+  "plugins": {
+    "CapacitorUpdater": {
+      "autoUpdate": false
+    }
+  }
 }

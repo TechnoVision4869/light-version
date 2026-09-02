@@ -4,6 +4,7 @@ import { ScreenOrientation } from "@capacitor/screen-orientation";
 import { Capacitor } from "@capacitor/core";
 import { StatusBar } from "@capacitor/status-bar";
 import { App as CapApp } from "@capacitor/app";
+import { CapacitorUpdater } from "@capgo/capacitor-updater";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { SidebarContext } from "./store/SidebarContextProvider";
 import Home from "./components/Home";
@@ -59,6 +60,19 @@ export default function App() {
     return () => {
       resumeListener.then((listener) => listener.remove());
     };
+  }, []);
+
+  useEffect(() => {
+    const notifyReady = async () => {
+      try {
+        if (Capacitor.getPlatform() !== "web") {
+          await CapacitorUpdater.notifyAppReady();
+        }
+      } catch (error) {
+        console.warn("Failed to notify CapacitorUpdater app ready", error);
+      }
+    };
+    notifyReady();
   }, []);
 
   useEffect(() => {

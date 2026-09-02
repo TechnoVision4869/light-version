@@ -4,7 +4,6 @@ import toast from 'react-hot-toast';
 import { SidebarContext } from '../store/SidebarContextProvider';
 import { MainContext } from '../store/MainContextProvider';
 import { APP_CONFIG } from "../config/appConfig";
-import { CONFIG } from "../data/layers";
 import { isInCompare, addToCompare, removeFromCompare, COMPARE_UPDATED_EVENT } from "../lib/compareStorage";
 import { getMockRemainingCount, getMockViewCount, getMockUnitStatus } from "../lib/mockEngagementData";
 import SimilarUnits from "./SimilarUnits";
@@ -24,12 +23,12 @@ import CALCULATOR_ICON from "../assets/icons/icons8-calculator-30.png";
 import DOWNLOAD_ICON from "../assets/icons/download-pdf.png";
 
 export default function UnitPanel({ unit, inCompareView = false, onOpenInterior } = {}) {
-    const { currentProject, currentItem: contextCurrentItem } = useContext(SidebarContext);
+    const { currentProject, currentItem: contextCurrentItem, developerConfig } = useContext(SidebarContext);
     const currentItem = unit ?? contextCurrentItem;
     const useStatic = APP_CONFIG.USE_STATIC;
 
     const { openPanorama, openBalconyView, openGallery, openRoomInterior, openPaymentPlan, openSimilarUnit } = useContext(MainContext);
-    const useHotspots = APP_CONFIG.USE_HOTSPOTS;
+    const useHotspots = developerConfig.USE_HOTSPOTS;
 
     const [inCompare, setInCompare] = useState(() => isInCompare(currentItem?.id));
 
@@ -212,7 +211,7 @@ export default function UnitPanel({ unit, inCompareView = false, onOpenInterior 
                         <hr className="h-divider" />
                         <button className="w-full border-2 hover:bg-white/7 py-2 px-4 rounded-lg text-sm font-medium transition"
                             onClick={() => openBalconyView(currentItem)}
-                        > { CONFIG.BALCONY_TITLE }
+                        > { developerConfig.BALCONY_TITLE }
                         </button>
                     </>
                 }
