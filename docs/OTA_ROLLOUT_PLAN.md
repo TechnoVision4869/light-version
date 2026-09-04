@@ -97,8 +97,8 @@ the app still launches normally with the plugin present but inactive.
 
 ---
 
-## اليوم 2 (الخميس) — نشر التحديث + آلية الفحص التلقائي
-## Day 2 (Thursday) — Publish Mechanism + Auto-Check Flow
+## اليوم 2 (الخميس) — نشر التحديث + آلية الفحص التلقائي ✅ تم
+## Day 2 (Thursday) — Publish Mechanism + Auto-Check Flow ✅ Done
 
 ### Step 3: Package and publish the first test update
 **Technical:** `npm run build`, package `dist/` into the bundle format the plugin expects, upload it
@@ -110,6 +110,21 @@ to know if something new exists.
 "النسخة الحالية رقمها كام" عشان التطبيق يقدر يقارن.
 
 **Backend required?** No — this is a build-and-upload step, same category as Step 1(a).
+
+**✅ Done — and made repeatable, not a one-off.** Two version numbers turned out to be involved, and
+keeping them separate was the key design decision: `android/app/build.gradle`'s `versionName`
+(`"1.9"`) is the **native APK baseline** and is untouched by this step, today or in the future.
+`package.json`'s `version` field (previously an unused Vite default, `"0.0.0"`) was repurposed as the
+**OTA bundle version counter only** — seeded to `"1.9.0"`, auto-incremented via npm's built-in
+`npm version patch --no-git-tag-version` on every publish.
+
+Added `scripts/publish-ota.js` (new npm script `npm run ota:publish`) that on every run: bumps the
+version, builds, zips `dist/` via `npx @capgo/cli@latest bundle zip` (no login/API key needed for local
+zipping), and writes `manifest.json` + a `_headers` CORS file into a generated `ota-publish/` folder
+(gitignored, same category as `dist/`). First run produced `1.9.1` — `ota-publish/bundle-1.9.1.zip` +
+`manifest.json` pointing at `https://light-tour-ota.cold-bush-b9d3.workers.dev/bundle-1.9.1.zip`.
+Uploading that folder to the Cloudflare Worker (drag-and-drop, same as Day 1) is still a manual dashboard
+step each time — not automated, since that would need a `wrangler` API token this plan doesn't set up.
 
 ### Step 4: Build the update-check + background download flow
 **Technical:** On app launch (and optionally on resume from background), call the plugin's check-for-
@@ -124,6 +139,35 @@ offline-first design (no error shown, no blocking).
 أي مشاكل — ده مهم جدًا لأن التطبيق أصلاً مصمم يشتغل بدون إنترنت.
 
 **Backend required?** No.
+
+**✅ Done:**
+- New `src/lib/otaUpdater.js` (`checkForUpdate()`): fetches the Cloudflare-hosted `manifest.json`,
+  compares its `version` against `CapacitorUpdater.current().bundle.version` (plain string inequality —
+  no semver library in this repo, and we control what gets published, so this is an intentional
+  simplification), and calls `CapacitorUpdater.download()` if different. Does **not** call `set()`/apply
+  — that's Day 3's "Restart Now" button.
+- Wired into `src/App.jsx` in a new platform-guarded `useEffect`, following the exact pattern already
+  used for `StatusBar`'s resume listener: runs on launch and again on every `resume` event, wrapped in
+  try/catch with `console.warn` so a failed/offline check never surfaces anything to the user.
+- Confirmed no native/CORS blockers: `android/app/src/main/res/xml/config.xml` has `<access origin="*" />`
+  (no allowlist to update), no CSP in `index.html`, and `public/sw.js`'s routing only special-cases
+  `/assets/file/*` and the API hostname — a `*.workers.dev` request passes through its default
+  Network-First branch untouched.
+- `npx cap sync android` + `./gradlew assembleSandboxDebug` built cleanly with the new code.
+  `eslint src/App.jsx src/lib/otaUpdater.js scripts/publish-ota.js` shows no new errors.
+- **On-device test done** (via `chrome://inspect/#devices`, closing out Day 1's pending check too):
+  confirmed the full chain — `version native 1.9` → `current()` → manifest fetch → `download()` →
+  `Downloading .../bundle-1.9.1.zip` → `Download succeeded: SUCCEEDED` → bundle stored with
+  `status: "pending"`.
+- **Bug found and fixed by that test**: since `set()` is intentionally never called (Day 3 scope), the
+  active bundle stays `builtin`/`1.9` forever, so the original `checkForUpdate()` — which only compared
+  against `current().bundle.version` — re-triggered a full ~15 MB re-download of `1.9.1` on **every**
+  app resume (4 downloads observed in a few minutes of testing). Fixed by also checking
+  `CapacitorUpdater.list()` for an already-downloaded matching version (any status other than `"error"`)
+  before calling `download()` again. Rebuilt (`sandbox` and `ebrochure` debug flavors both) and
+  **re-verified on-device**: on the fixed build, `current()` → `list()` runs on resume with no
+  follow-up `download()` call, confirming the already-downloaded `1.9.1` bundle is correctly reused
+  instead of re-fetched every time.
 
 ---
 

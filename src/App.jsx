@@ -5,6 +5,7 @@ import { Capacitor } from "@capacitor/core";
 import { StatusBar } from "@capacitor/status-bar";
 import { App as CapApp } from "@capacitor/app";
 import { CapacitorUpdater } from "@capgo/capacitor-updater";
+import { checkForUpdate } from "./lib/otaUpdater";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { SidebarContext } from "./store/SidebarContextProvider";
 import Home from "./components/Home";
@@ -73,6 +74,24 @@ export default function App() {
       }
     };
     notifyReady();
+  }, []);
+
+  useEffect(() => {
+    const runUpdateCheck = async () => {
+      try {
+        if (Capacitor.getPlatform() !== "web") {
+          await checkForUpdate();
+        }
+      } catch (error) {
+        console.warn("OTA update check failed", error);
+      }
+    };
+    runUpdateCheck();
+    const resumeListener = CapApp.addListener("resume", runUpdateCheck);
+
+    return () => {
+      resumeListener.then((listener) => listener.remove());
+    };
   }, []);
 
   useEffect(() => {
