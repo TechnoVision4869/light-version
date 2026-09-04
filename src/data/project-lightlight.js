@@ -11,6 +11,7 @@ const SOMABAY_BG = `/${projectPath}/images/somabay.jpg`;
 export const config = {
   // General
     USE_PREDEFINED_POS: true,
+    PREDEFINED_POS: {x: 0.42, y: 0.4},
     USE_HOTSPOTS: false,
 
   // 360 Settings

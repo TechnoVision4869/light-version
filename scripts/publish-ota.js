@@ -21,7 +21,14 @@ writeFileSync(
   `${OUT_DIR}/manifest.json`,
   JSON.stringify({ version, url: `${OTA_BASE_URL}/bundle-${version}.zip` }, null, 2),
 );
-writeFileSync(`${OUT_DIR}/_headers`, "/*\n  Access-Control-Allow-Origin: *\n");
+// manifest.json must never be cached: Cloudflare's edge was observed serving a stale
+// copy (CF-Cache-Status: HIT) after a deploy, so devices kept seeing the old version
+// number and never detected the update. The zips are content-addressed by filename and
+// are safe to cache normally.
+writeFileSync(
+  `${OUT_DIR}/_headers`,
+  "/*\n  Access-Control-Allow-Origin: *\n\n/manifest.json\n  Cache-Control: no-store\n",
+);
 
 console.log(`\nOTA bundle ${version} ready in ${OUT_DIR}/ — drag that folder onto the`);
 console.log("light-tour-ota Cloudflare deployment (Compute → Workers & Pages) to publish.");

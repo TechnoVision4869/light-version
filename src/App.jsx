@@ -6,6 +6,7 @@ import { StatusBar } from "@capacitor/status-bar";
 import { App as CapApp } from "@capacitor/app";
 import { CapacitorUpdater } from "@capgo/capacitor-updater";
 import { checkForUpdate } from "./lib/otaUpdater";
+import { showUpdateReadyToast } from "./components/OtaUpdateToast";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { SidebarContext } from "./store/SidebarContextProvider";
 import Home from "./components/Home";
@@ -80,7 +81,10 @@ export default function App() {
     const runUpdateCheck = async () => {
       try {
         if (Capacitor.getPlatform() !== "web") {
-          await checkForUpdate();
+          const bundle = await checkForUpdate();
+          if (bundle) {
+            showUpdateReadyToast(bundle);
+          }
         }
       } catch (error) {
         console.warn("OTA update check failed", error);

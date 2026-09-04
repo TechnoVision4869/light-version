@@ -171,8 +171,8 @@ offline-first design (no error shown, no blocking).
 
 ---
 
-## اليوم 3 (الاحد) — إشعار المستخدم بوجود تحديث
-## Day 3 (Sunday) — Notify Users of the Update (Priority 2)
+## اليوم 3 (الاحد) — إشعار المستخدم بوجود تحديث ✅ تم (متأكد منه على جهاز حقيقي)
+## Day 3 (Sunday) — Notify Users of the Update (Priority 2) ✅ Done — verified on a real device
 
 ### Step 5: Build the "update available / ready" notification
 **Technical:** Listen to the plugin's download-progress/download-complete events and show a small,
@@ -188,10 +188,85 @@ mid-task — the user decides when.
 
 **Backend required?** No.
 
+**✅ Done:**
+- `src/lib/otaUpdater.js`'s `checkForUpdate()` changed to *return* an already-downloaded matching bundle
+  (instead of `null`) — needed so a pending update can be (re-)notified across sessions, not just at the
+  moment it first downloads.
+- New `src/components/OtaUpdateToast.jsx` (`showUpdateReadyToast(bundle)`) — first
+  `toast((t) => <JSX/>)` render-prop usage in this codebase (every prior `toast()` call was a plain
+  string); uses a fixed `id: "ota-update-ready"` so repeated resume-checks update the same toast in
+  place rather than stacking duplicates — this is what implements "dismiss and be reminded later" with
+  no extra state. Buttons reuse the existing `Button` component (`@/components/ui/button`) to match the
+  app's design system. "Restart Now" calls `CapacitorUpdater.set({ id: bundle.id })` — confirmed from
+  the plugin's own docs that this is a **terminal operation** (destroys the JS context immediately, no
+  code after it runs), so the handler only has a `catch` for a pre-reload failure, nothing "on success."
+  "Later" just dismisses.
+- Wired into `src/App.jsx`'s existing Day-2 update-check effect: captures `checkForUpdate()`'s return
+  value and calls `showUpdateReadyToast()` when non-null.
+- Confirmed via `src/store/MainContextProvider.jsx` that this should stay a plain toast, not a
+  `MainContext` overlay — that overlay slot is deliberately single-slot and would fight the user's
+  current screen.
+- `npm run build` + `npx cap sync android` + `./gradlew assembleSandboxDebug assembleEbrochureDebug`
+  all built cleanly; `eslint` on the three touched/new files shows no new errors.
+
 ### First end-to-end manual test
 Publish a second test version, open the app on a real device already running the first version,
 confirm: check → download → notification → tap "Restart Now" → new version is running. Fix anything
 broken before moving to full testing Day 4.
+
+**✅ Part 1 done, on-device**: toast appeared immediately on install (device already had `1.9.1`
+downloaded-but-unapplied from Day 2), tapped "Restart Now" → `CapacitorUpdater.set()` applied it →
+confirmed via `chrome://inspect` logs: the app's full startup sequence re-ran (`notifyAppReady()` fired
+again, this time for bundle `wjMJg8ph0o`/`1.9.1`) with no errors — the app is now running content
+delivered entirely over the network, no reinstall. This also confirms Day 1's rollback-safety
+`notifyAppReady()` mechanism protects every OTA-applied bundle going forward, not just the native
+install.
+
+**⚠️ Part 2 gotcha found — testing-sequence bug, not a shipped-code bug.** Publishing `1.9.2` and testing
+against the device (now running `1.9.1`) showed `1.9.2` download silently, no toast. Root cause: `1.9.1`
+had been published back during **Day 2 testing, before the Day 3 toast code existed** — so applying it
+in Part 1's "Restart Now" test silently regressed the device from the Day-3-native-install back to
+pre-Day-3 JS (confirmed via logs: `notifyAppReady()` re-firing for that old bundle). That old code still
+downloads fine (Day 2 logic intact) but has no `showUpdateReadyToast()` call to fire, since that
+function didn't exist when it was built. This is the exact "OTA can't retroactively add capability to
+code that doesn't have it" limitation, triggered by accident rather than by design.
+
+**Lesson for Day 5's how-to**: never test/apply an already-downloaded bundle that predates a native
+reinstall which added new JS-dependent capability — always publish fresh after any native install that
+changes what the running JS is capable of, before relying on OTA to carry that capability forward.
+Corollary for debugging a "no toast appeared" report: check what the **live manifest actually serves**
+(`curl` it, and compare against the same URL with a cache-busting query) before assuming the app is at
+fault — twice now the app logic was correct and the input was stale.
+
+**Recovery** (one-time, this device only): manually ran
+`await Capacitor.Plugins.CapacitorUpdater.set({ id: <the pending 1.9.2 bundle> })` in the connected
+devtools console to jump onto `1.9.2` directly, bypassing the toast (the running code had none to tap).
+Confirmed applied; the plugin's `autoDeletePrevious` also cleaned the stale `1.9.1` off the device, so
+there was nothing left that could regress it again.
+
+### ⚠️ Second bug found: Cloudflare edge-cached the manifest (this one is production-critical)
+
+Publishing `1.9.3` and resuming the app produced no toast — and this time the app was entirely correct.
+`curl` against the live URL showed Cloudflare serving a **stale `manifest.json`** (`CF-Cache-Status:
+HIT`, old ETag, `"version": "1.9.2"`) while the same URL *with a cache-busting query* returned the
+correct `"version": "1.9.3"` and a different ETag. The deploy had worked (`bundle-1.9.3.zip` was live,
+200 OK); only the manifest was being served stale from the edge. So the device fetched a manifest
+claiming `1.9.2`, matched it against the `1.9.2` it was running, and correctly did nothing.
+
+Left unfixed this would have **systematically broken update detection for every device in the field** —
+new versions would publish and simply never be seen. Fixed in two independent places, deliberately:
+1. **Server-side** (`scripts/publish-ota.js`) — the generated `_headers` now adds
+   `/manifest.json` → `Cache-Control: no-store` alongside the existing CORS rule. This protects **all**
+   devices immediately regardless of what JS they're running, which is why it's the essential half.
+2. **Client-side** (`src/lib/otaUpdater.js`) — the manifest fetch is now
+   `fetch(\`${MANIFEST_URL}?t=${Date.now()}\`, { cache: "no-store" })`. The unique query string defeats
+   any edge cache; `no-store` defeats the WebView's own HTTP cache. This only helps devices already
+   running a bundle that contains it, so it's belt-and-braces rather than the primary fix.
+
+**✅ Full loop verified on-device** (published `1.9.4` carrying both fixes): manifest served fresh →
+device detected it on resume → downloaded → **toast appeared** → tapped **"Later"** (dismissed cleanly,
+reappeared on the next resume) → tapped **"Restart Now"** → app reloaded onto the new version. Both
+Day 3 requirements — notify, and let the user choose when — confirmed working end to end.
 
 ---
 
@@ -255,10 +330,11 @@ realistically cover it:
 
 ## Milestones
 
-- **End of Day 2:** an update can be manually published and the app detects + downloads it (no user-
+- **End of Day 2:** ✅ an update can be manually published and the app detects + downloads it (no user-
   facing notification yet).
-- **End of Day 3:** the full loop works end-to-end on at least one test device, including the user-
-  facing "update ready" notification.
+- **End of Day 3:** ✅ the full loop works end-to-end on at least one test device, including the user-
+  facing "update ready" notification — verified on the `ebrochure` build: publish → detect → download →
+  toast → "Later" (reappears, no re-download) → "Restart Now" → new version running.
 - **End of Day 5:** verified safe on real tablets (including failure/rollback cases), documented for
   future use, ready for a real rollout.
 
@@ -274,3 +350,66 @@ larger plan remain open and are not blocked by this work, but should be schedule
   المستخدم النهائية على التابلت، وهيحتاج وقت مخصص للتنفيذ **وللاختبار الفعلي على أجهزة حقيقية**، لأنه
   بيمس صميم عمل التطبيق أوفلاين. **لسه معملناش خطوات تفصيلية له هنا — بس بنحطه كنقطة مهمة يجب التخطيط
   ليها قريب.**
+
+  **Note on OTA limits, relevant to this feature specifically:** once Day 3 lands, most *future* JS/UI
+  work (including this queue-downloads feature, most likely) ships via OTA — no reinstall needed. The
+  one thing OTA can never deliver is new **native Android permissions**, since those live in
+  `android/app/src/main/AndroidManifest.xml`, a native file OTA never touches — any change there needs
+  a fresh APK build + install, a one-time cost for whichever release first needs it. Plausible examples
+  if this feature's design calls for them:
+  - **`FOREGROUND_SERVICE`** (+ `FOREGROUND_SERVICE_DATA_SYNC` on Android 14+) — most likely one to
+    actually need. Downloads currently only survive while the app process is alive in the background;
+    surviving a full OS kill with a persistent "Downloading Project X — 45%" notification needs this.
+  - **`POST_NOTIFICATIONS`** (Android 13+ runtime permission) — if "download complete"/"update ready"
+    ever became a real system notification instead of the in-app toast, visible even when the app isn't
+    open.
+  - **`MANAGE_EXTERNAL_STORAGE`** / legacy `WRITE_EXTERNAL_STORAGE` — if staff ever need to export a
+    downloaded project or generated brochure to a shared/public location instead of just sharing it
+    through the app-to-app share sheet.
+  - Less likely given the current roadmap, same category: `BLUETOOTH_CONNECT`/`BLUETOOTH_SCAN`
+    (device-to-device sync between tablets), `ACCESS_FINE_LOCATION` (geofencing/location-tagged
+    content).
+
+---
+
+## Appendix: DevTools console commands for testing OTA on a device
+
+Used throughout Day 2/3 testing; feeds into Day 5's team how-to. These run against the **live app on a
+connected device**, not in a terminal.
+
+**Getting a console:** with the device connected and the app open, go to `chrome://inspect/#devices` in
+Chrome on the dev machine → click **inspect** under the app → **Console** tab. Note that the app's
+own `[CapgoUpdater] 🟢 ...` log lines show up here too, which is how the download/apply flow was
+verified on Days 2-3.
+
+**Important gotcha:** the plugin is a bundled module import inside the app, *not* a global — typing
+`CapacitorUpdater.list()` gives `CapacitorUpdater is not defined`. Reach it through Capacitor's plugin
+registry instead: `Capacitor.Plugins.CapacitorUpdater` (registered under that exact name, confirmed in
+`node_modules/@capgo/capacitor-updater/dist/esm/index.js`).
+
+```js
+// What bundle is the app running right now?
+// Look for `bundle.version` — "1.9" / id "builtin" means no OTA update has been applied yet.
+await Capacitor.Plugins.CapacitorUpdater.current();
+
+// Every bundle stored on the device: builtin, active, downloaded-but-pending, and failed ones.
+// Useful for confirming a download landed, or spotting orphaned duplicates eating storage.
+const { bundles } = await Capacitor.Plugins.CapacitorUpdater.list();
+console.table(bundles);
+
+// Manually apply a specific version, bypassing the toast entirely.
+// This is the recovery path when the running bundle has no toast UI to tap (see the Day 3
+// stale-bundle gotcha above). The app reloads immediately and DevTools needs reopening.
+const { bundles } = await Capacitor.Plugins.CapacitorUpdater.list();
+const target = bundles.find(b => b.version === "1.9.2" && b.status !== "error");
+await Capacitor.Plugins.CapacitorUpdater.set({ id: target.id });
+
+// Delete a stored bundle (e.g. an orphaned duplicate download reclaiming ~15 MB).
+// Never delete the currently-active one.
+await Capacitor.Plugins.CapacitorUpdater.delete({ id: "<bundle id>" });
+```
+
+**Reading `status`:** `success` = applied and confirmed good (`notifyAppReady()` ran on it); `pending` =
+downloaded, not yet activated; `error` = failed to apply and was rolled back. A `pending` bundle whose
+version matches the currently-active one is a harmless orphan — `checkForUpdate()` short-circuits on the
+version match before it ever reaches the `list()` branch, so it can't be applied by accident.

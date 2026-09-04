@@ -3,7 +3,10 @@ import { CapacitorUpdater } from "@capgo/capacitor-updater";
 const MANIFEST_URL = "https://light-tour-ota.cold-bush-b9d3.workers.dev/manifest.json";
 
 export async function checkForUpdate() {
-  const response = await fetch(MANIFEST_URL);
+  // Cache-bust deliberately: a plain fetch was served a stale manifest from Cloudflare's
+  // edge cache after a deploy, so the app never saw the new version. The unique query
+  // string defeats the edge cache; `no-store` defeats the WebView's own HTTP cache.
+  const response = await fetch(`${MANIFEST_URL}?t=${Date.now()}`, { cache: "no-store" });
   if (!response.ok) {
     throw new Error(`OTA manifest fetch failed: ${response.status}`);
   }
@@ -15,11 +18,11 @@ export async function checkForUpdate() {
   }
 
   const { bundles } = await CapacitorUpdater.list();
-  const alreadyDownloaded = bundles.some(
+  const existing = bundles.find(
     (bundle) => bundle.version === manifest.version && bundle.status !== "error",
   );
-  if (alreadyDownloaded) {
-    return null;
+  if (existing) {
+    return existing;
   }
 
   return CapacitorUpdater.download({
